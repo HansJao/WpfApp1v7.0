@@ -1,0 +1,49 @@
+﻿<Page x:Class="WpfApp1.Pages.StoreSearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="StoreSearchPage">
+
+    <Grid>
+        <DockPanel>
+            <Grid DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
+                <DataGrid x:Name="DataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="0,60,0,10" CanUserAddRows="false">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="織廠" Binding="{Binding FabricFactory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="整理" Binding="{Binding ClearFactory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="時間" Binding="{Binding CheckDate}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Content="查詢" HorizontalAlignment="Left" Margin="223,31,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>
+                <TextBox x:Name="MinNumber" HorizontalAlignment="Left" Height="23" Margin="84,0,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="120"/>
+                <TextBox x:Name="MaxNumber" HorizontalAlignment="Left" Height="23" Margin="84,31,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="120"/>
+                <Label Content="最少:" HorizontalAlignment="Left" Margin="42,-2,0,0" VerticalAlignment="Top" Height="25"/>
+                <Label Content="最多:" HorizontalAlignment="Left" Margin="42,29,0,0" VerticalAlignment="Top"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,10,0,0">
+                <DataGrid x:Name="DataGridStoreSearchListByShipped" AutoGenerateColumns="False" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,10" CanUserAddRows="False">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="織廠" Binding="{Binding FabricFactory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="整理" Binding="{Binding ClearFactory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="時間" Binding="{Binding CheckDate}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button x:Name="ButtonStoreSearchListByShipped" Content="查詢" HorizontalAlignment="Left" Margin="28,33,0,0" VerticalAlignment="Top" Width="75" Click="ButtonStoreSearchListByShipped_Click"/>
+                <Button x:Name="ButtonExportToExcel" Content="匯出" HorizontalAlignment="Left" Margin="121,33,0,0" VerticalAlignment="Top" Width="75" Click="ButtonExportToExcel_Click"/>
+                <DatePicker x:Name="DatePickerSelecter" HorizontalAlignment="Left" Margin="124,0,0,0" VerticalAlignment="Top" SelectedDateChanged="DatePickerSelecter_SelectedDateChanged"/>
+                <!--<Button x:Name="ButtonInventoryCheckSheet" Content="庫存盤點表" HorizontalAlignment="Left" Margin="28,6,0,0" VerticalAlignment="Top" Width="75" Click="ButtonInventoryCheckSheet_Click"/>-->
+            </Grid>
+        </DockPanel>
+
+    </Grid>
+</Page>
