@@ -12,7 +12,7 @@
         <DockPanel>
             <Grid DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
                 <DataGrid x:Name="DataGrid1" ItemsSource="{Binding}" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="0,60,0,10" CanUserAddRows="false">
-                    <DataGrid.Columns >
+                    <DataGrid.Columns>
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="織廠" Binding="{Binding FabricFactory}"></DataGridTextColumn>
