@@ -223,7 +223,7 @@ namespace WpfApp1.Adapter.MSSQL
 
         public IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(int orderColorDetailNo)
         {
-            var sqlCmd = @"select pofd.OrderFlowDateNo,pofd.OrderColorDetailNo,f.Name,pofd.InputDate,pofd.CompleteDate 
+            var sqlCmd = @"select pofd.OrderFlowDateNo,pofd.OrderColorDetailNo,pofd.OrderFlowNo,f.Name,pofd.InputDate,pofd.CompleteDate 
                           from ProcessOrderFlow pof
                           inner join ProcessOrderFlowDate pofd on pof.OrderDetailNo = pofd.OrderFlowNo
                           inner join Factory f on f.FactoryID = pof.FactoryID
@@ -246,36 +246,48 @@ namespace WpfApp1.Adapter.MSSQL
         /// <summary>
         /// 更新加工訂單流程時間
         /// </summary>
-        /// <param name="orderFlowDateNo"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderFlowInputDate(int orderFlowDateNo, DateTime? date)
+        public int UpdateProcessOrderFlowInputDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
             var sqlCmd = @"update ProcessOrderFlowDate
                           set InputDate = @InputDate,
                              UpdateDate = GETDATE()
-                          where OrderFlowDateNo = @OrderFlowDateNo";
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@OrderFlowDateNo", SqlDbType.Int) { Value = orderFlowDateNo },
-                new SqlParameter("@InputDate", SqlDbType.DateTime) { Value = date }
-            };
-            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+                         where OrderFlowNo = @OrderFlowNo and OrderColorDetailNo in @OrderColorDetailNo";
+            var parameter =
+                new
+                {
+                    OrderColorDetailNo = orderColorDetailNoList,
+                    InputDate = date,
+                    OrderFlowNo = orderFlowNo
+                };
+
+            var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return count;
         }
-
-        public int UpdateProcessOrderFlowCompleteDate(int orderFlowDateNo, DateTime? date)
+        /// <summary>
+        /// 更新加工訂單流程時間
+        /// </summary>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
             var sqlCmd = @"update ProcessOrderFlowDate
                           set CompleteDate = @CompleteDate,
                              UpdateDate = GETDATE()
-                          where OrderFlowDateNo = @OrderFlowDateNo";
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@OrderFlowDateNo", SqlDbType.Int) { Value = orderFlowDateNo },
-                new SqlParameter("@CompleteDate", SqlDbType.DateTime) { Value = date }
-            };
-            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+                          where OrderFlowNo = @OrderFlowNo and OrderColorDetailNo in @OrderColorDetailNo";
+            var parameter =
+                new
+                {
+                    OrderColorDetailNo = orderColorDetailNoList,
+                    CompleteDate = date,
+                    OrderFlowNo = orderFlowNo
+                };
+            var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return count;
         }
 

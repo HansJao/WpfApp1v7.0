@@ -282,9 +282,16 @@ namespace WpfApp1.Pages
             {
                 return;
             }
+            var dataGridFactoryShippingDetailItems = DataGridFactoryShippingDetail.SelectedItems;
+            List<ProcessFactoryShippingDetail> factoryShippingDetails = new List<ProcessFactoryShippingDetail>();
+            factoryShippingDetails.AddRange(dataGridFactoryShippingDetailItems.Cast<ProcessFactoryShippingDetail>());
+
+            int orderFlowNo = processOrderFlowDateDetail.OrderFlowNo;
+            IEnumerable<int> orderColorDetailNoList = factoryShippingDetails.Select(s => s.OrderColorDetailNo);
+
             var datePicker = (DatePicker)sender;
             var date = datePicker.SelectedDate;
-            int count = ProcessModule.UpdateProcessOrderFlowInputDate(processOrderFlowDateDetail.OrderFlowDateNo, date);
+            int count = ProcessModule.UpdateProcessOrderFlowInputDate(orderFlowNo, orderColorDetailNoList, date);
         }
 
         private void DatePickerCompleteDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
@@ -294,9 +301,16 @@ namespace WpfApp1.Pages
             {
                 return;
             }
+            var dataGridFactoryShippingDetailItems = DataGridFactoryShippingDetail.SelectedItems;
+            List<ProcessFactoryShippingDetail> factoryShippingDetails = new List<ProcessFactoryShippingDetail>();
+            factoryShippingDetails.AddRange(dataGridFactoryShippingDetailItems.Cast<ProcessFactoryShippingDetail>());
+
+            int orderFlowNo = processOrderFlowDateDetail.OrderFlowNo;
+            IEnumerable<int> orderColorDetailNoList = factoryShippingDetails.Select(s => s.OrderColorDetailNo);
+
             var datePicker = (DatePicker)sender;
             var date = datePicker.SelectedDate;
-            int count = ProcessModule.UpdateProcessOrderFlowCompleteDate(processOrderFlowDateDetail.OrderFlowDateNo, date);
+            int count = ProcessModule.UpdateProcessOrderFlowCompleteDate(orderFlowNo, orderColorDetailNoList, date);
         }
 
         private void DataGridFactoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -330,11 +344,6 @@ namespace WpfApp1.Pages
             NewProcessOrderColorDetaiDialog dialog = new NewProcessOrderColorDetaiDialog(processOrder, processFactoryShippingDetail);
             dialog.DataContext = this;
             dialog.Show();
-        }
-
-        private void DataGridFactoryShippingDetail_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-
         }
 
         private void DataGridFactoryShippingDetail_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)

@@ -159,7 +159,6 @@ namespace WpfApp1.Modules.Process.Implement
         /// <returns></returns>
         public int InsertProcessOrderFlowDate(List<ProcessOrderFlowDate> proecessOrderFlowDateList)
         {
-
             int result = ProcessOrderAdapter.InsertProcessOrderFlowDate(proecessOrderFlowDateList);
             return result;
         }
@@ -167,22 +166,24 @@ namespace WpfApp1.Modules.Process.Implement
         /// 更新加工訂單流程時間
         /// </summary>
         /// <param name="orderFlowDateNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderFlowInputDate(int orderFlowDateNo, DateTime? date)
+        public int UpdateProcessOrderFlowInputDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
-            int result = ProcessOrderAdapter.UpdateProcessOrderFlowInputDate(orderFlowDateNo, date);
+            int result = ProcessOrderAdapter.UpdateProcessOrderFlowInputDate(orderFlowNo, orderColorDetailNoList, date);
             return result;
         }
         /// <summary>
         /// 更新加工訂單流程時間
         /// </summary>
-        /// <param name="orderFlowDateNo"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderFlowCompleteDate(int orderFlowDateNo, DateTime? date)
+        public int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
-            int result = ProcessOrderAdapter.UpdateProcessOrderFlowCompleteDate(orderFlowDateNo, date);
+            int result = ProcessOrderAdapter.UpdateProcessOrderFlowCompleteDate(orderFlowNo, orderColorDetailNoList, date);
             return result;
         }
 

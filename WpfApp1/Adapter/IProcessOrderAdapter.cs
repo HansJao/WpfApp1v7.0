@@ -90,17 +90,19 @@ namespace WpfApp1.Adapter
         /// <summary>
         /// 更新加工訂單流程時間
         /// </summary>
-        /// <param name="orderFlowDateNo"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        int UpdateProcessOrderFlowInputDate(int orderFlowDateNo, DateTime? date);
+        int UpdateProcessOrderFlowInputDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date);
         /// <summary>
         /// 更新加工訂單流程時間
         /// </summary>
-        /// <param name="orderFlowDateNo"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        int UpdateProcessOrderFlowCompleteDate(int orderFlowDateNo, DateTime? date);
+        int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date);
         /// <summary>
         /// 依據狀態,工廠取得加工訂單
         /// </summary>

@@ -10,6 +10,7 @@ namespace WpfApp1.DataClass.ProcessOrder
     {
         public int OrderFlowDateNo { get; set; }
         public int OrderColorDetailNo { get; set; }
+        public int OrderFlowNo { get; set; }
         public string Name { get; set; }
         public string Process { get; set; }
         public DateTime? InputDate { get; set; }
