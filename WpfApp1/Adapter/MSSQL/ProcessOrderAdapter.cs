@@ -355,5 +355,22 @@ namespace WpfApp1.Adapter.MSSQL
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return count;
         }
+        /// <summary>
+        /// 刪除加工訂單顏色明細
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        public int DeleteFactoryShippingDetail(int orderColorDetailNo)
+        {
+            string sql = @"delete from FactoryShipping where OrderColorDetailNo = @OrderColorDetailNo;
+                           delete from ProcessOrderColorDetail where OrderColorDetailNo = @OrderColorDetailNo;
+                           delete from ProcessOrderFlowDate where OrderColorDetailNo = @OrderColorDetailNo;";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+               new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
+            return count;
+        }
     }
 }

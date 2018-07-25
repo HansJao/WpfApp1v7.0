@@ -358,5 +358,23 @@ namespace WpfApp1.Pages
                 int count = ProcessModule.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
             }
         }
+
+        private void ButtonDeleteFactoryShippingDetail_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessFactoryShippingDetail processFactoryShippingDetail = DataGridFactoryShippingDetail.SelectedItem as ProcessFactoryShippingDetail;
+            if (MessageBox.Show(string.Concat("是否刪除'", processFactoryShippingDetail.Color, "'??"), "刪除", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                int count = ProcessModule.DeleteFactoryShippingDetail(processFactoryShippingDetail.OrderColorDetailNo);
+                DataGridRefresh<ProcessFactoryShippingDetail>(DataGridFactoryShippingDetail, processFactoryShippingDetail);
+            }
+        }
+
+        private void DataGridRefresh<T>(DataGrid dataGrid,T processFactoryShippingDetail)
+        {
+            var items = dataGrid.ItemsSource as List<T>;
+            items.Remove(processFactoryShippingDetail);
+            DataGridFactoryShippingDetail.ItemsSource = items;
+            DataGridFactoryShippingDetail.Items.Refresh();
+        }
     }
 }

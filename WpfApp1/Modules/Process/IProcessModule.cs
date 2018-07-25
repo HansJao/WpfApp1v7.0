@@ -145,5 +145,12 @@ namespace WpfApp1.Modules.Process
         /// <param name="quantity"></param>
         /// <returns></returns>
         int UpdateProcessOrderColorDetail(int orderColorDetailNo,int quantity);
+
+        /// <summary>
+        /// 刪除加工訂單顏色明細
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        int DeleteFactoryShippingDetail(int orderColorDetailNo);
     }
 }

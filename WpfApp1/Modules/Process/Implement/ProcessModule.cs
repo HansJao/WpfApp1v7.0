@@ -241,5 +241,15 @@ namespace WpfApp1.Modules.Process.Implement
             int count = ProcessOrderAdapter.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
             return count;
         }
+        /// <summary>
+        /// 刪除加工訂單顏色明細
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        public int DeleteFactoryShippingDetail(int orderColorDetailNo)
+        {
+            int count = ProcessOrderAdapter.DeleteFactoryShippingDetail(orderColorDetailNo);
+            return count;
+        }
     }
 }
