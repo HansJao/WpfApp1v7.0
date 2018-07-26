@@ -50,6 +50,7 @@ namespace WpfApp1.Pages
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 textileList.Add(sheet.SheetName);
             }
+
             ComboBoxTextileList.ItemsSource = textileList;
             ComboBoxTextileList.Loaded += (ls, le) =>
             {
@@ -132,6 +133,10 @@ namespace WpfApp1.Pages
                     {
                         ComboBoxCustomerList.Tag = "TextInput";
                         ComboBoxCustomerList.IsDropDownOpen = true;
+                    }
+                    else if (ComboBoxCustomerList.Tag.ToString() == "TextInput" && ComboBoxCustomerList.Items.Contains(searchText) || searchText == "　")
+                    {
+                        return;
                     }
                     else
                     {
@@ -416,10 +421,18 @@ namespace WpfApp1.Pages
                 int customerTotal = 0;
                 foreach (var textileShippingData in shippingSheetStructure.TextileShippingDatas)
                 {
-                    rowIndex++;
-                    XSSFRow rowTextileName = (XSSFRow)ws.CreateRow(rowIndex);
-                    rowTextileName.Height = 440;
-                    CreateCell(rowTextileName, 1, textileShippingData.TextileName, positionStyle);
+                    //判斷若為第0筆資料,則與客戶資料同一行,否則跳下一行
+                    if (shippingSheetStructure.TextileShippingDatas.IndexOf(textileShippingData) == 0)
+                    {
+                        CreateCell(rowTextile, 1, textileShippingData.TextileName, positionStyle);
+                    }
+                    else
+                    {
+                        rowIndex++;
+                        XSSFRow rowTextileName = (XSSFRow)ws.CreateRow(rowIndex);
+                        rowTextileName.Height = 440;
+                        CreateCell(rowTextileName, 1, textileShippingData.TextileName, positionStyle);
+                    }
                     ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 1, 3));
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {

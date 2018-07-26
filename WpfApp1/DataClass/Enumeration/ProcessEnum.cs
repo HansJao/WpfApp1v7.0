@@ -9,7 +9,7 @@ namespace WpfApp1.DataClass.Enumeration
 {
     public class ProcessEnum
     {
-       
+
     }
     public enum ProcessOrderColorStatus
     {
@@ -18,6 +18,8 @@ namespace WpfApp1.DataClass.Enumeration
         [Description("緊急")]
         緊急 = 2,
         [Description("未出完")]
-        未出完 = 3
+        未出完 = 3,
+        [Description("修訂")]
+        修訂 = 4
     }
 }

@@ -33,7 +33,7 @@
                         <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <ComboBox x:Name="ComboBoxTextileList" HorizontalAlignment="Left" Margin="126,30,0,0" VerticalAlignment="Top" IsEditable="True" Width="120" SelectionChanged="ComboBoxTextileList_SelectionChanged" IsTextSearchEnabled="False" IsSynchronizedWithCurrentItem="False">
+                <ComboBox x:Name="ComboBoxTextileList" HorizontalAlignment="Left" Margin="126,30,0,0" VerticalAlignment="Top" IsEditable="True" Width="120" SelectionChanged="ComboBoxTextileList_SelectionChanged" IsTextSearchEnabled="False">
                 </ComboBox>
                 <Label HorizontalAlignment="Left" Margin="80,26,0,0" VerticalAlignment="Top"/>
                 <ComboBox x:Name="ComboBoxCustomerList" HorizontalAlignment="Left" Margin="126,3,0,0" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False" SelectionChanged="ComboBoxCustomerList_SelectionChanged">
