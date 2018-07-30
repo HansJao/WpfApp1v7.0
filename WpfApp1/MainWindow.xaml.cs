@@ -22,6 +22,7 @@ using System.Windows.Shapes;
 using WpfApp1.Pages;
 using WpfApp1.Pages.CustomerPages;
 using WpfApp1.Pages.FactoryPages;
+using WpfApp1.ViewModel.InventoryViewModel;
 using WpfApp1.Windows;
 
 //using Microsoft.Office.Interop.Excel;
@@ -76,8 +77,8 @@ namespace WpfApp1
 
         private void ButtonStorageInventroyExportFunction_Click(object sender, RoutedEventArgs e)
         {
-            var storeSearchPage = new StoreSearchPage();
-            storeSearchPage.ButtonInventoryCheckSheet_Click(this, e);
+            var storeSearchViewModel = new StoreSearchViewModel();
+            storeSearchViewModel.ButtonInventoryCheckSheet_Click();
         }
 
         private void ButtonFactoryList_Click(object sender, RoutedEventArgs e)

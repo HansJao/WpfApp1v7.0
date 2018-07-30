@@ -16,84 +16,84 @@ namespace WpfApp1.ViewModel.FactoryViewModel
 {
     public class AddFactoryViewModel : ViewModelBase
     {
-        public Factory Factory { get; set; }
+        private Factory _factory { get; set; }
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         //定義一個ICommand型別的參數，他會回傳實作ICommand介面的RelayCommand類別。
         public ICommand AddFactoryClick { get { return new RelayCommand(AddFactoryClickExecute, CanAddFactoryClickExecute); } }
 
         public AddFactoryViewModel()
         {
-            Factory = new Factory();
+            _factory = new Factory();
         }
 
         public string Name
         {
-            get { return Factory.Name; }
+            get { return _factory.Name; }
             set
             {
-                if (Factory.Name != value)
+                if (_factory.Name != value)
                 {
-                    Factory.Name = value;
+                    _factory.Name = value;
                     RaisePropertyChanged("Name");
                 }
             }
         }
         public string PhoneNumber
         {
-            get { return Factory.PhoneNumber; }
+            get { return _factory.PhoneNumber; }
             set
             {
-                if (Factory.PhoneNumber != value)
+                if (_factory.PhoneNumber != value)
                 {
-                    Factory.PhoneNumber = value;
+                    _factory.PhoneNumber = value;
                     RaisePropertyChanged("PhoneNumber");
                 }
             }
         }
         public string CellPhone
         {
-            get { return Factory.CellPhone; }
+            get { return _factory.CellPhone; }
             set
             {
-                if (Factory.CellPhone != value)
+                if (_factory.CellPhone != value)
                 {
-                    Factory.CellPhone = value;
+                    _factory.CellPhone = value;
                     RaisePropertyChanged("CellPhone");
                 }
             }
         }
         public string Fax
         {
-            get { return Factory.Fax; }
+            get { return _factory.Fax; }
             set
             {
-                if (Factory.Fax != value)
+                if (_factory.Fax != value)
                 {
-                    Factory.Fax = value;
+                    _factory.Fax = value;
                     RaisePropertyChanged("Fax");
                 }
             }
         }
         public string Address
         {
-            get { return Factory.Address; }
+            get { return _factory.Address; }
             set
             {
-                if (Factory.Address != value)
+                if (_factory.Address != value)
                 {
-                    Factory.Address = value;
+                    _factory.Address = value;
                     RaisePropertyChanged("Address");
                 }
             }
         }
         public ProcessItem Process
         {
-            get { return Factory.Process; }
+            get { return _factory.Process; }
             set
             {
-                if (Factory.Process != value)
+                if (_factory.Process != value)
                 {
-                    Factory.Process = value;
+                    _factory.Process = value;
                     RaisePropertyChanged("Process");
                 }
             }
@@ -101,12 +101,12 @@ namespace WpfApp1.ViewModel.FactoryViewModel
 
         public int Sort
         {
-            get { return Factory.Sort; }
+            get { return _factory.Sort; }
             set
             {
-                if (Factory.Sort != value)
+                if (_factory.Sort != value)
                 {
-                    Factory.Sort = value;
+                    _factory.Sort = value;
                     RaisePropertyChanged("Sort");
                 }
             }

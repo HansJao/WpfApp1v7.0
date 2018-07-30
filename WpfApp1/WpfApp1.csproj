@@ -142,6 +142,7 @@
     <Compile Include="DataClass\Shipping\ShippingSheetStructure.cs" />
     <Compile Include="DataClass\Shipping\TextileShippingData.cs" />
     <Compile Include="DataClass\StoreSearch\InventoryCheck.cs" />
+    <Compile Include="DataClass\StoreSearch\StoreData.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\XamlHelper.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
+    <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
