@@ -71,7 +71,7 @@ namespace WpfApp1
 
         private void ButtonFactoryManageFunction_Click(object sender, RoutedEventArgs e)
         {
-            this.MainFrame.NavigationService.Navigate(new AddFactory(""));
+            this.MainFrame.NavigationService.Navigate(new AddFactory());
         }
 
         private void ButtonStorageInventroyExportFunction_Click(object sender, RoutedEventArgs e)

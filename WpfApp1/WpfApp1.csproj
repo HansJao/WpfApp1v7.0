@@ -116,6 +116,7 @@
     <Compile Include="Adapter\MSSQL\FactoryAdapter.cs" />
     <Compile Include="Adapter\ICustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\ProcessOrderAdapter.cs" />
+    <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="DataClass\Customer\CustomerName.cs" />
     <Compile Include="DataClass\Entity\Customer.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
@@ -186,6 +187,8 @@
     <Compile Include="Utility\ISerializer.cs" />
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\XamlHelper.cs" />
+    <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
     </Compile>

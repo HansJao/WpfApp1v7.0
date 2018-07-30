@@ -16,5 +16,9 @@ namespace WpfApp1.Utility
             }
             return Convert.ToInt32(s);
         }
+        public static int ToInt(this Enum s)
+        {
+            return Convert.ToInt32(s);
+        }
     }
 }

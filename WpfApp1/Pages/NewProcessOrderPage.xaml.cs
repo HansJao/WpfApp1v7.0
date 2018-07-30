@@ -16,6 +16,7 @@ using WpfApp1.Modules.FactoryModule.Implement;
 using WpfApp1.Modules.Process;
 using WpfApp1.Modules.Process.Implement;
 using WpfApp1.Pages.FactoryPages;
+using WpfApp1.ViewModel.FactoryViewModel;
 
 namespace WpfApp1.Pages
 {
@@ -91,7 +92,9 @@ namespace WpfApp1.Pages
             if (notInDbFactoryName.Count() > 0)
             {
                 MessageBox.Show(string.Concat("以下工廠尚未存在於清單:\n", string.Join(",", notInDbFactoryName), "\n點選確認將跳轉至新增工廠頁面!!"));
-                this.NavigationService.Navigate(new AddFactory(notInDbFactoryName.First()));
+                var addFactory = new AddFactory();
+                addFactory.DataContext = new AddFactoryViewModel { Name = notInDbFactoryName.First() };
+                this.NavigationService.Navigate(addFactory);
                 return;
             }
             var factoryDictionary = GetFactoryName(factoryList);
