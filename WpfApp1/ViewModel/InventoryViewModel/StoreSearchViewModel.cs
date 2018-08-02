@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.Utility;
 using static WpfApp1.Pages.StoreSearchPage;
@@ -22,23 +23,43 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         //定義一個ICommand型別的參數，他會回傳實作ICommand介面的RelayCommand類別。
         public ICommand InventoryNumberRangeClick { get { return new RelayCommand(InventoryNumberRangeSearchExecute, CanExecute); } }
         public ICommand ExportToExcelClick { get { return new RelayCommand(ExportToExcel, CanExecute); } }
+        public ICommand ExportCheckDateToExcelClick { get { return new RelayCommand(ExportCheckDateToExcel, CanExecute); } }
+
+
         public StoreSearchViewModel()
         {
             _storeDataList = new ObservableCollection<StoreData>();
             _shippingHistoryStoreDataList = new ObservableCollection<StoreData>();
             MaxNumber = 3;
             MinNumber = 0;
+            DateRange = 10;
         }
 
         private ObservableCollection<StoreData> _storeDataList { get; set; }
         private int _maxNumber { get; set; }
         private int _minNumber { get; set; }
+        private int _dateRange { get; set; }
 
         public ObservableCollection<StoreData> StoreDataList
         {
             get { return _storeDataList; }
             set { _storeDataList = value; }
         }
+
+
+        public int DateRange
+        {
+            get { return _dateRange; }
+            set
+            {
+                if (_dateRange != value)
+                {
+                    _dateRange = value;
+                    RaisePropertyChanged("DateRange");
+                }
+            }
+        }
+
         public int MaxNumber
         {
             get { return _maxNumber; }
@@ -298,123 +319,201 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         {
             return true;
         }
-        public void ButtonInventoryCheckSheet_Click()
+
+
+        /// <summary>
+        /// 依據是否出貨過濾資料
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="row"></param>
+        /// <param name="timeRange"></param>
+        /// <returns></returns>
+        public List<StoreSearchData<InventoryCheck>> IsShippedAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange)
         {
-            IWorkbook workbook = null;  //新建IWorkbook對象  
-            string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
-            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            var list = new List<StoreSearchData<InventoryCheck>>();
-            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
+            for (int columnIndex = 5; columnIndex < 14; columnIndex++)
             {
-                ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
-                IRow row;
-                var firstRow = sheet.GetRow(0);
-
-                list.Add(new StoreSearchData<InventoryCheck>
+                if (row.GetCell(columnIndex) != null && row.GetCell(columnIndex).CellType != CellType.String && row.GetCell(columnIndex).NumericCellValue != 0)
                 {
-                    TextileName = sheet.SheetName,
-                    StoreSearchColorDetails = new List<InventoryCheck>()
-                });
-                var colorList = new List<StoreData>();
-                for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
-                {
-                    if (rowIndex > 70)
-                        break;
-                    row = sheet.GetRow(rowIndex);   //row讀入第i行數據  
-
-                    if (row != null)
+                    var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+                    if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error))
                     {
-                        if (row.GetCell(1) == null)
-                        {
-                            break;
-                        }
-                        for (int columnIndex = 5; columnIndex < 14; columnIndex++)
-                        {
-                            if (row.GetCell(columnIndex) != null && row.GetCell(columnIndex).CellType != CellType.String && row.GetCell(columnIndex).NumericCellValue != 0)
-                            {
-                                var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
-                                if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error))
-                                {
-                                    continue;
-                                }
-                                var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
-                                list.Last().StoreSearchColorDetails.Add(new InventoryCheck
-                                {
-                                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
-                                    CountInventory = cellValue.ToString(),
-                                });
-                                break;
-                            }
-                        }
+                        continue;
                     }
-                    else
+                    var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
+                    list.Last().StoreSearchColorDetails.Add(new InventoryCheck
                     {
-                        break;
-                    }
+                        ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                        StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                        CountInventory = cellValue.ToString(),
+                    });
+                    break;
                 }
             }
 
-            CreateInventoryCheckExcel(list);
+            return list;
         }
-        public void CreateInventoryCheckExcel(List<StoreSearchData<InventoryCheck>> list)
+
+        private int CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
-            //建立Excel 2003檔案
-            IWorkbook wb = new XSSFWorkbook();
-            ISheet ws = wb.CreateSheet("Class");
-            XSSFRow row = (XSSFRow)ws.CreateRow(0);
-            row.Height = 440;
-
-            ws.SetColumnWidth(0, 3000);
-            ws.SetColumnWidth(1, 2800);
-            ws.SetColumnWidth(3, 3000);
-            ws.SetColumnWidth(4, 3000);
-            ws.SetColumnWidth(5, 2800);
-            ws.SetColumnWidth(7, 3000);
-            ICellStyle positionStyle = wb.CreateCellStyle();
-            positionStyle.WrapText = true;
-            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-
-            ICellStyle aquaStyle = wb.CreateCellStyle();
-            aquaStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Aqua.Index;
-            aquaStyle.FillPattern = FillPattern.SolidForeground;
-
-            ExcelHelper.CreateCell(row, 0, "顏色", positionStyle);
-            ExcelHelper.CreateCell(row, 1, "儲位", positionStyle);
-            ExcelHelper.CreateCell(row, 2, "數量", positionStyle);
-            ExcelHelper.CreateCell(row, 3, "清點資訊", positionStyle);
-
-            ExcelHelper.CreateCell(row, 4, "顏色", positionStyle);
-            ExcelHelper.CreateCell(row, 5, "儲位", positionStyle);
-            ExcelHelper.CreateCell(row, 6, "數量", positionStyle);
-            ExcelHelper.CreateCell(row, 7, "清點資訊", positionStyle);
-            int rowIndex = 1;
-            foreach (var storeData in list)
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
+            foreach (var item in storeData.StoreSearchColorDetails)
             {
-                if (storeData.StoreSearchColorDetails.Count() == 0)
-                {
-                    continue;
-                }
-                XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-                ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
-                ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
-                ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
-                foreach (var item in storeData.StoreSearchColorDetails)
-                {
-                    rowIndex++;
-                    XSSFRow rowColor = (XSSFRow)ws.CreateRow(rowIndex);
-                    ExcelHelper.CreateCell(rowColor, 0, item.ColorName, positionStyle);
-                    ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
-                    ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
-                }
-
                 rowIndex++;
+                XSSFRow rowColor = (XSSFRow)ws.CreateRow(rowIndex);
+                ExcelHelper.CreateCell(rowColor, 0, item.ColorName, positionStyle);
+                ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
+                ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
             }
-            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", "庫存盤點清單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
-            wb.Write(file);
-            file.Close();
+
+            rowIndex++;
+            return rowIndex;
+        }
+
+        public void InventoryCheckSheetClick()
+        {
+            ExcelHelper excelHelper = new ExcelHelper();
+            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            {
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "顏色",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2800,
+                    ColumnTitle = "儲位",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2600,
+                    ColumnTitle = "數量",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "清點資訊",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "顏色",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2800,
+                    ColumnTitle = "儲位",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2600,
+                    ColumnTitle = "數量",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "清點資訊",
+                }
+            };
+            excelHelper.ButtonInventoryCheckSheet_Click(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
+        }
+
+        /// <summary>
+        /// 依據清點日期過濾資料
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="row"></param>
+        /// <param name="timeRange"></param>
+        /// <returns></returns>
+        public List<StoreSearchData<InventoryCheck>> CheckDateAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange)
+        {
+            var checkDate = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate);
+            var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+
+            if (checkDate == null || string.IsNullOrEmpty(checkDate.ToString()) || (checkDate.CellType == CellType.Formula && checkDate.CachedFormulaResultType == CellType.Error))
+            {
+                list.Last().StoreSearchColorDetails.Add(new InventoryCheck
+                {
+                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                    CountInventory = countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error) ? "-10" : countInventory.NumericCellValue.ToString(),
+                    CheckDate = null
+                });
+            }
+            else
+            {
+                var correctCheckDate = checkDate.CellType == CellType.Numeric ? checkDate.DateCellValue : Convert.ToDateTime(checkDate.StringCellValue.ToString()).Date;
+                if (correctCheckDate < DateTime.Now.AddDays(timeRange * -1))
+                {
+                    list.Last().StoreSearchColorDetails.Add(new InventoryCheck
+                    {
+                        ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                        StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                        CountInventory = countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error) ? "-10" : countInventory.NumericCellValue.ToString(),
+                        CheckDate = correctCheckDate
+                    });
+                }
+            }
+            return list;
+        }
+
+        private int CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        {
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
+            
+            foreach (var item in storeData.StoreSearchColorDetails.OrderBy(o => o.CheckDate))
+            {
+                rowIndex++;
+                XSSFRow rowColor = (XSSFRow)ws.CreateRow(rowIndex);
+                ExcelHelper.CreateCell(rowColor, 0, item.ColorName, positionStyle);
+                ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
+                ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
+                ExcelHelper.CreateCell(rowColor, 3, item.CheckDate?.ToString("MM/dd"), positionStyle);
+            }
+
+            rowIndex++;
+            return rowIndex;
+        }
+
+        private void ExportCheckDateToExcel()
+        {
+            ExcelHelper excelHelper = new ExcelHelper();
+            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            {
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "顏色",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2800,
+                    ColumnTitle = "儲位",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2600,
+                    ColumnTitle = "數量",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2600,
+                    ColumnTitle = "清點日期",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "清點資訊",
+                },
+
+            };
+            excelHelper.ButtonInventoryCheckSheet_Click(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
         }
     }
 

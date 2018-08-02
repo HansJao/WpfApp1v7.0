@@ -1,10 +1,15 @@
 ﻿using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.DataClass.StoreSearch;
 
 namespace WpfApp1.Utility
 {
@@ -219,8 +224,108 @@ namespace WpfApp1.Utility
             {
                 return "2D";
             }
-            return "";
 
+            return "";
+        }
+
+        public delegate List<StoreSearchData<InventoryCheck>> CustomAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange);
+        public delegate int CreateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData);
+        public void ButtonInventoryCheckSheet_Click(CustomAction customAction, CreateExcelAction createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
+        {
+            IWorkbook workbook = null;  //新建IWorkbook對象  
+            string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            var list = new List<StoreSearchData<InventoryCheck>>();
+            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
+            {
+                ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
+                IRow row;
+                var firstRow = sheet.GetRow(0);
+
+                list.Add(new StoreSearchData<InventoryCheck>
+                {
+                    TextileName = sheet.SheetName,
+                    StoreSearchColorDetails = new List<InventoryCheck>()
+                });
+                var colorList = new List<StoreData>();
+                for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
+                {
+                    if (rowIndex > 70)
+                        break;
+                    row = sheet.GetRow(rowIndex);   //row讀入第i行數據  
+
+                    if (row != null)
+                    {
+                        if (row.GetCell(1) == null)
+                        {
+                            break;
+                        }
+                        customAction(list, row, timeRange);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            }
+            CreateInventoryCheckExcel(createExcelAction, list, columnFormats);
+        }
+
+        public void CreateInventoryCheckExcel(CreateExcelAction createExcelAction, List<StoreSearchData<InventoryCheck>> list, List<ColumnFormat> columnFormats)
+        {
+            //建立Excel 2003檔案
+            IWorkbook wb = new XSSFWorkbook();
+            ISheet ws = wb.CreateSheet("Class");
+            XSSFRow row = (XSSFRow)ws.CreateRow(0);
+            row.Height = 440;
+
+            ICellStyle positionStyle = wb.CreateCellStyle();
+            positionStyle.WrapText = true;
+            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
+            ICellStyle aquaStyle = wb.CreateCellStyle();
+            aquaStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Aqua.Index;
+            aquaStyle.FillPattern = FillPattern.SolidForeground;
+
+            foreach (var item in columnFormats)
+            {
+                ws.SetColumnWidth(columnFormats.IndexOf(item), item.CoiumnWidth);
+                CreateCell(row, columnFormats.IndexOf(item), item.ColumnTitle, positionStyle);
+            }
+
+            int rowIndex = 1;
+            foreach (var storeData in list)
+            {
+                if (storeData.StoreSearchColorDetails.Count() == 0)
+                {
+                    continue;
+                }
+                rowIndex = createExcelAction(wb, ws, positionStyle, rowIndex, storeData);
+            }
+            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", "庫存盤點清單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
+            wb.Write(file);
+            file.Close();
+        }
+
+        private int CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        {
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
+            foreach (var item in storeData.StoreSearchColorDetails)
+            {
+                rowIndex++;
+                XSSFRow rowColor = (XSSFRow)ws.CreateRow(rowIndex);
+                ExcelHelper.CreateCell(rowColor, 0, item.ColorName, positionStyle);
+                ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
+                ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
+            }
+
+            rowIndex++;
+            return rowIndex;
         }
     }
 }

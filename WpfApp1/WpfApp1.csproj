@@ -128,6 +128,7 @@
     <Compile Include="DataClass\Enumeration\ExcelEnum.cs" />
     <Compile Include="DataClass\Enumeration\FactoryEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderDetailFactoryName.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Utility\XamlHelper.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
+    <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>

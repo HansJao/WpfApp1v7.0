@@ -11,5 +11,6 @@ namespace WpfApp1.DataClass.StoreSearch
         public string ColorName { get; set; }
         public string StorageSpaces { get; set; }
         public string CountInventory { get; set; }
+        public DateTime? CheckDate { get; set; }
     }
 }

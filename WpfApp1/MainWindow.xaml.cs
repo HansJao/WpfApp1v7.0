@@ -78,7 +78,7 @@ namespace WpfApp1
         private void ButtonStorageInventroyExportFunction_Click(object sender, RoutedEventArgs e)
         {
             var storeSearchViewModel = new StoreSearchViewModel();
-            storeSearchViewModel.ButtonInventoryCheckSheet_Click();
+            storeSearchViewModel.InventoryCheckSheetClick();
         }
 
         private void ButtonFactoryList_Click(object sender, RoutedEventArgs e)
