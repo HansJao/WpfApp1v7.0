@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -433,6 +434,9 @@ namespace WpfApp1.Pages
                         rowTextileName.Height = 440;
                         CreateCell(rowTextileName, 1, textileShippingData.TextileName, positionStyle);
                     }
+                    //判斷是否為配件碼布
+                    Regex reg = new Regex(@"碼布$");
+                    var isAccessories = reg.IsMatch(textileShippingData.TextileName);
                     ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 1, 3));
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
@@ -470,9 +474,15 @@ namespace WpfApp1.Pages
                             {
                                 CreateCell(rowColorInfo, shippingCount - (shippingCount / weightCellNumber - 1) * weightCellNumber, null, coralStyle);
                             }
+                            if (isAccessories)
+                            {
+                                break;
+                            }
+
                         }
                         colorIndex++;
-                        customerTotal += shippingSheetData.ShippingNumber;
+                        //如果是配件碼布的話只要加1
+                        customerTotal += isAccessories ? 1 : shippingSheetData.ShippingNumber;
                     }
                 }
                 rowIndex++;
@@ -485,7 +495,7 @@ namespace WpfApp1.Pages
             }
             XSSFRow rowTotal = (XSSFRow)ws.CreateRow(rowIndex);
             rowTotal.Height = 440;
-            CreateCell(rowTotal, 3, "Total", positionStyle);
+            CreateCell(rowTotal, 3, "總出貨數", positionStyle);
             CreateCell(rowTotal, 4, total.ToString(), positionStyle);
             FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), "/", "出貨", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
@@ -581,7 +591,10 @@ namespace WpfApp1.Pages
                             Array2 = array2Index,
 
                         });
-                        customerShippingTotal = customerShippingTotal + color.ShippingNumber;
+                        Regex reg = new Regex(@"碼布$");
+                        var isAccessories = reg.IsMatch(textile.TextileName);
+                        //如果是配件碼布的話只要加1
+                        customerShippingTotal += isAccessories ? 1 : color.ShippingNumber;
                         array2Index++;
                     }
                     array1Index++;

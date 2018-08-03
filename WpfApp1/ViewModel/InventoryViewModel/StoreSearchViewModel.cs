@@ -123,13 +123,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 IRow row;
                 var currentDateCellIndex = -1;
                 var firstRow = sheet.GetRow(0);
-                for (int i = 5; i < 14; i++)
+                for (int columnIndex = 5; columnIndex < 14; columnIndex++)
                 {
-                    var cell = firstRow.GetCell(i);
+                    var cell = firstRow.GetCell(columnIndex);
                     var cellValue = cell.StringCellValue;
                     if (cellValue == currentDateValue)
                     {
-                        currentDateCellIndex = i;
+                        currentDateCellIndex = columnIndex;
                         break;
                     }
                 }
@@ -139,21 +139,21 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     StoreSearchColorDetails = new List<StoreSearchColorDetail>()
                 });
                 var colorList = new List<StoreData>();
-                for (int i = 1; i < sheet.LastRowNum; i++)  //對工作表每一行  
+                for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
-                    if (i > 100)
+                    if (rowIndex > 100)
                         break;
-                    row = sheet.GetRow(i);   //row讀入第i行數據  
+                    row = sheet.GetRow(rowIndex);   //row讀入第i行數據  
 
                     if (row != null)
                     {
-                        if (row.GetCell(1) == null)
+                        if (row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()) == null)
                         {
                             break;
                         }
                         if (row.GetCell(currentDateCellIndex) != null && row.GetCell(currentDateCellIndex).CellType != CellType.String && row.GetCell(currentDateCellIndex).NumericCellValue != 0)
                         {
-                            var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+                            var countInventory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt());
                             if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error))
                             {
                                 continue;
@@ -161,11 +161,11 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                             var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
                             list.Last().StoreSearchColorDetails.Add(new StoreSearchColorDetail
                             {
-                                ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                                FabricFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory).ToString(),
-                                ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
+                                ColorName = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()).ToString(),
+                                FabricFactory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory.ToInt()).ToString(),
+                                ClearFactory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory.ToInt()).ToString(),
                                 CountInventory = cellValue.ToString(),
-                                CheckDate = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate).ToString()
+                                CheckDate = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate.ToInt()).ToString()
                             });
                         }
                     }
@@ -195,7 +195,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         ClearFactory = color.ClearFactory,
                         CountInventory = color.CountInventory,
                         CheckDate = color.CheckDate,
-
                     });
                 }
             }
@@ -211,8 +210,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
             ws.SetColumnWidth(0, 3000);
             ws.SetColumnWidth(1, 3150);
-            ws.SetColumnWidth(4, 1700);
             ws.SetColumnWidth(2, 1700);
+            ws.SetColumnWidth(4, 1700);
 
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
@@ -465,7 +464,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
             ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
-            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
+            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 5, 7));
             
             foreach (var item in storeData.StoreSearchColorDetails.OrderBy(o => o.CheckDate))
             {
@@ -498,12 +497,12 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 },
                 new ColumnFormat
                 {
-                    CoiumnWidth = 2600,
+                    CoiumnWidth = 1850,
                     ColumnTitle = "數量",
                 },
                 new ColumnFormat
                 {
-                    CoiumnWidth = 2600,
+                    CoiumnWidth = 1850,
                     ColumnTitle = "清點日期",
                 },
                 new ColumnFormat

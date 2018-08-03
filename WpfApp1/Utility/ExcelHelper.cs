@@ -285,10 +285,6 @@ namespace WpfApp1.Utility
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
-            ICellStyle aquaStyle = wb.CreateCellStyle();
-            aquaStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Aqua.Index;
-            aquaStyle.FillPattern = FillPattern.SolidForeground;
-
             foreach (var item in columnFormats)
             {
                 ws.SetColumnWidth(columnFormats.IndexOf(item), item.CoiumnWidth);
@@ -307,25 +303,6 @@ namespace WpfApp1.Utility
             FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", "庫存盤點清單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
             file.Close();
-        }
-
-        private int CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
-        {
-            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-            ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
-            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
-            ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 4, 6));
-            foreach (var item in storeData.StoreSearchColorDetails)
-            {
-                rowIndex++;
-                XSSFRow rowColor = (XSSFRow)ws.CreateRow(rowIndex);
-                ExcelHelper.CreateCell(rowColor, 0, item.ColorName, positionStyle);
-                ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
-                ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
-            }
-
-            rowIndex++;
-            return rowIndex;
         }
     }
 }

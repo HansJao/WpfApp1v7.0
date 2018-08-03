@@ -28,8 +28,9 @@
                 <TextBox  Text="{Binding MaxNumber}" HorizontalAlignment="Left" Height="23" Margin="84,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
                 <Label Content="最少:" HorizontalAlignment="Left" Margin="42,-2,0,0" VerticalAlignment="Top" Height="25"/>
                 <Label Content="最多:" HorizontalAlignment="Left" Margin="42,29,0,0" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="323,10,0,0" TextWrapping="Wrap" Text="{Binding DateRange}" VerticalAlignment="Top" Width="120"/>
-                <Button Content="Button" HorizontalAlignment="Left" Margin="368,38,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportCheckDateToExcelClick}"/>
+                <TextBox HorizontalAlignment="Left" Height="23" Margin="368,10,0,0" TextWrapping="Wrap" Text="{Binding DateRange}" VerticalAlignment="Top" Width="75"/>
+                <Button Content="清點時間清單匯出" HorizontalAlignment="Left" Margin="343,38,0,0" VerticalAlignment="Top" Width="100" Command="{Binding ExportCheckDateToExcelClick}"/>
+                <Label Content="時間範圍:" HorizontalAlignment="Left" Margin="310,10,0,0" VerticalAlignment="Top"/>
             </Grid>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,10,0,0">
                 <DataGrid x:Name="DataGridStoreSearchListByShipped" AutoGenerateColumns="False" ItemsSource="{Binding ShippingHistoryStoreDataList}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,10" CanUserAddRows="False">
