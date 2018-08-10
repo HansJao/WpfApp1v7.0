@@ -1,4 +1,6 @@
 ﻿using NPOI.SS.UserModel;
+using NPOI.SS.Util;
+using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,6 +14,7 @@ using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
@@ -25,6 +28,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
         protected IFabricModule FabricModule { get; } = new FabricModule();
         public ICommand CheckFabricClick { get { return new RelayCommand(CheckFabricClickExecute, CanExecute); } }
         public ICommand NewFabricDoubleClick { get { return new RelayCommand(NewFabricExecute, CanExecute); } }
+        public ICommand ExportInventoryPriceClick { get { return new RelayCommand(ExportInventoryPriceToExcel, CanExecute); } }
+
 
         private ObservableCollection<string> _fabricNameList { get; set; }
 
@@ -116,27 +121,75 @@ namespace WpfApp1.ViewModel.FabricViewModel
         /// <param name="row"></param>
         /// <param name="timeRange"></param>
         /// <returns></returns>
-        public List<StoreSearchData<InventoryCheck>> GetCountInventoryAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange)
+        public List<StoreSearchData<InventoryPrice>> GetCountInventoryAction(List<StoreSearchData<InventoryPrice>> list, IRow row, int timeRange)
         {
             var columnIndex = ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt();
-            if (row.GetCell(columnIndex) != null && row.GetCell(columnIndex).CellType != CellType.String && row.GetCell(columnIndex).NumericCellValue != 0)
+
+            var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+            if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error) || countInventory.NumericCellValue < 0)
             {
-                var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
-                if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error))
-                {
-                    //continue;
-                }
-                var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
-                list.Last().StoreSearchColorDetails.Add(new InventoryCheck
+                list.Last().StoreSearchColorDetails.Add(new InventoryPrice
                 {
                     ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
-                    CountInventory = cellValue.ToString(),
+                    CountInventory = 0,
                 });
+                return list;
             }
-
+            var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
+            list.Last().StoreSearchColorDetails.Add(new InventoryPrice
+            {
+                ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                CountInventory = Convert.ToInt32(cellValue),
+            });
 
             return list;
+        }
+
+        private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryPrice> storeData)
+        {
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+            int countInventoryTotal = 0;
+            foreach (var item in storeData.StoreSearchColorDetails)
+            {
+                countInventoryTotal += item.CountInventory;
+            }
+            ExcelHelper.CreateCell(rowTextile, 1, countInventoryTotal.ToString(), positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 2, (countInventoryTotal * 20 * 200).ToString(), positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 3, (countInventoryTotal * 20 * 170).ToString(), positionStyle);
+
+            rowIndex++;
+            return "庫存成本清單";
+        }
+
+        private void ExportInventoryPriceToExcel()
+        {
+            ExcelHelper excelHelper = new ExcelHelper();
+            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            {
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "布種名稱",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2800,
+                    ColumnTitle = "庫存總數",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 1850,
+                    ColumnTitle = "庫存總價格",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 1850,
+                    ColumnTitle = "庫存總成本",
+                }
+
+            };
+            excelHelper.ButtonInventoryCheckSheet_Click<InventoryPrice>(GetCountInventoryAction, CreateInventoryPriceExcelAction, 0, columnFormats);
         }
 
         private bool CanExecute()

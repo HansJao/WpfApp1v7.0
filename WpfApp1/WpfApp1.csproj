@@ -146,6 +146,7 @@
     <Compile Include="DataClass\Shipping\ShippingSheetStructure.cs" />
     <Compile Include="DataClass\Shipping\TextileShippingData.cs" />
     <Compile Include="DataClass\StoreSearch\InventoryCheck.cs" />
+    <Compile Include="DataClass\StoreSearch\InventoryPrice.cs" />
     <Compile Include="DataClass\StoreSearch\StoreData.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />

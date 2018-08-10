@@ -352,7 +352,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return list;
         }
 
-        private int CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        private string CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -368,7 +368,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             }
 
             rowIndex++;
-            return rowIndex;
+            return "庫存盤點清單";
         }
 
         public void InventoryCheckSheetClick()
@@ -417,7 +417,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ColumnTitle = "清點資訊",
                 }
             };
-            excelHelper.ButtonInventoryCheckSheet_Click(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
+            excelHelper.ButtonInventoryCheckSheet_Click<InventoryCheck>(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return list;
         }
 
-        private int CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        private string CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -477,7 +477,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             }
 
             rowIndex++;
-            return rowIndex;
+            return "檢查時間盤點清單";
         }
 
         private void ExportCheckDateToExcel()
@@ -512,7 +512,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 },
 
             };
-            excelHelper.ButtonInventoryCheckSheet_Click(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
+            excelHelper.ButtonInventoryCheckSheet_Click<InventoryCheck>(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
         }
     }
 

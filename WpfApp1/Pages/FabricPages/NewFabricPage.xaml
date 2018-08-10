@@ -53,7 +53,7 @@
                 <TextBox HorizontalAlignment="Left" Text="{Binding AverageUnitPrice}" Height="23" Margin="80,145,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"/>
                 <Label Content="平均成本:" HorizontalAlignment="Left" Margin="0,168,0,0" VerticalAlignment="Top"/>
                 <TextBox HorizontalAlignment="Left" Text="{Binding AverageCost}" Height="23" Margin="80,173,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="80"/>
-                <Button Content="匯出庫存成本" HorizontalAlignment="Left" Margin="80,320,0,0" VerticalAlignment="Top" Width="80"/>
+                <Button Content="匯出庫存成本" HorizontalAlignment="Left" Command="{Binding ExportInventoryPriceClick}" Margin="80,320,0,0" VerticalAlignment="Top" Width="80"/>
             </Grid>
         </DockPanel>
 

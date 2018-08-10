@@ -228,8 +228,8 @@ namespace WpfApp1.Utility
             return "";
         }
 
-        public delegate List<StoreSearchData<InventoryCheck>> CustomAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange);
-        public delegate int CreateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData);
+        public delegate List<StoreSearchData<T>> CustomAction<T>(List<StoreSearchData<T>> list, IRow row, int timeRange);
+        public delegate string CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<T> storeData);
 
         public List<string> GetExcelSheetName()
         {
@@ -247,23 +247,23 @@ namespace WpfApp1.Utility
         }
 
 
-        public void ButtonInventoryCheckSheet_Click(CustomAction customAction, CreateExcelAction createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
+        public void ButtonInventoryCheckSheet_Click<T>(CustomAction<T> customAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            var list = new List<StoreSearchData<InventoryCheck>>();
+            var list = new List<StoreSearchData<T>>();
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 IRow row;
                 var firstRow = sheet.GetRow(0);
 
-                list.Add(new StoreSearchData<InventoryCheck>
+                list.Add(new StoreSearchData<T>
                 {
                     TextileName = sheet.SheetName,
-                    StoreSearchColorDetails = new List<InventoryCheck>()
+                    StoreSearchColorDetails = new List<T>()
                 });
                 var colorList = new List<StoreData>();
                 for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
@@ -289,7 +289,7 @@ namespace WpfApp1.Utility
             CreateInventoryCheckExcel(createExcelAction, list, columnFormats);
         }
 
-        public void CreateInventoryCheckExcel(CreateExcelAction createExcelAction, List<StoreSearchData<InventoryCheck>> list, List<ColumnFormat> columnFormats)
+        public void CreateInventoryCheckExcel<T>(CreateExcelAction<T> createExcelAction, List<StoreSearchData<T>> list, List<ColumnFormat> columnFormats)
         {
             //建立Excel 2003檔案
             IWorkbook wb = new XSSFWorkbook();
@@ -309,15 +309,16 @@ namespace WpfApp1.Utility
             }
 
             int rowIndex = 1;
+            string createFileName = string.Empty;
             foreach (var storeData in list)
             {
                 if (storeData.StoreSearchColorDetails.Count() == 0)
                 {
                     continue;
                 }
-                rowIndex = createExcelAction(wb, ws, positionStyle, rowIndex, storeData);
+                createFileName = createExcelAction(wb, ws, positionStyle,ref rowIndex, storeData);
             }
-            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", "庫存盤點清單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
+            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", createFileName, DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
             file.Close();
         }
