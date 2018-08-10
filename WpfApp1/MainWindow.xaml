@@ -37,6 +37,7 @@
                 </MenuItem>
             </Menu>
             <!--<Button x:Name="ButtonFactoryManageFunction" Content="工廠管理" Click="ButtonFactoryManageFunction_Click" />-->
+            <Button x:Name="ButtonFabricManageFunction" Content="布種管理" Click="ButtonFabricManageFunction_Click" />
             <Button x:Name="ButtonReportsFunction" Content="報表" Click="ButtonReportsFunction_Click" />
             <Button x:Name="ButtonReportsByCustomerFunction" Content="客戶報表" Click="ButtonReportsByCustomerFunction_Click" ></Button>
         </ToolBar>

@@ -230,6 +230,23 @@ namespace WpfApp1.Utility
 
         public delegate List<StoreSearchData<InventoryCheck>> CustomAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange);
         public delegate int CreateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, int rowIndex, StoreSearchData<InventoryCheck> storeData);
+
+        public List<string> GetExcelSheetName()
+        {
+            IWorkbook workbook = null;  //新建IWorkbook對象  
+            string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            var sheetListName = new List<string>();
+            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
+            {
+                var sheetName = workbook.GetSheetName(sheetCount);  //獲取第i個工作表
+                sheetListName.Add(sheetName);
+            }
+            return sheetListName;
+        }
+
+
         public void ButtonInventoryCheckSheet_Click(CustomAction customAction, CreateExcelAction createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  

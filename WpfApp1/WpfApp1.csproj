@@ -110,15 +110,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adapter\IFabricAdapter.cs" />
     <Compile Include="Adapter\IFacroryAdapter.cs" />
     <Compile Include="Adapter\IProcessOrderAdapter.cs" />
     <Compile Include="Adapter\MSSQL\CustomerAdapter.cs" />
+    <Compile Include="Adapter\MSSQL\FabricAdapter.cs" />
     <Compile Include="Adapter\MSSQL\FactoryAdapter.cs" />
     <Compile Include="Adapter\ICustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\ProcessOrderAdapter.cs" />
     <Compile Include="Command\RelayCommand.cs" />
     <Compile Include="DataClass\Customer\CustomerName.cs" />
     <Compile Include="DataClass\Entity\Customer.cs" />
+    <Compile Include="DataClass\Entity\Fabric.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
     <Compile Include="DataClass\Entity\FactoryShipping.cs" />
     <Compile Include="DataClass\Entity\ProcessOrder.cs" />
@@ -148,12 +151,17 @@
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
     <Compile Include="Modules\CustomerModule\Implement\CustomerModule.cs" />
+    <Compile Include="Modules\FabricModule\IFabricModule.cs" />
+    <Compile Include="Modules\FabricModule\Implement\FabricModule.cs" />
     <Compile Include="Modules\FactoryModule\IFactoryModule.cs" />
     <Compile Include="Modules\FactoryModule\Implement\FactoryModule.cs" />
     <Compile Include="Modules\Process\Implement\ProcessModule.cs" />
     <Compile Include="Modules\Process\IProcessModule.cs" />
     <Compile Include="Pages\CustomerPages\CustomerListPage.xaml.cs">
       <DependentUpon>CustomerListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FabricPages\NewFabricPage.xaml.cs">
+      <DependentUpon>NewFabricPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\FactoryManagePage.xaml.cs">
       <DependentUpon>FactoryManagePage.xaml</DependentUpon>
@@ -189,6 +197,7 @@
     <Compile Include="Utility\ISerializer.cs" />
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\XamlHelper.cs" />
+    <Compile Include="ViewModel\FabricViewModel\NewFabricViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -219,6 +228,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Pages\CustomerPages\CustomerListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FabricPages\NewFabricPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -21,6 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.Pages;
 using WpfApp1.Pages.CustomerPages;
+using WpfApp1.Pages.FabricPages;
 using WpfApp1.Pages.FactoryPages;
 using WpfApp1.ViewModel.InventoryViewModel;
 using WpfApp1.Windows;
@@ -93,6 +94,11 @@ namespace WpfApp1
         private void ButtonCustomerList_Click(object sender, RoutedEventArgs e)
         {
             this.MainFrame.NavigationService.Navigate(new CustomerListPage());
+        }
+
+        private void ButtonFabricManageFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainFrame.NavigationService.Navigate(new NewFabricPage());
         }
     }
 }
