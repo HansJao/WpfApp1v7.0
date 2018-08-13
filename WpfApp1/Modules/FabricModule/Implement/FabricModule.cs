@@ -51,5 +51,17 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.AddFabric(fabric);
             return count;
         }
+
+        /// <summary>
+        /// 更新布種
+        /// </summary>
+        /// <param name="fabric"></param>
+        /// <returns></returns>
+        public int EditFabric(Fabric fabric)
+        {
+            fabric.UpdateDate = DateTime.Now;
+            int count = FabricAdapter.EditFabric(fabric);
+            return count;
+        }
     }
 }

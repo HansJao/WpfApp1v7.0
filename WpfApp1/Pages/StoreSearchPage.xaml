@@ -39,7 +39,8 @@
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="織廠" Binding="{Binding FabricFactory}"></DataGridTextColumn>
                         <DataGridTextColumn Header="整理" Binding="{Binding ClearFactory}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="出貨數量" Binding="{Binding ShippedCount}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="計算庫存量" Binding="{Binding CountInventory}"></DataGridTextColumn>
                         <DataGridTextColumn Header="時間" Binding="{Binding CheckDate}"/>
                     </DataGrid.Columns>
                 </DataGrid>

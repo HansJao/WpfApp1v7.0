@@ -18,5 +18,11 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="fabric"></param>
         /// <returns></returns>
         int AddFabric(Fabric fabric);
+        /// <summary>
+        /// 更新布種
+        /// </summary>
+        /// <param name="fabric"></param>
+        /// <returns></returns>
+        int EditFabric(Fabric fabric);
     }
 }

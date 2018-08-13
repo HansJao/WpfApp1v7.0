@@ -228,7 +228,7 @@ namespace WpfApp1.Utility
             return "";
         }
 
-        public delegate List<StoreSearchData<T>> CustomAction<T>(List<StoreSearchData<T>> list, IRow row, int timeRange);
+        public delegate List<StoreSearchData<T>> ReadExcelAction<T>(List<StoreSearchData<T>> list, IRow row, int timeRange);
         public delegate string CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<T> storeData);
 
         public List<string> GetExcelSheetName()
@@ -247,7 +247,7 @@ namespace WpfApp1.Utility
         }
 
 
-        public void ButtonInventoryCheckSheet_Click<T>(CustomAction<T> customAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
+        public void ButtonInventoryCheckSheet_Click<T>(ReadExcelAction<T> readExcelAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
@@ -278,7 +278,7 @@ namespace WpfApp1.Utility
                         {
                             break;
                         }
-                        customAction(list, row, timeRange);
+                        readExcelAction(list, row, timeRange);
                     }
                     else
                     {

@@ -29,23 +29,18 @@ namespace WpfApp1.ViewModel.FabricViewModel
         public ICommand CheckFabricClick { get { return new RelayCommand(CheckFabricClickExecute, CanExecute); } }
         public ICommand NewFabricDoubleClick { get { return new RelayCommand(NewFabricExecute, CanExecute); } }
         public ICommand ExportInventoryPriceClick { get { return new RelayCommand(ExportInventoryPriceToExcel, CanExecute); } }
+        public ICommand FabricEditClick { get { return new RelayCommand(FabricEdit, CanExecute); } }
 
-
-        private ObservableCollection<string> _fabricNameList { get; set; }
-
-        public ObservableCollection<string> FabricDataList
+        private void FabricEdit()
         {
-            get { return _fabricNameList; }
-            set { _fabricNameList = value; }
+            int count = FabricModule.EditFabric(Fabric);
         }
 
-        private ObservableCollection<Fabric> _fabricList { get; set; }
+        public ObservableCollection<string> FabricNameList { get; set; }
 
-        public ObservableCollection<Fabric> FabricList
-        {
-            get { return _fabricList; }
-            set { _fabricList = value; }
-        }
+        public Fabric Fabric { get; set; }
+
+        public ObservableCollection<Fabric> FabricList { get; set; }
 
         public int AverageUnitPrice { get; set; }
         public int AverageCost { get; set; }
@@ -83,8 +78,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         public NewFabricViewModel()
         {
-            _fabricNameList = new ObservableCollection<string>();
-            _fabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
+            FabricNameList = new ObservableCollection<string>();
+            FabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
             AverageUnitPrice = 200;
             AverageCost = 170;
         }
@@ -110,7 +105,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             var names = FabricModule.CheckExcelAndSqlFabricName();
             foreach (var name in names)
             {
-                FabricDataList.Add(name);
+                FabricNameList.Add(name);
             }
         }
 
@@ -154,10 +149,14 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 countInventoryTotal += item.CountInventory;
             }
-            ExcelHelper.CreateCell(rowTextile, 1, countInventoryTotal.ToString(), positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 2, (countInventoryTotal * 20 * 200).ToString(), positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 3, (countInventoryTotal * 20 * 170).ToString(), positionStyle);
-
+            var textile = FabricList.Where(w => w.FabricName == storeData.TextileName).FirstOrDefault();
+            //未匯入Sql的布種不予計算
+            if (textile != null)
+            {
+                ExcelHelper.CreateCell(rowTextile, 1, countInventoryTotal.ToString(), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 2, (countInventoryTotal * 20 * textile.AverageUnitPrice).ToString(), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 3, (countInventoryTotal * 20 * textile.AverageCost).ToString(), positionStyle);
+            }
             rowIndex++;
             return "庫存成本清單";
         }

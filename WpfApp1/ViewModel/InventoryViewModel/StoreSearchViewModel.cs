@@ -164,6 +164,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                 ColorName = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()).ToString(),
                                 FabricFactory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory.ToInt()).ToString(),
                                 ClearFactory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory.ToInt()).ToString(),
+                                ShippedCount = Convert.ToInt32(row.GetCell(currentDateCellIndex).NumericCellValue),
                                 CountInventory = cellValue.ToString(),
                                 CheckDate = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate.ToInt()) == null ? "" : row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate.ToInt()).ToString()
                             });
@@ -193,6 +194,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         ColorName = color.ColorName,
                         FabricFactory = color.FabricFactory,
                         ClearFactory = color.ClearFactory,
+                        ShippedCount = color.ShippedCount,
                         CountInventory = color.CountInventory,
                         CheckDate = color.CheckDate,
                     });
@@ -222,19 +224,26 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
             ExcelHelper.CreateCell(row, 2, "織廠", positionStyle);
             ExcelHelper.CreateCell(row, 3, "整理", positionStyle);
-            ExcelHelper.CreateCell(row, 4, "數量", positionStyle);
-            ExcelHelper.CreateCell(row, 5, "時間", positionStyle);
+            ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
+            ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
+            ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
             int rowIndex = 1;
             foreach (StoreData storeData in ShippingHistoryStoreDataList)
             {
                 XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
 
                 ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+                if (!string.IsNullOrEmpty(storeData.TextileName))
+                {
+                    rowIndex++;
+                    continue;
+                }
                 ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 3, storeData.ClearFactory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 4, storeData.CountInventory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 5, storeData.CheckDate, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
 
                 rowIndex++;
             }
@@ -352,7 +361,16 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return list;
         }
 
-        private string CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        /// <summary>
+        /// 建立已出貨的庫存盤點Excel清單
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="ws"></param>
+        /// <param name="positionStyle"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="storeData"></param>
+        /// <returns></returns>
+        private string CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -371,6 +389,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return "庫存盤點清單";
         }
 
+        /// <summary>
+        /// 庫存盤點清單
+        /// </summary>
         public void InventoryCheckSheetClick()
         {
             ExcelHelper excelHelper = new ExcelHelper();
@@ -459,13 +480,22 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return list;
         }
 
-        private string CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        /// <summary>
+        /// 建立檢查時間點盤點清單
+        /// </summary>
+        /// <param name="wb"></param>
+        /// <param name="ws"></param>
+        /// <param name="positionStyle"></param>
+        /// <param name="rowIndex"></param>
+        /// <param name="storeData"></param>
+        /// <returns></returns>
+        private string CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
             ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 2));
             ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 5, 7));
-            
+
             foreach (var item in storeData.StoreSearchColorDetails.OrderBy(o => o.CheckDate))
             {
                 rowIndex++;
@@ -480,6 +510,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             return "檢查時間盤點清單";
         }
 
+        /// <summary>
+        /// 檢查時間點盤點清單
+        /// </summary>
         private void ExportCheckDateToExcel()
         {
             ExcelHelper excelHelper = new ExcelHelper();

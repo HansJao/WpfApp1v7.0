@@ -12,10 +12,10 @@
     </Page.DataContext>
     <Grid>
         <DockPanel>            
-            <Grid DockPanel.Dock="Left" Width="350" HorizontalAlignment="Left">
+            <Grid DockPanel.Dock="Left" HorizontalAlignment="Left">
                 <Label Content="布種搜尋:" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                 <TextBox Width="100" Height="24" Text="{Binding FabricSearch, UpdateSourceTrigger=PropertyChanged}" Margin="60,4,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
-                <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,30,0,0" ItemsSource="{Binding FabricList}" AutoGenerateColumns="False" CanUserAddRows="False" >
+                <DataGrid x:Name="DataGridFabric" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,30,0,0" ItemsSource="{Binding FabricList}" SelectedItem="{Binding Fabric}" AutoGenerateColumns="False" CanUserAddRows="False" >
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="布種編號" Binding="{Binding FabricID}"></DataGridTextColumn>
                         <DataGridTextColumn Header="布種名稱" Binding="{Binding FabricName}"></DataGridTextColumn>
@@ -25,7 +25,7 @@
                         <DataGridTemplateColumn Header="修改" >
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate>
-                                    <Button x:Name="ButtonEditFactory" Content="修改"/>
+                                    <Button x:Name="ButtonEditFactory" Content="修改" Command="{Binding DataContext.FabricEditClick, ElementName=DataGridFabric}"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
@@ -34,7 +34,7 @@
             </Grid>
             <Grid DockPanel.Dock="left" HorizontalAlignment="Left" Margin="30,0,0,0">
                 <Button Content="檢查未匯入布種" Command="{Binding CheckFabricClick}" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="90"/>
-                <ListBox HorizontalAlignment="Left" ItemsSource="{Binding FabricDataList}" SelectedItem="{Binding SelectedFabricName}" Height="100" Margin="0,37,0,0" VerticalAlignment="Top" Width="163">
+                <ListBox HorizontalAlignment="Left" ItemsSource="{Binding FabricNameList}" SelectedItem="{Binding SelectedFabricName}" Height="100" Margin="0,37,0,0" VerticalAlignment="Top" Width="163">
                     <ListBox.Resources>
                         <viewModel:NewFabricViewModel x:Key="myResources" x:Name="myTestResources"/>
                     </ListBox.Resources>

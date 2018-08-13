@@ -12,6 +12,7 @@ namespace WpfApp1.DataClass.StoreSearch
         public string ColorName { get; set; }
         public string FabricFactory { get; set; }
         public string ClearFactory { get; set; }
+        public int ShippedCount { get; set; }
         public string CountInventory { get; set; }
         public string CheckDate { get; set; }
     }
