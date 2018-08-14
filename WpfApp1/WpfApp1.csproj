@@ -152,6 +152,8 @@
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
     <Compile Include="Modules\CustomerModule\Implement\CustomerModule.cs" />
+    <Compile Include="Modules\ExcelModule\IExcelModule.cs" />
+    <Compile Include="Modules\ExcelModule\Implement\ExcelModule.cs" />
     <Compile Include="Modules\FabricModule\IFabricModule.cs" />
     <Compile Include="Modules\FabricModule\Implement\FabricModule.cs" />
     <Compile Include="Modules\FactoryModule\IFactoryModule.cs" />

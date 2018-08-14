@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,13 @@ namespace WpfApp1.Utility
     {
         public static int ExecuteParameter(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
         {
+
+            //var conString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + AppSettingConfig.DbfFilePath() + "; Extended Properties=dBASE IV;");
+            //using (var con = new OleDbConnection(conString))
+            //{
+            //    string sql4 = "SELECT * FROM INVOSUB.dbf";
+            //    var test = con.Query<dynamic>(sql4);
+            //}
             int result;
             using (var con = new SqlConnection(connectionString))
             {
@@ -54,7 +62,7 @@ namespace WpfApp1.Utility
         }
 
         public static IEnumerable<T> QueryCollection<T>(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
-        {
+        {           
             IEnumerable<T> result;
             using (var con = new SqlConnection(connectionString))
             {

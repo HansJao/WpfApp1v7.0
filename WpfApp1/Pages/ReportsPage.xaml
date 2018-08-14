@@ -18,6 +18,8 @@
             <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="100,42,0,0" VerticalAlignment="Top"/>
             <DatePicker x:Name="DatePickerBegin" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top"/>
             <DatePicker x:Name="DatePickerEnd" HorizontalAlignment="Left" Margin="204,10,0,0" VerticalAlignment="Top"/>
+            <Button Content="每日出貨表" HorizontalAlignment="Left" Margin="362,74,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+            <Button HorizontalAlignment="Left" Content="檢查" Margin="396,22,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_1"/>            
         </Grid>
     </ScrollViewer>
 </Page>
