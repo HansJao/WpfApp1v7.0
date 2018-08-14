@@ -110,17 +110,26 @@ namespace WpfApp1.ViewModel.FabricViewModel
         }
 
         /// <summary>
-        /// 依據是否出貨過濾資料
+        /// 取得所有布種庫存量資料
         /// </summary>
         /// <param name="list"></param>
         /// <param name="row"></param>
         /// <param name="timeRange"></param>
         /// <returns></returns>
-        public List<StoreSearchData<InventoryPrice>> GetCountInventoryAction(List<StoreSearchData<InventoryPrice>> list, IRow row, int timeRange)
+        public List<StoreSearchData<InventoryPrice>> GetAllInventoryAction(List<StoreSearchData<InventoryPrice>> list, IRow row, string sheetName, int timeRange)
         {
             var columnIndex = ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt();
 
             var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+            //如果沒有這個布種名稱則新增
+            if (list.Where(w => w.TextileName == sheetName).Count() == 0)
+            {
+                list.Add(new StoreSearchData<InventoryPrice>
+                {
+                    TextileName = sheetName,
+                    StoreSearchColorDetails = new List<InventoryPrice>()
+                });
+            }
             if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error) || countInventory.NumericCellValue < 0)
             {
                 list.Last().StoreSearchColorDetails.Add(new InventoryPrice
@@ -188,7 +197,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 }
 
             };
-            excelHelper.ButtonInventoryCheckSheet_Click<InventoryPrice>(GetCountInventoryAction, CreateInventoryPriceExcelAction, 0, columnFormats);
+            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryPrice>>(GetAllInventoryAction, CreateInventoryPriceExcelAction, 0, columnFormats);
         }
 
         private bool CanExecute()

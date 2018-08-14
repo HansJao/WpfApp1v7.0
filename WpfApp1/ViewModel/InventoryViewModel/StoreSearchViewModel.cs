@@ -115,7 +115,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         {
             var list = new List<StoreSearchData<StoreSearchColorDetail>>();
             list = ExcelModule.GetExcelDailyShippedList(ShippingHistoryDate);
-           
+
             foreach (var item in list)
             {
                 if (item.StoreSearchColorDetails.Count() == 0)
@@ -278,8 +278,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         /// <param name="row"></param>
         /// <param name="timeRange"></param>
         /// <returns></returns>
-        public List<StoreSearchData<InventoryCheck>> IsShippedAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange)
+        public List<StoreSearchData<InventoryCheck>> IsShippedAction(List<StoreSearchData<InventoryCheck>> list, IRow row, string sheetName, int timeRange)
         {
+
             for (int columnIndex = 5; columnIndex < 14; columnIndex++)
             {
                 if (row.GetCell(columnIndex) != null && row.GetCell(columnIndex).CellType != CellType.String && row.GetCell(columnIndex).NumericCellValue != 0)
@@ -289,6 +290,17 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     {
                         continue;
                     }
+
+                    //如果沒有這個布種名稱則新增
+                    if (list.Where(w => w.TextileName == sheetName).Count() == 0)
+                    {
+                        list.Add(new StoreSearchData<InventoryCheck>
+                        {
+                            TextileName = sheetName,
+                            StoreSearchColorDetails = new List<InventoryCheck>()
+                        });
+                    }
+
                     var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
                     list.Last().StoreSearchColorDetails.Add(new InventoryCheck
                     {
@@ -380,7 +392,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ColumnTitle = "清點資訊",
                 }
             };
-            excelHelper.ButtonInventoryCheckSheet_Click<InventoryCheck>(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
+            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
         }
 
         /// <summary>
@@ -390,8 +402,17 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         /// <param name="row"></param>
         /// <param name="timeRange"></param>
         /// <returns></returns>
-        public List<StoreSearchData<InventoryCheck>> CheckDateAction(List<StoreSearchData<InventoryCheck>> list, IRow row, int timeRange)
+        public List<StoreSearchData<InventoryCheck>> CheckDateAction(List<StoreSearchData<InventoryCheck>> list, IRow row, string sheetName, int timeRange)
         {
+            //如果沒有這個布種名稱則新增
+            if (list.Where(w => w.TextileName == sheetName).Count() == 0)
+            {
+                list.Add(new StoreSearchData<InventoryCheck>
+                {
+                    TextileName = sheetName,
+                    StoreSearchColorDetails = new List<InventoryCheck>()
+                });
+            }
             var checkDate = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate);
             var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
 
@@ -487,7 +508,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 },
 
             };
-            excelHelper.ButtonInventoryCheckSheet_Click<InventoryCheck>(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
+            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
         }
     }
 

@@ -228,8 +228,8 @@ namespace WpfApp1.Utility
             return "";
         }
 
-        public delegate List<StoreSearchData<T>> ReadExcelAction<T>(List<StoreSearchData<T>> list, IRow row, int timeRange);
-        public delegate string CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle,ref int rowIndex, StoreSearchData<T> storeData);
+        public delegate List<T> ReadExcelAction<T>(List<T> list, IRow row, string sheetName, int timeRange);
+        public delegate string CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, T storeData);
 
         public List<string> GetExcelSheetName()
         {
@@ -247,25 +247,27 @@ namespace WpfApp1.Utility
         }
 
 
-        public void ButtonInventoryCheckSheet_Click<T>(ReadExcelAction<T> readExcelAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
+        /// <summary>
+        /// 讀取Excel後匯出Excel
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="readExcelAction"></param>
+        /// <param name="createExcelAction"></param>
+        /// <param name="timeRange"></param>
+        /// <param name="columnFormats"></param>
+        public void InventoryCheckSheet<T>(ReadExcelAction<T> readExcelAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            var list = new List<StoreSearchData<T>>();
+            var list = new List<T>();
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 IRow row;
                 var firstRow = sheet.GetRow(0);
-
-                list.Add(new StoreSearchData<T>
-                {
-                    TextileName = sheet.SheetName,
-                    StoreSearchColorDetails = new List<T>()
-                });
-                var colorList = new List<StoreData>();
+                               
                 for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
                     if (rowIndex > 70)
@@ -274,11 +276,12 @@ namespace WpfApp1.Utility
 
                     if (row != null)
                     {
+                        //該筆資料沒有顏色則不讀取該Row
                         if (row.GetCell(1) == null)
                         {
                             break;
                         }
-                        readExcelAction(list, row, timeRange);
+                        readExcelAction(list, row, sheet.SheetName, timeRange);
                     }
                     else
                     {
@@ -286,10 +289,10 @@ namespace WpfApp1.Utility
                     }
                 }
             }
-            CreateInventoryCheckExcel(createExcelAction, list, columnFormats);
+            CreateExcelFile(createExcelAction, list, columnFormats);
         }
 
-        public void CreateInventoryCheckExcel<T>(CreateExcelAction<T> createExcelAction, List<StoreSearchData<T>> list, List<ColumnFormat> columnFormats)
+        public void CreateExcelFile<T>(CreateExcelAction<T> createExcelAction, List<T> list, List<ColumnFormat> columnFormats)
         {
             //建立Excel 2003檔案
             IWorkbook wb = new XSSFWorkbook();
@@ -312,11 +315,7 @@ namespace WpfApp1.Utility
             string createFileName = string.Empty;
             foreach (var storeData in list)
             {
-                if (storeData.StoreSearchColorDetails.Count() == 0)
-                {
-                    continue;
-                }
-                createFileName = createExcelAction(wb, ws, positionStyle,ref rowIndex, storeData);
+                createFileName = createExcelAction(wb, ws, positionStyle, ref rowIndex, storeData);
             }
             FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", createFileName, DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
