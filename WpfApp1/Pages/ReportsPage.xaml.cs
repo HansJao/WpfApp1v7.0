@@ -18,9 +18,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.Adapter.MSSQL;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Reports;
 using WpfApp1.Modules.ExcelModule;
 using WpfApp1.Modules.ExcelModule.Implement;
+using WpfApp1.Utility;
 using WpfApp1.ViewModel.InventoryViewModel;
 
 namespace WpfApp1.Pages
@@ -248,6 +250,76 @@ namespace WpfApp1.Pages
                     ShippedCount = shippedCount
                 });
             }
+
+            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            {
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "布種顏色",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 2800,
+                    ColumnTitle = "出貨重量",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 1850,
+                    ColumnTitle = "約略出貨數",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "布種名稱",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 1850,
+                    ColumnTitle = "顏色",
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 1850,
+                    ColumnTitle = "出貨數量",
+                },
+
+            };
+
+            var excelHelper = new ExcelHelper();
+            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList, columnFormats);
+        }
+
+        private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)
+        {
+            ICellStyle estyle = wb.CreateCellStyle();
+            estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+            estyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle a2style = wb.CreateCellStyle();
+            a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+            a2style.FillPattern = FillPattern.SolidForeground;
+
+            var distance = LevenshteinDistance(storeData.OriginalSource.TextileColorName, storeData.TextileName + storeData.ColorName);
+
+            var soFar = distance > 3;
+
+            var approximateNumber = storeData.OriginalSource.Weight / 20;
+            var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
+
+            var isEqual = round == storeData.ShippedCount;
+
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, soFar ? a2style : positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 1, storeData.OriginalSource.Weight.ToString(), positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 2, (approximateNumber).ToString(), positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 3, storeData.TextileName, positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 4, storeData.ColorName, positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 5, storeData.ShippedCount.ToString(), isEqual ? positionStyle : estyle);
+
+
+            rowIndex++;
+            return "庫存對照清單";
         }
 
         public class Container
