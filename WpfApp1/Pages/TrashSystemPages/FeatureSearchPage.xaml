@@ -1,0 +1,27 @@
+﻿<Page x:Class="WpfApp1.Pages.TrashSystemPages.FeatureSearchPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages.TrashSystemPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="FeatureSearchPage"
+      xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.TrashSystemViewModel">
+    <Page.DataContext>
+        <viewModel:FeatureSearchViewModel/>
+    </Page.DataContext>
+    <Grid>
+        <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,9,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}"/>
+                <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>
+                <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>                            
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Content="Button" HorizontalAlignment="Left" Margin="329,140,0,0" VerticalAlignment="Top" Width="75" Command="{Binding GetFeatureExecuteClick}"/>
+
+    </Grid>
+</Page>

@@ -200,9 +200,9 @@ namespace WpfApp1.ViewModel.FabricViewModel
             excelHelper.InventoryCheckSheet<StoreSearchData<InventoryPrice>>(GetAllInventoryAction, CreateInventoryPriceExcelAction, 0, columnFormats);
         }
 
-        private bool CanExecute()
-        {
-            return true;
-        }
+        //private bool CanExecute()
+        //{
+        //    return true;
+        //}
     }
 }

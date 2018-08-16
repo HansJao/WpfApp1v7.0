@@ -265,10 +265,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             workbook.Close();
         }
 
-        bool CanExecute()
-        {
-            return true;
-        }
+        //bool CanExecute()
+        //{
+        //    return true;
+        //}
 
 
         /// <summary>

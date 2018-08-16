@@ -110,9 +110,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Adapter\DBF\TrashAdapter.cs" />
     <Compile Include="Adapter\IFabricAdapter.cs" />
     <Compile Include="Adapter\IFacroryAdapter.cs" />
     <Compile Include="Adapter\IProcessOrderAdapter.cs" />
+    <Compile Include="Adapter\ITrashAdapter.cs" />
     <Compile Include="Adapter\MSSQL\CustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\FabricAdapter.cs" />
     <Compile Include="Adapter\MSSQL\FactoryAdapter.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="DataClass\StoreSearch\StoreData.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
+    <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
     <Compile Include="Modules\CustomerModule\Implement\CustomerModule.cs" />
     <Compile Include="Modules\ExcelModule\IExcelModule.cs" />
@@ -160,6 +163,8 @@
     <Compile Include="Modules\FactoryModule\Implement\FactoryModule.cs" />
     <Compile Include="Modules\Process\Implement\ProcessModule.cs" />
     <Compile Include="Modules\Process\IProcessModule.cs" />
+    <Compile Include="Modules\TrashModule\Implement\TrashModule.cs" />
+    <Compile Include="Modules\TrashModule\ITrashModule.cs" />
     <Compile Include="Pages\CustomerPages\CustomerListPage.xaml.cs">
       <DependentUpon>CustomerListPage.xaml</DependentUpon>
     </Compile>
@@ -193,6 +198,9 @@
     <Compile Include="Pages\StoreSearchPage.xaml.cs">
       <DependentUpon>StoreSearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TrashSystemPages\FeatureSearchPage.xaml.cs">
+      <DependentUpon>FeatureSearchPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\DapperHelper.cs" />
     <Compile Include="Utility\ExcelHelper.cs" />
     <Compile Include="Utility\ExtensionHelper.cs" />
@@ -204,6 +212,7 @@
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
@@ -271,6 +280,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\StoreSearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TrashSystemPages\FeatureSearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

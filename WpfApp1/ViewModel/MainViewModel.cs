@@ -20,11 +20,6 @@ namespace WpfApp1.ViewModel
         private void ExportCheckDateExcel()
         {
             
-        }
-
-        bool CanExecute()
-        {
-            return true;
-        }
+        }       
     }
 }

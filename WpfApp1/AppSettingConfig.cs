@@ -24,6 +24,11 @@ namespace WpfApp1
             return getAppSettings("StoreManageFileName");
         }
 
+        internal static string DbfConnectionString()
+        {
+            return getAppSettings("DbfConnectionString");
+        }
+
         public static string ShippingFileName()
         {
             return getAppSettings("ShippingFileName");

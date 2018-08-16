@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="1200">
     <Grid>
-        <ToolBar HorizontalAlignment="Left" Height="31" Margin="10,10,0,0" VerticalAlignment="Top" Width="380">
+        <ToolBar HorizontalAlignment="Left" Height="31" Margin="10,10,0,0" VerticalAlignment="Top" Width="500">
             <Menu>
                 <MenuItem Header="庫存管理">
                     <MenuItem Header="庫存查詢" Click="ButtonStoreSearchFunction_Click"/>
@@ -36,10 +36,15 @@
                     <MenuItem x:Name="ButtonCustomerList" Header="客戶清單" Click="ButtonCustomerList_Click"/>
                 </MenuItem>
             </Menu>
+            <Menu>
+                <MenuItem Header="帳務系統" >
+                    <MenuItem Header="報表" Click="ButtonReportsFunction_Click" />
+                    <MenuItem Header="客戶報表" Click="ButtonReportsByCustomerFunction_Click"/>
+                    <MenuItem Header="特徵搜尋" Click="ButtonFeatureSearchFunction_Click"/>
+                </MenuItem>
+            </Menu>
             <!--<Button x:Name="ButtonFactoryManageFunction" Content="工廠管理" Click="ButtonFactoryManageFunction_Click" />-->
             <Button x:Name="ButtonFabricManageFunction" Content="布種管理" Click="ButtonFabricManageFunction_Click" />
-            <Button x:Name="ButtonReportsFunction" Content="報表" Click="ButtonReportsFunction_Click" />
-            <Button x:Name="ButtonReportsByCustomerFunction" Content="客戶報表" Click="ButtonReportsByCustomerFunction_Click" ></Button>
         </ToolBar>
         <Frame x:Name="MainFrame" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"  NavigationUIVisibility="Hidden"/>
     </Grid>

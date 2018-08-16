@@ -12,6 +12,19 @@ namespace WpfApp1.Utility
 {
     public class DapperHelper
     {
+
+        #region Dbf File
+        public static IEnumerable<T> QueryDbfCollection<T>(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
+        {
+            IEnumerable<T> result;
+            using (var con = new OleDbConnection(connectionString))
+            {
+                DynamicParameters parameters = parseParameters(commandParameters);
+                result = con.Query<T>(commandText, parameters, commandType: commandType, commandTimeout: 30);
+            }
+            return result;
+        } 
+        #endregion
         public static int ExecuteParameter(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
         {
 

@@ -20,8 +20,11 @@ using System.Windows.Shapes;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Reports;
+using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.ExcelModule;
 using WpfApp1.Modules.ExcelModule.Implement;
+using WpfApp1.Modules.TrashModule;
+using WpfApp1.Modules.TrashModule.Implement;
 using WpfApp1.Utility;
 using WpfApp1.ViewModel.InventoryViewModel;
 
@@ -33,15 +36,19 @@ namespace WpfApp1.Pages
     public partial class ReportsPage : Page
     {
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
+        protected ITrashModule TrashModule { get; } = new TrashModule();
 
         public ReportsPage()
         {
             InitializeComponent();
-            string databaseDirectory = AppSettingConfig.DbfFilePath();
-            string database2 = "ITEM.dbf";
-            string sql2 = "SELECT * FROM " + database2;
-            DataTable dt2 = GetOleDbDbfDataTable(databaseDirectory, sql2);
-            DataGridInCash_Copy1.ItemsSource = dt2.DefaultView;
+            //string databaseDirectory = AppSettingConfig.DbfFilePath();
+            //string database2 = "ITEM.dbf";
+            //string sql2 = "SELECT * FROM " + database2;
+            //DataTable dt2 = GetOleDbDbfDataTable(databaseDirectory, sql2);
+            
+            IEnumerable<TrashItem> trashItems = TrashModule.GetTrashItems();
+            DataGridInCash_Copy1.ItemsSource = trashItems;
+
         }
 
         private void ButtonExport_Click(object sender, RoutedEventArgs e)

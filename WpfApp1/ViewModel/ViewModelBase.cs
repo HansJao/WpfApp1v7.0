@@ -18,5 +18,10 @@ namespace WpfApp1.ViewModel
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
+        public virtual bool CanExecute()
+        {
+            return true;
+        }
     }
 }
