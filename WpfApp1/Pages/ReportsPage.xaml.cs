@@ -20,6 +20,7 @@ using System.Windows.Shapes;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Reports;
+using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.ExcelModule;
 using WpfApp1.Modules.ExcelModule.Implement;
@@ -45,7 +46,7 @@ namespace WpfApp1.Pages
             //string database2 = "ITEM.dbf";
             //string sql2 = "SELECT * FROM " + database2;
             //DataTable dt2 = GetOleDbDbfDataTable(databaseDirectory, sql2);
-            
+
             IEnumerable<TrashItem> trashItems = TrashModule.GetTrashItems();
             DataGridInCash_Copy1.ItemsSource = trashItems;
 
@@ -208,7 +209,7 @@ namespace WpfApp1.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var excelDailyShippedList = ExcelModule.GetExcelDailyShippedList(DatePickerBegin.SelectedDate);
+            List<StoreSearchData<DataClass.StoreSearch.StoreSearchColorDetail>> excelDailyShippedList = ExcelModule.GetExcelDailyShippedList(DatePickerBegin.SelectedDate);
 
             string databaseDirectory = AppSettingConfig.DbfFilePath();
             string sql4 = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,SUM(invosub.QUANTITY) FROM INVOSUB.dbf invosub " +
@@ -294,7 +295,8 @@ namespace WpfApp1.Pages
             };
 
             var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList, columnFormats);
+            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList.OrderBy(o => o.TextileName).ToList(), columnFormats);
+            //excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction1, newList1.OrderBy(o => o.TextileName).ToList(), columnFormats);
         }
 
         private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)
@@ -327,7 +329,7 @@ namespace WpfApp1.Pages
 
             rowIndex++;
             return "庫存對照清單";
-        }
+        }      
 
         public class Container
         {
