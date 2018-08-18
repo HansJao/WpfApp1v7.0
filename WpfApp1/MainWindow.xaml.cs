@@ -59,7 +59,7 @@ namespace WpfApp1
 
         private void ButtonReportsByCustomerFunction_Click(object sender, RoutedEventArgs e)
         {
-            this.MainFrame.NavigationService.Navigate(new ReportsByCustomerPage());
+            this.MainFrame.NavigationService.Navigate(new TrashSystemTablePage());
         }
 
         private void ButtonProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)

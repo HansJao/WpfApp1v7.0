@@ -15,14 +15,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfApp1.Pages
+namespace WpfApp1.Pages.TrashSystemPages
 {
     /// <summary>
     /// ReportsByCustomerPage.xaml 的互動邏輯
     /// </summary>
-    public partial class ReportsByCustomerPage : Page
+    public partial class TrashSystemTablePage : Page
     {
-        public ReportsByCustomerPage()
+        public TrashSystemTablePage()
         {
             InitializeComponent();
             string databaseDirectory = AppSettingConfig.DbfFilePath();

@@ -187,8 +187,8 @@
     <Compile Include="Pages\ProcessOrderPage.xaml.cs">
       <DependentUpon>ProcessOrderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ReportsByCustomerPage.xaml.cs">
-      <DependentUpon>ReportsByCustomerPage.xaml</DependentUpon>
+    <Compile Include="Pages\TrashSystemPages\TrashSystemTablePage.xaml.cs">
+      <DependentUpon>TrashSystemTablePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ReportsPage.xaml.cs">
       <DependentUpon>ReportsPage.xaml</DependentUpon>
@@ -269,7 +269,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ReportsByCustomerPage.xaml">
+    <Page Include="Pages\TrashSystemPages\TrashSystemTablePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
