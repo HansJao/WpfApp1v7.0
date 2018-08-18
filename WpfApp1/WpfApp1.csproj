@@ -153,6 +153,7 @@
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
     <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
+    <Compile Include="DataClass\TrashSystem\TrashShipped.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
     <Compile Include="Modules\CustomerModule\Implement\CustomerModule.cs" />
     <Compile Include="Modules\ExcelModule\IExcelModule.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>

@@ -21,7 +21,5 @@
                 <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>                            
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="329,140,0,0" VerticalAlignment="Top" Width="75" Command="{Binding GetFeatureExecuteClick}"/>
-
     </Grid>
 </Page>

@@ -17,7 +17,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
     public class FeatureSearchViewModel : ViewModelBase
     {
         protected ITrashModule TrashModule { get; } = new TrashModule();
-        public ICommand GetFeatureExecuteClick { get { return new RelayCommand(GetFeatureExecute, CanExecute); } }
 
         private string _feature { get; set; }
         public string Feature
@@ -57,11 +56,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         {
             get { return _trashItemList; }
             set { _trashItemList = value; }
-        }
-
-        private void GetFeatureExecute()
-        {
-            //_trashItemList = TrashModule.GetTrashItems();
         }
 
         public FeatureSearchViewModel()

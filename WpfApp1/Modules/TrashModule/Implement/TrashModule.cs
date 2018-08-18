@@ -39,5 +39,11 @@ namespace WpfApp1.Modules.TrashModule.Implement
             IEnumerable<TrashItem> trashItems = TrashAdapter.GetTrashItemsByFeature(feature);
             return trashItems;
         }
+
+        public IEnumerable<TrashShipped> GetTrashShippedList(DateTime datePickerBegin, DateTime datePickerEnd)
+        {
+            IEnumerable<TrashShipped> trashList = TrashAdapter.GetTrashShippedList(datePickerBegin, datePickerEnd);
+            return trashList;
+        }
     }
 }
