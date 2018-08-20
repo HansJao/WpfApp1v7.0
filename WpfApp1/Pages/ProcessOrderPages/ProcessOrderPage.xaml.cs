@@ -18,7 +18,7 @@ using WpfApp1.Modules.Process.Implement;
 using WpfApp1.Utility;
 using WpfApp1.Windows;
 
-namespace WpfApp1.Pages
+namespace WpfApp1.Pages.ProcessOrderPages
 {
     /// <summary>
     /// ProcessOrderPage.xaml 的互動邏輯

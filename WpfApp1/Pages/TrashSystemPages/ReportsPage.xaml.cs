@@ -29,7 +29,7 @@ using WpfApp1.Modules.TrashModule.Implement;
 using WpfApp1.Utility;
 using WpfApp1.ViewModel.InventoryViewModel;
 
-namespace WpfApp1.Pages
+namespace WpfApp1.Pages.TrashSystemPages
 {
     /// <summary>
     /// ReportsPage.xaml 的互動邏輯

@@ -181,16 +181,16 @@
     <Compile Include="Pages\FactoryPages\FactoryListPage.xaml.cs">
       <DependentUpon>FactoryListPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\NewProcessOrderPage.xaml.cs">
+    <Compile Include="Pages\ProcessOrderPages\NewProcessOrderPage.xaml.cs">
       <DependentUpon>NewProcessOrderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ProcessOrderPage.xaml.cs">
+    <Compile Include="Pages\ProcessOrderPages\ProcessOrderPage.xaml.cs">
       <DependentUpon>ProcessOrderPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TrashSystemPages\TrashSystemTablePage.xaml.cs">
       <DependentUpon>TrashSystemTablePage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\ReportsPage.xaml.cs">
+    <Compile Include="Pages\TrashSystemPages\ReportsPage.xaml.cs">
       <DependentUpon>ReportsPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ShippingPage.xaml.cs">
@@ -261,11 +261,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\NewProcessOrderPage.xaml">
+    <Page Include="Pages\ProcessOrderPages\NewProcessOrderPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ProcessOrderPage.xaml">
+    <Page Include="Pages\ProcessOrderPages\ProcessOrderPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -273,7 +273,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\ReportsPage.xaml">
+    <Page Include="Pages\TrashSystemPages\ReportsPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
