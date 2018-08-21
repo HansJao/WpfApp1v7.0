@@ -211,7 +211,7 @@ namespace WpfApp1.Modules.Process.Implement
             return processOrderColorDetails;
         }
 
-        public void CreateProcessOrderColorFlow(List<ProcessOrderColorDetail> processOrderColorDetailList,int orderNo)
+        public void CreateProcessOrderColorFlow(List<ProcessOrderColorDetail> processOrderColorDetailList, int orderNo)
         {
             var processOrderColorDetailCount = InsertProcessOrderColorDetail(processOrderColorDetailList);
             var processOrderColorDetail = GetProcessOrderColorDetail(processOrderColorDetailCount);
@@ -250,6 +250,19 @@ namespace WpfApp1.Modules.Process.Implement
         {
             int count = ProcessOrderAdapter.DeleteFactoryShippingDetail(orderColorDetailNo);
             return count;
+        }
+        /// <summary>
+        /// 依據時間取得加工訂單明細
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime)
+        {
+            List<ProcessOrderStructure> processOrderStructures;
+            IEnumerable<ProcessOrder> processOrders = ProcessOrderAdapter.GetProcessOrderByDate(dateTime);
+            IEnumerable<ProcessOrderColorDetail> processOrderColorDetails = ProcessOrderAdapter.GetProcessOrderColorDetailList(processOrders.Select(s => s.OrderNo));
+            IEnumerable<FactoryShippingName> factoryShippingNames = ProcessOrderAdapter.GetFactoryShippingNameList(processOrderColorDetails.Select(s => s.OrderColorDetailNo));
+            return processOrders;
         }
     }
 }

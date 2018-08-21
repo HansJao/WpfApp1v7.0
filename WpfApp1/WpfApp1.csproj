@@ -140,6 +140,7 @@
     <Compile Include="DataClass\ProcessOrder\ProcessOrderColor.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessFactoryShippingDetail.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderFlowDateDetail.cs" />
+    <Compile Include="DataClass\ProcessOrder\ProcessOrderStructure.cs" />
     <Compile Include="DataClass\Reports\OriginalSource.cs" />
     <Compile Include="DataClass\Reports\TextileColor.cs" />
     <Compile Include="DataClass\Reports\TextileData.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ProcessOrderViewModel\ExportProcessOrderRecordViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

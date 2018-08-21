@@ -20,6 +20,7 @@
                 <MenuItem Header="訂單管理">
                     <MenuItem Header="新增訂單" Click="ButtonNewProcessOrderRecordFunction_Click"/>
                     <MenuItem Header="訂單紀錄" Click="ButtonProcessOrderRecordFunction_Click"/>
+                    <MenuItem Header="匯出訂單紀錄" Click="ButtonExportProcessOrderRecordFunction_Click"/>
                 </MenuItem>
             </Menu>
             <!--<Button x:Name="ButtonNewProcessOrderRecord" Content="新增訂單" Click="ButtonNewProcessOrderRecordFunction_Click" />

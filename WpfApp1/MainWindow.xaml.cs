@@ -26,6 +26,7 @@ using WpfApp1.Pages.FactoryPages;
 using WpfApp1.Pages.ProcessOrderPages;
 using WpfApp1.Pages.TrashSystemPages;
 using WpfApp1.ViewModel.InventoryViewModel;
+using WpfApp1.ViewModel.ProcessOrderViewModel;
 using WpfApp1.Windows;
 
 //using Microsoft.Office.Interop.Excel;
@@ -71,6 +72,12 @@ namespace WpfApp1
         private void ButtonNewProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
         {
             this.MainFrame.NavigationService.Navigate(new NewProcessOrderPage());
+        }
+
+        private void ButtonExportProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
+        {
+            //this.MainFrame.NavigationService.Navigate(new NewProcessOrderPage());
+            var x = new ExportProcessOrderRecordViewModel();
         }
 
         private void ButtonFactoryManageFunction_Click(object sender, RoutedEventArgs e)

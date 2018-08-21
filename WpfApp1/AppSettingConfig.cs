@@ -61,6 +61,15 @@ namespace WpfApp1
             return getAppSettings("ProcessOrderFileName");
         }
 
+        public static string ProcessOrderRecordDateFilePath()
+        {
+            return getAppSettings("ProcessOrderRecordDateFilePath");
+        }
+        public static string ProcessOrderRecordDateFileName()
+        {
+            return getAppSettings("ProcessOrderRecordDateFileName");
+        }
+
         #region Helper
         /// <summary>
         /// Get AppSettings Value

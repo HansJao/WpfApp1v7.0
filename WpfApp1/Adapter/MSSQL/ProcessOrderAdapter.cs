@@ -87,7 +87,7 @@ namespace WpfApp1.Adapter.MSSQL
             string sql = @"INSERT INTO ProcessOrderColorDetail
                            output inserted.OrderColorDetailNo
                            VALUES 
-                           (@OrderNo,@Color,@ColorNumber,@Quantity,@Status);";
+                           (@OrderNo,@Color,@ColorNumber,@Quantity,@Status,@UpdateDate);";
             List<int> orderColorDetailNoList = new List<int>();
             using (var scope = new TransactionScope())
             {
@@ -99,7 +99,8 @@ namespace WpfApp1.Adapter.MSSQL
                         new SqlParameter("@Color", SqlDbType.NVarChar) { Value = item.Color },
                         new SqlParameter("@ColorNumber", SqlDbType.NVarChar) { Value = item.ColorNumber },
                         new SqlParameter("@Quantity", SqlDbType.NVarChar) { Value = item.Quantity },
-                        new SqlParameter("@Status", SqlDbType.NVarChar) { Value = item.Status }
+                        new SqlParameter("@Status", SqlDbType.NVarChar) { Value = item.Status },
+                        new SqlParameter("@UpdateDate", SqlDbType.DateTime) { Value = DateTime.Now }
                     };
                     var orderColorDetailNo = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
                     orderColorDetailNoList.Add(orderColorDetailNo);
@@ -209,9 +210,11 @@ namespace WpfApp1.Adapter.MSSQL
 
         public int UpdateProcessOrderFlowDate(int orderColorDetailNo, ProcessOrderColorStatus status)
         {
-            var sqlCmd = @"update ProcessOrderColorDetail
-                          set Status = @Status
-                          where OrderColorDetailNo = @OrderColorDetailNo";
+            var sqlCmd = @"UPDATE ProcessOrderColorDetail
+                          SET 
+                          Status = @Status,
+                          UpdateDate = GETDATE()
+                          WHERE OrderColorDetailNo = @OrderColorDetailNo";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo },
@@ -371,6 +374,46 @@ namespace WpfApp1.Adapter.MSSQL
             };
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return count;
+        }
+        /// 依據時間取得加工訂單明細
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime)
+        {
+            var sqlCmd = "SELECT * FROM ProcessOrder WHERE CreateDate > @CreateDate";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+               new SqlParameter("@CreateDate", SqlDbType.DateTime) { Value = dateTime }
+            };
+            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 依據多個訂單號取得加工訂單顏色明細清單
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrderColorDetail> GetProcessOrderColorDetailList(IEnumerable<int> orderNo)
+        {
+            var sqlCmd = "SELECT * FROM ProcessOrderColorDetail WHERE OrderNo IN @OrderNo";
+            var parameter = (new { OrderNo = orderNo });
+            var result = DapperHelper.QueryCollection<ProcessOrderColorDetail, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+
+            return result;
+        }
+        /// <summary>
+        /// 依據多個加工訂單顏色明細編號號取得工廠直送清單
+        /// </summary>
+        /// <param name="processOrderColorDetailNo"></param>
+        /// <returns></returns>
+        public IEnumerable<FactoryShippingName> GetFactoryShippingNameList(IEnumerable<int> processOrderColorDetailNo)
+        {
+            var sqlCmd = @"select fs.ShippingNo,fs.OrderColorDetailNo,c.Name,fs.Quantity,fs.CreateDate from FactoryShipping fs
+                           inner join Customer c on c.CustomerID = fs.CustomerID
+                           where OrderColorDetailNo IN @OrderColorDetailNo";
+            var parameter = (new { OrderColorDetailNo = processOrderColorDetailNo });
+            return DapperHelper.QueryCollection<FactoryShippingName, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
         }
     }
 }

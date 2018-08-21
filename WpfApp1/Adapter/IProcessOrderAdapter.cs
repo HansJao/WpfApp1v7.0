@@ -129,5 +129,23 @@ namespace WpfApp1.Adapter
         /// <param name="orderColorDetailNo"></param>
         /// <returns></returns>
         int DeleteFactoryShippingDetail(int orderColorDetailNo);
+        /// <summary>
+        /// 依據時間取得加工訂單明細
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime);
+        /// <summary>
+        /// 依據多個訂單號取得加工訂單顏色明細清單
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrderColorDetail> GetProcessOrderColorDetailList(IEnumerable<int> orderNo);
+        /// <summary>
+        /// 依據多個加工訂單顏色明細編號號取得工廠直送清單
+        /// </summary>
+        /// <param name="processOrderColorDetailNo"></param>
+        /// <returns></returns>
+        IEnumerable<FactoryShippingName> GetFactoryShippingNameList(IEnumerable<int> processOrderColorDetailNo);
     }
 }
