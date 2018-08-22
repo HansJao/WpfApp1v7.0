@@ -17,7 +17,7 @@ namespace WpfApp1.DataClass.ProcessOrder
     {
         public ProcessOrderColorDetail ProcessOrderColorDetail { get; set; }
         public IEnumerable<ProcessOrderFlowDateDetail> ProcessOrderFlowDateDetails { get; set; }
-        public IEnumerable<FactoryShipping> FactoryShippings { get; set; }
+        public IEnumerable<FactoryShippingName> FactoryShippings { get; set; }
 
     }
 

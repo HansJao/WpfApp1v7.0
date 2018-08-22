@@ -15,6 +15,11 @@
         <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <TextBox HorizontalAlignment="Left" Height="23" Margin="58,9,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
         <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top">
+            <DataGrid.Style>
+                <Style TargetType="DataGrid">
+                    <Setter Property="AlternatingRowBackground" Value="LightCoral"/>
+                </Style>
+            </DataGrid.Style>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}"/>
                 <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>

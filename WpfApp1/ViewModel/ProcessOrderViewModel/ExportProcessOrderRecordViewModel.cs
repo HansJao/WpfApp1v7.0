@@ -21,9 +21,9 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
         public ExportProcessOrderRecordViewModel()
         {
             //ExportProcessOrderRecordExecute();
-            //var dateTime = ReadProcessOrderRecordDate();
-            //IEnumerable<ProcessOrder> processOrders = ProcessModule.GetProcessOrderByDate(dateTime);
-            TestWrite();
+            var dateTime = ReadProcessOrderRecordDate();
+            IEnumerable<ProcessOrder> processOrders = ProcessModule.GetProcessOrderByDate(dateTime);
+            // TestWrite();
         }
 
         void TestWrite()

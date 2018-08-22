@@ -224,18 +224,16 @@ namespace WpfApp1.Adapter.MSSQL
             return count;
         }
 
-        public IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(int orderColorDetailNo)
+        public IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(List<int> orderColorDetailNo)
         {
             var sqlCmd = @"select pofd.OrderFlowDateNo,pofd.OrderColorDetailNo,pofd.OrderFlowNo,f.Name,pofd.InputDate,pofd.CompleteDate 
                           from ProcessOrderFlow pof
                           inner join ProcessOrderFlowDate pofd on pof.OrderDetailNo = pofd.OrderFlowNo
                           inner join Factory f on f.FactoryID = pof.FactoryID
-                          where pofd.OrderColorDetailNo=@OrderColorDetailNo";
-            SqlParameter[] parameters = new SqlParameter[]
-           {
-                new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo }
-           };
-            var result = DapperHelper.QueryCollection<ProcessOrderFlowDateDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+                          where pofd.OrderColorDetailNo IN @OrderColorDetailNo";
+            var parameter = (new { OrderColorDetailNo = orderColorDetailNo });
+
+            var result = DapperHelper.QueryCollection<ProcessOrderFlowDateDetail, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
 

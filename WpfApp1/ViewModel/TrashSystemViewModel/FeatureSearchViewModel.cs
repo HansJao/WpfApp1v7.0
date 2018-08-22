@@ -31,11 +31,22 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 ICollectionView cv = CollectionViewSource.GetDefaultView(_trashItemList);
                 if (!string.IsNullOrEmpty(filterText))
                 {
+                    var splitText = filterText.Split(' ');
                     cv.Filter = o =>
                     {
                         /* change to get data row value */
                         TrashItem p = o as TrashItem;
-                        return (p.I_03.ToUpper().Contains(filterText.ToUpper()));
+                        bool isContains = true;
+                        foreach (var item in splitText)
+                        {
+                            if (!p.I_03.ToUpper().Contains(item.ToUpper()))
+                            {
+                                isContains = false;
+                                break;
+                            }
+                        }
+                        //isContains = p.I_03.ToUpper().Contains(filterText.ToUpper());
+                        return isContains;
                         /* end change to get data row value */
                     };
                 }

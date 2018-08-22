@@ -197,8 +197,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 return;
             var factoryShippingList = ProcessModule.GetFactoryShipping(processOrderColorDetail.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
-
-            var processOrderFlowDateDetail = ProcessModule.GetProcessOrderFlowDateDetail(processOrderColorDetail.OrderColorDetailNo);
+            List<int> orderColorDetailNos = new List<int> { processOrderColorDetail.OrderColorDetailNo };
+            var processOrderFlowDateDetail = ProcessModule.GetProcessOrderFlowDateDetail(orderColorDetailNos);
             DataGridProcessOrderFlowDateDetail.ItemsSource = processOrderFlowDateDetail;
         }
 
@@ -369,7 +369,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
         }
 
-        private void DataGridRefresh<T>(DataGrid dataGrid,T processFactoryShippingDetail)
+        private void DataGridRefresh<T>(DataGrid dataGrid, T processFactoryShippingDetail)
         {
             var items = dataGrid.ItemsSource as List<T>;
             items.Remove(processFactoryShippingDetail);

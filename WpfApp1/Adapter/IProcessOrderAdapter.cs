@@ -80,7 +80,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="OrderColorDetailNo"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(int OrderColorDetailNo);
+        IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(List<int> OrderColorDetailNo);
         /// <summary>
         /// 新增加工訂單流程時間
         /// </summary>

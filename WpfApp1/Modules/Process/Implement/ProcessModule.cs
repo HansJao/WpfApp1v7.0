@@ -147,7 +147,7 @@ namespace WpfApp1.Modules.Process.Implement
         /// </summary>
         /// <param name="OrderColorDetailNo"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(int OrderColorDetailNo)
+        public IEnumerable<ProcessOrderFlowDateDetail> GetProcessOrderFlowDateDetail(List<int> OrderColorDetailNo)
         {
             IEnumerable<ProcessOrderFlowDateDetail> result = ProcessOrderAdapter.GetProcessOrderFlowDateDetail(OrderColorDetailNo);
             return result;
@@ -258,10 +258,26 @@ namespace WpfApp1.Modules.Process.Implement
         /// <returns></returns>
         public IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime)
         {
-            List<ProcessOrderStructure> processOrderStructures;
+
             IEnumerable<ProcessOrder> processOrders = ProcessOrderAdapter.GetProcessOrderByDate(dateTime);
             IEnumerable<ProcessOrderColorDetail> processOrderColorDetails = ProcessOrderAdapter.GetProcessOrderColorDetailList(processOrders.Select(s => s.OrderNo));
+            IEnumerable<ProcessOrderFlowDateDetail> processOrderFlowDateDetails = ProcessOrderAdapter.GetProcessOrderFlowDateDetail(processOrderColorDetails.Select(s => s.OrderColorDetailNo).ToList());
             IEnumerable<FactoryShippingName> factoryShippingNames = ProcessOrderAdapter.GetFactoryShippingNameList(processOrderColorDetails.Select(s => s.OrderColorDetailNo));
+            List<ProcessOrderStructure> processOrderStructures = new List<ProcessOrderStructure>();
+            var processOrderStructure = processOrders
+                .Select(s =>
+                new ProcessOrderStructure
+                {
+                    ProcessOrder = s,
+                    ProcessOrderColorGroups = processOrderColorDetails.Where(w => w.OrderNo == s.OrderNo)
+                                                .Select(s1 =>
+                                                new ProcessOrderColorGroup
+                                                {
+                                                    ProcessOrderColorDetail = s1,
+                                                    ProcessOrderFlowDateDetails = processOrderFlowDateDetails.Where(w => w.OrderColorDetailNo == s1.OrderColorDetailNo),
+                                                    FactoryShippings = factoryShippingNames.Where(w => w.OrderColorDetailNo == s1.OrderColorDetailNo)
+                                                })
+                });
             return processOrders;
         }
     }
