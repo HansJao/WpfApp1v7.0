@@ -413,5 +413,24 @@ namespace WpfApp1.Adapter.MSSQL
             var parameter = (new { OrderColorDetailNo = processOrderColorDetailNo });
             return DapperHelper.QueryCollection<FactoryShippingName, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
         }
+        /// <summary>
+        /// 更新加工訂單流程工廠名稱
+        /// </summary>
+        /// <param name="selectedFactoryID"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <returns></returns>
+        public bool EditProcessOrderFlowFactory(int selectedFactoryID, int orderFlowNo)
+        {
+            var sqlCmd = @"UPDATE ProcessOrderFlow
+                          SET FactoryID = @FactoryID
+                          WHERE OrderDetailNo = @OrderDetailNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FactoryID", SqlDbType.Int) { Value = selectedFactoryID },
+                new SqlParameter("@OrderDetailNo", SqlDbType.Int) { Value = orderFlowNo }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count == 1 ;
+        }
     }
 }

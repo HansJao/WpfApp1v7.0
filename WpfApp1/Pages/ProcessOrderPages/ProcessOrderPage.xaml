@@ -105,7 +105,7 @@
                         </DataGrid>
                         <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
                     </StackPanel>
-                    <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" >
+                    <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
                             <!--<DataGridTextColumn Header="加工項目" Binding="{Binding Process}"/>-->

@@ -57,6 +57,15 @@ namespace WpfApp1.Modules.Process
         int DeleteProcessOrder(ProcessOrder processOrder);
 
         int UpdateProcessOrderFlowDate(List<ProcessOrderFlowFactoryName> processOrderFlowFactoryName);
+
+        /// <summary>
+        /// 更新加工訂單流程工廠名稱
+        /// </summary>
+        /// <param name="selectedFactoryItem"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <returns></returns>
+        bool EditProcessOrderFlowFactory(int selectedFactoryItem, int orderFlowNo);
+
         /// <summary>
         /// 取得工廠直送清單
         /// </summary>

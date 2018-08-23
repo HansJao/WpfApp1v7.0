@@ -44,8 +44,10 @@
             </Grid>
             <Grid>
                 <DataGrid x:Name="DataGridShippingSheet" HorizontalAlignment="Left"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,60,0,0">
+                   
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="客戶" Binding="{Binding Customer}"/>
+                        
+                        <DataGridTextColumn  Header="客戶" Binding="{Binding Customer}" />
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"/>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
                         <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>

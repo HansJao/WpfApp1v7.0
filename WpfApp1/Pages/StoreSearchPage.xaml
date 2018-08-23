@@ -6,6 +6,7 @@
       xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.InventoryViewModel"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       Title="StoreSearchPage">
     <Page.DataContext>
         <viewModel:StoreSearchViewModel/>
@@ -33,7 +34,12 @@
                 <Label Content="時間範圍:" HorizontalAlignment="Left" Margin="310,10,0,0" VerticalAlignment="Top"/>
             </Grid>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,10,0,0">
-                <DataGrid x:Name="DataGridStoreSearchListByShipped" AutoGenerateColumns="False" ItemsSource="{Binding ShippingHistoryStoreDataList}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,10" CanUserAddRows="False">
+                <DataGrid x:Name="DataGridStoreSearchListByShipped" AutoGenerateColumns="False" ItemsSource="{Binding ShippingHistoryStoreDataList}" SelectedItem="{Binding StoreData}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,10" CanUserAddRows="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding TestInteractivity}" CommandParameter="{Binding ElementName=DataGridStoreSearchListByShipped, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>

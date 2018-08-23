@@ -147,5 +147,12 @@ namespace WpfApp1.Adapter
         /// <param name="processOrderColorDetailNo"></param>
         /// <returns></returns>
         IEnumerable<FactoryShippingName> GetFactoryShippingNameList(IEnumerable<int> processOrderColorDetailNo);
+        /// <summary>
+        /// 更新加工訂單流程工廠名稱
+        /// </summary>
+        /// <param name="selectedFactoryItem"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <returns></returns>
+        bool EditProcessOrderFlowFactory(int selectedFactoryItem, int orderFlowNo);
     }
 }

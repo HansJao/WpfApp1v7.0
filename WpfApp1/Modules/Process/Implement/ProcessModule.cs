@@ -280,5 +280,18 @@ namespace WpfApp1.Modules.Process.Implement
                 });
             return processOrders;
         }
+
+        /// <summary>
+        /// 更新加工訂單流程工廠名稱
+        /// </summary>
+        /// <param name="selectedFactoryItem"></param>
+        /// <param name="orderFlowNo"></param>
+        /// <returns></returns>
+        public bool EditProcessOrderFlowFactory(int selectedFactoryItem, int orderFlowNo)
+        {
+            bool success = ProcessOrderAdapter.EditProcessOrderFlowFactory(selectedFactoryItem, orderFlowNo);
+            return success;
+        }
+
     }
 }

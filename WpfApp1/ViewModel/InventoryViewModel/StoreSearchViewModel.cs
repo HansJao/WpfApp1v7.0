@@ -27,6 +27,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public ICommand ExportToExcelClick { get { return new RelayCommand(ExportToExcel, CanExecute); } }
         public ICommand ExportCheckDateToExcelClick { get { return new RelayCommand(ExportCheckDateToExcel, CanExecute); } }
 
+        public ICommand TestInteractivity { get { return new RelayCommand(TestInteractivityExecute, CanExecute); } }
+
+        private void TestInteractivityExecute()
+        {
+            throw new NotImplementedException();
+        }
+
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
 
         public StoreSearchViewModel()
@@ -37,6 +44,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             MinNumber = 0;
             DateRange = 10;
         }
+
+        public StoreData StoreData { get; set; }
 
         private ObservableCollection<StoreData> _storeDataList { get; set; }
         private int _maxNumber { get; set; }

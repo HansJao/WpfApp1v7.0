@@ -17,6 +17,7 @@ using WpfApp1.Modules.Process;
 using WpfApp1.Modules.Process.Implement;
 using WpfApp1.Utility;
 using WpfApp1.Windows;
+using WpfApp1.Windows.ProcessWindows;
 
 namespace WpfApp1.Pages.ProcessOrderPages
 {
@@ -375,6 +376,20 @@ namespace WpfApp1.Pages.ProcessOrderPages
             items.Remove(processFactoryShippingDetail);
             DataGridFactoryShippingDetail.ItemsSource = items;
             DataGridFactoryShippingDetail.Items.Refresh();
+        }
+
+        private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (DataGridProcessOrderFlowDateDetail.SelectedIndex == -1)
+            {
+                MessageBox.Show("未選擇一筆資料！！");
+                return;
+            }
+            var selected = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
+            EditProcessOrderFlowFactoryNameDialog editProcessOrderFlowFactoryNameDialog = new EditProcessOrderFlowFactoryNameDialog(selected);
+            DataGridProcessOrderFlowDateDetail.CancelEdit();
+            editProcessOrderFlowFactoryNameDialog.DataContext = this;
+            editProcessOrderFlowFactoryNameDialog.Show();
         }
     }
 }
