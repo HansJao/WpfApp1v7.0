@@ -89,24 +89,23 @@ namespace WpfApp1.Adapter.MSSQL
                            VALUES 
                            (@OrderNo,@Color,@ColorNumber,@Quantity,@Status,@UpdateDate);";
             List<int> orderColorDetailNoList = new List<int>();
-            using (var scope = new TransactionScope())
+
+            foreach (var item in processOrderColorDetail)
             {
-                foreach (var item in processOrderColorDetail)
+                SqlParameter[] parameters = new SqlParameter[]
                 {
-                    SqlParameter[] parameters = new SqlParameter[]
-                    {
                         new SqlParameter("@OrderNo", SqlDbType.Int) { Value = item.OrderNo },
                         new SqlParameter("@Color", SqlDbType.NVarChar) { Value = item.Color },
                         new SqlParameter("@ColorNumber", SqlDbType.NVarChar) { Value = item.ColorNumber },
                         new SqlParameter("@Quantity", SqlDbType.NVarChar) { Value = item.Quantity },
                         new SqlParameter("@Status", SqlDbType.NVarChar) { Value = item.Status },
                         new SqlParameter("@UpdateDate", SqlDbType.DateTime) { Value = DateTime.Now }
-                    };
-                    var orderColorDetailNo = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
-                    orderColorDetailNoList.Add(orderColorDetailNo);
-                }
-                scope.Complete();
+                };
+                var orderColorDetailNo = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
+                orderColorDetailNoList.Add(orderColorDetailNo);
             }
+
+
             return orderColorDetailNoList;//DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, processOrderColorDetail);
         }
 
@@ -430,7 +429,7 @@ namespace WpfApp1.Adapter.MSSQL
                 new SqlParameter("@OrderDetailNo", SqlDbType.Int) { Value = orderFlowNo }
             };
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
-            return count == 1 ;
+            return count == 1;
         }
     }
 }

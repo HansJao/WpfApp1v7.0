@@ -105,32 +105,33 @@
                         </DataGrid>
                         <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
                     </StackPanel>
-                    <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
-                            <!--<DataGridTextColumn Header="加工項目" Binding="{Binding Process}"/>-->
-                            <!--<DataGridTextColumn Header="轉入時間" Binding="{Binding InputeDate}"/>-->
-                            <!--<DataGridTextColumn Header="轉出時間" Binding="{Binding CompleteDate}"/>-->
-                            <DataGridTemplateColumn Header="轉入時間"  Width="100" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <DatePicker x:Name="DatePickerInputDate" SelectedDate="{Binding InputDate ,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerInputDate_SelectedDateChanged"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTemplateColumn Header="完成時間"  Width="100" >
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <DatePicker x:Name="DatePickerCompleteDate" SelectedDate="{Binding CompleteDate,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerCompleteDate_SelectedDateChanged" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                    <StackPanel>
+                        <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
+                                <DataGridTemplateColumn Header="轉入時間"  Width="100" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <DatePicker x:Name="DatePickerInputDate" SelectedDate="{Binding InputDate ,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerInputDate_SelectedDateChanged"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="完成時間"  Width="100" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <DatePicker x:Name="DatePickerCompleteDate" SelectedDate="{Binding CompleteDate,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerCompleteDate_SelectedDateChanged" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <!--<Button Content="新增工廠" Width="60" Height="24" HorizontalAlignment="Right"/>-->
+
+                    </StackPanel>
                     <StackPanel>
                         <DockPanel x:Name="DockPanelCustomer" >
                             <Label Content="客戶:"/>

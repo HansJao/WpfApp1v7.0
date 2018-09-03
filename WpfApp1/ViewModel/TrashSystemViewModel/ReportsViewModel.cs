@@ -240,7 +240,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             var isEqual = round == storeData.ShippedCount;
 
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, soFar ? a2style : positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, GetStyle(wb, distance) ?? positionStyle);
             ExcelHelper.CreateCell(rowTextile, 1, storeData.OriginalSource.Weight.ToString(), positionStyle);
             ExcelHelper.CreateCell(rowTextile, 2, (approximateNumber).ToString(), positionStyle);
             ExcelHelper.CreateCell(rowTextile, 3, storeData.TextileName, positionStyle);
@@ -251,6 +251,31 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             rowIndex++;
             return "庫存對照清單";
         }
+
+
+        private ICellStyle GetStyle(IWorkbook wb, int distence)
+        {
+            switch (distence)
+            {
+                case 0:
+                    return null;
+                case 1:
+                    ICellStyle bstyle = wb.CreateCellStyle();
+                    bstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+                    bstyle.FillPattern = FillPattern.SolidForeground;
+                    return bstyle;
+                case 2:
+                    ICellStyle hstyle = wb.CreateCellStyle();
+                    hstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SkyBlue.Index;
+                    hstyle.FillPattern = FillPattern.LessDots;
+                    return hstyle;
+                default:
+                    ICellStyle a2style = wb.CreateCellStyle();
+                    a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+                    a2style.FillPattern = FillPattern.SolidForeground;
+                    return a2style;
+            }
+        }
         public class Container
         {
             public OriginalSource OriginalSource { get; set; }
@@ -258,10 +283,11 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             public string ColorName { get; set; }
             public int ShippedCount { get; set; }
         }
-        public int LevenshteinDistance(string s, string t)
+        public int LevenshteinDistance(string accountTextileColorName, string excelTextileColorName)
         {
-            int n = s.Length;
-            int m = t.Length;
+            string replaceName = excelTextileColorName.Replace("采毓", "").Replace("佳隆", "");
+            int n = accountTextileColorName.Length;
+            int m = replaceName.Length;
             int[,] d = new int[n + 1, m + 1];
 
             if (n == 0)
@@ -286,7 +312,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 for (int j = 1; j <= m; j++)
                 {
-                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                    int cost = (replaceName[j - 1] == accountTextileColorName[i - 1]) ? 0 : 1;
 
                     d[i, j] = Math.Min(
                         Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),

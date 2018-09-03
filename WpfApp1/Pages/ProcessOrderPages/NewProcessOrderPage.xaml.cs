@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Transactions;
 using System.Windows;
 using System.Windows.Controls;
 using WpfApp1.DataClass.Entity;
@@ -157,10 +158,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private List<string> CheckFactoryList(List<string> factoryList, List<FactoryIdentity> factoryIdentities)
         {
             List<string> remainFactoryList = new List<string>();
-            if (factoryList.Count() != factoryIdentities.Count())
-            {
-                remainFactoryList = factoryList.Where(w => !factoryIdentities.Select(s => s.Name).Contains(w)).ToList();
-            }
+            //if (factoryList.Count() != factoryIdentities.Count())
+            //{
+            remainFactoryList = factoryList.Where(w => !factoryIdentities.Select(s => s.Name).Contains(w)).ToList();
+            //}
             return remainFactoryList;
         }
 
@@ -250,28 +251,31 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 return;
             }
 
-
-            var processOrderNo = ProcessModule.InsertProcessOrder(processOrder);
-
-            List<ProcessOrderFlow> processOrderFlowList = GetProcessOrderFlowList(processOrderNo);
-
-            var processOrderFlowSuccessCount = ProcessModule.InsertProcessOrderFlow(processOrderFlowList);
-
-            var processOrderColorDetailList = new List<ProcessOrderColorDetail>();
-
-            foreach (ProcessOrderColor item in DataGridProcessOrderColor.Items)
+            using (var scope = new TransactionScope())
             {
-                processOrderColorDetailList.Add(new ProcessOrderColorDetail
+                var processOrderNo = ProcessModule.InsertProcessOrder(processOrder);
+
+                List<ProcessOrderFlow> processOrderFlowList = GetProcessOrderFlowList(processOrderNo);
+
+                var processOrderFlowSuccessCount = ProcessModule.InsertProcessOrderFlow(processOrderFlowList);
+
+                var processOrderColorDetailList = new List<ProcessOrderColorDetail>();
+
+                foreach (ProcessOrderColor item in DataGridProcessOrderColor.Items)
                 {
-                    OrderNo = processOrderNo,
-                    Color = item.Color,
-                    ColorNumber = item.ColorNumber,
-                    Quantity = item.Quantity,
-                    Status = item.Status
+                    processOrderColorDetailList.Add(new ProcessOrderColorDetail
+                    {
+                        OrderNo = processOrderNo,
+                        Color = item.Color,
+                        ColorNumber = item.ColorNumber,
+                        Quantity = item.Quantity,
+                        Status = item.Status
+                    }
+                    );
                 }
-                );
+                ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, processOrderNo);
+                scope.Complete();
             }
-            ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, processOrderNo);
         }
 
         private List<ProcessOrderFlow> GetProcessOrderFlowList(int processOrderNo)
