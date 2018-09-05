@@ -217,7 +217,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             };
 
             var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList.OrderBy(o => o.TextileName).ToList(), columnFormats);
+            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)).ToList(), columnFormats);
         }
 
         private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)

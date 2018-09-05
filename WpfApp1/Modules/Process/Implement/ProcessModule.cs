@@ -256,10 +256,10 @@ namespace WpfApp1.Modules.Process.Implement
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime)
+        public List<ProcessOrderStructure> GetNewOrEditProcessOrderStructures(DateTime dateTime, IEnumerable<int> orderNo)
         {
 
-            IEnumerable<ProcessOrder> processOrders = ProcessOrderAdapter.GetProcessOrderByDate(dateTime);
+            IEnumerable<ProcessOrder> processOrders = ProcessOrderAdapter.GetNewOrEditProcessOrder(dateTime, orderNo);
             IEnumerable<ProcessOrderColorDetail> processOrderColorDetails = ProcessOrderAdapter.GetProcessOrderColorDetailList(processOrders.Select(s => s.OrderNo));
             IEnumerable<ProcessOrderFlowDateDetail> processOrderFlowDateDetails = ProcessOrderAdapter.GetProcessOrderFlowDateDetail(processOrderColorDetails.Select(s => s.OrderColorDetailNo).ToList());
             IEnumerable<FactoryShippingName> factoryShippingNames = ProcessOrderAdapter.GetFactoryShippingNameList(processOrderColorDetails.Select(s => s.OrderColorDetailNo));
@@ -278,7 +278,7 @@ namespace WpfApp1.Modules.Process.Implement
                                                     FactoryShippings = factoryShippingNames.Where(w => w.OrderColorDetailNo == s1.OrderColorDetailNo)
                                                 })
                 });
-            return processOrders;
+            return processOrderStructure.ToList();
         }
 
         /// <summary>

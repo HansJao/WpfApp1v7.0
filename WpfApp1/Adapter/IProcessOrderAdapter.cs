@@ -130,11 +130,11 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         int DeleteFactoryShippingDetail(int orderColorDetailNo);
         /// <summary>
-        /// 依據時間取得加工訂單明細
+        /// 取得新增或修改的加工訂單明細
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime);
+        IEnumerable<ProcessOrder> GetNewOrEditProcessOrder(DateTime dateTime, IEnumerable<int> orderNo);
         /// <summary>
         /// 依據多個訂單號取得加工訂單顏色明細清單
         /// </summary>

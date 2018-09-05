@@ -25,12 +25,12 @@ namespace WpfApp1.Modules.Process
         /// <returns></returns>
         IEnumerable<ProcessOrderFlowFactoryName> GetProcessOrderFlow(int orderNo);
 
-        /// <summary>
-        /// 依據時間取得加工訂單明細
+        /// </summary>
+        /// 取得新增或修改的加工訂單明細
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime);
+        List<ProcessOrderStructure> GetNewOrEditProcessOrderStructures(DateTime dateTime, IEnumerable<int> orderNo);
 
         /// <summary>
         /// 以訂單編號取得加工訂單顏色明細

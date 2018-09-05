@@ -372,18 +372,21 @@ namespace WpfApp1.Adapter.MSSQL
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return count;
         }
-        /// 依據時間取得加工訂單明細
+        /// </summary>
+        /// 取得新增或修改的加工訂單明細
         /// </summary>
         /// <param name="dateTime"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderByDate(DateTime dateTime)
+        public IEnumerable<ProcessOrder> GetNewOrEditProcessOrder(DateTime dateTime, IEnumerable<int> orderNo)
         {
-            var sqlCmd = "SELECT * FROM ProcessOrder WHERE CreateDate > @CreateDate";
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-               new SqlParameter("@CreateDate", SqlDbType.DateTime) { Value = dateTime }
-            };
-            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            var sqlCmd = @"SELECT DISTINCT PO.* FROM ProcessOrder PO 
+                           LEFT JOIN ProcessOrderColorDetail POCD ON POCD.OrderNo = PO.OrderNo
+                           LEFT JOIN ProcessOrderFlowDate POFD ON POFD.OrderColorDetailNo = POCD.OrderColorDetailNo
+                           LEFT JOIN FactoryShipping FS ON FS.OrderColorDetailNo = POCD.OrderColorDetailNo
+                           WHERE PO.CreateDate > @DATE OR POCD.UpdateDate > @DATE OR POFD.UpdateDate > @DATE OR FS.CreateDate > @DATE OR PO.OrderNo IN @OrderNo";
+            var parameter = (new { DATE = dateTime, OrderNo = orderNo });
+           
+            var result = DapperHelper.QueryCollection<ProcessOrder, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
         /// <summary>

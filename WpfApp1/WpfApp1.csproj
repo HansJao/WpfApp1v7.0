@@ -146,6 +146,8 @@
     <Compile Include="DataClass\ProcessOrder\ProcessOrderColor.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessFactoryShippingDetail.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderFlowDateDetail.cs" />
+    <Compile Include="DataClass\ProcessOrder\ProcessOrderRecordOrderStringRow.cs" />
+    <Compile Include="DataClass\ProcessOrder\ProcessOrderRecordText.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderStructure.cs" />
     <Compile Include="DataClass\Reports\OriginalSource.cs" />
     <Compile Include="DataClass\Reports\TextileColor.cs" />
