@@ -183,7 +183,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessFactoryShippingDetail> GetProcessFactoryShippingDetail(int orderNo)
+        public IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo)
         {
             string sql = @"select pocd.OrderColorDetailNo,pocd.OrderNo,pocd.Color,pocd.ColorNumber,pocd.Quantity,pocd.Status,SUM(fs.Quantity) as ShippingQuantity from ProcessOrderColorDetail pocd
                           left join FactoryShipping fs on pocd.OrderColorDetailNo = fs.OrderColorDetailNo 
@@ -193,7 +193,7 @@ namespace WpfApp1.Adapter.MSSQL
             {
                 new SqlParameter("@OrderNo", SqlDbType.Int) { Value = orderNo }
             };
-            return DapperHelper.QueryCollection<ProcessFactoryShippingDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
+            return DapperHelper.QueryCollection<ProcessOrderColorFactoryShippingDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
         }
         /// <summary>
         /// 依據狀態取得加工訂單
@@ -475,6 +475,23 @@ namespace WpfApp1.Adapter.MSSQL
             };
             var remark = DapperHelper.Query<string>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return remark;
+        }
+        /// <summary>
+        /// 取得已完成的顏色
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public IEnumerable<int> GetIsCompleteColor(int orderNo)
+        {
+            var sqlCmd = @"SELECT POFD.OrderColorDetailNo FROM  ProcessOrderFlowDate POFD  
+                           INNER JOIN ProcessOrderColorDetail POCD ON POCD.OrderColorDetailNo = POFD.OrderColorDetailNo
+                           WHERE POFD.CompleteDate IS NOT NULL AND POCD.OrderNo = @OrderNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@OrderNo", SqlDbType.Int) { Value = orderNo },
+            };
+            var result = DapperHelper.QueryCollection<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
         }
     }
 }

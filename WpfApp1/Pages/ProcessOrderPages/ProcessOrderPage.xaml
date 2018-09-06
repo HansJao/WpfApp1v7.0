@@ -80,7 +80,7 @@
                         </DataGrid.Columns>
                     </DataGrid>-->
                     <StackPanel Orientation="Vertical">
-                        <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
+                        <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridOrderColorFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"/>
                                 <DataGridTextColumn Header="色號" Binding="{Binding ColorNumber}"/>

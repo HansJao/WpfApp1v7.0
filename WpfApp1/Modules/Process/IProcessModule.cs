@@ -87,7 +87,7 @@ namespace WpfApp1.Modules.Process
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
-        IEnumerable<ProcessFactoryShippingDetail> GetProcessFactoryShippingDetail(int orderNo);
+        IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo);
 
         /// <summary>
         /// 依據狀態取得加工訂單
@@ -140,6 +140,9 @@ namespace WpfApp1.Modules.Process
         /// <param name="statusList"></param>
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList);
+
+       
+
         /// <summary>
         /// 取得加工訂單顏色明細
         /// </summary>
@@ -184,6 +187,12 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderNo"></param>
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
+        /// <summary>
+        /// 取得已完成的顏色
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        IEnumerable<int> GetIsCompleteColor(int orderNo);
 
     }
 }

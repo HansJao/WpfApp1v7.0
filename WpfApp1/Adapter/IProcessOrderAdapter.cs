@@ -61,7 +61,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="orderNo"></param>
         /// <returns></returns>
-        IEnumerable<ProcessFactoryShippingDetail> GetProcessFactoryShippingDetail(int orderNo);
+        IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo);
         /// <summary>
         /// 依據狀態取得加工訂單
         /// </summary>
@@ -167,5 +167,6 @@ namespace WpfApp1.Adapter
         /// <param name="orderNo"></param>
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
+        IEnumerable<int> GetIsCompleteColor(int orderNo);
     }
 }

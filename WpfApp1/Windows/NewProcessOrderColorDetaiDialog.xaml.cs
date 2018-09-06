@@ -29,14 +29,14 @@ namespace WpfApp1.Windows
     {
         private ProcessOrder _processOrder;
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
-        public NewProcessOrderColorDetaiDialog(ProcessOrder processOrder, ProcessFactoryShippingDetail processFactoryShippingDetail)
+        public NewProcessOrderColorDetaiDialog(ProcessOrder processOrder, ProcessOrderColorFactoryShippingDetail processOrderColorFactoryShippingDetail)
         {
 
             InitializeComponent();
             LabelOrderString.Content = processOrder.OrderString;
             LabelFabric.Content = processOrder.Fabric;
-            TextBoxColor.Text = processFactoryShippingDetail.Color;
-            TextBoxColorNumber.Text = processFactoryShippingDetail.ColorNumber;
+            TextBoxColor.Text = processOrderColorFactoryShippingDetail.Color;
+            TextBoxColorNumber.Text = processOrderColorFactoryShippingDetail.ColorNumber;
             _processOrder = processOrder;
         }
 
@@ -60,7 +60,7 @@ namespace WpfApp1.Windows
             ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, _processOrder.OrderNo);
 
             ProcessOrderPage page = (ProcessOrderPage)this.DataContext;
-            page.DataGridFactoryShippingDetail.ItemsSource = ProcessModule.GetProcessFactoryShippingDetail(_processOrder.OrderNo);
+            page.DataGridOrderColorFactoryShippingDetail.ItemsSource = ProcessModule.GetProcessOrderColorFactoryShippingDetail(_processOrder.OrderNo);
             this.Close();
         }
 

@@ -54,9 +54,9 @@ namespace WpfApp1.Modules.Process.Implement
 
         }
 
-        public IEnumerable<ProcessFactoryShippingDetail> GetProcessFactoryShippingDetail(int orderNo)
+        public IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo)
         {
-            var result = ProcessOrderAdapter.GetProcessFactoryShippingDetail(orderNo);
+            var result = ProcessOrderAdapter.GetProcessOrderColorFactoryShippingDetail(orderNo);
             return result;
         }
 
@@ -312,6 +312,16 @@ namespace WpfApp1.Modules.Process.Implement
         {
             string remark = ProcessOrderAdapter.GetProcessOrderRemark(orderNo);
             return remark;
+        }
+        /// <summary>
+        /// 取得已完成的顏色
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public IEnumerable<int> GetIsCompleteColor(int orderNo)
+        {
+            IEnumerable<int> result = ProcessOrderAdapter.GetIsCompleteColor(orderNo);
+            return result;
         }
     }
 }

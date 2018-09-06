@@ -11,7 +11,7 @@ namespace WpfApp1.DataClass.ProcessOrder
     /// <summary>
     /// 加工廠出貨明細
     /// </summary>
-    public class ProcessFactoryShippingDetail : ProcessOrderColorDetail
+    public class ProcessOrderColorFactoryShippingDetail : ProcessOrderColorDetail
     {
         public int ShippingQuantity { get; set; }
     }
