@@ -124,6 +124,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="date"></param>
         /// <returns></returns>
         int UpdateProcessOrderFlowInputDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date);
+
         /// <summary>
         /// 更新加工訂單流程時間
         /// </summary>
@@ -168,5 +169,21 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNo"></param>
         /// <returns></returns>
         int DeleteFactoryShippingDetail(int orderColorDetailNo);
+
+        /// <summary>
+        /// 更新加工訂單備註
+        /// </summary>
+        /// <param name="processOrderNo"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        bool UpdateProcessOrderRemark(int processOrderNo, string text);
+
+        /// <summary>
+        /// 取得加工訂單備註
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        string GetProcessOrderRemark(int orderNo);
+
     }
 }

@@ -154,5 +154,18 @@ namespace WpfApp1.Adapter
         /// <param name="orderFlowNo"></param>
         /// <returns></returns>
         bool EditProcessOrderFlowFactory(int selectedFactoryItem, int orderFlowNo);
+        /// <summary>
+        /// 更新加工訂單備註
+        /// </summary>
+        /// <param name="processOrderNo"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderRemark(int processOrderNo, string text);
+        /// <summary>
+        /// 取得加工訂單備註
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        string GetProcessOrderRemark(int orderNo);
     }
 }

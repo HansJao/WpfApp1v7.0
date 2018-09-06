@@ -51,10 +51,11 @@ namespace WpfApp1.Adapter.MSSQL
 
         public int InsertProcessOrder(ProcessOrder processOrder)
         {
-            string sql = @"INSERT INTO ProcessOrder (OrderString,Fabric,Specification,ProcessItem,Precautions,Memo,HandFeel,CreateDate) 
+            string sql = @"INSERT INTO ProcessOrder 
+                           (OrderString,Fabric,Specification,ProcessItem,Precautions,Memo,HandFeel,CreateDate) 
                            VALUES 
-                            (@OrderString,@Fabric,@Specification,@ProcessItem,@Precautions,@Memo,@HandFeel,@CreateDate);
-                            SELECT CAST(SCOPE_IDENTITY() as int)";
+                           (@OrderString,@Fabric,@Specification,@ProcessItem,@Precautions,@Memo,@HandFeel,@CreateDate);
+                           SELECT CAST(SCOPE_IDENTITY() as int)";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@OrderString", SqlDbType.NVarChar) { Value = processOrder.OrderString },
@@ -132,7 +133,7 @@ namespace WpfApp1.Adapter.MSSQL
 
         public IEnumerable<FactoryShippingName> GetFactoryShipping(int orderColorDetailNo)
         {
-            var sqlCmd = @"select fs.ShippingNo,fs.OrderColorDetailNo,c.Name,fs.Quantity,fs.CreateDate from FactoryShipping fs
+            var sqlCmd = @"select fs.ShippingNo,fs.OrderColorDetailNo,c.Name,fs.Quantity,fs.CreateDate,fs.ShippingDate from FactoryShipping fs
                            inner join Customer c on c.CustomerID = fs.CustomerID
                            where OrderColorDetailNo = @OrderColorDetailNo";
             SqlParameter[] parameters = new SqlParameter[]
@@ -148,14 +149,20 @@ namespace WpfApp1.Adapter.MSSQL
                            select @CustomerID = CustomerID from Customer
                            where Name = @Customer
                            INSERT INTO FactoryShipping
+                            ([OrderColorDetailNo]
+                            ,[CustomerID]
+                            ,[Quantity]
+                            ,[CreateDate]
+                            ,[ShippingDate])
                            VALUES 
-                           (@OrderColorDetailNo,@CustomerID,@Quantity,@CreateDate);";
+                           (@OrderColorDetailNo,@CustomerID,@Quantity,@CreateDate,@ShippingDate);";
             SqlParameter[] parameters = new SqlParameter[]
            {
                 new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = factoryShippingName.OrderColorDetailNo },
                 new SqlParameter("@Customer", SqlDbType.NVarChar) { Value = factoryShippingName.Name },
                 new SqlParameter("@Quantity", SqlDbType.Int) { Value = factoryShippingName.Quantity },
                 new SqlParameter("@CreateDate", SqlDbType.DateTime) { Value = factoryShippingName.CreateDate },
+                new SqlParameter("@ShippingDate", SqlDbType.DateTime) { Value = factoryShippingName.ShippingDate },
            };
             return DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
         }
@@ -385,7 +392,7 @@ namespace WpfApp1.Adapter.MSSQL
                            LEFT JOIN FactoryShipping FS ON FS.OrderColorDetailNo = POCD.OrderColorDetailNo
                            WHERE PO.CreateDate > @DATE OR POCD.UpdateDate > @DATE OR POFD.UpdateDate > @DATE OR FS.CreateDate > @DATE OR PO.OrderNo IN @OrderNo";
             var parameter = (new { DATE = dateTime, OrderNo = orderNo });
-           
+
             var result = DapperHelper.QueryCollection<ProcessOrder, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
@@ -409,7 +416,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<FactoryShippingName> GetFactoryShippingNameList(IEnumerable<int> processOrderColorDetailNo)
         {
-            var sqlCmd = @"select fs.ShippingNo,fs.OrderColorDetailNo,c.Name,fs.Quantity,fs.CreateDate from FactoryShipping fs
+            var sqlCmd = @"select fs.ShippingNo,fs.OrderColorDetailNo,c.Name,fs.Quantity,fs.CreateDate,fs.ShippingDate from FactoryShipping fs
                            inner join Customer c on c.CustomerID = fs.CustomerID
                            where OrderColorDetailNo IN @OrderColorDetailNo";
             var parameter = (new { OrderColorDetailNo = processOrderColorDetailNo });
@@ -433,6 +440,41 @@ namespace WpfApp1.Adapter.MSSQL
             };
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return count == 1;
+        }
+        /// <summary>
+        /// 更新加工訂單備註
+        /// </summary>
+        /// <param name="processOrderNo"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderRemark(int processOrderNo, string text)
+        {
+            var sqlCmd = @"UPDATE ProcessOrder
+                          SET Remark = @Remark
+                          WHERE OrderNo = @OrderNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@OrderNo", SqlDbType.Int) { Value = processOrderNo },
+                new SqlParameter("@Remark", SqlDbType.NVarChar) { Value = text }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
+        }
+        /// <summary>
+        /// 取得加工訂單備註
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public string GetProcessOrderRemark(int orderNo)
+        {
+            var sqlCmd = @"SELECT Remark FROM ProcessOrder
+                           WHERE OrderNo = @OrderNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@OrderNo", SqlDbType.Int) { Value = orderNo },
+            };
+            var remark = DapperHelper.Query<string>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return remark;
         }
     }
 }

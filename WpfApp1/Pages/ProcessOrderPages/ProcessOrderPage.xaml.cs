@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Enumeration;
@@ -107,8 +108,12 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
             var processOrder = dataGrid.SelectedItem as ProcessOrder;
 
-            var processOrderFlow = ProcessModule.GetProcessOrderFlow(processOrder.OrderNo);
-            DataGridProcessOrderFlow.ItemsSource = processOrderFlow;
+            //var processOrderFlow = ProcessModule.GetProcessOrderFlow(processOrder.OrderNo);
+            //DataGridProcessOrderFlow.ItemsSource = processOrderFlow;
+
+            string processOrderRemark = ProcessModule.GetProcessOrderRemark(processOrder.OrderNo);
+            TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
+            remark.Text = processOrderRemark ?? "";
 
             var processFactoryShippingDetail = ProcessModule.GetProcessFactoryShippingDetail(processOrder.OrderNo);
             DataGridFactoryShippingDetail.ItemsSource = processFactoryShippingDetail;
@@ -134,7 +139,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 ProcessModule.DeleteProcessOrder(processOrder);
                 DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(_processOrderColorStatus);
-                DataGridProcessOrderFlow.ItemsSource = null;
+                //DataGridProcessOrderFlow.ItemsSource = null;
                 DataGridFactoryShippingDetail.ItemsSource = null;
                 DataGridProcessOrderFlowDateDetail.ItemsSource = null;
                 DataGridFactoryShipping.ItemsSource = null;
@@ -226,7 +231,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 OrderColorDetailNo = processOrderColorDetail.OrderColorDetailNo,
                 Name = ComboBoxCustomer.SelectedItem.ToString(),
                 Quantity = TextBoxQuantity.Text.ToInt(),
-                CreateDate = DateTime.Now
+                CreateDate = DateTime.Now,
+                ShippingDate = DatePickerShippingDate.SelectedDate
             };
 
             var count = ProcessModule.InsertFactoryShipping(factoryShipping);
@@ -390,6 +396,13 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridProcessOrderFlowDateDetail.CancelEdit();
             editProcessOrderFlowFactoryNameDialog.DataContext = this;
             editProcessOrderFlowFactoryNameDialog.Show();
+        }
+
+        private void ButtonUpdateProcessOrderRemark_Click(object sender, RoutedEventArgs e)
+        {
+            TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
+            int processOrderNo = (DataGridProcessOrder.SelectedItem as ProcessOrder).OrderNo;
+            bool success = ProcessModule.UpdateProcessOrderRemark(processOrderNo, remark.Text);
         }
     }
 }

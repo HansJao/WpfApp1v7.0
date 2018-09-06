@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="450" d:DesignWidth="1000"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:convert="clr-namespace:WpfApp1.Utility"
       xmlns:ProcessEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
@@ -55,7 +55,7 @@
             </DataGrid>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <DataGrid x:Name="DataGridProcessOrderFlow" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="Collapsed">
+                    <!--<DataGrid x:Name="DataGridProcessOrderFlow" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Visibility="Collapsed">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="工廠" Binding="{Binding Factory}"/>
                             <DataGridTextColumn Header="加工項目" Binding="{Binding Process}"/>
@@ -78,7 +78,7 @@
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
-                    </DataGrid>
+                    </DataGrid>-->
                     <StackPanel Orientation="Vertical">
                         <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
                             <DataGrid.Columns>
@@ -138,16 +138,19 @@
                             <ComboBox x:Name="ComboBoxCustomer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="120" IsEditable="True"/>
                         </DockPanel>
                         <StackPanel Orientation="Horizontal">
-                            <DockPanel Width="180">
+                            <DockPanel Width="250">
                                 <Label Content="數量:"/>
                                 <TextBox x:Name="TextBoxQuantity" Height="25" Width="50"/>
+                                <DatePicker x:Name="DatePickerShippingDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}" />
                                 <Button x:Name="ButtonNewFactoryShipping" Content="新增" DockPanel.Dock="Left" VerticalAlignment="Top" Width="50" Click="ButtonNewFactoryShipping_Click"/>
+
                             </DockPanel>
                         </StackPanel>
                         <DataGrid x:Name="DataGridFactoryShipping"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="客戶" Binding="{Binding Name}"/>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
+                                <DataGridTextColumn Header="出貨時間" Binding="{Binding ShippingDate, StringFormat=yyyy/MM/dd}"/>
                                 <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate}"/>
                                 <DataGridTemplateColumn Header="刪除" >
                                     <DataGridTemplateColumn.CellTemplate >
@@ -159,7 +162,17 @@
                             </DataGrid.Columns>
                         </DataGrid>
                     </StackPanel>
+                    <StackPanel>
+                        <RichTextBox x:Name="RichTextBoxProcessOrderRemark" Width="210" Background="#FFDAD9D9">
+                            <FlowDocument>
+                                <Paragraph>
+                                </Paragraph>
+                            </FlowDocument>
+                        </RichTextBox>
+                        <Button x:Name="ButtonUpdateProcessOrderRemark"  Content="更新" HorizontalAlignment="Right" Width="50" Click="ButtonUpdateProcessOrderRemark_Click"/>
+                    </StackPanel>
                 </StackPanel>
+                
             </StackPanel>
         </DockPanel>
     </Grid>

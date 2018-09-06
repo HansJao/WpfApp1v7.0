@@ -13,5 +13,6 @@ namespace WpfApp1.DataClass.ProcessOrder
         public string Name { get; set; }
         public int Quantity { get; set; }
         public DateTime CreateDate { get; set; }
+        public DateTime? ShippingDate { get; set; }
     }
 }

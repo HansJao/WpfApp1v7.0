@@ -292,6 +292,26 @@ namespace WpfApp1.Modules.Process.Implement
             bool success = ProcessOrderAdapter.EditProcessOrderFlowFactory(selectedFactoryItem, orderFlowNo);
             return success;
         }
-
+        /// <summary>
+        /// 更新加工訂單備註
+        /// </summary>
+        /// <param name="processOrderNo"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public bool UpdateProcessOrderRemark(int processOrderNo, string text)
+        {
+            int count = ProcessOrderAdapter.UpdateProcessOrderRemark(processOrderNo, text);
+            return count == 1;
+        }
+        /// <summary>
+        /// 取得加工訂單備註
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public string GetProcessOrderRemark(int orderNo)
+        {
+            string remark = ProcessOrderAdapter.GetProcessOrderRemark(orderNo);
+            return remark;
+        }
     }
 }
