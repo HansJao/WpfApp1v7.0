@@ -81,7 +81,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             ISheet sheet = workbook.GetSheet(orderString);
 
             IRow rowFive = sheet.GetRow(5);
-            var width = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Width).CellType == CellType.Formula ? "" : rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Width).StringCellValue;
+            var width = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Width).StringCellValue;
             var clearType = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType).StringCellValue;
             var factoryString = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).StringCellValue.Replace(" ", "");
             var handFeel = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel).StringCellValue;
@@ -103,7 +103,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             IRow rowSix = sheet.GetRow(6);
             var fabric = rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Fabric);
             TextBoxFabric.Text = fabric.StringCellValue;
-            var weight = rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight).CellType == CellType.Formula ? "" : rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight).StringCellValue;
+            var weight = rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight).StringCellValue;
 
             TextBoxSpecification.Text = string.Concat(clearType, " ", width, "X", weight);
 

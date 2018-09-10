@@ -9,6 +9,7 @@ namespace WpfApp1.DataClass.ProcessOrder
     public class ProcessOrderRecordOrderStringRow
     {
         public string OrderString { get; set; }
-        public int RowNumber { get; set; }
+        public int StartRow { get; set; }
+        public int EndRow { get; set; }
     }
 }

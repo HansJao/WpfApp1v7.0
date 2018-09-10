@@ -42,49 +42,90 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
             var containOrderString = new List<string>();
             Dictionary<string, List<ProcessOrderRecordOrderStringRow>> keyValuePairs = new Dictionary<string, List<ProcessOrderRecordOrderStringRow>>();
 
-            //取得每一個sheet內的訂單編號
-            foreach (var item in processOrderStructures)
-            {
-                string sheetName = item.ProcessOrder.OrderString.Substring(2, 5);
-                ISheet sheet = templateWorkbook.GetSheet(sheetName) ?? templateWorkbook.CreateSheet(sheetName);
-                int lastRow = sheet.LastRowNum;
-                if (!keyValuePairs.ContainsKey(sheetName))
-                    for (int row = 0; row <= lastRow; row++)
-                    {
-                        //為了防止cell null 錯誤
-                        if (lastRow == 0)
-                            break;
-                        IRow dataRow = sheet.GetRow(row);
-                        ICell cell = dataRow.GetCell(0) ?? null;
-                        //判斷Excel是否含有值
-                        if (cell != null && cell.CellType == CellType.String)
-                        {
-                            //判斷是否已存在於字典中 如不在字典中則加入key
-                            if (!keyValuePairs.ContainsKey(sheetName))
-                            {
-                                keyValuePairs.Add(sheetName, new List<ProcessOrderRecordOrderStringRow>
-                                                                    {
-                                                                        new ProcessOrderRecordOrderStringRow { OrderString = cell.StringCellValue, RowNumber = row }
-                                                                    });
-                            }
-                            else
-                            {
-                                keyValuePairs[sheetName].Add(new ProcessOrderRecordOrderStringRow { OrderString = cell.StringCellValue, RowNumber = row });
-                            }
-                        }
-                    }
-            }
+            #region 更新邏輯
+            ////取得每一個sheet內的訂單編號
+            //foreach (var item in processOrderStructures)
+            //{
+            //    string sheetName = item.ProcessOrder.OrderString.Substring(2, 5);
+            //    ISheet sheet = templateWorkbook.GetSheet(sheetName) ?? templateWorkbook.CreateSheet(sheetName);
+            //    int lastRow = sheet.LastRowNum;
+
+            //    string priviousSheetName = string.Empty, priviousOrderString = string.Empty;
+
+            //    for (int row = 0; row <= lastRow; row++)
+            //    {
+            //        //為了防止cell null 錯誤
+            //        if (lastRow == 0)
+            //            break;
+            //        IRow dataRow = sheet.GetRow(row);
+            //        ICell cell = dataRow.GetCell(0) ?? null;
+            //        //判斷Excel是否含有值
+            //        if (cell != null && cell.CellType == CellType.String)
+            //        {
+            //            if (item.ProcessOrder.OrderString == cell.StringCellValue)
+            //            {
+            //                //判斷是否已存在於字典中 如不在字典中則加入key
+            //                if (!keyValuePairs.ContainsKey(sheetName))
+            //                {
+            //                    keyValuePairs.Add(sheetName, new List<ProcessOrderRecordOrderStringRow>
+            //                                                        {
+            //                                                            new ProcessOrderRecordOrderStringRow { OrderString = cell.StringCellValue, StartRow = row }
+            //                                                        });
+            //                }
+            //                else
+            //                {
+            //                    keyValuePairs[sheetName].Add(new ProcessOrderRecordOrderStringRow { OrderString = cell.StringCellValue, StartRow = row });
+            //                }
+            //            }
+            //            //if (!keyValuePairs.ContainsKey(priviousSheetName) || keyValuePairs[priviousSheetName].Count() == 0)
+            //            //{
+            //            //    priviousSheetName = sheetName;
+            //            //    priviousOrderString = cell.StringCellValue;
+            //            //    continue;
+            //            //}
+            //            if (priviousOrderString != cell.StringCellValue && priviousSheetName != string.Empty && keyValuePairs[priviousSheetName].Where(w => w.OrderString == priviousOrderString).Count() > 0)
+            //                keyValuePairs[priviousSheetName].Where(w => w.OrderString == priviousOrderString).First().EndRow = row;
+            //            priviousSheetName = sheetName;
+            //            priviousOrderString = cell.StringCellValue;
+            //        }
+
+            //    }
+            //} 
+            #endregion
 
 
             ICellStyle positionStyle = templateWorkbook.CreateCellStyle();
+            
             positionStyle.WrapText = true;
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            positionStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+            positionStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle colorDetailStyle = templateWorkbook.CreateCellStyle();
+            colorDetailStyle.WrapText = true;
+            colorDetailStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            colorDetailStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            colorDetailStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+            colorDetailStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle colorDetailStyle2 = templateWorkbook.CreateCellStyle();
+            colorDetailStyle2.WrapText = true;
+            colorDetailStyle2.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            colorDetailStyle2.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            colorDetailStyle2.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LemonChiffon.Index;
+            colorDetailStyle2.FillPattern = FillPattern.SolidForeground;
+
+            do
+            {
+                templateWorkbook.RemoveSheetAt(0);
+            } while (templateWorkbook.NumberOfSheets != 0);
 
             foreach (var item in processOrderStructures)
             {
                 string sheetName = item.ProcessOrder.OrderString.Substring(2, 5);
                 ISheet sheet = templateWorkbook.GetSheet(sheetName) ?? templateWorkbook.CreateSheet(sheetName);
+
                 sheet.SetColumnWidth(0, 3300);
                 sheet.SetColumnWidth(1, 6300);
                 sheet.SetColumnWidth(2, 4100);
@@ -96,12 +137,13 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
                 //判斷是否已存在於字典中 如果存在則是使用更新
                 if (keyValuePairs.ContainsKey(sheetName) && keyValuePairs[sheetName].Where(w => w.OrderString == item.ProcessOrder.OrderString).Count() > 0)
                 {
+                    #region 更新邏輯
+                    int totalRoqCount = 1 + item.ProcessOrderColorGroups.Count() + item.ProcessOrderColorGroups.Sum(s => s.FactoryShippings.Count() + s.ProcessOrderFlowDateDetails.Count());
+                    var currentOrder = keyValuePairs[sheetName].Where(w => w.OrderString == item.ProcessOrder.OrderString).First();
+                    sheet.ShiftRows(currentOrder.EndRow, lastRow, totalRoqCount - (currentOrder.EndRow - currentOrder.StartRow));
 
-                }
-                else
-                {
-                    lastRow++;
-                    IRow dataRow = sheet.CreateRow(lastRow);
+                    int updateRowNumber = currentOrder.StartRow;
+                    IRow dataRow = sheet.CreateRow(updateRowNumber);
 
                     CreateStringCell(dataRow, 0, item.ProcessOrder.OrderString, positionStyle);
 
@@ -120,99 +162,97 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
 
                     foreach (var orderDetail in item.ProcessOrderColorGroups)
                     {
-                        lastRow++;
-                        IRow colorDetailRow = sheet.CreateRow(lastRow);
+                        updateRowNumber++;
+
+                        IRow colorDetailRow = sheet.CreateRow(updateRowNumber);
                         CreateStringCell(colorDetailRow, 1, orderDetail.ProcessOrderColorDetail.Color, positionStyle);
                         CreateStringCell(colorDetailRow, 2, orderDetail.ProcessOrderColorDetail.ColorNumber, positionStyle);
                         CreateStringCell(colorDetailRow, 3, orderDetail.ProcessOrderColorDetail.Quantity + "疋", positionStyle);
 
                         foreach (var orderFlowDate in orderDetail.ProcessOrderFlowDateDetails)
                         {
-                            lastRow++;
-                            IRow orderFlowDateRow = sheet.CreateRow(lastRow);
+                            updateRowNumber++;
+                            IRow orderFlowDateRow = sheet.CreateRow(updateRowNumber);
                             CreateStringCell(orderFlowDateRow, 2, orderFlowDate.Name, positionStyle);
                             CreateStringCell(orderFlowDateRow, 3, orderFlowDate.InputDate?.ToString("yyyy/MM/dd"), positionStyle);
                             CreateStringCell(orderFlowDateRow, 4, orderFlowDate.CompleteDate?.ToString("yyyy/MM/dd"), positionStyle);
                         }
                         foreach (var factoryShipping in orderDetail.FactoryShippings)
                         {
-                            lastRow++;
-                            IRow factoryShippingRow = sheet.CreateRow(lastRow);
+                            updateRowNumber++;
+                            IRow factoryShippingRow = sheet.CreateRow(updateRowNumber);
                             string sentence = string.Concat(factoryShipping.CreateDate.ToString("yyyy/MM/dd"), "載", factoryShipping.Quantity, "疋到", factoryShipping.Name);
                             CreateStringCell(factoryShippingRow, 1, sentence, positionStyle);
                         }
                     }
+                    #endregion
+                }
+                else
+                {
+                    if (lastRow != 0) lastRow++;
+                    IRow dataRow = sheet.CreateRow(lastRow);
 
+                    CreateStringCell(dataRow, 0, item.ProcessOrder.OrderString, positionStyle);
+
+                    CreateStringCell(dataRow, 1, item.ProcessOrder.Fabric, positionStyle);
+
+                    CreateStringCell(dataRow, 2, item.ProcessOrder.Specification, positionStyle);
+
+                    CreateStringCell(dataRow, 3, item.ProcessOrder.ProcessItem, positionStyle);
+
+                    CreateStringCell(dataRow, 4, item.ProcessOrder.Precautions, positionStyle);
+
+                    CreateStringCell(dataRow, 5, item.ProcessOrder.Memo, positionStyle);
+
+                    CreateStringCell(dataRow, 6, item.ProcessOrder.HandFeel, positionStyle);
+                    int index = 0;
+                    foreach (var orderDetail in item.ProcessOrderColorGroups)
+                    {
+                        lastRow++;
+                        bool isOdd = index % 2 == 1;
+                        index++;
+                        IRow colorDetailRow = sheet.CreateRow(lastRow);
+                        CreateStringCell(colorDetailRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 1, orderDetail.ProcessOrderColorDetail.Color, isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 2, orderDetail.ProcessOrderColorDetail.ColorNumber, isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 3, orderDetail.ProcessOrderColorDetail.Quantity + "疋", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 4, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateStringCell(colorDetailRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        foreach (var orderFlowDate in orderDetail.ProcessOrderFlowDateDetails)
+                        {
+                            lastRow++;
+                            IRow orderFlowDateRow = sheet.CreateRow(lastRow);
+                            CreateStringCell(orderFlowDateRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 1, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 2, orderFlowDate.Name, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 3, orderFlowDate.InputDate?.ToString("yyyy/MM/dd"), isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 4, orderFlowDate.CompleteDate?.ToString("yyyy/MM/dd"), isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(orderFlowDateRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        }
+                        foreach (var factoryShipping in orderDetail.FactoryShippings)
+                        {
+                            lastRow++;
+                            IRow factoryShippingRow = sheet.CreateRow(lastRow);
+                            string sentence = string.Concat(factoryShipping.CreateDate.ToString("yyyy/MM/dd"), "載", factoryShipping.Quantity, "疋到", factoryShipping.Name);
+
+                            CreateStringCell(factoryShippingRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 1, sentence, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 2, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 3, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 4, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateStringCell(factoryShippingRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        }
+                    }
                 }
             }
 
-
-            //string sheetName = "201808";
-            //ISheet sheet = templateWorkbook.GetSheet(sheetName) ?? templateWorkbook.CreateSheet(sheetName);
-            //IRow dataRow = sheet.GetRow(4) ?? sheet.CreateRow(4);
-            //ICell cell = dataRow.GetCell(1) ?? dataRow.CreateCell(1);
-            //cell.SetCellValue("foo");
-
-            //sheet.ShiftRows(0, 10, 10);
             using (FileStream fs = new FileStream(tempPath, FileMode.Create, FileAccess.Write))
             {
                 templateWorkbook.Write(fs);
             }
-
-            //using (FileStream fs = File.Open(tempPath, FileMode.Create, FileAccess.Read))
-            //{
-            //    //把xls文件读入workbook变量里，之后就可以关闭了
-            //    IWorkbook wk = new XSSFWorkbook(fs);
-            //    ISheet wsheet = wk.GetSheet("201808");
-            //    XSSFRow row = (XSSFRow)wsheet.GetRow(0);
-            //    row.Height = 5000;
-            //    row.GetCell(0).SetCellValue("123456987");
-            //    wsheet.SetColumnWidth(0, 3000);
-            //    wsheet.SetColumnWidth(1, 3150);
-            //    wsheet.SetColumnWidth(2, 1700);
-            //    wsheet.SetColumnWidth(4, 1700);
-
-            //    //ICellStyle positionStyle = wk.CreateCellStyle();
-            //    //positionStyle.WrapText = true;
-            //    //positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            //    //positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-
-            //    //ExcelHelper.CreateCell(row, 0, "布種", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 2, "織廠", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 3, "整理", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
-            //    //ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
-            //    wk.Write(fs);
-            //    fs.Close();
-            //}
-            //建立Excel 2003檔案
-            //IWorkbook wb = new XSSFWorkbook();
-            //ISheet ws = wb.GetSheet("201808");
-            //XSSFRow row = (XSSFRow)ws.CreateRow(0);
-            //row.Height = 440;
-
-            //ws.SetColumnWidth(0, 3000);
-            //ws.SetColumnWidth(1, 3150);
-            //ws.SetColumnWidth(2, 1700);
-            //ws.SetColumnWidth(4, 1700);
-
-            //ICellStyle positionStyle = wb.CreateCellStyle();
-            //positionStyle.WrapText = true;
-            //positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            //positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-
-            //ExcelHelper.CreateCell(row, 0, "布種", positionStyle);
-            //ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
-            //ExcelHelper.CreateCell(row, 2, "織廠", positionStyle);
-            //ExcelHelper.CreateCell(row, 3, "整理", positionStyle);
-            //ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
-            //ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
-            //ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
-            //FileStream file = new FileStream(tempPath, FileMode.Open);//產生檔案
-            //wb.Write(file);
-            //file.Close();
         }
 
         public void CreateStringCell(IRow row, int cellIndex, string cellValue, ICellStyle style)
