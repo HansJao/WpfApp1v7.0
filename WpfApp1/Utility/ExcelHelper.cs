@@ -322,6 +322,13 @@ namespace WpfApp1.Utility
             file.Close();
         }
 
+        public static string GetCellString(IRow row,int cellNum)
+        {
+            row.GetCell(cellNum).SetCellType(CellType.String);
+            string result = row.GetCell(cellNum).StringCellValue;
+            return result;
+        }
+
         public static T GetCellValue<T>(IRow row,int cellNum,T test)
         {
             ICell cell = row.GetCell(cellNum);

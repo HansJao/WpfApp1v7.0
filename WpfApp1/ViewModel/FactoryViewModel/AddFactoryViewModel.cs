@@ -33,7 +33,7 @@ namespace WpfApp1.ViewModel.FactoryViewModel
             {
                 if (_factory.Name != value)
                 {
-                    _factory.Name = value;
+                    _factory.Name = value.Trim();
                     RaisePropertyChanged("Name");
                 }
             }
@@ -135,6 +135,12 @@ namespace WpfApp1.ViewModel.FactoryViewModel
                 Sort = Sort
             };
 
+            var isContainFactory = FactoryModule.GetFactoryList().Select(s => s.Name).Contains(factory.Name);
+            if(isContainFactory)
+            {
+                MessageBox.Show("此工廠已存在於清單!!");
+                return;
+            }
             int count = FactoryModule.InsertFactory(factory);
             if (count == 1)
             {
@@ -145,6 +151,10 @@ namespace WpfApp1.ViewModel.FactoryViewModel
                 Fax = string.Empty;
                 Address = string.Empty;
                 Sort = 0;
+            }
+            else
+            {
+                MessageBox.Show("新增失敗!!");
             }
         }
         //定義是否可以更新Title

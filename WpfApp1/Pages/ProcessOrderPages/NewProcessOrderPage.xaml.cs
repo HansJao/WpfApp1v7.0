@@ -17,6 +17,7 @@ using WpfApp1.Modules.FactoryModule.Implement;
 using WpfApp1.Modules.Process;
 using WpfApp1.Modules.Process.Implement;
 using WpfApp1.Pages.FactoryPages;
+using WpfApp1.Utility;
 using WpfApp1.ViewModel.FactoryViewModel;
 
 namespace WpfApp1.Pages.ProcessOrderPages
@@ -83,11 +84,14 @@ namespace WpfApp1.Pages.ProcessOrderPages
             IRow rowFive = sheet.GetRow(5);
 
             int widthCellNum = (int)ExcelEnum.ProcessOrderColumnIndexEnum.Width;
-            var width = rowFive.GetCell(widthCellNum).StringCellValue;
+            string width = ExcelHelper.GetCellString(rowFive, widthCellNum);
 
-            var clearType = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType).StringCellValue;
-            var factoryString = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).StringCellValue.Replace(" ", "");
-            var handFeel = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel).StringCellValue;
+
+            string clearType = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType);
+
+            string factoryString = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).Replace(" ", "");
+
+            string handFeel = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel); 
             TextBoxHandFeel.Text = handFeel;
 
             var factoryList = factoryString.Split('一').ToList();
@@ -104,20 +108,22 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var factoryDictionary = GetFactoryName(factoryList);
 
             IRow rowSix = sheet.GetRow(6);
-            var fabric = rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Fabric);
-            TextBoxFabric.Text = fabric.StringCellValue;
-            var weight = rowSix.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight).StringCellValue;
+            string fabric = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Fabric);
+            TextBoxFabric.Text = fabric;
+
+            var weight = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight);
 
             TextBoxSpecification.Text = string.Concat(clearType, " ", width, "X", weight);
 
             IRow rowNine = sheet.GetRow(9);
-            var memo = rowNine.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Memo).StringCellValue;
+            string memo = ExcelHelper.GetCellString(rowNine, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Memo);
             TextBoxMemo.Text = Regex.Replace(memo, " {2,}", " ");
 
             IRow rowSeven = sheet.GetRow(7);
-            var processItem = rowSeven.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ProcessItem).StringCellValue;
+            string processItem = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ProcessItem);
             TextBoxProcessItem.Text = processItem;
-            var precautions = rowSeven.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Precations).StringCellValue;
+
+            string precautions = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Precations);
             TextBoxPrecautions.Text = precautions;
 
             factoryDictionary.TryGetValue("FabricFactory", out string fabricFactory);
@@ -133,18 +139,14 @@ namespace WpfApp1.Pages.ProcessOrderPages
             for (int rowIndex = 9; rowIndex <= 18; rowIndex++)
             {
                 IRow row = sheet.GetRow(rowIndex);
-                var colorCell = row.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Color);
-                colorCell.SetCellType(CellType.String);
-                var color = colorCell.StringCellValue;
+                string color = ExcelHelper.GetCellString(row, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Color);
+
                 if (string.IsNullOrEmpty(color) || string.IsNullOrEmpty(color.Trim()))
                     break;
-                var colorNumberCell = row.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorNumber);
-                colorNumberCell.SetCellType(CellType.String);
-                var colorNumber = colorNumberCell.StringCellValue;
-
-                var quantityCell = row.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorQuantity);
-                quantityCell.SetCellType(CellType.String);
-                Int32.TryParse(quantityCell.StringCellValue.Replace("疋", "").Replace("約", ""), out int quantity);
+                var colorNumber = ExcelHelper.GetCellString(row, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorNumber);
+               
+                var quantityCellString = ExcelHelper.GetCellString(row, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorQuantity);
+                Int32.TryParse(quantityCellString.Replace("疋", "").Replace("約", ""), out int quantity);
 
                 processOrderColor.Add(new ProcessOrderColor
                 {

@@ -31,7 +31,7 @@ namespace WpfApp1.ViewModel.CustomerViewModel
             {
                 if (_customer.Name != value)
                 {
-                    _customer.Name = value;
+                    _customer.Name = value.Trim();
                     RaisePropertyChanged("Name");
                 }
             }
@@ -129,6 +129,12 @@ namespace WpfApp1.ViewModel.CustomerViewModel
                 Sort = Sort
             };
 
+            bool isContainCustomer = CustomerModule.GetCustomerList().Select(s => s.Name).Contains(customer.Name);
+            if (isContainCustomer)
+            {
+                MessageBox.Show("此客戶已存在清單內!!");
+                return;
+            }
             bool success = CustomerModule.InsertCustomer(customer);
             if (success)
             {
@@ -140,6 +146,10 @@ namespace WpfApp1.ViewModel.CustomerViewModel
                 Address = string.Empty;
                 Memo = string.Empty;
                 Sort = 0;
+            }
+            else
+            {
+                MessageBox.Show("新增失敗!!");
             }
         }
     }
