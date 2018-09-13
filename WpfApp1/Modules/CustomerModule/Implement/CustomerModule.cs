@@ -55,6 +55,8 @@ namespace WpfApp1.Modules.CustomerModule.Implement
             }
 
         }
+
+
         /// <summary>
         /// 更新客戶明細
         /// </summary>
@@ -63,6 +65,16 @@ namespace WpfApp1.Modules.CustomerModule.Implement
         {
             int count = CustomerAdapter.UpdateCustomer(customer);
             return count;
+        }
+
+        /// <summary>
+        /// 新增客戶明細
+        /// </summary>
+        /// <returns></returns>
+        public bool InsertCustomer(Customer customer)
+        {
+            int count = CustomerAdapter.InsertCustomer(customer);
+            return count == 1;
         }
     }
 }

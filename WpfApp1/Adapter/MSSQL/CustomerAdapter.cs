@@ -48,5 +48,20 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, customer);
             return result;
         }
+
+        public int InsertCustomer(Customer customer)
+        {
+            var sqlCmd = @"INSERT INTO [dbo].[Customer]
+                           ([Name]
+                           ,[PhoneNumber]
+                           ,[CellPhone]
+                           ,[Fax]
+                           ,[Address]
+                           ,[Memo]
+                           ,[Sort])
+                           VALUES(@Name,@PhoneNumber,@CellPhone,@Fax,@Address,@Memo,@Sort)";
+            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, customer);
+            return result;
+        }
     }
 }

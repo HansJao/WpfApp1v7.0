@@ -26,5 +26,10 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <returns></returns>
         int UpdateCustomer(Customer customer);
+        /// <summary>
+        /// 新增客戶明細
+        /// </summary>
+        /// <returns></returns>
+        int InsertCustomer(Customer customer);
     }
 }

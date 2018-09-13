@@ -98,7 +98,7 @@ namespace WpfApp1
 
         private void ButtonCustomerAddFunction_Click(object sender, RoutedEventArgs e)
         {
-
+            this.MainFrame.NavigationService.Navigate(new AddCustomerPage());
         }
         private void ButtonCustomerList_Click(object sender, RoutedEventArgs e)
         {

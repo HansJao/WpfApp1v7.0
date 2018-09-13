@@ -321,5 +321,32 @@ namespace WpfApp1.Utility
             wb.Write(file);
             file.Close();
         }
+
+        public static T GetCellValue<T>(IRow row,int cellNum,T test)
+        {
+            ICell cell = row.GetCell(cellNum);
+            switch (cell.CellType)
+            {
+                case CellType.Unknown:
+                    break;
+                case CellType.Numeric:
+                    break;
+                case CellType.String:
+                    cell.SetCellType(CellType.String);
+                    //return (T)cell.StringCellValue;
+                    break;
+                case CellType.Formula:
+                    break;
+                case CellType.Blank:
+                    break;
+                case CellType.Boolean:
+                    break;
+                case CellType.Error:
+                    break;
+                default:
+                    break;
+            }
+            return test;
+        }
     }
 }

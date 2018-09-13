@@ -81,7 +81,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
             ISheet sheet = workbook.GetSheet(orderString);
 
             IRow rowFive = sheet.GetRow(5);
-            var width = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Width).StringCellValue;
+
+            int widthCellNum = (int)ExcelEnum.ProcessOrderColumnIndexEnum.Width;
+            var width = rowFive.GetCell(widthCellNum).StringCellValue;
+
             var clearType = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType).StringCellValue;
             var factoryString = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).StringCellValue.Replace(" ", "");
             var handFeel = rowFive.GetCell((int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel).StringCellValue;
