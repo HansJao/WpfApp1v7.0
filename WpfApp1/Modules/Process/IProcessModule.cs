@@ -132,7 +132,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date);
+        bool UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date);
         /// <summary>
         /// 依據狀態,工廠取得加工訂單
         /// </summary>
@@ -194,5 +194,12 @@ namespace WpfApp1.Modules.Process
         /// <returns></returns>
         IEnumerable<int> GetIsCompleteColor(int orderNo);
 
+        /// <summary>
+        /// 更新加工訂單顏色明細狀態為已完成
+        /// </summary>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
+        /// <returns></returns>
+        bool UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
     }
 }

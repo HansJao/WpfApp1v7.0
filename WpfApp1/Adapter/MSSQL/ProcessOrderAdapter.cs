@@ -283,10 +283,10 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
-            var sqlCmd = @"update ProcessOrderFlowDate
-                          set CompleteDate = @CompleteDate,
-                             UpdateDate = GETDATE()
-                          where OrderFlowNo = @OrderFlowNo and OrderColorDetailNo in @OrderColorDetailNo";
+            var sqlCmd = @"UPDATE ProcessOrderFlowDate
+                          SET CompleteDate = @CompleteDate,
+                          UpdateDate = GETDATE()
+                          WHERE OrderFlowNo = @OrderFlowNo AND OrderColorDetailNo IN @OrderColorDetailNo";
             var parameter =
                 new
                 {
@@ -492,6 +492,31 @@ namespace WpfApp1.Adapter.MSSQL
             };
             var result = DapperHelper.QueryCollection<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
+        }
+
+        public int UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList)
+        {
+            var sqlCmd = @" DECLARE @lastOrderFlowNo INT
+
+                            SELECT TOP 1 @lastOrderFlowNo = OrderFlowNo  FROM ProcessOrderFlowDate
+                            WHERE OrderColorDetailNo = @OrderColorDetailNo
+                            ORDER BY OrderFlowNo DESC
+
+                            IF(@lastOrderFlowNo = @OrderFlowNo)
+	                             begin
+	                                UPDATE ProcessOrderColorDetail
+                                    SET Status = 5
+                                    WHERE OrderColorDetailNo IN @OrderColorDetailNoList
+                                 end";
+            var parameter =
+                new
+                {
+                    OrderColorDetailNo = orderColorDetailNoList.First(),
+                    OrderFlowNo = orderFlowNo,
+                    OrderColorDetailNoList = orderColorDetailNoList
+                };
+            var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return count;
         }
     }
 }

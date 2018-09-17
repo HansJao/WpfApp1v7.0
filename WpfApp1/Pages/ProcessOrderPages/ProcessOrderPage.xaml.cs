@@ -32,7 +32,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
-        private ProcessOrderColorStatus _processOrderColorStatus = ProcessOrderColorStatus.未出完;
+        private ProcessOrderColorStatus _processOrderColorStatus = ProcessOrderColorStatus.未完成;
         public ProcessOrderPage()
         {
             InitializeComponent();
@@ -330,7 +330,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
             var datePicker = (DatePicker)sender;
             var date = datePicker.SelectedDate;
-            int count = ProcessModule.UpdateProcessOrderFlowCompleteDate(orderFlowNo, orderColorDetailNoList, date);
+            bool success = ProcessModule.UpdateProcessOrderFlowCompleteDate(orderFlowNo, orderColorDetailNoList, date);
+            if (success)
+            {
+                bool updateStatusSuccess = ProcessModule.UpdateProcessOrderColorDetailStatusByLastComplete(orderFlowNo, orderColorDetailNoList);
+            }
         }
 
         private void DataGridFactoryList_SelectionChanged(object sender, SelectionChangedEventArgs e)

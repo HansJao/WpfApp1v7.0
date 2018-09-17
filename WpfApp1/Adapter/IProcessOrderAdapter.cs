@@ -168,5 +168,12 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
         IEnumerable<int> GetIsCompleteColor(int orderNo);
+        /// <summary>
+        /// 更新加工訂單顏色明細狀態為已完成
+        /// </summary>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
     }
 }

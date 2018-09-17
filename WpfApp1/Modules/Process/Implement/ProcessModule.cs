@@ -181,10 +181,10 @@ namespace WpfApp1.Modules.Process.Implement
         /// <param name="orderColorDetailNoList"></param>
         /// <param name="date"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
+        public bool UpdateProcessOrderFlowCompleteDate(int orderFlowNo, IEnumerable<int> orderColorDetailNoList, DateTime? date)
         {
             int result = ProcessOrderAdapter.UpdateProcessOrderFlowCompleteDate(orderFlowNo, orderColorDetailNoList, date);
-            return result;
+            return orderColorDetailNoList.Count() == result;
         }
 
         /// <summary>
@@ -322,6 +322,17 @@ namespace WpfApp1.Modules.Process.Implement
         {
             IEnumerable<int> result = ProcessOrderAdapter.GetIsCompleteColor(orderNo);
             return result;
+        }
+        /// <summary>
+        /// 更新加工訂單顏色明細狀態為已完成
+        /// </summary>
+        /// <param name="orderFlowNo"></param>
+        /// <param name="orderColorDetailNoList"></param>
+        /// <returns></returns>
+        public bool UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList)
+        {
+            int result = ProcessOrderAdapter.UpdateProcessOrderColorDetailStatusByLastComplete(orderFlowNo, orderColorDetailNoList);
+            return result == orderColorDetailNoList.Count();
         }
     }
 }

@@ -212,24 +212,24 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
                         bool isOdd = index % 2 == 1;
                         index++;
                         IRow colorDetailRow = sheet.CreateRow(lastRow);
-                        CreateStringCell(colorDetailRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateBlankCell(colorDetailRow, 0, isOdd ? colorDetailStyle : colorDetailStyle2);
                         CreateStringCell(colorDetailRow, 1, orderDetail.ProcessOrderColorDetail.Color, isOdd ? colorDetailStyle : colorDetailStyle2);
                         CreateStringCell(colorDetailRow, 2, orderDetail.ProcessOrderColorDetail.ColorNumber, isOdd ? colorDetailStyle : colorDetailStyle2);
                         CreateStringCell(colorDetailRow, 3, orderDetail.ProcessOrderColorDetail.Quantity + "疋", isOdd ? colorDetailStyle : colorDetailStyle2);
-                        CreateStringCell(colorDetailRow, 4, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                        CreateStringCell(colorDetailRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                        CreateStringCell(colorDetailRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateBlankCell(colorDetailRow, 4, isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateBlankCell(colorDetailRow, 5, isOdd ? colorDetailStyle : colorDetailStyle2);
+                        CreateBlankCell(colorDetailRow, 6, isOdd ? colorDetailStyle : colorDetailStyle2);
                         foreach (var orderFlowDate in orderDetail.ProcessOrderFlowDateDetails)
                         {
                             lastRow++;
                             IRow orderFlowDateRow = sheet.CreateRow(lastRow);
-                            CreateStringCell(orderFlowDateRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(orderFlowDateRow, 1, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(orderFlowDateRow, 0, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(orderFlowDateRow, 1, isOdd ? colorDetailStyle : colorDetailStyle2);
                             CreateStringCell(orderFlowDateRow, 2, orderFlowDate.Name, isOdd ? colorDetailStyle : colorDetailStyle2);
                             CreateStringCell(orderFlowDateRow, 3, orderFlowDate.InputDate?.ToString("yyyy/MM/dd"), isOdd ? colorDetailStyle : colorDetailStyle2);
                             CreateStringCell(orderFlowDateRow, 4, orderFlowDate.CompleteDate?.ToString("yyyy/MM/dd"), isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(orderFlowDateRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(orderFlowDateRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(orderFlowDateRow, 5, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(orderFlowDateRow, 6, isOdd ? colorDetailStyle : colorDetailStyle2);
                         }
                         foreach (var factoryShipping in orderDetail.FactoryShippings)
                         {
@@ -237,13 +237,13 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
                             IRow factoryShippingRow = sheet.CreateRow(lastRow);
                             string sentence = string.Concat(factoryShipping.CreateDate.ToString("yyyy/MM/dd"), "載", factoryShipping.Quantity, "疋到", factoryShipping.Name);
 
-                            CreateStringCell(factoryShippingRow, 0, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 0, isOdd ? colorDetailStyle : colorDetailStyle2);
                             CreateStringCell(factoryShippingRow, 1, sentence, isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(factoryShippingRow, 2, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(factoryShippingRow, 3, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(factoryShippingRow, 4, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(factoryShippingRow, 5, "", isOdd ? colorDetailStyle : colorDetailStyle2);
-                            CreateStringCell(factoryShippingRow, 6, "", isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 2, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 3, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 4, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 5, isOdd ? colorDetailStyle : colorDetailStyle2);
+                            CreateBlankCell(factoryShippingRow, 6, isOdd ? colorDetailStyle : colorDetailStyle2);
                         }
                     }
                 }
@@ -260,6 +260,12 @@ namespace WpfApp1.ViewModel.ProcessOrderViewModel
             var cell = row.CreateCell(cellIndex);
             cell.SetCellValue(cellValue);
             cell.SetCellType(CellType.String);
+            cell.CellStyle = style;
+        }
+        public void CreateBlankCell(IRow row, int cellIndex, ICellStyle style)
+        {
+            var cell = row.CreateCell(cellIndex);
+            cell.SetCellType(CellType.Blank);
             cell.CellStyle = style;
         }
 

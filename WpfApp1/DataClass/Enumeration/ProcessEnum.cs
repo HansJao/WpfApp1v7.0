@@ -17,9 +17,11 @@ namespace WpfApp1.DataClass.Enumeration
         已出完 = 1,
         [Description("緊急")]
         緊急 = 2,
-        [Description("未出完")]
-        未出完 = 3,
+        [Description("未完成")]
+        未完成 = 3,
         [Description("修訂")]
-        修訂 = 4
+        修訂 = 4,
+        [Description("已完成")]
+        已完成 = 5
     }
 }

@@ -12,6 +12,7 @@ namespace WpfApp1.DataClass.Shipping
         public string CountInventory { get; set; }
         public string StorageSpaces { get; set; }
         public int ShippingNumber { get; set; }
+        public string ClearFactory { get; set; }
         public string Memo { get; set; }
     }
 }

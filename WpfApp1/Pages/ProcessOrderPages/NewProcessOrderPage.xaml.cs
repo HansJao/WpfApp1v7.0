@@ -153,7 +153,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     Color = color,
                     ColorNumber = colorNumber,
                     Quantity = quantity,
-                    Status = ProcessOrderColorStatus.未出完
+                    Status = ProcessOrderColorStatus.未完成
                 }
                 );
             }
