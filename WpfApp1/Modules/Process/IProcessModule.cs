@@ -57,6 +57,7 @@ namespace WpfApp1.Modules.Process
         int DeleteProcessOrder(ProcessOrder processOrder);
 
         int UpdateProcessOrderFlowDate(List<ProcessOrderFlowFactoryName> processOrderFlowFactoryName);
+        
 
         /// <summary>
         /// 更新加工訂單流程工廠名稱
@@ -201,5 +202,13 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNoList"></param>
         /// <returns></returns>
         bool UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
+
+        /// <summary>
+        /// 新增加工訂單流程
+        /// </summary>
+        /// <param name="processOrderFlow"></param>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo);
     }
 }

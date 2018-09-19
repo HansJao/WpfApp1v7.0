@@ -334,5 +334,16 @@ namespace WpfApp1.Modules.Process.Implement
             int result = ProcessOrderAdapter.UpdateProcessOrderColorDetailStatusByLastComplete(orderFlowNo, orderColorDetailNoList);
             return result == orderColorDetailNoList.Count();
         }
+        /// <summary>
+        /// 新增加工訂單流程
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        public int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo)
+        {
+            int rsult = ProcessOrderAdapter.NewProcessOrderFlow(processOrderFlow, orderColorDetailNo);
+            return rsult;
+        }
     }
 }

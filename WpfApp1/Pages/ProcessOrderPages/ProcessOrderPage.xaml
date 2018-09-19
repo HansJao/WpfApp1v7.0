@@ -129,7 +129,7 @@
                                 </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
-                        <!--<Button Content="新增工廠" Width="60" Height="24" HorizontalAlignment="Right"/>-->
+                        <Button x:Name="ButtonAddFactory" Content="新增工廠" Width="60" Height="24" HorizontalAlignment="Right" Click="ButtonAddFactory_Click"/>
 
                     </StackPanel>
                     <StackPanel>

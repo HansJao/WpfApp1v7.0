@@ -246,6 +246,9 @@
     <Compile Include="Windows\NewProcessOrderColorDetaiDialog.xaml.cs">
       <DependentUpon>NewProcessOrderColorDetaiDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ProcessWindows\AddProcessOrderFlowFactoryDialog.xaml.cs">
+      <DependentUpon>AddProcessOrderFlowFactoryDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProcessWindows\EditProcessOrderFlowFactoryNameDialog.xaml.cs">
       <DependentUpon>EditProcessOrderFlowFactoryNameDialog.xaml</DependentUpon>
     </Compile>
@@ -327,6 +330,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\NewProcessOrderColorDetaiDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProcessWindows\AddProcessOrderFlowFactoryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

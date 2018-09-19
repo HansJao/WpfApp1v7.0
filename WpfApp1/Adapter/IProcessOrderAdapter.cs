@@ -175,5 +175,12 @@ namespace WpfApp1.Adapter
         /// <param name="orderColorDetailNoList"></param>
         /// <returns></returns>
         int UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
+        /// <summary>
+        /// 新增加工訂單流程
+        /// </summary>
+        /// <param name="processOrderFlow"></param>
+        /// <param name="orderColorDetailNo"></param>
+        /// <returns></returns>
+        int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo);
     }
 }

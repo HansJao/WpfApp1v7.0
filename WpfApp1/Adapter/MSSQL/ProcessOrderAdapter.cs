@@ -505,7 +505,8 @@ namespace WpfApp1.Adapter.MSSQL
                             IF(@lastOrderFlowNo = @OrderFlowNo)
 	                             begin
 	                                UPDATE ProcessOrderColorDetail
-                                    SET Status = 5
+                                    SET Status = 5,
+                                    UpdateDate = GETDATE()
                                     WHERE OrderColorDetailNo IN @OrderColorDetailNoList
                                  end";
             var parameter =
@@ -516,6 +517,28 @@ namespace WpfApp1.Adapter.MSSQL
                     OrderColorDetailNoList = orderColorDetailNoList
                 };
             var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return count;
+        }
+
+        public int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo)
+        {
+            var sqlCmd = @"INSERT INTO ProcessOrderFlow
+                           OUTPUT  inserted.OrderDetailNo
+                           VALUES 
+                           (@OrderNo,@FactoryID);";
+            SqlParameter[] parameter = new SqlParameter[]
+                {
+                        new SqlParameter("@OrderNo", SqlDbType.Int) { Value = processOrderFlow.OrderNo },
+                        new SqlParameter("@FactoryID", SqlDbType.Int) { Value = processOrderFlow.FactoryID }
+                };
+            var orderDetailNo = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+
+
+            var cmd = @"INSERT INTO ProcessOrderFlowDate
+                        VALUES(@OrderColorDetailNo,@OrderDetailNo,null,null,GETDATE());";
+            var parameters =
+                orderColorDetailNo.Select(s => new { OrderColorDetailNo = s, OrderDetailNo = orderDetailNo, });
+            var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, cmd, parameters);
             return count;
         }
     }

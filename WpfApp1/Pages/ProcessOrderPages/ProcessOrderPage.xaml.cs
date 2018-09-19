@@ -116,8 +116,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
             remark.Text = processOrderRemark ?? "";
 
-            IEnumerable<ProcessOrderColorFactoryShippingDetail> processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrder.OrderNo);
-            DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
+            UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
             DataGridOrderColorFactoryShippingDetail.UpdateLayout();
 
 
@@ -252,8 +251,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var factoryShippingList = ProcessModule.GetFactoryShipping(processOrderColorDetail.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
-            var processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderColorDetail.OrderNo);
-            DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
+            UpdateDataGridOrderColorFactoryShippingDetail(processOrderColorDetail.OrderNo);
         }
 
         private void ButtonDeleteFactoryShipping_Click(object sender, RoutedEventArgs e)
@@ -266,7 +264,12 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
             var processOrder = (ProcessOrder)DataGridProcessOrder.SelectedItem;
-            var processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrder.OrderNo);
+            UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
+        }
+
+        private void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
+        {
+            var processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo);
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
         }
 
@@ -334,6 +337,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             if (success)
             {
                 bool updateStatusSuccess = ProcessModule.UpdateProcessOrderColorDetailStatusByLastComplete(orderFlowNo, orderColorDetailNoList);
+                UpdateDataGridOrderColorFactoryShippingDetail(factoryShippingDetails.First().OrderNo);
             }
         }
 
@@ -421,5 +425,25 @@ namespace WpfApp1.Pages.ProcessOrderPages
             int processOrderNo = (DataGridProcessOrder.SelectedItem as ProcessOrder).OrderNo;
             bool success = ProcessModule.UpdateProcessOrderRemark(processOrderNo, remark.Text);
         }
+
+        private void ButtonAddFactory_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (DataGridProcessOrder.SelectedIndex == -1)
+            {
+                MessageBox.Show("請選擇一筆訂單!!");
+                return;
+            }
+            if (DataGridOrderColorFactoryShippingDetail.SelectedIndex == -1)
+            {
+                MessageBox.Show("請選擇一種顏色!!");
+                return;
+            }
+
+            AddProcessOrderFlowFactoryDialog dialog = new AddProcessOrderFlowFactoryDialog();
+            dialog.DataContext = this;
+            dialog.Show();
+        }
+
     }
 }
