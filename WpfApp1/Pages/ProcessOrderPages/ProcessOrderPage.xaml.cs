@@ -124,7 +124,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
             {
                 var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if (isCompleteColor.Contains(item.OrderColorDetailNo))
+                if(item.Status == ProcessOrderColorStatus.已出完)
+                {
+                    row.Background = Brushes.Gray;
+                }
+                else if (isCompleteColor.Contains(item.OrderColorDetailNo))
                 {
                     row.Background = Brushes.Pink;
                 }
@@ -213,9 +217,16 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var processOrderColorDetail = (ProcessOrderColorDetail)dataGrid.SelectedItem;
             if (processOrderColorDetail == null)
                 return;
+
             var factoryShippingList = ProcessModule.GetFactoryShipping(processOrderColorDetail.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
+
             List<int> orderColorDetailNos = new List<int> { processOrderColorDetail.OrderColorDetailNo };
+            RefrashDataGridProcessOrderFlowDateDetail(orderColorDetailNos);
+        }
+
+        public void RefrashDataGridProcessOrderFlowDateDetail(List<int> orderColorDetailNos)
+        {
             var processOrderFlowDateDetail = ProcessModule.GetProcessOrderFlowDateDetail(orderColorDetailNos);
             DataGridProcessOrderFlowDateDetail.ItemsSource = processOrderFlowDateDetail;
         }
@@ -403,6 +414,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             items.Remove(processOrderColorFactoryShippingDetail);
             DataGridOrderColorFactoryShippingDetail.ItemsSource = items;
             DataGridOrderColorFactoryShippingDetail.Items.Refresh();
+        }
+
+        public void Test()
+        {
+
         }
 
         private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)

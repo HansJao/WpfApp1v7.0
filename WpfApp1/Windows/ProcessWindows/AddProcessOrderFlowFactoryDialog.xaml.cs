@@ -51,9 +51,13 @@ namespace WpfApp1.Windows.ProcessWindows
             Factory factory = (Factory)ComboBoxFactoryNames.SelectedItem;
             ProcessOrder processOrder = (ProcessOrder)processOrderPage.DataGridProcessOrder.SelectedItem;
             IEnumerable<ProcessOrderColorFactoryShippingDetail> processOrderColorDetails = processOrderPage.DataGridOrderColorFactoryShippingDetail.SelectedItems.Cast<ProcessOrderColorFactoryShippingDetail>();
+            ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)processOrderPage.DataGridOrderColorFactoryShippingDetail.SelectedItem;
             
+
             int count = ProcessModule.NewProcessOrderFlow(new ProcessOrderFlow { OrderNo = processOrder.OrderNo, FactoryID = factory.FactoryID, }
             , processOrderColorDetails.Select(s => s.OrderColorDetailNo));
+            processOrderPage.RefrashDataGridProcessOrderFlowDateDetail(new List<int> { processOrderColorDetail.OrderColorDetailNo });
+            this.Close();
         }
     }
 }
