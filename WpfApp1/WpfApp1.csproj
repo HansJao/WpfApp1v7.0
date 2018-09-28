@@ -185,6 +185,9 @@
     <Compile Include="Pages\CustomerPages\CustomerListPage.xaml.cs">
       <DependentUpon>CustomerListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\FabricPages\FabricCostQueryPage.xaml.cs">
+      <DependentUpon>FabricCostQueryPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\FabricPages\NewFabricPage.xaml.cs">
       <DependentUpon>NewFabricPage.xaml</DependentUpon>
     </Compile>
@@ -270,6 +273,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\CustomerPages\CustomerListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FabricPages\FabricCostQueryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
