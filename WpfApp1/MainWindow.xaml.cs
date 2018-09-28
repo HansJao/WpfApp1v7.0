@@ -113,5 +113,10 @@ namespace WpfApp1
         {
             this.MainFrame.NavigationService.Navigate(new FeatureSearchPage());
         }
+        private void ButtonFabricCostQueryFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainFrame.NavigationService.Navigate(new FabricCostQueryPage());
+        }
+
     }
 }

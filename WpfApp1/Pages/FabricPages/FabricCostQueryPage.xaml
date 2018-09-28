@@ -6,7 +6,11 @@
       xmlns:local="clr-namespace:WpfApp1.Pages.FabricPages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
+        xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.FabricViewModel"
       Title="FabricCostPage">
+    <Page.DataContext>
+        <viewModel:FabricCostQueryViewModel/>
+    </Page.DataContext>
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal" Height="24" VerticalAlignment="Top" Margin="10,10,0,0">
@@ -14,20 +18,20 @@
                 <TextBox Height="24" Width="100" VerticalAlignment="Top" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top">
+                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding FabricList}" SelectedItem="{Binding Fabric}" Height="150" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="布種編號" Binding="{Binding FabricID}"></DataGridTextColumn>
                         <DataGridTextColumn Header="布種名稱" Binding="{Binding FabricName}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
-                <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,0,0,0">
+                <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding FabricColorList}" Margin="10,0,0,0" Height="150" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Columns >
-                        <DataGridTextColumn Header="顏色編號" Binding="{Binding FabricID}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="顏色" Binding="{Binding FabricName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色編號" Binding="{Binding ColorNo}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
-            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0">
+            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns >
                     <DataGridTextColumn Header="成分" Binding="{Binding FabricID}"></DataGridTextColumn>
                     <DataGridTextColumn Header="顏色" Binding="{Binding FabricName}"></DataGridTextColumn>
@@ -37,7 +41,7 @@
                     <DataGridTextColumn Header="群組" Binding="{Binding FabricName}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0">
+            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="加工項目" Binding="{Binding FabricID}"></DataGridTextColumn>
                     <DataGridTextColumn Header="損耗" Binding="{Binding FabricName}"></DataGridTextColumn>

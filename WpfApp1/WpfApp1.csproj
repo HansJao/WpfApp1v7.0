@@ -134,6 +134,7 @@
     <Compile Include="DataClass\Customer\CustomerName.cs" />
     <Compile Include="DataClass\Entity\Customer.cs" />
     <Compile Include="DataClass\Entity\Fabric.cs" />
+    <Compile Include="DataClass\Entity\FabricColor.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
     <Compile Include="DataClass\Entity\FactoryShipping.cs" />
     <Compile Include="DataClass\Entity\ProcessOrder.cs" />
@@ -229,6 +230,7 @@
     <Compile Include="Utility\JsonHelper.cs" />
     <Compile Include="Utility\XamlHelper.cs" />
     <Compile Include="ViewModel\CustomerViewModel\AddCustomerViewModel.cs" />
+    <Compile Include="ViewModel\FabricViewModel\FabricCostQueryViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\NewFabricViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />

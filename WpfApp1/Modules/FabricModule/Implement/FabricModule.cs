@@ -63,5 +63,15 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.EditFabric(fabric);
             return count;
         }
+        /// <summary>
+        /// 以布種編號取得布種顏色
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricColor> GetFabricColorListByFabricID(IEnumerable<int> fabricIDList)
+        {
+            IEnumerable<FabricColor> fabricColors = FabricAdapter.GetFabricColorListByFabricID(fabricIDList);
+            return fabricColors;
+        }
     }
 }

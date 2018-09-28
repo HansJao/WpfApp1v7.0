@@ -27,5 +27,11 @@ namespace WpfApp1.Adapter
         /// <param name="fabric"></param>
         /// <returns></returns>
         int EditFabric(Fabric fabric);
+        /// <summary>
+        /// 以布種編號取得布種顏色
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        IEnumerable<FabricColor> GetFabricColorListByFabricID(IEnumerable<int> fabricIDList);
     }
 }

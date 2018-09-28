@@ -52,6 +52,22 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabric);
             return result;
         }
+        /// <summary>
+        /// 以布種編號取得布種顏色
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricColor> GetFabricColorListByFabricID(IEnumerable<int> fabricIDList)
+        {
+            string sqlCmd = @"SELECT * FROM FabricColor WHERE FabricID IN @FabricID";
+            var parameter =
+               new
+               {
+                   FabricID = fabricIDList
+               };
+            var result = DapperHelper.QueryCollection<FabricColor,object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
 
+        }
     }
 }

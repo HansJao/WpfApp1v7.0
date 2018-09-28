@@ -44,8 +44,12 @@
                     <MenuItem Header="特徵搜尋" Click="ButtonFeatureSearchFunction_Click"/>
                 </MenuItem>
             </Menu>
-            <!--<Button x:Name="ButtonFactoryManageFunction" Content="工廠管理" Click="ButtonFactoryManageFunction_Click" />-->
-            <Button x:Name="ButtonFabricManageFunction" Content="布種管理" Click="ButtonFabricManageFunction_Click" />
+            <Menu>
+                <MenuItem Header="布種管理" >
+                    <MenuItem Header="新增布種" Click="ButtonFabricManageFunction_Click" />
+                    <MenuItem Header="布種成本查詢" Click="ButtonFabricCostQueryFunction_Click"/>
+                </MenuItem>
+            </Menu>
         </ToolBar>
         <Frame x:Name="MainFrame" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"  NavigationUIVisibility="Hidden"/>
     </Grid>
