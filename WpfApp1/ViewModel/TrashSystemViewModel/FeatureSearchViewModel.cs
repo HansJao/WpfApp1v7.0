@@ -60,6 +60,44 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 _feature = value; ;
             }
         }
+        private string _productNumber { get; set; }
+        public string ProductNumber
+        {
+            get
+            {
+                return _productNumber;
+            }
+            set
+            {
+                string filterText = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(_trashItemList);
+                if (!string.IsNullOrEmpty(filterText))
+                {
+                    cv.Filter = o =>
+                    {
+                        /* change to get data row value */
+                        TrashItem p = o as TrashItem;
+                        bool isContains = true;
+
+                        if (!p.I_01.ToUpper().Contains(filterText.ToUpper()))
+                        {
+                            isContains = false;
+                        }
+                        //isContains = p.I_03.ToUpper().Contains(filterText.ToUpper());
+                        return isContains;
+                        /* end change to get data row value */
+                    };
+                }
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                };
+                _productNumber = value; ;
+            }
+        }
 
         private ObservableCollection<TrashItem> _trashItemList { get; set; }
 
@@ -71,7 +109,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         public FeatureSearchViewModel()
         {
-            _trashItemList = new ObservableCollection<TrashItem>(TrashModule.GetTrashItems());
+            _trashItemList = new ObservableCollection<TrashItem>(TrashModule.GetTrashItems().OrderBy(o => o.I_01));
         }
     }
 }

@@ -18,6 +18,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="庫位" Binding="{Binding StoreArea}"></DataGridTextColumn>
                         <DataGridTextColumn Header="織廠" Binding="{Binding FabricFactory}"></DataGridTextColumn>
                         <DataGridTextColumn Header="整理" Binding="{Binding ClearFactory}"></DataGridTextColumn>
                         <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"></DataGridTextColumn>

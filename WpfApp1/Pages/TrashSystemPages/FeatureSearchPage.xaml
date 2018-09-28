@@ -13,7 +13,7 @@
     </Page.DataContext>
     <Grid>
         <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,9,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
         <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top">
             <DataGrid.Style>
                 <Style TargetType="DataGrid">
@@ -23,8 +23,10 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}"/>
                 <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>
-                <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>                            
+                <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="223,10,0,0" TextWrapping="Wrap" Text="{Binding ProductNumber,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="貨 號:" HorizontalAlignment="Left" Margin="183,7,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Page>
