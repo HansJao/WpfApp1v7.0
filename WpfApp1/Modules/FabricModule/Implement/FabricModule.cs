@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.Utility;
 
 namespace WpfApp1.Modules.FabricModule.Implement
@@ -72,6 +73,46 @@ namespace WpfApp1.Modules.FabricModule.Implement
         {
             IEnumerable<FabricColor> fabricColors = FabricAdapter.GetFabricColorListByFabricID(fabricIDList);
             return fabricColors;
+        }
+
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricColors"></param>
+        public bool AddFabricColorList(List<FabricColor> fabricColors)
+        {
+            int count = FabricAdapter.AddFabricColorList(fabricColors);
+            return fabricColors.Count() == count;
+        }
+        /// <summary>
+        /// 以布種顏色編號取得顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricProportion> GetFabricProportionByColorNo(List<int> fabricColorNoList)
+        {
+            IEnumerable<FabricProportion> fabricProportions = FabricAdapter.GetFabricProportionByColorNo(fabricColorNoList);
+            return fabricProportions;
+        }
+        /// <summary>
+        /// 以布種顏色編號取得布種顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList)
+        {
+            IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricAdapter.GetFabricIngredientProportionByColorNo(fabricColorNoList);
+            return fabricIngredientProportions;
+        }
+        /// <summary>
+        /// 以布種編號取得加工順序
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList)
+        {
+            IEnumerable<ProcessSequence> processSequences = FabricAdapter.GetProcessSequences(fabricIDList);
+            return processSequences;
         }
     }
 }

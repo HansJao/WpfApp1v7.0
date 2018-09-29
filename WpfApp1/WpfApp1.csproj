@@ -135,16 +135,19 @@
     <Compile Include="DataClass\Entity\Customer.cs" />
     <Compile Include="DataClass\Entity\Fabric.cs" />
     <Compile Include="DataClass\Entity\FabricColor.cs" />
+    <Compile Include="DataClass\Entity\FabricProportion.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
     <Compile Include="DataClass\Entity\FactoryShipping.cs" />
     <Compile Include="DataClass\Entity\ProcessOrder.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderColorDetail.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlowDate.cs" />
+    <Compile Include="DataClass\Entity\ProcessSequence.cs" />
     <Compile Include="DataClass\Enumeration\ExcelEnum.cs" />
     <Compile Include="DataClass\Enumeration\FactoryEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
+    <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderDetailFactoryName.cs" />
@@ -242,6 +245,9 @@
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FabricWindows\AddFabricColorDialog.xaml.cs">
+      <DependentUpon>AddFabricColorDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FactoryAddDialog.xaml.cs">
       <DependentUpon>FactoryAddDialog.xaml</DependentUpon>
     </Compile>
@@ -327,6 +333,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\CustomerEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FabricWindows\AddFabricColorDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

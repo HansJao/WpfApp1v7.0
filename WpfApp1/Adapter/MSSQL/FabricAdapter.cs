@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.Utility;
 
 namespace WpfApp1.Adapter.MSSQL
@@ -65,9 +66,74 @@ namespace WpfApp1.Adapter.MSSQL
                {
                    FabricID = fabricIDList
                };
-            var result = DapperHelper.QueryCollection<FabricColor,object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            var result = DapperHelper.QueryCollection<FabricColor, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
 
+        }
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricColors"></param>
+        public int AddFabricColorList(List<FabricColor> fabricColors)
+        {
+            string sqlCmd = @"INSERT INTO FabricColor
+                            (FabricID,Color)
+                           VALUES 
+                           (@FabricID,@Color);";
+
+            int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricColors);
+            return count;
+        }
+        /// <summary>
+        /// 以布種顏色編號取得顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricProportion> GetFabricProportionByColorNo(List<int> fabricColorNoList)
+        {
+            string sqlCmd = @"SELECT * FROM FabricProportion WHERE ColorNo IN @ColorNo";
+            var parameter =
+               new
+               {
+                   ColorNo = fabricColorNoList
+               };
+            var result = DapperHelper.QueryCollection<FabricProportion, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
+        /// <summary>
+        /// 以布種顏色編號取得布種顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        public IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList)
+        {
+
+            string sqlCmd = @"SELECT YP.Ingredient,YP.Color,YP.YarnCount,YP.Price,FP.Proportion,FP.[Group] FROM FabricProportion FP
+                              INNER JOIN YarnPrice YP ON FP.YarnPriceNo = YP.YarnPriceNo
+                              WHERE ColorNo IN @ColorNo";
+            var parameter =
+               new
+               {
+                   ColorNo = fabricColorNoList
+               };
+            var result = DapperHelper.QueryCollection<FabricIngredientProportion, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
+        /// <summary>
+        /// 以布種編號取得加工順序
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList)
+        {
+            string sqlCmd = @"SELECT * FROM ProcessSequence WHERE FabricID IN @FabricID";
+            var parameter =
+               new
+               {
+                   FabricID = fabricIDList
+               };
+            var result = DapperHelper.QueryCollection<ProcessSequence, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
         }
     }
 }

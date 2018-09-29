@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Fabric;
 
 namespace WpfApp1.Adapter
 {
@@ -33,5 +34,28 @@ namespace WpfApp1.Adapter
         /// <param name="fabricIDList"></param>
         /// <returns></returns>
         IEnumerable<FabricColor> GetFabricColorListByFabricID(IEnumerable<int> fabricIDList);
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricColors"></param>
+        int AddFabricColorList(List<FabricColor> fabricColors);
+        /// <summary>
+        /// 以布種顏色編號取得顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        IEnumerable<FabricProportion> GetFabricProportionByColorNo(List<int> fabricColorNoList);
+        /// <summary>
+        /// 以布種顏色編號取得布種顏色比例
+        /// </summary>
+        /// <param name="fabricColorNoList"></param>
+        /// <returns></returns>
+        IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList);
+        /// <summary>
+        /// 以布種編號取得加工順序
+        /// </summary>
+        /// <param name="fabricIDList"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList);
     }
 }
