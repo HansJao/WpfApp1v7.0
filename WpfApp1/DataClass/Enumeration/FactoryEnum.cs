@@ -29,6 +29,8 @@ namespace WpfApp1.DataClass.Enumeration
         Brushed = 5,
         [Description("印花")]
         Printing = 6,
+        [Description("紗")]
+        Yarn = 7,
 
     }
 

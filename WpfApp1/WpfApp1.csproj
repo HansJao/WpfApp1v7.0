@@ -248,6 +248,9 @@
     <Compile Include="Windows\FabricWindows\AddFabricColorDialog.xaml.cs">
       <DependentUpon>AddFabricColorDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FabricWindows\AddProcessSequenceDialog.xaml.cs">
+      <DependentUpon>AddProcessSequenceDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FactoryAddDialog.xaml.cs">
       <DependentUpon>FactoryAddDialog.xaml</DependentUpon>
     </Compile>
@@ -337,6 +340,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FabricWindows\AddFabricColorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FabricWindows\AddProcessSequenceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -19,6 +19,13 @@ namespace WpfApp1.ViewModel.FabricViewModel
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
         public ICommand AddFabricColorClick { get { return new RelayCommand(AddFabricColorExecute, CanExecute); } }
+        public ICommand AddProcessSequenceClick { get { return new RelayCommand(AddProcessSequenceExecute, CanExecute); } }
+
+        private void AddProcessSequenceExecute()
+        {
+            AddProcessSequenceDialog addProcessSequenceDialog = new AddProcessSequenceDialog();
+            addProcessSequenceDialog.Show();
+        }
 
         private void AddFabricColorExecute()
         {
