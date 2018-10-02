@@ -40,5 +40,36 @@ namespace WpfApp1.Adapter.DBF
             var result = DapperHelper.QueryDbfCollection<TrashShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
+        //var sqlCmd = @"update ProcessOrderFlowDate
+        //                  set InputDate = @InputDate,
+        //                     UpdateDate = GETDATE()
+        //                 where OrderFlowNo = @OrderFlowNo and OrderColorDetailNo in @OrderColorDetailNo";
+        //var parameter =
+        //    new
+        //    {
+        //        OrderColorDetailNo = orderColorDetailNoList,
+        //        InputDate = date,
+        //        OrderFlowNo = orderFlowNo
+        //    };
+        public void UpdateProductName(string v)
+        {
+            string sqlCmd = @"SELECT * from ITEM.dbf WHERE I_03 Like '%*%'";//@"UPDATE ITEM.dbf SET I_03=REPLACE(I_03,'*','X') WHERE I_03 LIKE '%*%'";
+
+            var result = DapperHelper.QueryDbfCollection<TrashItem>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
+
+            var replace = result.Select(s => new TrashItem { I_03 = s.I_03.Replace("*", "X"), F_01 = s.F_01, I_01 = s.I_01 });
+            foreach (var item in replace)
+            {
+                string sqlCmd2 = @"UPDATE ITEM.dbf SET I_03=@I_03 WHERE F_01=@F_01 AND I_01=@I_01";
+                SqlParameter[] parameters = new SqlParameter[]
+                   {
+                        new SqlParameter("@I_03", SqlDbType.NVarChar) { Value = item.I_03 },
+                        new SqlParameter("@F_01", SqlDbType.NVarChar) { Value = item.F_01 },
+                        new SqlParameter("@I_01", SqlDbType.NVarChar) { Value = item.I_01 },
+                   };
+             var count =  DapperHelper.QueryDbfCollection<int>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd2, parameters);
+            }
+
+        }
     }
 }

@@ -23,6 +23,7 @@
         <!--<Button x:Name="ButtonDeleteOrder" Margin="10,10,0,0" Content="刪除" Height="25" VerticalAlignment="Top" Click="ButtonDeleteOrder_Click" HorizontalAlignment="Left"/>-->
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
+                <Button x:Name="ButtonDisplayAllOrder" Content="顯示所有訂單" Width="100" Margin="2,0,3,0" Click="ButtonDisplayAllOrder_Click"/>
                 <ComboBox x:Name="ComboBoxStatus" Width="120" SelectionChanged="ComboBoxStatus_SelectionChanged" />
                 <Label DockPanel.Dock="Left" VerticalAlignment="Top" Content="訂單編號搜尋:"/>
                 <TextBox x:Name="TextBoxOrderStringSearch"  Height="26" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxOrderStringSearch_TextChanged"/>

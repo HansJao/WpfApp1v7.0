@@ -60,7 +60,8 @@ namespace WpfApp1.Windows
             ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, _processOrder.OrderNo);
 
             ProcessOrderPage page = (ProcessOrderPage)this.DataContext;
-            page.DataGridOrderColorFactoryShippingDetail.ItemsSource = ProcessModule.GetProcessOrderColorFactoryShippingDetail(_processOrder.OrderNo);
+            page.UpdateDataGridOrderColorFactoryShippingDetail(_processOrder.OrderNo);
+            
             this.Close();
         }
 

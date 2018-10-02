@@ -188,12 +188,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderNo"></param>
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
-        /// <summary>
-        /// 取得已完成的顏色
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        IEnumerable<int> GetIsCompleteColor(int orderNo);
+      
 
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成

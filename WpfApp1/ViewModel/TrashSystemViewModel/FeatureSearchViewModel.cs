@@ -110,6 +110,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public FeatureSearchViewModel()
         {
             _trashItemList = new ObservableCollection<TrashItem>(TrashModule.GetTrashItems().OrderBy(o => o.I_01));
+            //TrashModule.UpdateProductName("TC1X12275/黑鬍子");
         }
     }
 }

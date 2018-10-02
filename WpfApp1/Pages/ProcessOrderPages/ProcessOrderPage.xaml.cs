@@ -117,22 +117,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             remark.Text = processOrderRemark ?? "";
 
             UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
-            DataGridOrderColorFactoryShippingDetail.UpdateLayout();
-
-
-            IEnumerable<int> isCompleteColor = ProcessModule.GetIsCompleteColor(processOrder.OrderNo);
-            foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
-            {
-                var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if(item.Status == ProcessOrderColorStatus.已出完)
-                {
-                    row.Background = Brushes.Gray;
-                }
-                else if (isCompleteColor.Contains(item.OrderColorDetailNo))
-                {
-                    row.Background = Brushes.Pink;
-                }
-            }
 
             DataGridFactoryShipping.ItemsSource = null;
             ComboBoxCustomer.SelectedIndex = -1;
@@ -278,10 +262,25 @@ namespace WpfApp1.Pages.ProcessOrderPages
             UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
         }
 
-        private void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
+        public void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
         {
             var processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo);
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
+
+            DataGridOrderColorFactoryShippingDetail.UpdateLayout();
+
+            foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
+            {
+                var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (item.Status == ProcessOrderColorStatus.已出完)
+                {
+                    row.Background = Brushes.Gray;
+                }
+                else if (item.Status == ProcessOrderColorStatus.已完成)
+                {
+                    row.Background = Brushes.Pink;
+                }
+            }
         }
 
         private void SomeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -404,16 +403,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
             if (MessageBox.Show(string.Concat("是否刪除'", processOrderColorFactoryShippingDetail.Color, "'??"), "刪除", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 int count = ProcessModule.DeleteFactoryShippingDetail(processOrderColorFactoryShippingDetail.OrderColorDetailNo);
-                DataGridRefresh<ProcessOrderColorFactoryShippingDetail>(DataGridOrderColorFactoryShippingDetail, processOrderColorFactoryShippingDetail);
+                UpdateDataGridOrderColorFactoryShippingDetail(processOrderColorFactoryShippingDetail.OrderNo);
             }
-        }
-
-        private void DataGridRefresh<T>(DataGrid dataGrid, T processOrderColorFactoryShippingDetail)
-        {
-            var items = dataGrid.ItemsSource as List<T>;
-            items.Remove(processOrderColorFactoryShippingDetail);
-            DataGridOrderColorFactoryShippingDetail.ItemsSource = items;
-            DataGridOrderColorFactoryShippingDetail.Items.Refresh();
         }
 
         public void Test()
@@ -461,5 +452,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
             dialog.Show();
         }
 
+        private void ButtonDisplayAllOrder_Click(object sender, RoutedEventArgs e)
+        {
+            DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrder();
+        }
     }
 }
