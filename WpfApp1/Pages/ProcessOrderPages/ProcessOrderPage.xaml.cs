@@ -32,13 +32,12 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
-        private ProcessOrderColorStatus _processOrderColorStatus = ProcessOrderColorStatus.未完成;
         public ProcessOrderPage()
         {
             InitializeComponent();
 
             ComboBoxStatus.ItemsSource = Enum.GetValues(typeof(ProcessOrderColorStatus)).Cast<ProcessOrderColorStatus>();
-            ComboBoxStatus.SelectedIndex = 2;
+            DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrder();
 
             ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerNameList();
             ComboBoxCustomer.Loaded += (ls, le) =>
@@ -137,9 +136,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var result = MessageBox.Show(string.Concat("請確認是否要刪除訂單編號:", processOrder.OrderString, ",布種:", processOrder.Fabric), "刪除", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
+                ProcessOrderColorStatus status;
+                Enum.TryParse(ComboBoxStatus.SelectedIndex == -1 ? "" : ComboBoxStatus.SelectedItem.ToString(), out status);
                 ProcessModule.DeleteProcessOrder(processOrder);
-                DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(_processOrderColorStatus);
-                //DataGridProcessOrderFlow.ItemsSource = null;
+                DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(status);
+
                 DataGridOrderColorFactoryShippingDetail.ItemsSource = null;
                 DataGridProcessOrderFlowDateDetail.ItemsSource = null;
                 DataGridFactoryShipping.ItemsSource = null;
@@ -301,8 +302,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void ComboBoxStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProcessOrderColorStatus status;
-            Enum.TryParse(ComboBoxStatus.SelectedItem.ToString(), out status);
-            _processOrderColorStatus = status;
+            Enum.TryParse(ComboBoxStatus.SelectedIndex == -1 ? "" : ComboBoxStatus.SelectedItem.ToString(), out status);
             DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(status);
 
             DataGridFactoryList.SelectedIndex = -1;
@@ -359,14 +359,22 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 return;
             }
-            List<ProcessOrderColorStatus> statusList = new List<ProcessOrderColorStatus>
-            {
-                _processOrderColorStatus
-            };
+            ProcessOrderColorStatus status;
+            Enum.TryParse(ComboBoxStatus.SelectedIndex != -1 ? ComboBoxStatus.SelectedItem.ToString() : "", out status);
+            List<ProcessOrderColorStatus> statusList = status == 0
+                ? new List<ProcessOrderColorStatus>
+                    {
+                        ProcessOrderColorStatus.修訂,
+                        ProcessOrderColorStatus.已出完,
+                        ProcessOrderColorStatus.已完成,
+                        ProcessOrderColorStatus.未完成,
+                        ProcessOrderColorStatus.緊急
+                    }
+                : new List<ProcessOrderColorStatus> { status };
             List<Factory> factoryList = new List<Factory>();
             factoryList.AddRange(x.Cast<Factory>());
-            IEnumerable<ProcessOrder> y = ProcessModule.GetProcessOrderFilter(factoryList, statusList);
-            DataGridProcessOrder.ItemsSource = y;
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList);
+            DataGridProcessOrder.ItemsSource = processOrderList;
         }
 
         private void ButtonNewColor_Click(object sender, RoutedEventArgs e)
@@ -454,6 +462,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void ButtonDisplayAllOrder_Click(object sender, RoutedEventArgs e)
         {
+            ComboBoxStatus.SelectedIndex = -1;
             DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrder();
         }
     }

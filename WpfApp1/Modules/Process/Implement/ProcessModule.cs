@@ -68,7 +68,16 @@ namespace WpfApp1.Modules.Process.Implement
 
         public IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status)
         {
-            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByStatus(status).OrderByDescending(o => o.OrderNo);
+            IEnumerable<ProcessOrder> result;
+            if (status == 0)
+            {
+                result = ProcessOrderAdapter.GetProcessOrder();
+            }
+            else
+            {
+                result = ProcessOrderAdapter.GetProcessOrderByStatus(status).OrderByDescending(o => o.OrderNo);
+            }
+
             return result;
         }
 
