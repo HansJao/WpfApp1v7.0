@@ -304,7 +304,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 case "C大絨配件":
                 case "30C細絨布碼布":
                 case "30C細絨布配件":
-                    replaceTextileName = "C2X2+OP配件";
+                    replaceTextileName = "20C2X2+OP配件";
                     break;
                 default:
                     break;

@@ -344,19 +344,60 @@ namespace WpfApp1.Adapter.MSSQL
             return result;
         }
         /// <summary>
-        /// 修改加工訂單顏色明細
+        /// 修改加工訂單顏色明細數量
         /// </summary>
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderColorDetail(int orderColorDetailNo, int quantity)
+        public int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo, int quantity)
         {
-            var sqlCmd = @"update ProcessOrderColorDetail
-                          set Quantity = @Quantity
-                          where OrderColorDetailNo = @OrderColorDetailNo";
+            var sqlCmd = @"UPDATE ProcessOrderColorDetail
+                          SET Quantity = @Quantity,
+                          UpdateDate = GETDATE()
+                          WHERE OrderColorDetailNo = @OrderColorDetailNo";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@Quantity", SqlDbType.Int) { Value = quantity },
+                new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細顏色
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColor(int orderColorDetailNo, string color)
+        {
+            var sqlCmd = @"UPDATE ProcessOrderColorDetail
+                          SET Color = @Color,
+                          UpdateDate = GETDATE()
+                          WHERE OrderColorDetailNo = @OrderColorDetailNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = color },
+                new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細色號
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="colorNumber"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColorNumber(int orderColorDetailNo, string colorNumber)
+        {
+            var sqlCmd = @"UPDATE ProcessOrderColorDetail
+                          SET ColorNumber = @ColorNumber,
+                          UpdateDate = GETDATE()
+                          WHERE OrderColorDetailNo = @OrderColorDetailNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@ColorNumber", SqlDbType.NVarChar) { Value = colorNumber },
                 new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = orderColorDetailNo }
             };
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);

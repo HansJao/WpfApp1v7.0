@@ -394,14 +394,57 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void DataGridFactoryShippingDetail_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            if (e.EditAction == DataGridEditAction.Cancel)
+            {
+                return;
+            }
             if (e.Column.SortMemberPath == "Quantity")
             {
                 var editTextBox = e.EditingElement as TextBox;
                 var quantity = editTextBox.Text.ToInt();
                 var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
                 var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
-
-                int count = ProcessModule.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將疋數'", processOrderColorFactoryShippingDetail.Quantity, "'改為'", quantity, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailQuantity(orderColorDetailNo, quantity);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
+            }
+            else if (e.Column.SortMemberPath == "Color")
+            {
+                var editTextBox = e.EditingElement as TextBox;
+                var color = editTextBox.Text;
+                var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
+                var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將顏色'", processOrderColorFactoryShippingDetail.Color, "'改為'", color, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailColor(orderColorDetailNo, color);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
+            }
+            else if (e.Column.SortMemberPath == "ColorNumber")
+            {
+                var editTextBox = e.EditingElement as TextBox;
+                var colorNumber = editTextBox.Text;
+                var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
+                var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將色號'", processOrderColorFactoryShippingDetail.ColorNumber, "'改為'", colorNumber, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailColorNumber(orderColorDetailNo, colorNumber);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
             }
         }
 

@@ -165,8 +165,21 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        int UpdateProcessOrderColorDetail(int orderColorDetailNo,int quantity);
-
+        int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo,int quantity);
+        /// <summary>
+        /// 修改加工訂單顏色明細顏色
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderColorDetailColor(int orderColorDetailNo, string color);
+        /// <summary>
+        /// 修改加工訂單顏色明細色號
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="colorNumber"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderColorDetailColorNumber(int orderColorDetailNo, string colorNumber);
         /// <summary>
         /// 刪除加工訂單顏色明細
         /// </summary>

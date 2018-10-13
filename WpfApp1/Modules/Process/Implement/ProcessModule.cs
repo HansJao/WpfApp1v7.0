@@ -240,14 +240,36 @@ namespace WpfApp1.Modules.Process.Implement
             int count = InsertProcessOrderFlowDate(proecessOrderFlowDateList);
         }
         /// <summary>
-        /// 修改加工訂單顏色明細
+        /// 修改加工訂單顏色明細數量
         /// </summary>
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderColorDetail(int orderColorDetailNo, int quantity)
+        public int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo, int quantity)
         {
-            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailQuantity(orderColorDetailNo, quantity);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細顏色
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColor(int orderColorDetailNo, string color)
+        {
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailColor(orderColorDetailNo, color);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細色號
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="colorNumber"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColorNumber(int orderColorDetailNo, string colorNumber)
+        {
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailColorNumber(orderColorDetailNo, colorNumber);
             return count;
         }
         /// <summary>
