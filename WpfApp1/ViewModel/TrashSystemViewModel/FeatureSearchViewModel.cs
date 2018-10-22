@@ -36,10 +36,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     {
                         /* change to get data row value */
                         TrashItem p = o as TrashItem;
+                        string spec = p.I_03 ?? "";
+
                         bool isContains = true;
                         foreach (var item in splitText)
                         {
-                            if (!p.I_03.ToUpper().Contains(item.ToUpper()))
+                            if (!spec.ToUpper().Contains(item.ToUpper()))
                             {
                                 isContains = false;
                                 break;
