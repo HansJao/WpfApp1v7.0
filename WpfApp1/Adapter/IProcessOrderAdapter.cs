@@ -67,7 +67,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="Status"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status);
+        IEnumerable<ProcessOrder> GetProcessOrderByStatus(List<ProcessOrderColorStatus> status);
         /// <summary>
         /// 更新加工訂單顏色狀態
         /// </summary>
@@ -117,12 +117,26 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         IEnumerable<ProcessOrderColorDetail> GetProcessOrderColorDetail(IEnumerable<int> processOrderColorDetailNoList);
         /// <summary>
-        /// 修改加工訂單顏色明細
+        /// 修改加工訂單顏色明細數量
         /// </summary>
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        int UpdateProcessOrderColorDetail(int orderColorDetailNo, int quantity);
+        int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo, int quantity);
+        /// <summary>
+        /// 修改加工訂單顏色明細顏色
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderColorDetailColor(int orderColorDetailNo, string color);
+        /// <summary>
+        /// 修改加工訂單顏色明細色號
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="colorNumber"></param>
+        /// <returns></returns>
+        int UpdateProcessOrderColorDetailColorNumber(int orderColorDetailNo, string colorNumber);
         /// <summary>
         /// 刪除加工訂單顏色明細
         /// </summary>
@@ -167,7 +181,6 @@ namespace WpfApp1.Adapter
         /// <param name="orderNo"></param>
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
-        IEnumerable<int> GetIsCompleteColor(int orderNo);
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成
         /// </summary>
@@ -182,5 +195,11 @@ namespace WpfApp1.Adapter
         /// <param name="orderColorDetailNo"></param>
         /// <returns></returns>
         int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo);
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime);
     }
 }

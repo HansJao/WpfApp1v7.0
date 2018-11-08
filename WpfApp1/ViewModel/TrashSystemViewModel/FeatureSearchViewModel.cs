@@ -36,10 +36,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     {
                         /* change to get data row value */
                         TrashItem p = o as TrashItem;
+                        string spec = p.I_03 ?? "";
+
                         bool isContains = true;
                         foreach (var item in splitText)
                         {
-                            if (!p.I_03.ToUpper().Contains(item.ToUpper()))
+                            if (!spec.ToUpper().Contains(item.ToUpper()))
                             {
                                 isContains = false;
                                 break;
@@ -110,6 +112,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public FeatureSearchViewModel()
         {
             _trashItemList = new ObservableCollection<TrashItem>(TrashModule.GetTrashItems().OrderBy(o => o.I_01));
+            //TrashModule.UpdateProductName("TC1X12275/黑鬍子");
         }
     }
 }

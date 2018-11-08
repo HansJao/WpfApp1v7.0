@@ -45,5 +45,10 @@ namespace WpfApp1.Modules.TrashModule.Implement
             IEnumerable<TrashShipped> trashList = TrashAdapter.GetTrashShippedList(datePickerBegin, datePickerEnd);
             return trashList;
         }
+
+        public void UpdateProductName(string v)
+        {
+            TrashAdapter.UpdateProductName(v);
+        }
     }
 }

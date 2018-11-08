@@ -17,5 +17,6 @@ namespace WpfApp1.Modules.TrashModule
         IEnumerable<TrashItem> GetTrashItems();
         IEnumerable<TrashItem> GetTrashItemsByFeature(string feature);
         IEnumerable<TrashShipped> GetTrashShippedList(DateTime datePickerBegin, DateTime datePickerEnd);
+        void UpdateProductName(string v);
     }
 }

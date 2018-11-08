@@ -162,7 +162,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 {
                     foreach (var colorDetail in excelDailyShippedItem.StoreSearchColorDetails)
                     {
-                        var currentDistance = LevenshteinDistance(originalSource.TextileColorName, excelDailyShippedItem.TextileName + colorDetail.ColorName);
+                        var currentDistance = LevenshteinDistance(originalSource.TextileColorName, excelDailyShippedItem.TextileName, colorDetail.ColorName);
                         if (currentDistance < priviousDistance)
                         {
                             textileColor = colorDetail.ColorName;
@@ -177,7 +177,8 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     OriginalSource = originalSource,
                     TextileName = textileName,
                     ColorName = textileColor,
-                    ShippedCount = shippedCount
+                    ShippedCount = shippedCount,
+                    Distance = priviousDistance
                 });
             }
 
@@ -230,17 +231,13 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
             a2style.FillPattern = FillPattern.SolidForeground;
 
-            var distance = LevenshteinDistance(storeData.OriginalSource.TextileColorName, storeData.TextileName + storeData.ColorName);
-
-            var soFar = distance > 3;
-
             var approximateNumber = storeData.OriginalSource.Weight / 20;
             var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
 
             var isEqual = round == storeData.ShippedCount;
 
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, GetStyle(wb, distance) ?? positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, GetStyle(wb, storeData.Distance) ?? positionStyle);
             ExcelHelper.CreateCell(rowTextile, 1, storeData.OriginalSource.Weight.ToString(), positionStyle);
             ExcelHelper.CreateCell(rowTextile, 2, (approximateNumber).ToString(), positionStyle);
             ExcelHelper.CreateCell(rowTextile, 3, storeData.TextileName, positionStyle);
@@ -282,12 +279,40 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             public string TextileName { get; set; }
             public string ColorName { get; set; }
             public int ShippedCount { get; set; }
+            public int Distance { get; set; }
         }
-        public int LevenshteinDistance(string accountTextileColorName, string excelTextileColorName)
+        public int LevenshteinDistance(string accountTextileColorName, string excelTextileName, string excelColorName)
         {
-            string replaceName = excelTextileColorName.Replace("采毓", "").Replace("佳隆", "");
+
+            string replaceTextileName = excelTextileName.Replace("采毓", "").Replace("佳隆", "");
+
+            switch (excelTextileName)
+            {
+                case "搖粒布碼布":
+                case "搖粒布配件":
+                case "單刷布碼布":
+                case "單刷布配件":
+                    replaceTextileName = "SP+T2X2配件";
+                    break;
+                case "CVC大絨布配件碼布":
+                case "CVC大絨布配件":
+                case "30CVC細絨布碼布":
+                case "30CVC細絨布配件":
+                    replaceTextileName = "CVC2X2+OP配件";
+                    break;
+                case "C大絨碼布":
+                case "C大絨配件":
+                case "30C細絨布碼布":
+                case "30C細絨布配件":
+                    replaceTextileName = "20C2X2+OP配件";
+                    break;
+                default:
+                    break;
+            }
+
+            string excelTextileColorName = string.Concat(replaceTextileName, excelColorName);
             int n = accountTextileColorName.Length;
-            int m = replaceName.Length;
+            int m = excelTextileColorName.Length;
             int[,] d = new int[n + 1, m + 1];
 
             if (n == 0)
@@ -312,7 +337,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 for (int j = 1; j <= m; j++)
                 {
-                    int cost = (replaceName[j - 1] == accountTextileColorName[i - 1]) ? 0 : 1;
+                    int cost = (excelTextileColorName[j - 1] == accountTextileColorName[i - 1]) ? 0 : 1;
 
                     d[i, j] = Math.Min(
                         Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),

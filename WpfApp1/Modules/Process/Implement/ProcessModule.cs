@@ -68,7 +68,20 @@ namespace WpfApp1.Modules.Process.Implement
 
         public IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status)
         {
-            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByStatus(status).OrderByDescending(o => o.OrderNo);
+            IEnumerable<ProcessOrder> result;
+            if (status == 0)
+            {
+                result = ProcessOrderAdapter.GetProcessOrder();
+            }
+            else if (status == ProcessOrderColorStatus.未完成)
+            {
+                result = ProcessOrderAdapter.GetProcessOrderByStatus(new List<ProcessOrderColorStatus> { ProcessOrderColorStatus.未完成, ProcessOrderColorStatus.緊急 }).OrderByDescending(o => o.OrderNo);
+            }
+            else
+            {
+                result = ProcessOrderAdapter.GetProcessOrderByStatus(new List<ProcessOrderColorStatus> { status }).OrderByDescending(o => o.OrderNo);
+            }
+
             return result;
         }
 
@@ -224,21 +237,44 @@ namespace WpfApp1.Modules.Process.Implement
                     proecessOrderFlowDateList.Add(new ProcessOrderFlowDate
                     {
                         OrderColorDetailNo = item.OrderColorDetailNo,
-                        OrderFlowNo = flowItem.OrderDetailNo
+                        OrderFlowNo = flowItem.OrderDetailNo,
+                        UpdateDate = DateTime.Now
                     });
                 }
             }
             int count = InsertProcessOrderFlowDate(proecessOrderFlowDateList);
         }
         /// <summary>
-        /// 修改加工訂單顏色明細
+        /// 修改加工訂單顏色明細數量
         /// </summary>
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        public int UpdateProcessOrderColorDetail(int orderColorDetailNo, int quantity)
+        public int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo, int quantity)
         {
-            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailQuantity(orderColorDetailNo, quantity);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細顏色
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColor(int orderColorDetailNo, string color)
+        {
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailColor(orderColorDetailNo, color);
+            return count;
+        }
+        /// <summary>
+        /// 修改加工訂單顏色明細色號
+        /// </summary>
+        /// <param name="orderColorDetailNo"></param>
+        /// <param name="colorNumber"></param>
+        /// <returns></returns>
+        public int UpdateProcessOrderColorDetailColorNumber(int orderColorDetailNo, string colorNumber)
+        {
+            int count = ProcessOrderAdapter.UpdateProcessOrderColorDetailColorNumber(orderColorDetailNo, colorNumber);
             return count;
         }
         /// <summary>
@@ -313,16 +349,7 @@ namespace WpfApp1.Modules.Process.Implement
             string remark = ProcessOrderAdapter.GetProcessOrderRemark(orderNo);
             return remark;
         }
-        /// <summary>
-        /// 取得已完成的顏色
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        public IEnumerable<int> GetIsCompleteColor(int orderNo)
-        {
-            IEnumerable<int> result = ProcessOrderAdapter.GetIsCompleteColor(orderNo);
-            return result;
-        }
+
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成
         /// </summary>
@@ -344,6 +371,16 @@ namespace WpfApp1.Modules.Process.Implement
         {
             int rsult = ProcessOrderAdapter.NewProcessOrderFlow(processOrderFlow, orderColorDetailNo);
             return rsult;
+        }
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime)
+        {
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByFactoryUpdateDate(dateTime);
+            return result;
         }
     }
 }

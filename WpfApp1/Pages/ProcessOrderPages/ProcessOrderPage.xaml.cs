@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
@@ -32,13 +33,12 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
-        private ProcessOrderColorStatus _processOrderColorStatus = ProcessOrderColorStatus.未完成;
         public ProcessOrderPage()
         {
             InitializeComponent();
 
             ComboBoxStatus.ItemsSource = Enum.GetValues(typeof(ProcessOrderColorStatus)).Cast<ProcessOrderColorStatus>();
-            ComboBoxStatus.SelectedIndex = 2;
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder()); ;
 
             ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerNameList();
             ComboBoxCustomer.Loaded += (ls, le) =>
@@ -117,22 +117,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             remark.Text = processOrderRemark ?? "";
 
             UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
-            DataGridOrderColorFactoryShippingDetail.UpdateLayout();
-
-
-            IEnumerable<int> isCompleteColor = ProcessModule.GetIsCompleteColor(processOrder.OrderNo);
-            foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
-            {
-                var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                if(item.Status == ProcessOrderColorStatus.已出完)
-                {
-                    row.Background = Brushes.Gray;
-                }
-                else if (isCompleteColor.Contains(item.OrderColorDetailNo))
-                {
-                    row.Background = Brushes.Pink;
-                }
-            }
 
             DataGridFactoryShipping.ItemsSource = null;
             ComboBoxCustomer.SelectedIndex = -1;
@@ -153,9 +137,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var result = MessageBox.Show(string.Concat("請確認是否要刪除訂單編號:", processOrder.OrderString, ",布種:", processOrder.Fabric), "刪除", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
+                ProcessOrderColorStatus status;
+                Enum.TryParse(ComboBoxStatus.SelectedIndex == -1 ? "" : ComboBoxStatus.SelectedItem.ToString(), out status);
                 ProcessModule.DeleteProcessOrder(processOrder);
-                DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(_processOrderColorStatus);
-                //DataGridProcessOrderFlow.ItemsSource = null;
+                DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByStatus(status));
+
                 DataGridOrderColorFactoryShippingDetail.ItemsSource = null;
                 DataGridProcessOrderFlowDateDetail.ItemsSource = null;
                 DataGridFactoryShipping.ItemsSource = null;
@@ -278,10 +264,25 @@ namespace WpfApp1.Pages.ProcessOrderPages
             UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
         }
 
-        private void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
+        public void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
         {
             var processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo);
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
+
+            DataGridOrderColorFactoryShippingDetail.UpdateLayout();
+
+            foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
+            {
+                var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                if (item.Status == ProcessOrderColorStatus.已出完)
+                {
+                    row.Background = Brushes.Gray;
+                }
+                else if (item.Status == ProcessOrderColorStatus.已完成)
+                {
+                    row.Background = Brushes.Pink;
+                }
+            }
         }
 
         private void SomeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -302,9 +303,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void ComboBoxStatus_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ProcessOrderColorStatus status;
-            Enum.TryParse(ComboBoxStatus.SelectedItem.ToString(), out status);
-            _processOrderColorStatus = status;
-            DataGridProcessOrder.ItemsSource = ProcessModule.GetProcessOrderByStatus(status);
+            Enum.TryParse(ComboBoxStatus.SelectedIndex == -1 ? "" : ComboBoxStatus.SelectedItem.ToString(), out status);
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByStatus(status));
 
             DataGridFactoryList.SelectedIndex = -1;
         }
@@ -360,14 +360,22 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 return;
             }
-            List<ProcessOrderColorStatus> statusList = new List<ProcessOrderColorStatus>
-            {
-                _processOrderColorStatus
-            };
+            ProcessOrderColorStatus status;
+            Enum.TryParse(ComboBoxStatus.SelectedIndex != -1 ? ComboBoxStatus.SelectedItem.ToString() : "", out status);
+            List<ProcessOrderColorStatus> statusList = status == 0
+                ? new List<ProcessOrderColorStatus>
+                    {
+                        ProcessOrderColorStatus.修訂,
+                        ProcessOrderColorStatus.已出完,
+                        ProcessOrderColorStatus.已完成,
+                        ProcessOrderColorStatus.未完成,
+                        ProcessOrderColorStatus.緊急
+                    }
+                : new List<ProcessOrderColorStatus> { status };
             List<Factory> factoryList = new List<Factory>();
             factoryList.AddRange(x.Cast<Factory>());
-            IEnumerable<ProcessOrder> y = ProcessModule.GetProcessOrderFilter(factoryList, statusList);
-            DataGridProcessOrder.ItemsSource = y;
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList);
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(processOrderList);
         }
 
         private void ButtonNewColor_Click(object sender, RoutedEventArgs e)
@@ -387,14 +395,57 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void DataGridFactoryShippingDetail_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
+            if (e.EditAction == DataGridEditAction.Cancel)
+            {
+                return;
+            }
             if (e.Column.SortMemberPath == "Quantity")
             {
                 var editTextBox = e.EditingElement as TextBox;
                 var quantity = editTextBox.Text.ToInt();
                 var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
                 var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
-
-                int count = ProcessModule.UpdateProcessOrderColorDetail(orderColorDetailNo, quantity);
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將疋數'", processOrderColorFactoryShippingDetail.Quantity, "'改為'", quantity, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailQuantity(orderColorDetailNo, quantity);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
+            }
+            else if (e.Column.SortMemberPath == "Color")
+            {
+                var editTextBox = e.EditingElement as TextBox;
+                var color = editTextBox.Text;
+                var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
+                var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將顏色'", processOrderColorFactoryShippingDetail.Color, "'改為'", color, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailColor(orderColorDetailNo, color);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
+            }
+            else if (e.Column.SortMemberPath == "ColorNumber")
+            {
+                var editTextBox = e.EditingElement as TextBox;
+                var colorNumber = editTextBox.Text;
+                var processOrderColorFactoryShippingDetail = e.Row.Item as ProcessOrderColorFactoryShippingDetail;
+                var orderColorDetailNo = processOrderColorFactoryShippingDetail.OrderColorDetailNo;
+                MessageBoxResult mr = MessageBox.Show(string.Concat("是否將色號'", processOrderColorFactoryShippingDetail.ColorNumber, "'改為'", colorNumber, "'?"), "修改確認", MessageBoxButton.YesNo);
+                if (mr == MessageBoxResult.Yes)
+                {
+                    int count = ProcessModule.UpdateProcessOrderColorDetailColorNumber(orderColorDetailNo, colorNumber);
+                }
+                else
+                {
+                    DataGridOrderColorFactoryShippingDetail.CancelEdit();
+                }
             }
         }
 
@@ -404,16 +455,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
             if (MessageBox.Show(string.Concat("是否刪除'", processOrderColorFactoryShippingDetail.Color, "'??"), "刪除", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 int count = ProcessModule.DeleteFactoryShippingDetail(processOrderColorFactoryShippingDetail.OrderColorDetailNo);
-                DataGridRefresh<ProcessOrderColorFactoryShippingDetail>(DataGridOrderColorFactoryShippingDetail, processOrderColorFactoryShippingDetail);
+                UpdateDataGridOrderColorFactoryShippingDetail(processOrderColorFactoryShippingDetail.OrderNo);
             }
-        }
-
-        private void DataGridRefresh<T>(DataGrid dataGrid, T processOrderColorFactoryShippingDetail)
-        {
-            var items = dataGrid.ItemsSource as List<T>;
-            items.Remove(processOrderColorFactoryShippingDetail);
-            DataGridOrderColorFactoryShippingDetail.ItemsSource = items;
-            DataGridOrderColorFactoryShippingDetail.Items.Refresh();
         }
 
         public void Test()
@@ -461,5 +504,16 @@ namespace WpfApp1.Pages.ProcessOrderPages
             dialog.Show();
         }
 
+        private void ButtonDisplayAllOrder_Click(object sender, RoutedEventArgs e)
+        {
+            ComboBoxStatus.SelectedIndex = -1;
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
+        }
+
+        private void ButtonUpdateDateOrder_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderByFactoryUpdateDate(DateTime.Now.ToShortDateString());
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(processOrderList);
+        }
     }
 }
