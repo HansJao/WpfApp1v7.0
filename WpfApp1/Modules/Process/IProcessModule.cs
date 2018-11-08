@@ -218,5 +218,12 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNo"></param>
         /// <returns></returns>
         int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo);
+
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime);
     }
 }

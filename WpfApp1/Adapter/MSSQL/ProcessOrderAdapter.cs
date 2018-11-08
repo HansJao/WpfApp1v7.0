@@ -200,17 +200,14 @@ namespace WpfApp1.Adapter.MSSQL
         /// </summary>
         /// <param name="Status"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status)
+        public IEnumerable<ProcessOrder> GetProcessOrderByStatus(List<ProcessOrderColorStatus> status)
         {
             var sqlCmd = @"select distinct po.OrderNo,po.OrderString,po.Fabric,po.Specification,po.ProcessItem,po.Precautions,po.Memo,po.HandFeel,po.CreateDate from ProcessOrder po
                           left join ProcessOrderColorDetail pocd on po.OrderNo = pocd.OrderNo
-                          where Status = @Status";
-            SqlParameter[] parameters = new SqlParameter[]
-          {
-                new SqlParameter("@Status", SqlDbType.Int) { Value = status }
-          };
-            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+                          where Status in @Status";
+            var parameter = (new { Status = status });
 
+            var result = DapperHelper.QueryCollection<ProcessOrder, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
 
@@ -517,7 +514,7 @@ namespace WpfApp1.Adapter.MSSQL
             var remark = DapperHelper.Query<string>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return remark;
         }
-       
+
 
         public int UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList)
         {
@@ -565,6 +562,26 @@ namespace WpfApp1.Adapter.MSSQL
                 orderColorDetailNo.Select(s => new { OrderColorDetailNo = s, OrderDetailNo = orderDetailNo, });
             var count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, cmd, parameters);
             return count;
+        }
+
+
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime)
+        {
+            var sqlCmd = @"SELECT DISTINCT PO.* FROM ProcessOrder PO
+                           INNER JOIN ProcessOrderColorDetail POCD ON POCD.OrderNo = PO.OrderNo
+                           INNER JOIN ProcessOrderFlowDate POF ON POF.OrderColorDetailNo = POCD.OrderColorDetailNo
+                           WHERE POF.UpdateDate BETWEEN @UpdateDate AND GETDATE()";
+            SqlParameter[] parameter = new SqlParameter[]
+                {
+                        new SqlParameter("@UpdateDate", SqlDbType.DateTime) { Value = dateTime },
+                };
+            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
         }
     }
 }

@@ -509,5 +509,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             ComboBoxStatus.SelectedIndex = -1;
             DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
         }
+
+        private void ButtonUpdateDateOrder_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderByFactoryUpdateDate(DateTime.Now.ToShortDateString());
+            DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(processOrderList);
+        }
     }
 }

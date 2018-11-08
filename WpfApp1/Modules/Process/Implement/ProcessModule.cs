@@ -73,9 +73,13 @@ namespace WpfApp1.Modules.Process.Implement
             {
                 result = ProcessOrderAdapter.GetProcessOrder();
             }
+            else if (status == ProcessOrderColorStatus.未完成)
+            {
+                result = ProcessOrderAdapter.GetProcessOrderByStatus(new List<ProcessOrderColorStatus> { ProcessOrderColorStatus.未完成, ProcessOrderColorStatus.緊急 }).OrderByDescending(o => o.OrderNo);
+            }
             else
             {
-                result = ProcessOrderAdapter.GetProcessOrderByStatus(status).OrderByDescending(o => o.OrderNo);
+                result = ProcessOrderAdapter.GetProcessOrderByStatus(new List<ProcessOrderColorStatus> { status }).OrderByDescending(o => o.OrderNo);
             }
 
             return result;
@@ -233,7 +237,8 @@ namespace WpfApp1.Modules.Process.Implement
                     proecessOrderFlowDateList.Add(new ProcessOrderFlowDate
                     {
                         OrderColorDetailNo = item.OrderColorDetailNo,
-                        OrderFlowNo = flowItem.OrderDetailNo
+                        OrderFlowNo = flowItem.OrderDetailNo,
+                        UpdateDate = DateTime.Now
                     });
                 }
             }
@@ -344,7 +349,7 @@ namespace WpfApp1.Modules.Process.Implement
             string remark = ProcessOrderAdapter.GetProcessOrderRemark(orderNo);
             return remark;
         }
-    
+
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成
         /// </summary>
@@ -366,6 +371,16 @@ namespace WpfApp1.Modules.Process.Implement
         {
             int rsult = ProcessOrderAdapter.NewProcessOrderFlow(processOrderFlow, orderColorDetailNo);
             return rsult;
+        }
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime)
+        {
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByFactoryUpdateDate(dateTime);
+            return result;
         }
     }
 }

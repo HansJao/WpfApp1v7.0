@@ -29,6 +29,7 @@
                 <TextBox x:Name="TextBoxOrderStringSearch"  Height="26" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxOrderStringSearch_TextChanged"/>
                 <Label DockPanel.Dock="Left" VerticalAlignment="Top" Content="布種搜尋:"/>
                 <TextBox x:Name="TextBoxFabricSearch"  Height="26" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxFabricSearch_TextChanged"/>
+                <Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Click="ButtonUpdateDateOrder_Click"/>
             </DockPanel>
             <DataGrid x:Name="DataGridFactoryList" Height="185" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
                 <DataGrid.Columns>

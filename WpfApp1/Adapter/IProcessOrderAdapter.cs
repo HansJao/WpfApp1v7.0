@@ -67,7 +67,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="Status"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status);
+        IEnumerable<ProcessOrder> GetProcessOrderByStatus(List<ProcessOrderColorStatus> status);
         /// <summary>
         /// 更新加工訂單顏色狀態
         /// </summary>
@@ -195,5 +195,11 @@ namespace WpfApp1.Adapter
         /// <param name="orderColorDetailNo"></param>
         /// <returns></returns>
         int NewProcessOrderFlow(ProcessOrderFlow processOrderFlow, IEnumerable<int> orderColorDetailNo);
+        /// <summary>
+        /// 取得加工訂單依照工廠加工轉入轉出的更新時間排序
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime);
     }
 }
