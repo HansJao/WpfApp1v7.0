@@ -55,11 +55,35 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     FabricColorList.Add(item);
                 }
 
-                IEnumerable<ProcessSequence> processSequences = FabricModule.GetProcessSequences(new List<int> { _fabric.FabricID });
+                IEnumerable<ProcessSequenceCost> processSequences = FabricModule.GetProcessSequences(new List<int> { _fabric.FabricID })
+                                                                    .Select(s => new ProcessSequenceCost
+                                                                    {
+                                                                        SequenceNo = s.SequenceNo,
+                                                                        FabricID = s.FabricID,
+                                                                        ColorNoString = s.ColorNoString,
+                                                                        ProcessItem = s.ProcessItem,
+                                                                        Loss = s.Loss,
+                                                                        WorkPay = s.WorkPay,
+                                                                        Order = s.Order,
+                                                                        Group = s.Group,
+                                                                        CreateDate = s.CreateDate,
+                                                                        UpdateDate = s.UpdateDate,
+                                                                        Cost = 0
+                                                                    });
                 foreach (var item in processSequences)
                 {
                     ProcessSequenceList.Add(item);
                 }
+            }
+        }
+        private float _yarnCost { get; set; }
+        public float YarnCost
+        {
+            get { return _yarnCost; }
+            set
+            {
+                _yarnCost = value;
+                RaisePropertyChanged("YarnCost");
             }
         }
         public ObservableCollection<FabricColor> FabricColorList { get; set; }
@@ -76,23 +100,34 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 FabricIngredientProportionList.Clear();
                 if (value == null) return;
                 IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricModule.GetFabricIngredientProportionByColorNo(new List<int> { value.ColorNo });
-
+                float yarnCost = 0;
                 foreach (var item in fabricIngredientProportions)
                 {
                     FabricIngredientProportionList.Add(item);
+                    yarnCost = yarnCost + item.Price * (item.Proportion / 100);
+                }
+                YarnCost = yarnCost;
+                foreach (var item in ProcessSequenceList)
+                {
+                    yarnCost = yarnCost * (1 + item.Loss / 100) + item.WorkPay;
+                    item.Cost = yarnCost;
                 }
             }
         }
         public ObservableCollection<FabricIngredientProportion> FabricIngredientProportionList { get; set; }
-
-        public ObservableCollection<ProcessSequence> ProcessSequenceList { get; set; }
+        private ObservableCollection<ProcessSequenceCost> _processSequenceList { get; set; }
+        public ObservableCollection<ProcessSequenceCost> ProcessSequenceList
+        {
+            get { return _processSequenceList; }
+            set { _processSequenceList = value; }
+        }
 
         public FabricCostQueryViewModel()
         {
             FabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
             FabricColorList = new ObservableCollection<FabricColor>();
             FabricIngredientProportionList = new ObservableCollection<FabricIngredientProportion>();
-            ProcessSequenceList = new ObservableCollection<ProcessSequence>();
+            ProcessSequenceList = new ObservableCollection<ProcessSequenceCost>();
         }
     }
 }

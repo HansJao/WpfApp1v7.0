@@ -17,9 +17,9 @@ namespace WpfApp1.DataClass.Enumeration
     /// </summary>
     public enum ProcessItem
     {
-        [Description("織")]
+        [Description("織廠")]
         Fabric = 1,
-        [Description("染")]
+        [Description("染廠")]
         Dye = 2,
         [Description("定")]
         Clear = 3,
@@ -29,7 +29,7 @@ namespace WpfApp1.DataClass.Enumeration
         Brushed = 5,
         [Description("印花")]
         Printing = 6,
-        [Description("紗")]
+        [Description("紗廠")]
         Yarn = 7,
 
     }
