@@ -29,7 +29,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void AddFabricColorExecute()
         {
-            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric);
+            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricIngredientProportionList);
             addFabricColorDialog.Show();
         }
 
@@ -109,7 +109,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 YarnCost = yarnCost;
                 foreach (var item in ProcessSequenceList)
                 {
-                    yarnCost = yarnCost * (1 + item.Loss / 100) + item.WorkPay;
+                    yarnCost = (yarnCost + item.WorkPay) * (1 + item.Loss / 100);
                     item.Cost = yarnCost;
                 }
             }

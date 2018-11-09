@@ -61,7 +61,8 @@
             </StackPanel>
             <StackPanel>
                 <DataGrid ItemsSource="{Binding FabricIngredientProportionList}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                         <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
                         <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                         <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>

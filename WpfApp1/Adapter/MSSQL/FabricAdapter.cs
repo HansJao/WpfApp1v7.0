@@ -108,8 +108,9 @@ namespace WpfApp1.Adapter.MSSQL
         public IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList)
         {
 
-            string sqlCmd = @"SELECT YP.Ingredient,YP.Color,YP.YarnCount,YP.Price,FP.Proportion,FP.[Group] FROM FabricProportion FP
+            string sqlCmd = @"SELECT F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price,FP.Proportion,FP.[Group] FROM FabricProportion FP
                               INNER JOIN YarnPrice YP ON FP.YarnPriceNo = YP.YarnPriceNo
+							  INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID
                               WHERE ColorNo IN @ColorNo";
             var parameter =
                new

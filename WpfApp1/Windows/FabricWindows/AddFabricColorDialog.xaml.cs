@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.ViewModel.FabricViewModel;
@@ -27,7 +28,7 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
         private Fabric _fabric;
-        public AddFabricColorDialog(Fabric fabric)
+        public AddFabricColorDialog(Fabric fabric, IEnumerable<FabricIngredientProportion> fabricIngredientProportion)
         {
             InitializeComponent();
             _fabric = fabric;
