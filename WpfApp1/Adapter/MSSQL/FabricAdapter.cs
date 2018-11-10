@@ -136,5 +136,16 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<ProcessSequence, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
+        /// <summary>
+        /// 取得所有紗商的紗價
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList()
+        {
+            string sqlCmd = @"SELECT F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price FROM YarnPrice YP
+                              INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID";
+            var result = DapperHelper.QueryCollection<MerchantYarnPrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
     }
 }

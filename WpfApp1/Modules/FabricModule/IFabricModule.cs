@@ -57,5 +57,10 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="fabricIDList"></param>
         /// <returns></returns>
         IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList);
+        /// <summary>
+        /// 取得所有紗商的紗價
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList();
     }
 }

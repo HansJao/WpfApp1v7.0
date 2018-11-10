@@ -114,5 +114,15 @@ namespace WpfApp1.Modules.FabricModule.Implement
             IEnumerable<ProcessSequence> processSequences = FabricAdapter.GetProcessSequences(fabricIDList);
             return processSequences;
         }
+        /// <summary>
+        /// 取得所有紗商的紗價
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList()
+        {
+            IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricAdapter.GetMerchantYarnPriceList();
+            return merchantYarnPrices;
+
+        }
     }
 }

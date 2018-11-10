@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,11 +29,18 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
         private Fabric _fabric;
-        public AddFabricColorDialog(Fabric fabric, IEnumerable<FabricIngredientProportion> fabricIngredientProportion)
+        private ObservableCollection<FabricIngredientProportion> _fabricIngredientProportion;
+        private ObservableCollection<FabricColor> _fabricColorList;
+        public AddFabricColorDialog(Fabric fabric, FabricColor FabricColor, ObservableCollection<FabricIngredientProportion> fabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
         {
             InitializeComponent();
             _fabric = fabric;
+            _fabricIngredientProportion = fabricIngredientProportion;
+            _fabricColorList = FabricColorList;
+
             LabelFabricName.Content = fabric.FabricName;
+            DataGridFabricIngredientProportion.ItemsSource = _fabricIngredientProportion;
+            TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
         }
 
         private void ButtonAddFabricColor_Click(object sender, RoutedEventArgs e)
@@ -42,6 +50,37 @@ namespace WpfApp1.Windows.FabricWindows
                 new FabricColor { FabricID = _fabric.FabricID, Color = TextBoxColorName.Text }
             };
             bool success = FabricModule.AddFabricColorList(fabricColors);
+        }
+
+        private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
+        {
+            YarnSelectDialog yarnSelectDialog = new YarnSelectDialog(ref _fabricIngredientProportion);
+            yarnSelectDialog.DataContext = this;
+            yarnSelectDialog.Show();
+        }
+
+        private void TextBoxColorName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBox = (TextBox)sender;
+            int isInFabricColorList = _fabricColorList.Where(w => w.Color == textBox.Text).Count();
+            if (isInFabricColorList > 0)
+            {
+                ButtonAddFabricColor.IsEnabled = false;
+            }
+            else if (textBox.Text == string.Empty)
+            {
+                ButtonAddFabricColor.IsEnabled = false;
+                ButtonEditFabricColor.IsEnabled = false;
+            }
+            else
+            {
+                ButtonAddFabricColor.IsEnabled = true;
+            }
+        }
+
+        private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

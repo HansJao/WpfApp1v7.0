@@ -143,11 +143,13 @@
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlowDate.cs" />
     <Compile Include="DataClass\Entity\ProcessSequence.cs" />
+    <Compile Include="DataClass\Entity\YarnPrice.cs" />
     <Compile Include="DataClass\Enumeration\ExcelEnum.cs" />
     <Compile Include="DataClass\Enumeration\FactoryEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
+    <Compile Include="DataClass\Fabric\MerchantYarnPrice.cs" />
     <Compile Include="DataClass\Fabric\ProcessSequenceCost.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
@@ -243,6 +245,9 @@
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="Windows\CommonWindows\TextBoxMessageDialog.xaml.cs">
+      <DependentUpon>TextBoxMessageDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
     </Compile>
@@ -251,6 +256,9 @@
     </Compile>
     <Compile Include="Windows\FabricWindows\AddProcessSequenceDialog.xaml.cs">
       <DependentUpon>AddProcessSequenceDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\FabricWindows\YarnSelectDialog.xaml.cs">
+      <DependentUpon>YarnSelectDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\FactoryAddDialog.xaml.cs">
       <DependentUpon>FactoryAddDialog.xaml</DependentUpon>
@@ -336,6 +344,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Windows\CommonWindows\TextBoxMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\CustomerEditDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -345,6 +357,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FabricWindows\AddProcessSequenceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FabricWindows\YarnSelectDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

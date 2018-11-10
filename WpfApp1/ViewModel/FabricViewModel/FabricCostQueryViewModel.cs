@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
@@ -29,7 +30,12 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void AddFabricColorExecute()
         {
-            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricIngredientProportionList);
+            if (Fabric == null)
+            {
+                MessageBox.Show("未選取布種!!");
+                return;
+            }
+            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricColor, FabricIngredientProportionList, FabricColorList);
             addFabricColorDialog.Show();
         }
 
