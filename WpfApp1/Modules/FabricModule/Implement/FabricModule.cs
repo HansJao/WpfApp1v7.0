@@ -158,11 +158,22 @@ namespace WpfApp1.Modules.FabricModule.Implement
                 ColorNo = colorNo,
                 YarnPriceNo = s.YarnPriceNo,
                 Proportion = s.Proportion,
-                Group = 1,
+                Group = s.Group == 0 ? 1 : s.Group,
                 CreateDate = DateTime.Now
             });
             int count = FabricAdapter.InsertFabricIngredientProportions(fabricProportions);
             return count == list.Count;
+        }
+        /// <summary>
+        /// 取得布種的成分群組資訊
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
+        {
+            IngredientGroupInfo ingredientGroupInfo = FabricAdapter.GetIngredientGroupInfo(fabricID, color);
+            return ingredientGroupInfo;
         }
     }
 }

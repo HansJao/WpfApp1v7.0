@@ -198,5 +198,25 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricProportions);
             return result;
         }
+        /// <summary>
+        /// 取得布種的成分群組資訊
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
+        {
+            var sqlCmd = @"SELECT TOP 1 FC.ColorNo,FP.[GROUP] FROM FabricColor FC
+                          INNER JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
+                          WHERE FabricID = @FabricID AND Color = @Color
+                          ORDER BY FP.[GROUP] DESC";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
+                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = color }
+            };
+            var result = DapperHelper.Query<IngredientGroupInfo>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
     }
 }

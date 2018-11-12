@@ -41,15 +41,23 @@ namespace WpfApp1.Windows.FabricWindows
             LabelFabricName.Content = fabric.FabricName;
             DataGridFabricIngredientProportion.ItemsSource = _fabricIngredientProportion;
             TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
+            ButtonControl(TextBoxColorName);
         }
 
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
-            List<FabricColor> fabricColors = new List<FabricColor>
+            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, TextBoxColorName.Text);
+            List<FabricIngredientProportion> fabricIngredientProportion = GetFabricIngredientProportions();
+            fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
+            bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
+            if (success == false)
             {
-                new FabricColor { FabricID = _fabric.FabricID, Color = TextBoxColorName.Text }
-            };
-            bool success = FabricModule.AddFabricColorList(fabricColors);
+                MessageBox.Show("好像有錯誤喔!!");
+            }
+            else
+            {
+                MessageBox.Show("新增成功!!");
+            }
         }
 
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
@@ -62,6 +70,11 @@ namespace WpfApp1.Windows.FabricWindows
         private void TextBoxColorName_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
+            ButtonControl(textBox);
+        }
+
+        private void ButtonControl(TextBox textBox)
+        {
             int isInFabricColorList = _fabricColorList.Where(w => w.Color == textBox.Text).Count();
             if (isInFabricColorList > 0)
             {
@@ -81,6 +94,9 @@ namespace WpfApp1.Windows.FabricWindows
                 ButtonAddFabricColor.IsEnabled = true;
                 ButtonEditFabricColor.IsEnabled = false;
             }
+
+            if (DataGridFabricIngredientProportion.Items.Count == 0)
+                ButtonEditFabricColor.IsEnabled = false;
         }
 
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
@@ -103,7 +119,6 @@ namespace WpfApp1.Windows.FabricWindows
             {
                 fabricIngredientProportions.Add(item);
             }
-
             return fabricIngredientProportions;
         }
 

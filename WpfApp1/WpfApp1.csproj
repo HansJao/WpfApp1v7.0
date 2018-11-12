@@ -149,6 +149,7 @@
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
+    <Compile Include="DataClass\Fabric\IngredientGroupInfo.cs" />
     <Compile Include="DataClass\Fabric\MerchantYarnPrice.cs" />
     <Compile Include="DataClass\Fabric\ProcessSequenceCost.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />

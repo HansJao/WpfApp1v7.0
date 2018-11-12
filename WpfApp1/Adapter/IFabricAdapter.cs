@@ -81,5 +81,12 @@ namespace WpfApp1.Adapter
         /// <param name="list"></param>
         /// <returns></returns>
         int InsertFabricIngredientProportions(IEnumerable<FabricProportion> list);
+        /// <summary>
+        /// 取得布種的成分群組資訊
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color);
     }
 }
