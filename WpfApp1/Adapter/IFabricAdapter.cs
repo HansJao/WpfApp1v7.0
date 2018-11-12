@@ -62,5 +62,11 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <returns></returns>
         IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList();
+        /// <summary>
+        /// 更新布種比例成分
+        /// </summary>
+        /// <param name="fabricIngredientProportions"></param>
+        /// <returns></returns>
+        int UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions);
     }
 }

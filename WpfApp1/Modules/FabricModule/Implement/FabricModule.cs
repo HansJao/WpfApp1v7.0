@@ -124,5 +124,15 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return merchantYarnPrices;
 
         }
+        /// <summary>
+        /// 更新布種比例成分
+        /// </summary>
+        /// <param name="fabricIngredientProportions"></param>
+        /// <returns></returns>
+        public bool UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions)
+        {
+            int count = FabricAdapter.UpdateFabricProportion(fabricIngredientProportions);
+            return count == fabricIngredientProportions.Count;
+        }
     }
 }

@@ -62,5 +62,12 @@ namespace WpfApp1.Modules.FabricModule
         /// </summary>
         /// <returns></returns>
         IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList();
+
+        /// <summary>
+        /// 更新布種比例成分
+        /// </summary>
+        /// <param name="fabricIngredientProportions"></param>
+        /// <returns></returns>
+        bool UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions);
     }
 }

@@ -108,7 +108,7 @@ namespace WpfApp1.Adapter.MSSQL
         public IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList)
         {
 
-            string sqlCmd = @"SELECT F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price,FP.Proportion,FP.[Group] FROM FabricProportion FP
+            string sqlCmd = @"SELECT FP.ProportionNo,F.Name,FP.YarnPriceNo,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price,FP.Proportion,FP.[Group] FROM FabricProportion FP
                               INNER JOIN YarnPrice YP ON FP.YarnPriceNo = YP.YarnPriceNo
 							  INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID
                               WHERE ColorNo IN @ColorNo";
@@ -142,9 +142,23 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList()
         {
-            string sqlCmd = @"SELECT F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price FROM YarnPrice YP
+            string sqlCmd = @"SELECT YP.YarnPriceNo,F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price FROM YarnPrice YP
                               INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID";
             var result = DapperHelper.QueryCollection<MerchantYarnPrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
+        /// <summary>
+        /// 更新布種比例成分
+        /// </summary>
+        /// <param name="fabricIngredientProportions"></param>
+        /// <returns></returns>
+        public int UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions)
+        {
+            var sqlCmd = @"UPDATE [dbo].[FabricProportion]
+                           SET [YarnPriceNo] = @YarnPriceNo
+                           ,[UpdateDate] = GETDATE()
+                           WHERE ProportionNo=@ProportionNo";
+            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricIngredientProportions);
             return result;
         }
     }

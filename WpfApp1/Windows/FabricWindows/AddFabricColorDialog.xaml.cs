@@ -43,7 +43,7 @@ namespace WpfApp1.Windows.FabricWindows
             TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
         }
 
-        private void ButtonAddFabricColor_Click(object sender, RoutedEventArgs e)
+        private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
             List<FabricColor> fabricColors = new List<FabricColor>
             {
@@ -65,22 +65,40 @@ namespace WpfApp1.Windows.FabricWindows
             int isInFabricColorList = _fabricColorList.Where(w => w.Color == textBox.Text).Count();
             if (isInFabricColorList > 0)
             {
+                ButtonAddIngredientGroup.IsEnabled = true;
                 ButtonAddFabricColor.IsEnabled = false;
+                ButtonEditFabricColor.IsEnabled = true;
             }
             else if (textBox.Text == string.Empty)
             {
+                ButtonAddIngredientGroup.IsEnabled = false;
                 ButtonAddFabricColor.IsEnabled = false;
                 ButtonEditFabricColor.IsEnabled = false;
             }
             else
             {
+                ButtonAddIngredientGroup.IsEnabled = false;
                 ButtonAddFabricColor.IsEnabled = true;
+                ButtonEditFabricColor.IsEnabled = false;
             }
         }
 
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
         {
-
+            List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion>();
+            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.Items)
+            {
+                fabricIngredientProportions.Add(item);
+            }
+            bool success = FabricModule.UpdateFabricProportion(fabricIngredientProportions);
+            if (success == false)
+            {
+                MessageBox.Show("好像有錯誤喔!!");
+            }
+            else
+            {
+                MessageBox.Show("更新成功!!");
+            }
         }
     }
 }

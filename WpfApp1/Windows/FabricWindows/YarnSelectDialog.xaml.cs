@@ -50,13 +50,13 @@ namespace WpfApp1.Windows.FabricWindows
                 {
                     return;
                 }
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(proportion, merchantYarnPrice);
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
                 _fabricIngredientProportion.Add(fabricIngredientProportion);
             }
             else
             {
                 var selectedItem = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.Proportion, merchantYarnPrice);
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo,selectedItem.Proportion, merchantYarnPrice);
                 _fabricIngredientProportion.RemoveAt(selectedIndex);
                 _fabricIngredientProportion.Insert(selectedIndex, fabricIngredientProportion);
                 addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
@@ -64,10 +64,19 @@ namespace WpfApp1.Windows.FabricWindows
 
         }
 
-        private FabricIngredientProportion GetFabricIngredientProportion(float proportion, MerchantYarnPrice merchantYarnPrice)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
+        /// <param name="proportion">成分比例,同一布種比例應相同</param>
+        /// <param name="merchantYarnPrice"></param>
+        /// <returns></returns>
+        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, float proportion, MerchantYarnPrice merchantYarnPrice)
         {
             FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
             {
+                ProportionNo = proportionNo,
+                YarnPriceNo = merchantYarnPrice.YarnPriceNo,
                 Name = merchantYarnPrice.Name,
                 Color = merchantYarnPrice.Color,
                 Ingredient = merchantYarnPrice.Ingredient,
