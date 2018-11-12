@@ -85,12 +85,7 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
         {
-            List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion>();
-            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.Items)
-            {
-                fabricIngredientProportions.Add(item);
-            }
-            bool success = FabricModule.UpdateFabricProportion(fabricIngredientProportions);
+            bool success = FabricModule.UpdateFabricProportion(GetFabricIngredientProportions());
             if (success == false)
             {
                 MessageBox.Show("好像有錯誤喔!!");
@@ -99,6 +94,32 @@ namespace WpfApp1.Windows.FabricWindows
             {
                 MessageBox.Show("更新成功!!");
             }
+        }
+
+        private List<FabricIngredientProportion> GetFabricIngredientProportions()
+        {
+            List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion>();
+            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.Items)
+            {
+                fabricIngredientProportions.Add(item);
+            }
+
+            return fabricIngredientProportions;
+        }
+
+        private void ButtonAddFabricColor_Click(object sender, RoutedEventArgs e)
+        {
+            int colorNo = FabricModule.InsertFabricColor(_fabric.FabricID, TextBoxColorName.Text);
+            bool success = FabricModule.InsertFabricIngredientProportions(colorNo, GetFabricIngredientProportions());
+            if (success == false)
+            {
+                MessageBox.Show("好像有錯誤喔!!");
+            }
+            else
+            {
+                MessageBox.Show("新增成功!!");
+            }
+
         }
     }
 }

@@ -68,5 +68,18 @@ namespace WpfApp1.Adapter
         /// <param name="fabricIngredientProportions"></param>
         /// <returns></returns>
         int UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions);
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        int InsertFabricColor(int fabricID, string text);
+        /// <summary>
+        /// 新增布種顏色的成分比例
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        int InsertFabricIngredientProportions(IEnumerable<FabricProportion> list);
     }
 }

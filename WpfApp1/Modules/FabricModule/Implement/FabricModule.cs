@@ -134,5 +134,35 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.UpdateFabricProportion(fabricIngredientProportions);
             return count == fabricIngredientProportions.Count;
         }
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public int InsertFabricColor(int fabricID, string text)
+        {
+            int colorNo = FabricAdapter.InsertFabricColor(fabricID, text);
+            return colorNo;
+        }
+        /// <summary>
+        /// 新增布種顏色的成分比例
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public bool InsertFabricIngredientProportions(int colorNo, List<FabricIngredientProportion> list)
+        {
+            IEnumerable<FabricProportion> fabricProportions = list.Select(s => new FabricProportion
+            {
+                ColorNo = colorNo,
+                YarnPriceNo = s.YarnPriceNo,
+                Proportion = s.Proportion,
+                Group = 1,
+                CreateDate = DateTime.Now
+            });
+            int count = FabricAdapter.InsertFabricIngredientProportions(fabricProportions);
+            return count == list.Count;
+        }
     }
 }

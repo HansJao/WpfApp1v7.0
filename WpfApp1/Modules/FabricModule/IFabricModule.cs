@@ -69,5 +69,21 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="fabricIngredientProportions"></param>
         /// <returns></returns>
         bool UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions);
+
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        int InsertFabricColor(int fabricID, string text);
+
+        /// <summary>
+        /// 新增布種顏色的成分比例
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        bool InsertFabricIngredientProportions(int colorNo, List<FabricIngredientProportion> list);
     }
 }

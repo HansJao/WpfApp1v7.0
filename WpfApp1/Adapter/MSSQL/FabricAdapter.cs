@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -159,6 +160,42 @@ namespace WpfApp1.Adapter.MSSQL
                            ,[UpdateDate] = GETDATE()
                            WHERE ProportionNo=@ProportionNo";
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricIngredientProportions);
+            return result;
+        }
+        /// <summary>
+        /// 新增布種顏色
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public int InsertFabricColor(int fabricID, string text)
+        {
+           
+            var sqlCmd = @"INSERT INTO FabricColor
+                           OUTPUT INSERTED.ColorNo
+                           VALUES
+                           (@FabricID, @Color, GETDATE());";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
+                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = text }
+            };
+            var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 新增布種顏色的成分比例
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public int InsertFabricIngredientProportions(IEnumerable<FabricProportion> fabricProportions)
+        {
+            var sqlCmd = @"INSERT INTO [dbo].[FabricProportion]
+                           ([ColorNo],[YarnPriceNo],[Proportion],[Group],[CreateDate])
+                           VALUES
+                           (@ColorNo,@YarnPriceNo,@Proportion,@Group,@CreateDate)";
+            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricProportions);
             return result;
         }
     }
