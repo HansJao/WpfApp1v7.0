@@ -38,17 +38,19 @@ namespace WpfApp1.Pages
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         //ObservableCollection<string> TextileList = new ObservableCollection<string>();
         List<ShippingSheetStructure> ShippingSheetStructure = new List<ShippingSheetStructure>();
+
+        private IWorkbook _workbook { get; set; }
         public ShippingPage()
         {
             InitializeComponent();
-            IWorkbook workbook = null;  //新建IWorkbook對象  
+            //IWorkbook _workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            _workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
             List<string> textileList = new List<string>();
-            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
+            for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
             {
-                ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
+                ISheet sheet = _workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 textileList.Add(sheet.SheetName);
             }
 
@@ -189,12 +191,12 @@ namespace WpfApp1.Pages
             if (selectedItem == null)
                 return;
             string textileName = (sender as ComboBox).SelectedItem.ToString();
-            IWorkbook workbook = null;  //新建IWorkbook對象  
-            string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
-            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            //IWorkbook _workbook = null;  //新建IWorkbook對象  
+            //string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+            //FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            //_workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
 
-            ISheet sheet = workbook.GetSheet(textileName);  //獲取工作表
+            ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
             IList selectedTextiles = new ObservableCollection<SelectedTextile>();
 
             DataGridSelectedTextile.ItemsSource = selectedTextiles;
