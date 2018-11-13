@@ -25,13 +25,20 @@ namespace WpfApp1.Windows.FabricWindows
     public partial class YarnSelectDialog : Window
     {
         protected IFabricModule FabricModule { get; } = new FabricModule();
-        private ObservableCollection<FabricIngredientProportion> _fabricIngredientProportion;
-        public YarnSelectDialog(ref ObservableCollection<FabricIngredientProportion> fabricIngredientProportion)
+        private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _fabricIngredientProportion;
+        private int _groupNo { get; set; }
+        public YarnSelectDialog(int groupNo, ref Dictionary<int, ObservableCollection<FabricIngredientProportion>> fabricIngredientProportion)
         {
             InitializeComponent();
+            _groupNo = groupNo;
             _fabricIngredientProportion = fabricIngredientProportion;
             IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricModule.GetMerchantYarnPriceList();
             DataGridMerchantYarnPrice.ItemsSource = merchantYarnPrices;
+        }
+
+        public void ChangeGroupNo(int groupNo)
+        {
+            _groupNo = groupNo;
         }
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
@@ -51,14 +58,14 @@ namespace WpfApp1.Windows.FabricWindows
                     return;
                 }
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
-                _fabricIngredientProportion.Add(fabricIngredientProportion);
+                _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
             }
             else
             {
                 var selectedItem = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo,selectedItem.Proportion, merchantYarnPrice);
-                _fabricIngredientProportion.RemoveAt(selectedIndex);
-                _fabricIngredientProportion.Insert(selectedIndex, fabricIngredientProportion);
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, merchantYarnPrice);
+                _fabricIngredientProportion[_groupNo].RemoveAt(selectedIndex);
+                _fabricIngredientProportion[_groupNo].Insert(selectedIndex, fabricIngredientProportion);
                 addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
             }
 

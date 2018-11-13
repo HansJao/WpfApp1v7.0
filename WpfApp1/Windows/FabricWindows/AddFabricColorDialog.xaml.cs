@@ -29,17 +29,17 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
         private Fabric _fabric;
-        private ObservableCollection<FabricIngredientProportion> _fabricIngredientProportion;
+        private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
         private ObservableCollection<FabricColor> _fabricColorList;
-        public AddFabricColorDialog(Fabric fabric, FabricColor FabricColor, ObservableCollection<FabricIngredientProportion> fabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
+        public AddFabricColorDialog(Fabric fabric, FabricColor FabricColor, Dictionary<int, ObservableCollection<FabricIngredientProportion>> dictionaryFabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
         {
             InitializeComponent();
             _fabric = fabric;
-            _fabricIngredientProportion = fabricIngredientProportion;
+            _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion;
             _fabricColorList = FabricColorList;
 
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _fabricIngredientProportion;
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[1];
             TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
             ButtonControl(TextBoxColorName);
         }
@@ -60,11 +60,13 @@ namespace WpfApp1.Windows.FabricWindows
             }
         }
 
+        private YarnSelectDialog _yarnSelectDialog { get; set; }
+
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
-            YarnSelectDialog yarnSelectDialog = new YarnSelectDialog(ref _fabricIngredientProportion);
-            yarnSelectDialog.DataContext = this;
-            yarnSelectDialog.Show();
+            _yarnSelectDialog = new YarnSelectDialog(1, ref _dictionaryFabricIngredientProportion);
+            _yarnSelectDialog.DataContext = this;
+            _yarnSelectDialog.Show();
         }
 
         private void TextBoxColorName_TextChanged(object sender, TextChangedEventArgs e)
@@ -135,6 +137,18 @@ namespace WpfApp1.Windows.FabricWindows
                 MessageBox.Show("新增成功!!");
             }
 
+        }
+
+        private void GroupOne_Click(object sender, RoutedEventArgs e)
+        {
+            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(1);
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[1];
+        }
+
+        private void GroupTwo_Click(object sender, RoutedEventArgs e)
+        {
+            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(2);
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[2];
         }
     }
 }

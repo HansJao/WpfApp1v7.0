@@ -37,7 +37,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 MessageBox.Show("未選取布種!!");
                 return;
             }
-            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricColor, FabricIngredientProportionList, FabricColorList);
+            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList);
             addFabricColorDialog.Show();
         }
 
