@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
@@ -118,8 +120,64 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     yarnCost = (yarnCost + item.WorkPay) * (1 + item.Loss / 100);
                     item.Cost = yarnCost;
                 }
+                FabricIngredientProportionGroup = fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
+                foreach (var item in FabricIngredientProportionGroup)
+                {
+
+
+                    DataGrid dataGrid = new DataGrid();
+                    dataGrid.HorizontalAlignment = HorizontalAlignment.Left;
+                    dataGrid.VerticalAlignment = VerticalAlignment.Top;
+                    dataGrid.AutoGenerateColumns = false;
+
+                    DataGridTextColumn yarnMerchant = new DataGridTextColumn();
+                    yarnMerchant.Header = "紗商";
+                    yarnMerchant.Binding = new Binding("Name");
+                    dataGrid.Columns.Add(yarnMerchant);
+
+                    DataGridTextColumn ingredient = new DataGridTextColumn();
+                    ingredient.Header = "成分";
+                    ingredient.Binding = new Binding("Ingredient");
+                    dataGrid.Columns.Add(ingredient);
+
+                    DataGridTextColumn color = new DataGridTextColumn();
+                    color.Header = "顏色";
+                    color.Binding = new Binding("Color");
+                    dataGrid.Columns.Add(color);
+
+                    DataGridTextColumn yarnCount = new DataGridTextColumn();
+                    yarnCount.Header = "紗支數";
+                    yarnCount.Binding = new Binding("YarnCount");
+                    dataGrid.Columns.Add(yarnCount);
+
+                    DataGridTextColumn price = new DataGridTextColumn();
+                    price.Header = "單價";
+                    price.Binding = new Binding("Price")
+                    {
+                        StringFormat = "{0:C}"
+                    };
+                    dataGrid.Columns.Add(price);
+
+                    DataGridTextColumn proportion = new DataGridTextColumn();
+                    proportion.Header = "比例";
+                    proportion.Binding = new Binding("Proportion")
+                    {
+                        StringFormat = "{0}%"
+                    };
+                    dataGrid.Columns.Add(proportion);
+
+                    DataGridTextColumn group = new DataGridTextColumn();
+                    group.Header = "群組";
+                    group.Binding = new Binding("Group");
+                    dataGrid.Columns.Add(group);
+
+                    dataGrid.ItemsSource = item.Value;
+                    _stackPanel.Children.Add(dataGrid);
+                }
+
             }
         }
+        public Dictionary<int, ObservableCollection<FabricIngredientProportion>> FabricIngredientProportionGroup { get; set; }
         public ObservableCollection<FabricIngredientProportion> FabricIngredientProportionList { get; set; }
         private ObservableCollection<ProcessSequenceCost> _processSequenceList { get; set; }
         public ObservableCollection<ProcessSequenceCost> ProcessSequenceList
@@ -127,13 +185,15 @@ namespace WpfApp1.ViewModel.FabricViewModel
             get { return _processSequenceList; }
             set { _processSequenceList = value; }
         }
-
-        public FabricCostQueryViewModel()
+        private StackPanel _stackPanel { get; set; }
+        public FabricCostQueryViewModel(StackPanel stackPanel)
         {
             FabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
             FabricColorList = new ObservableCollection<FabricColor>();
             FabricIngredientProportionList = new ObservableCollection<FabricIngredientProportion>();
             ProcessSequenceList = new ObservableCollection<ProcessSequenceCost>();
+
+            _stackPanel = stackPanel;
         }
     }
 }

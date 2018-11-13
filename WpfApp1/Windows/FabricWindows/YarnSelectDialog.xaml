@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="YarnSelectDialog" Height="450" Width="800">
     <Grid>
-        <ListBox HorizontalAlignment="Left" Height="289" Margin="311,60,0,0" VerticalAlignment="Top" Width="200"/>
-        <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" Margin="60,93,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" Margin="60,59,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns >
                 <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
