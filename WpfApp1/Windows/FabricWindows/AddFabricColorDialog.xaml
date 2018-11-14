@@ -28,7 +28,7 @@
         <Button x:Name="ButtonChangeYarn" Content="變更" HorizontalAlignment="Left" Margin="332,81,0,0" VerticalAlignment="Top" Width="50" Click="ButtonChangeYarn_Click"/>
         <Button x:Name="ButtonEditFabricColor" Content="修改" HorizontalAlignment="Left" Margin="202,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonEditFabricColor_Click"/>
         <Button x:Name="ButtonAddFabricColor" Content="新增顏色" HorizontalAlignment="Left" Margin="27,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAddFabricColor_Click"/>
-        <ComboBox x:Name="ComboBoxGroup" HorizontalAlignment="Left" Margin="216,20,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
+        <ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="216,20,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
 
     </Grid>
 </Window>

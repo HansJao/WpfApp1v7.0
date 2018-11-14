@@ -56,6 +56,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 _fabric = value;
                 FabricColorList.Clear();
                 ProcessSequenceList.Clear();
+                _stackPanel.Children.Clear();
                 if (value == null) return;
                 List<int> fabricIDList = new List<int> { _fabric.FabricID };
 
@@ -86,8 +87,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 }
             }
         }
-        private float _yarnCost { get; set; }
-        public float YarnCost
+        private decimal _yarnCost { get; set; }
+        public decimal YarnCost
         {
             get { return _yarnCost; }
             set
@@ -110,7 +111,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 FabricIngredientProportionList.Clear();
                 if (value == null) return;
                 IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricModule.GetFabricIngredientProportionByColorNo(new List<int> { value.ColorNo });
-                float yarnCost = 0;
+                decimal yarnCost = 0;
                 foreach (var item in fabricIngredientProportions)
                 {
                     FabricIngredientProportionList.Add(item);
@@ -192,7 +193,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                     dataGrid.ItemsSource = fabricIngredientPropertionItem.Value;
                     _stackPanel.Children.Add(dataGrid);
-                    float fabricIngredientPropertionItemYarnCost = 0;
+                    decimal fabricIngredientPropertionItemYarnCost = 0;
                     foreach (var fabricIngredientProportionItem in fabricIngredientPropertionItem.Value)
                     {
                         fabricIngredientPropertionItemYarnCost = fabricIngredientPropertionItemYarnCost + fabricIngredientProportionItem.Price * (fabricIngredientProportionItem.Proportion / 100);

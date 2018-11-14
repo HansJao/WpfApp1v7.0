@@ -9,8 +9,8 @@ namespace WpfApp1.DataClass.Fabric
 {
     public class ProcessSequenceCost : ProcessSequence
     {
-        private float _cost { get; set; }
-        public float Cost { get { return _cost; } set { _cost = value; OnPropertyChanged(); } }
+        private decimal _cost { get; set; }
+        public decimal Cost { get { return _cost; } set { _cost = value; OnPropertyChanged(); } }
 
     }
 }

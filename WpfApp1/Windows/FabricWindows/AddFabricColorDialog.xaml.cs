@@ -65,7 +65,8 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
-            _yarnSelectDialog = new YarnSelectDialog(1, ref _dictionaryFabricIngredientProportion);
+            int groupNo = Convert.ToInt16(ComboBoxGroup.SelectedItem);
+            _yarnSelectDialog = new YarnSelectDialog(groupNo, ref _dictionaryFabricIngredientProportion);
             _yarnSelectDialog.Owner = this;
             _yarnSelectDialog.Left = this.Left + this.Width;
             _yarnSelectDialog.Top = this.Top;

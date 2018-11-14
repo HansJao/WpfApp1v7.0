@@ -50,10 +50,10 @@ namespace WpfApp1.Windows.FabricWindows
                 TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog();
                 textBoxMessageDialog.Left = this.Left + 100;
                 textBoxMessageDialog.Top = this.Top + 130;
-                float proportion = 0;
+                decimal proportion = 0;
                 if (textBoxMessageDialog.ShowDialog() == true)
                 {
-                    proportion = float.Parse(textBoxMessageDialog.TextBoxProportion.Text);
+                    proportion = decimal.Parse(textBoxMessageDialog.TextBoxProportion.Text);
                 }
                 else
                 {
@@ -88,7 +88,7 @@ namespace WpfApp1.Windows.FabricWindows
         /// <param name="proportion">成分比例,同一布種比例應相同</param>
         /// <param name="merchantYarnPrice"></param>
         /// <returns></returns>
-        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, float proportion, MerchantYarnPrice merchantYarnPrice)
+        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, MerchantYarnPrice merchantYarnPrice)
         {
             FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
             {

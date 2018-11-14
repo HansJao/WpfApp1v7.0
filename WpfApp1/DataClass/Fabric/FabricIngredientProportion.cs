@@ -15,7 +15,7 @@ namespace WpfApp1.DataClass.Fabric
         public string Color { get; set; }
         public int YarnCount { get; set; }
         public int Price { get; set; }
-        public float Proportion { get; set; }
+        public decimal Proportion { get; set; }
         public int Group { get; set; }
     }
 }
