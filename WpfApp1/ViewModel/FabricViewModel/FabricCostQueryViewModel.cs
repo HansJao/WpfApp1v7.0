@@ -38,6 +38,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 return;
             }
             AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList);
+            addFabricColorDialog.Left = 500;
+            addFabricColorDialog.Top = 550;
             addFabricColorDialog.Show();
         }
 
@@ -120,64 +122,90 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     yarnCost = (yarnCost + item.WorkPay) * (1 + item.Loss / 100);
                     item.Cost = yarnCost;
                 }
-                FabricIngredientProportionGroup = fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
-                foreach (var item in FabricIngredientProportionGroup)
+                FabricIngredientProportionGroup = fabricIngredientProportions.Count() == 0 ? FabricIngredientProportionGroup : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
+                _stackPanel.Children.Clear();
+                foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
+                    DataGrid dataGrid = new DataGrid
+                    {
+                        HorizontalAlignment = HorizontalAlignment.Left,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        AutoGenerateColumns = false,
+                        CanUserAddRows = false,
+                        Name = string.Concat("Group", fabricIngredientPropertionItem.Key)
+                    };
 
-
-                    DataGrid dataGrid = new DataGrid();
-                    dataGrid.HorizontalAlignment = HorizontalAlignment.Left;
-                    dataGrid.VerticalAlignment = VerticalAlignment.Top;
-                    dataGrid.AutoGenerateColumns = false;
-
-                    DataGridTextColumn yarnMerchant = new DataGridTextColumn();
-                    yarnMerchant.Header = "紗商";
-                    yarnMerchant.Binding = new Binding("Name");
+                    DataGridTextColumn yarnMerchant = new DataGridTextColumn
+                    {
+                        Header = "紗商",
+                        Binding = new Binding("Name")
+                    };
                     dataGrid.Columns.Add(yarnMerchant);
 
-                    DataGridTextColumn ingredient = new DataGridTextColumn();
-                    ingredient.Header = "成分";
-                    ingredient.Binding = new Binding("Ingredient");
+                    DataGridTextColumn ingredient = new DataGridTextColumn
+                    {
+                        Header = "成分",
+                        Binding = new Binding("Ingredient")
+                    };
                     dataGrid.Columns.Add(ingredient);
 
-                    DataGridTextColumn color = new DataGridTextColumn();
-                    color.Header = "顏色";
-                    color.Binding = new Binding("Color");
+                    DataGridTextColumn color = new DataGridTextColumn
+                    {
+                        Header = "顏色",
+                        Binding = new Binding("Color")
+                    };
                     dataGrid.Columns.Add(color);
 
-                    DataGridTextColumn yarnCount = new DataGridTextColumn();
-                    yarnCount.Header = "紗支數";
-                    yarnCount.Binding = new Binding("YarnCount");
+                    DataGridTextColumn yarnCount = new DataGridTextColumn
+                    {
+                        Header = "紗支數",
+                        Binding = new Binding("YarnCount")
+                    };
                     dataGrid.Columns.Add(yarnCount);
 
-                    DataGridTextColumn price = new DataGridTextColumn();
-                    price.Header = "單價";
-                    price.Binding = new Binding("Price")
+                    DataGridTextColumn price = new DataGridTextColumn
                     {
-                        StringFormat = "{0:C}"
+                        Header = "單價",
+                        Binding = new Binding("Price")
+                        {
+                            StringFormat = "{0:C}"
+                        }
                     };
                     dataGrid.Columns.Add(price);
 
-                    DataGridTextColumn proportion = new DataGridTextColumn();
-                    proportion.Header = "比例";
-                    proportion.Binding = new Binding("Proportion")
+                    DataGridTextColumn proportion = new DataGridTextColumn
                     {
-                        StringFormat = "{0}%"
+                        Header = "比例",
+                        Binding = new Binding("Proportion")
+                        {
+                            StringFormat = "{0}%"
+                        }
                     };
                     dataGrid.Columns.Add(proportion);
 
-                    DataGridTextColumn group = new DataGridTextColumn();
-                    group.Header = "群組";
-                    group.Binding = new Binding("Group");
+                    DataGridTextColumn group = new DataGridTextColumn
+                    {
+                        Header = "群組",
+                        Binding = new Binding("Group")
+                    };
                     dataGrid.Columns.Add(group);
 
-                    dataGrid.ItemsSource = item.Value;
+                    dataGrid.ItemsSource = fabricIngredientPropertionItem.Value;
                     _stackPanel.Children.Add(dataGrid);
+                    float fabricIngredientPropertionItemYarnCost = 0;
+                    foreach (var fabricIngredientProportionItem in fabricIngredientPropertionItem.Value)
+                    {
+                        fabricIngredientPropertionItemYarnCost = fabricIngredientPropertionItemYarnCost + fabricIngredientProportionItem.Price * (fabricIngredientProportionItem.Proportion / 100);
+                    }
+
+                    Label label = new Label();
+                    label.Content = string.Concat("紗價成本:", fabricIngredientPropertionItemYarnCost);
+                    _stackPanel.Children.Add(label);
                 }
 
             }
         }
-        public Dictionary<int, ObservableCollection<FabricIngredientProportion>> FabricIngredientProportionGroup { get; set; }
+        public Dictionary<int, ObservableCollection<FabricIngredientProportion>> FabricIngredientProportionGroup { get; set; } = new Dictionary<int, ObservableCollection<FabricIngredientProportion>>();
         public ObservableCollection<FabricIngredientProportion> FabricIngredientProportionList { get; set; }
         private ObservableCollection<ProcessSequenceCost> _processSequenceList { get; set; }
         public ObservableCollection<ProcessSequenceCost> ProcessSequenceList
@@ -192,6 +220,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             FabricColorList = new ObservableCollection<FabricColor>();
             FabricIngredientProportionList = new ObservableCollection<FabricIngredientProportion>();
             ProcessSequenceList = new ObservableCollection<ProcessSequenceCost>();
+            FabricIngredientProportionGroup.Add(1, new ObservableCollection<FabricIngredientProportion>());
 
             _stackPanel = stackPanel;
         }

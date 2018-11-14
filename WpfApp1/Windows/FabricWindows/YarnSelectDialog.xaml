@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
-        Title="YarnSelectDialog" Height="450" Width="800">
+        Title="YarnSelectDialog" Height="300" Width="300">
     <Grid>
-        <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" Margin="60,59,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" Margin="22,37,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns >
                 <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
@@ -23,7 +23,7 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <ComboBox HorizontalAlignment="Left" Margin="60,32,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox HorizontalAlignment="Left" Margin="120,10,0,0" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>

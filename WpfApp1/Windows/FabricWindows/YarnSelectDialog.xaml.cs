@@ -48,6 +48,8 @@ namespace WpfApp1.Windows.FabricWindows
             if (selectedIndex == -1)
             {
                 TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog();
+                textBoxMessageDialog.Left = this.Left + 100;
+                textBoxMessageDialog.Top = this.Top + 130;
                 float proportion = 0;
                 if (textBoxMessageDialog.ShowDialog() == true)
                 {
@@ -58,7 +60,15 @@ namespace WpfApp1.Windows.FabricWindows
                     return;
                 }
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
-                _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
+                if (_fabricIngredientProportion.Count == 0)
+                {
+                    List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion> { fabricIngredientProportion };
+                    _fabricIngredientProportion.Add(_groupNo, new ObservableCollection<FabricIngredientProportion>(fabricIngredientProportions));
+                }
+                else
+                {
+                    _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
+                }
             }
             else
             {

@@ -207,7 +207,7 @@ namespace WpfApp1.Adapter.MSSQL
         public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
         {
             var sqlCmd = @"SELECT TOP 1 FC.ColorNo,FP.[GROUP] FROM FabricColor FC
-                          INNER JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
+                          Left JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
                           WHERE FabricID = @FabricID AND Color = @Color
                           ORDER BY FP.[GROUP] DESC";
             SqlParameter[] parameters = new SqlParameter[]

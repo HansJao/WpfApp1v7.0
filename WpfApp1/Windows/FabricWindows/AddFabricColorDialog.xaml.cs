@@ -38,8 +38,9 @@ namespace WpfApp1.Windows.FabricWindows
             _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion;
             _fabricColorList = FabricColorList;
 
+            ComboBoxGroup.ItemsSource = dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[1];
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0 ? _dictionaryFabricIngredientProportion[1] : null;
             TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
             ButtonControl(TextBoxColorName);
         }
@@ -65,6 +66,9 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
             _yarnSelectDialog = new YarnSelectDialog(1, ref _dictionaryFabricIngredientProportion);
+            _yarnSelectDialog.Owner = this;
+            _yarnSelectDialog.Left = this.Left + this.Width;
+            _yarnSelectDialog.Top = this.Top;
             _yarnSelectDialog.DataContext = this;
             _yarnSelectDialog.Show();
         }
@@ -139,16 +143,12 @@ namespace WpfApp1.Windows.FabricWindows
 
         }
 
-        private void GroupOne_Click(object sender, RoutedEventArgs e)
+        private void ComboBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(1);
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[1];
-        }
-
-        private void GroupTwo_Click(object sender, RoutedEventArgs e)
-        {
-            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(2);
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[2];
+            ComboBox comboBox = (ComboBox)sender;
+            int groupNo = Convert.ToInt16(comboBox.SelectedItem);
+            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(groupNo);
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[groupNo];
         }
     }
 }
