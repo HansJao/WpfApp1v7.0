@@ -52,11 +52,12 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         IEnumerable<FabricIngredientProportion> GetFabricIngredientProportionByColorNo(List<int> fabricColorNoList);
         /// <summary>
-        /// 以布種編號取得加工順序
+        /// 取得加工順序
         /// </summary>
-        /// <param name="fabricIDList"></param>
+        /// <param name="fabricID"></param>
+        /// <param name="colorNo"></param>
         /// <returns></returns>
-        IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList);
+        IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo);
         /// <summary>
         /// 取得所有紗商的紗價
         /// </summary>

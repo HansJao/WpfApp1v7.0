@@ -105,13 +105,14 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return fabricIngredientProportions;
         }
         /// <summary>
-        /// 以布種編號取得加工順序
+        /// 取得加工順序
         /// </summary>
-        /// <param name="fabricIDList"></param>
-        /// <returns></returns>
-        public IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList)
+        /// <param name="fabricID"></param>
+        /// <param name="fabricID"></param>
+        /// <returns></colorNo>
+        public IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo)
         {
-            IEnumerable<ProcessSequence> processSequences = FabricAdapter.GetProcessSequences(fabricIDList);
+            IEnumerable<ProcessSequenceDetail> processSequences = FabricAdapter.GetProcessSequences(fabricID, colorNo);
             return processSequences;
         }
         /// <summary>

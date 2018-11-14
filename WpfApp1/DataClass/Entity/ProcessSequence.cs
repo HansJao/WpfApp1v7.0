@@ -12,7 +12,6 @@ namespace WpfApp1.DataClass.Entity
     {
         public int SequenceNo { get; set; }
         public int FabricID { get; set; }
-        public string ColorNoString { get; set; }
         public ProcessItem ProcessItem { get; set; }
         public decimal Loss { get; set; }
         public int WorkPay { get; set; }

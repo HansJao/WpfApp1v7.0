@@ -122,19 +122,24 @@ namespace WpfApp1.Adapter.MSSQL
             return result;
         }
         /// <summary>
-        /// 以布種編號取得加工順序
+        /// 取得加工順序
         /// </summary>
-        /// <param name="fabricIDList"></param>
+        /// <param name="fabricID"></param>
+        /// <param name="colorNo"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessSequence> GetProcessSequences(IEnumerable<int> fabricIDList)
+        public IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo)
         {
-            string sqlCmd = @"SELECT * FROM ProcessSequence WHERE FabricID IN @FabricID";
-            var parameter =
-               new
-               {
-                   FabricID = fabricIDList
-               };
-            var result = DapperHelper.QueryCollection<ProcessSequence, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            string sqlCmd = @"SELECT PSCM.ColorNo,F.Name,PS.SequenceNo,PS.FabricID,PS.FactoryID,PS.ProcessItem,PS.Loss,PS.WorkPay,PS.[Order],PS.[Group] 
+                              FROM [hungyidb].[dbo].[ProcessSequenceColorMapping] PSCM
+                              RIGHT JOIN ProcessSequence PS ON PSCM.SequenceNo = PS.SequenceNo
+                              LEFT JOIN Factory F ON PS.FactoryID = F.FactoryID
+                              WHERE PSCM.ColorNo = @ColorNo OR PS.FabricID = @FabricID";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
+                new SqlParameter("@ColorNo", SqlDbType.Int) { Value = colorNo }
+            };
+            var result = DapperHelper.QueryCollection<ProcessSequenceDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
         /// <summary>

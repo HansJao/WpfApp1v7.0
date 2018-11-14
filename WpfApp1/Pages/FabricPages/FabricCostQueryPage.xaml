@@ -45,9 +45,13 @@
                     </DataGrid>
                     <Button Content="新增顏色" Command="{Binding AddFabricColorClick}" Width="75" Height="24" HorizontalAlignment="Right" Margin="0,5,0,0"/>
                 </StackPanel>
-                <StackPanel>
+                <StackPanel x:Name="StackPanelArea" Margin="10,0,0,0">
+
+                </StackPanel>
+                <StackPanel x:Name="StackPanelProcessSequence">
                     <DataGrid ItemsSource="{Binding ProcessSequenceList,Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
                         <DataGrid.Columns>
+                            <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"></DataGridTextColumn>
                             <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem,Converter={StaticResource EnumConverter}}"></DataGridTextColumn>
                             <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%}"></DataGridTextColumn>
                             <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C}"></DataGridTextColumn>
@@ -75,9 +79,7 @@
                     <Label Content="紗價成本:" HorizontalAlignment="Left"  />
                     <Label Content="{Binding YarnCost}" HorizontalAlignment="Left" />
                 </StackPanel>
-                <StackPanel x:Name="StackPanelArea" Margin="10,0,0,0">
-                    
-                </StackPanel>
+                
             </StackPanel>
 
         </StackPanel>

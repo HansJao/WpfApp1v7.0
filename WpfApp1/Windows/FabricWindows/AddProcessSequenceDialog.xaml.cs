@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WpfApp1.DataClass.Entity;
 
 namespace WpfApp1.Windows.FabricWindows
 {
@@ -19,9 +20,13 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class AddProcessSequenceDialog : Window
     {
-        public AddProcessSequenceDialog()
+        public AddProcessSequenceDialog(Fabric fabric, FabricColor fabricColor)
         {
             InitializeComponent();
+            LabelTextileID.Content = fabric.FabricID;
+            LabelTextileName.Content = fabric.FabricName;
+
+            LabelFabricColor.Content = fabricColor.Color;
         }
     }
 }

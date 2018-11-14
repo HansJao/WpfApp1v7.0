@@ -11,7 +11,7 @@ namespace WpfApp1.Pages.FabricPages
         public FabricCostQueryPage()
         {
             InitializeComponent();
-            this.DataContext = new FabricCostQueryViewModel(StackPanelArea);
+            this.DataContext = new FabricCostQueryViewModel(StackPanelArea, StackPanelProcessSequence);
         }
     }
 }
