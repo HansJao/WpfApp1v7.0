@@ -68,8 +68,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 _fabric = value;
                 FabricColorList.Clear();
-                ProcessSequenceList.Clear();
                 _stackPanel.Children.Clear();
+                _stackPanelProcessSequence.Children.Clear();
                 if (value == null) return;
 
                 var fabricColorList = FabricModule.GetFabricColorListByFabricID(new List<int> { _fabric.FabricID });
@@ -77,29 +77,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 {
                     FabricColorList.Add(item);
                 }
-
-                IEnumerable<ProcessSequenceDetail> processSequences = FabricModule.GetProcessSequences(Fabric.FabricID, FabricColor.ColorNo)
-                                                                    .Select(s => new ProcessSequenceDetail
-                                                                    {
-                                                                        ColorNo = s.ColorNo,
-                                                                        Name = s.Name,
-                                                                        SequenceNo = s.SequenceNo,
-                                                                        FabricID = s.FabricID,
-                                                                        ProcessItem = s.ProcessItem,
-                                                                        Loss = s.Loss,
-                                                                        WorkPay = s.WorkPay,
-                                                                        Order = s.Order,
-                                                                        Group = s.Group,
-                                                                        CreateDate = s.CreateDate,
-                                                                        UpdateDate = s.UpdateDate,
-                                                                        Cost = 0
-                                                                    });
-                foreach (var item in processSequences)
-                {
-                    ProcessSequenceList.Add(item);
-                }
-
-
             }
         }
         private decimal _yarnCost { get; set; }
@@ -123,21 +100,10 @@ namespace WpfApp1.ViewModel.FabricViewModel
             set
             {
                 _fabricColor = value;
-                FabricIngredientProportionList.Clear();
+                _stackPanelProcessSequence.Children.Clear();
                 if (value == null) return;
                 IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricModule.GetFabricIngredientProportionByColorNo(new List<int> { value.ColorNo });
-                decimal yarnCost = 0;
-                foreach (var item in fabricIngredientProportions)
-                {
-                    FabricIngredientProportionList.Add(item);
-                    yarnCost = yarnCost + item.Price * (item.Proportion / 100);
-                }
-                YarnCost = yarnCost;
-                foreach (var item in ProcessSequenceList)
-                {
-                    yarnCost = (yarnCost + item.WorkPay) * (1 + item.Loss / 100);
-                    item.Cost = yarnCost;
-                }
+
                 FabricIngredientProportionGroup = fabricIngredientProportions.Count() == 0
                                                   ? FabricIngredientProportionGroup
                                                   : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
@@ -167,11 +133,12 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                     foreach (var processSequenceList in ProcessSequenceListGroup)
                     {
+                        decimal processSequenceCost = fabricIngredientProportionYarnCost;
                         List<ProcessSequenceDetail> dataGridProcessSequenceList = new List<ProcessSequenceDetail>();
                         foreach (var item in processSequenceList.Value)
                         {
-                            fabricIngredientProportionYarnCost = (fabricIngredientProportionYarnCost + item.WorkPay) * (1 + item.Loss / 100);
-                            item.Cost = Math.Round(fabricIngredientProportionYarnCost);
+                            processSequenceCost = (processSequenceCost + item.WorkPay) * (1 + item.Loss / 100);
+                            item.Cost = processSequenceCost;
                             dataGridProcessSequenceList.Add(new ProcessSequenceDetail
                             {
                                 ColorNo = item.ColorNo,
@@ -267,24 +234,15 @@ namespace WpfApp1.ViewModel.FabricViewModel
         }
 
         public Dictionary<int, ObservableCollection<FabricIngredientProportion>> FabricIngredientProportionGroup { get; set; } = new Dictionary<int, ObservableCollection<FabricIngredientProportion>>();
-        public ObservableCollection<FabricIngredientProportion> FabricIngredientProportionList { get; set; }
-        private ObservableCollection<ProcessSequenceDetail> _processSequenceList { get; set; }
-        public ObservableCollection<ProcessSequenceDetail> ProcessSequenceList
-        {
-            get { return _processSequenceList; }
-            set { _processSequenceList = value; }
-        }
-
         public Dictionary<int, ObservableCollection<ProcessSequenceDetail>> ProcessSequenceListGroup { get; set; }
 
         private StackPanel _stackPanel { get; set; }
         private StackPanel _stackPanelProcessSequence { get; set; }
+
         public FabricCostQueryViewModel(StackPanel stackPanel, StackPanel stackPanelProcessSequence)
         {
             FabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
             FabricColorList = new ObservableCollection<FabricColor>();
-            FabricIngredientProportionList = new ObservableCollection<FabricIngredientProportion>();
-            ProcessSequenceList = new ObservableCollection<ProcessSequenceDetail>();
             FabricIngredientProportionGroup.Add(1, new ObservableCollection<FabricIngredientProportion>());
 
             _stackPanel = stackPanel;

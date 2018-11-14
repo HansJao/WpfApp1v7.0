@@ -20,24 +20,23 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Page.Resources>
-    <!--<Page.DataContext>
-        <viewModel:FabricCostQueryViewModel/>
-    </Page.DataContext>-->
     <Grid>
         <StackPanel>
-            <StackPanel Orientation="Horizontal" Height="24" VerticalAlignment="Top" Margin="10,10,0,0">
-                <Label Content="布種搜尋:" />
-                <TextBox Height="24" Width="100" VerticalAlignment="Top" />
-            </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
-                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding FabricList}" SelectedItem="{Binding Fabric}" Height="150" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns >
-                        <DataGridTextColumn Header="布種編號" Binding="{Binding FabricID}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="布種名稱" Binding="{Binding FabricName}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
                 <StackPanel>
-                    <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding FabricColorList}" SelectedItem="{Binding FabricColor}" Margin="2,0,0,0" Height="121" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <StackPanel Orientation="Horizontal" Height="24" VerticalAlignment="Top">
+                        <Label Content="布種搜尋:" />
+                        <TextBox Height="24" Width="100" VerticalAlignment="Top" />
+                    </StackPanel>
+                    <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding FabricList}" SelectedItem="{Binding Fabric}" Height="300" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Header="布種編號" Binding="{Binding FabricID}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="布種名稱" Binding="{Binding FabricName}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel>
+                    <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding FabricColorList}" SelectedItem="{Binding FabricColor}" Margin="2,24,0,0" Height="270" AutoGenerateColumns="False" CanUserAddRows="False">
                         <DataGrid.Columns >
                             <DataGridTextColumn Header="顏色編號" Binding="{Binding ColorNo}"></DataGridTextColumn>
                             <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
@@ -45,43 +44,16 @@
                     </DataGrid>
                     <Button Content="新增顏色" Command="{Binding AddFabricColorClick}" Width="75" Height="24" HorizontalAlignment="Right" Margin="0,5,0,0"/>
                 </StackPanel>
-                <StackPanel x:Name="StackPanelArea" Margin="10,0,0,0">
-
+                <StackPanel Margin="2,24,0,0">
+                    <StackPanel x:Name="StackPanelArea" Margin="10,0,0,0">
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel x:Name="StackPanelProcessSequence">
-                    <DataGrid ItemsSource="{Binding ProcessSequenceList,Mode=TwoWay}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,0,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem,Converter={StaticResource EnumConverter}}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="順序" Binding="{Binding Order}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="群組" Binding="{Binding Group}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="成本" Binding="{Binding Cost}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                    <Button Command="{Binding AddProcessSequenceClick}" Content="新增加工項目" Width="80" HorizontalAlignment="Right" />
+                <StackPanel Orientation="Vertical" Margin="2,0,0,0">
+                    <Button Command="{Binding AddProcessSequenceClick}" Content="新增加工項目" Width="80" Height="24" HorizontalAlignment="Right" />
+                    <StackPanel x:Name="StackPanelProcessSequence">
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
-                <DataGrid ItemsSource="{Binding FabricIngredientProportionList}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,5,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="比例" Binding="{Binding Proportion,StringFormat={}{0}%}"></DataGridTextColumn>
-                        <DataGridTextColumn Header="群組" Binding="{Binding Group}"></DataGridTextColumn>
-                    </DataGrid.Columns>
-                </DataGrid>
-                <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
-                    <Label Content="紗價成本:" HorizontalAlignment="Left"  />
-                    <Label Content="{Binding YarnCost}" HorizontalAlignment="Left" />
-                </StackPanel>
-                
-            </StackPanel>
-
         </StackPanel>
     </Grid>
 </Page>
