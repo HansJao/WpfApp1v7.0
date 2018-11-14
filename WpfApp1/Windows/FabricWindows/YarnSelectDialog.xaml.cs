@@ -47,9 +47,11 @@ namespace WpfApp1.Windows.FabricWindows
             int selectedIndex = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex;
             if (selectedIndex == -1)
             {
-                TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog();
-                textBoxMessageDialog.Left = this.Left + 100;
-                textBoxMessageDialog.Top = this.Top + 130;
+                TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
+                {
+                    Left = this.Left + 100,
+                    Top = this.Top + 130
+                };
                 decimal proportion = 0;
                 if (textBoxMessageDialog.ShowDialog() == true)
                 {

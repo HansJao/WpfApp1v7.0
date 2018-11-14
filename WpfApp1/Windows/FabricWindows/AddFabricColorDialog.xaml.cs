@@ -40,8 +40,12 @@ namespace WpfApp1.Windows.FabricWindows
 
             ComboBoxGroup.ItemsSource = dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0 ? _dictionaryFabricIngredientProportion[1] : null;
-            TextBoxColorName.Text = FabricColor == null ? string.Empty : FabricColor.Color;
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0 
+                                                            ? _dictionaryFabricIngredientProportion[1] 
+                                                            : null;
+            TextBoxColorName.Text = FabricColor == null 
+                                    ? string.Empty 
+                                    : FabricColor.Color;
             ButtonControl(TextBoxColorName);
         }
 
@@ -66,11 +70,13 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
             int groupNo = Convert.ToInt16(ComboBoxGroup.SelectedItem);
-            _yarnSelectDialog = new YarnSelectDialog(groupNo, ref _dictionaryFabricIngredientProportion);
-            _yarnSelectDialog.Owner = this;
-            _yarnSelectDialog.Left = this.Left + this.Width;
-            _yarnSelectDialog.Top = this.Top;
-            _yarnSelectDialog.DataContext = this;
+            _yarnSelectDialog = new YarnSelectDialog(groupNo, ref _dictionaryFabricIngredientProportion)
+            {
+                Owner = this,
+                Left = this.Left + this.Width,
+                Top = this.Top,
+                DataContext = this
+            };
             _yarnSelectDialog.Show();
         }
 
