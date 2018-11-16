@@ -130,6 +130,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
+                    _stackPanelProcessSequence.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
                     foreach (var processSequenceList in ProcessSequenceListGroup)
                     {
@@ -158,6 +159,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             VerticalAlignment = VerticalAlignment.Top,
                             AutoGenerateColumns = false,
                             CanUserAddRows = false,
+                            Margin = new Thickness(0,3,0,0),
                             Name = string.Concat("Group", processSequenceList.Key)
                         };
                         CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);
