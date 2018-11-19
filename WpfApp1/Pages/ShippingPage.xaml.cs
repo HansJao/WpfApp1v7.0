@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -114,68 +115,8 @@ namespace WpfApp1.Pages
                     comboBox.Tag = "Selection";
                 };
             };
-            ComboBoxCustomerList.ItemsSource = CustomerModule.GetCustomerNameList();
-            ComboBoxCustomerList.Loaded += (ls, le) =>
-            {
-                var targetTextBox = ComboBoxCustomerList?.Template.FindName("PART_EditableTextBox", ComboBoxCustomerList) as TextBox;
-
-                if (targetTextBox == null) return;
-
-                ComboBoxCustomerList.Tag = "TextInput";
-                ComboBoxCustomerList.StaysOpenOnEdit = true;
-                ComboBoxCustomerList.IsEditable = true;
-                ComboBoxCustomerList.IsTextSearchEnabled = false;
-
-                targetTextBox.TextChanged += (o, args) =>
-                {
-                    var textBox = (TextBox)o;
-
-                    var searchText = textBox.Text;
-
-                    if (ComboBoxCustomerList.Tag.ToString() == "Selection")
-                    {
-                        ComboBoxCustomerList.Tag = "TextInput";
-                        ComboBoxCustomerList.IsDropDownOpen = true;
-                    }
-                    else if (ComboBoxCustomerList.Tag.ToString() == "TextInput" && ComboBoxCustomerList.Items.Contains(searchText) || searchText == "　")
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        if (ComboBoxCustomerList.SelectionBoxItem != null)
-                        {
-                            ComboBoxCustomerList.SelectedItem = null;
-                            targetTextBox.Text = searchText;
-                            ComboBoxCustomerList.IsDropDownOpen = true;
-                            targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                        }
-
-                        if (string.IsNullOrEmpty(searchText))
-                        {
-                            ComboBoxCustomerList.Items.Filter = item => true;
-                            ComboBoxCustomerList.SelectedItem = default(object);
-                        }
-                        else
-                            ComboBoxCustomerList.Items.Filter = item =>
-                                    item.ToString().ToLower().Contains(searchText.ToLower());
-
-                        //Keyboard.ClearFocus();
-                        //Keyboard.Focus(targetTextBox);
-                        ComboBoxCustomerList.IsDropDownOpen = true;
-                        targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                    }
-                };
-
-                ComboBoxCustomerList.SelectionChanged += (o, args) =>
-                {
-                    var comboBox = o as ComboBox;
-                    ComboBoxTextileList.SelectedIndex = -1;
-                    DataGridSelectedTextile.ItemsSource = null;
-                    if (comboBox?.SelectedItem == null) return;
-                    comboBox.Tag = "Selection";
-                };
-            };
+            DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
+           
             GetShippingCacheNameList();
         }
 
@@ -191,11 +132,7 @@ namespace WpfApp1.Pages
             if (selectedItem == null)
                 return;
             string textileName = (sender as ComboBox).SelectedItem.ToString();
-            //IWorkbook _workbook = null;  //新建IWorkbook對象  
-            //string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
-            //FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            //_workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-
+         
             ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
             IList selectedTextiles = new ObservableCollection<SelectedTextile>();
 
@@ -228,7 +165,7 @@ namespace WpfApp1.Pages
                 MessageBox.Show("未輸入出布數量!!");
                 return;
             }
-            var customerName = ComboBoxCustomerList.Text.ToString();
+            var customerName = TextBoxCustomerName.Text.ToString();
             var textileName = ComboBoxTextileList.Text.ToString();
             //若表中有此客戶
             if (ShippingSheetStructure.Count > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).Count() > 0)
@@ -528,11 +465,7 @@ namespace WpfApp1.Pages
             cell.CellStyle = style;
         }
 
-        private void ComboBoxCustomerList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //ComboBoxTextileList.Text = null;
-            //DataGridSelectedTextile.ItemsSource = null;
-        }
+      
 
         private void ButtonShippingDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -643,6 +576,35 @@ namespace WpfApp1.Pages
             reader.Close();
 
             DataGridShippingDisplay();
+        }
+
+        private void TextBoxCustomerName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBoxName = (TextBox)sender;
+            string filterText = textBoxName.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridCustomerName.ItemsSource);
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                cv.Filter = o =>
+                {
+                    /* change to get data row value */
+                    string p = o as string;
+                    return (p.ToUpper().Contains(filterText.ToUpper()));
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                cv.Filter = o =>
+                {
+                    return (true);
+                };
+            }
+        }
+
+        private void DataGridCustomerName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TextBoxCustomerName.Text = DataGridCustomerName.SelectedItem as string;
         }
     }
 }

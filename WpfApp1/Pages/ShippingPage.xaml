@@ -12,9 +12,20 @@
             <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
         </Grid.Resources>
         <DockPanel>
+            <Grid>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Label Content="客戶名稱:" VerticalAlignment="Top"/>
+                    <TextBox x:Name="TextBoxCustomerName" VerticalAlignment ="Top" Height="24" Width="100" TextChanged="TextBoxCustomerName_TextChanged" />
+                </StackPanel>
+                <DataGrid x:Name="DataGridCustomerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,38,0,0" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="DataGridCustomerName_SelectionChanged">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="客戶名稱" Binding="{Binding}"/>
+                    </DataGrid.Columns >
+                </DataGrid>
+            </Grid>
             <Grid DockPanel.Dock="Left">
                 <Button Content="確認" HorizontalAlignment="Left" Margin="251,30,0,0" VerticalAlignment="Top" Width="75" Click="SelectedTextile_Click"/>
-                <DataGrid x:Name="DataGridSelectedTextile" AutoGenerateColumns="False" ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="35,60,0,0" VerticalAlignment="Top" CanUserAddRows="False">
+                <DataGrid x:Name="DataGridSelectedTextile" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="35,60,0,0" VerticalAlignment="Top" CanUserAddRows="False">
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
                         <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
@@ -37,17 +48,14 @@
                 <ComboBox x:Name="ComboBoxTextileList" HorizontalAlignment="Left" Margin="126,30,0,0" VerticalAlignment="Top" IsEditable="True" Width="120" SelectionChanged="ComboBoxTextileList_SelectionChanged" IsTextSearchEnabled="False">
                 </ComboBox>
                 <Label HorizontalAlignment="Left" Margin="80,26,0,0" VerticalAlignment="Top"/>
-                <ComboBox x:Name="ComboBoxCustomerList" HorizontalAlignment="Left" Margin="126,3,0,0" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False" SelectionChanged="ComboBoxCustomerList_SelectionChanged">
-                   
-                </ComboBox>
-                <Label Content="客戶：" HorizontalAlignment="Left" Margin="80,-1,0,0" VerticalAlignment="Top"/>
+                <!--<ComboBox x:Name="ComboBoxCustomerList" HorizontalAlignment="Left" Margin="126,3,0,0" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False" SelectionChanged="ComboBoxCustomerList_SelectionChanged">
+                </ComboBox>-->
+                <!--<Label Content="客戶：" HorizontalAlignment="Left" Margin="80,-1,0,0" VerticalAlignment="Top"/>-->
                 <Label Content="布種：" HorizontalAlignment="Left" Margin="80,26,0,0" VerticalAlignment="Top"/>
             </Grid>
             <Grid>
                 <DataGrid x:Name="DataGridShippingSheet" HorizontalAlignment="Left"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Margin="10,60,0,0">
-                   
                     <DataGrid.Columns>
-                        
                         <DataGridTextColumn  Header="客戶" Binding="{Binding Customer}" />
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"/>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
