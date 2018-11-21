@@ -176,5 +176,23 @@ namespace WpfApp1.Modules.FabricModule.Implement
             IngredientGroupInfo ingredientGroupInfo = FabricAdapter.GetIngredientGroupInfo(fabricID, color);
             return ingredientGroupInfo;
         }
+        /// <summary>
+        /// 新增加工程序
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        public bool InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
+        {
+            int groupIndex = FabricAdapter.GetGroupIndex(processSequenceDetails.First().FabricID);
+            int order = 0;
+            processSequenceDetails.ForEach(f =>
+            {
+                order++;
+                f.Order = order;
+                f.Group = groupIndex;
+            });
+            int count = FabricAdapter.InsertProcessSequence(processSequenceDetails);
+            return count == processSequenceDetails.Count;
+        }
     }
 }

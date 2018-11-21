@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Fabric;
+using WpfApp1.Modules.FabricModule;
+using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.Modules.FactoryModule;
 using WpfApp1.Modules.FactoryModule.Implement;
 using WpfApp1.Utility;
@@ -26,6 +28,7 @@ namespace WpfApp1.Windows.FabricWindows
     public partial class AddProcessSequenceDialog : Window
     {
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
+        protected IFabricModule FabricModule { get; } = new FabricModule();
         private Dictionary<int, ObservableCollection<ProcessSequenceDetail>> _processSequenceListGroup { get; set; }
         private Fabric _fabric { get; set; }
         private FabricColor _fabricColor { get; set; }
@@ -46,6 +49,7 @@ namespace WpfApp1.Windows.FabricWindows
         private void ComboBoxProcessGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
+            DataGridProcessSequence.Items.Clear();
             DataGridProcessSequence.ItemsSource = _processSequenceListGroup[Convert.ToInt16(comboBox.SelectedItem)];
         }
 
@@ -76,6 +80,22 @@ namespace WpfApp1.Windows.FabricWindows
                     WorkPay = TextBoxWorkPay.Text.ToInt(),
                     Loss = Convert.ToDecimal(TextBoxLoss.Text),
                 });
+            }
+        }
+
+        private void ButtonNewProcessSequence_Click(object sender, RoutedEventArgs e)
+        {
+            List<ProcessSequenceDetail> processSequenceDetails = new List<ProcessSequenceDetail>();
+            foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
+            {
+                processSequenceDetails.Add(processSequenceDetail);
+            }
+            if (CheckBoxIsThisColor.IsChecked == true)
+            {
+                if(ComboBoxProcessGroup.SelectedIndex == -1)
+                {
+                    bool success = FabricModule.InsertProcessSequence(processSequenceDetails);
+                }
             }
         }
     }

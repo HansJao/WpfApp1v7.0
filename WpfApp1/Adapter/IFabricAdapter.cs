@@ -89,5 +89,18 @@ namespace WpfApp1.Adapter
         /// <param name="color"></param>
         /// <returns></returns>
         IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color);
+        /// <summary>
+        /// 新增加工程序
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        int InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
+
+        /// <summary>
+        /// 取得布種加工程序群組標示
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <returns></returns>
+        int GetGroupIndex(int fabricID);
     }
 }

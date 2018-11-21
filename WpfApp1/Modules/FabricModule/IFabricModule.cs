@@ -93,5 +93,12 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="color"></param>
         /// <returns></returns>
         IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color);
+
+        /// <summary>
+        /// 新增加工程序
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        bool InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
     }
 }

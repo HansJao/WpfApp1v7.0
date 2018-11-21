@@ -175,7 +175,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public int InsertFabricColor(int fabricID, string text)
         {
-           
+
             var sqlCmd = @"INSERT INTO FabricColor
                            OUTPUT INSERTED.ColorNo
                            VALUES
@@ -221,6 +221,51 @@ namespace WpfApp1.Adapter.MSSQL
                 new SqlParameter("@Color", SqlDbType.NVarChar) { Value = color }
             };
             var result = DapperHelper.Query<IngredientGroupInfo>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 新增加工程序
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        public int InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
+        {
+            string sqlCmd = @"
+INSERT INTO [dbo].[ProcessSequence]
+           ([FabricID]
+           ,[FactoryID]
+           ,[ProcessItem]
+           ,[Loss]
+           ,[WorkPay]
+           ,[Order]
+           ,[Group])
+     VALUES
+           (@FabricID
+           ,@FactoryID
+           ,@ProcessItem
+           ,@Loss
+           ,@WorkPay
+           ,@Order
+           ,@Group)";
+            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, processSequenceDetails);
+            return result;
+        }
+        /// <summary>
+        /// 取得布種加工程序群組標示
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <returns></returns>
+        public int GetGroupIndex(int fabricID)
+        {
+            string sqlCmd = @"
+                  SELECT TOP 1 [Group] + 1 FROM ProcessSequence
+                  WHERE FabricID = @FabricID
+                  ORDER BY [Group] DESC;";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
+            };
+            var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
     }
