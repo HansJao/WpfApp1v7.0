@@ -133,7 +133,7 @@ namespace WpfApp1.Adapter.MSSQL
                               FROM [hungyidb].[dbo].[ProcessSequenceColorMapping] PSCM
                               RIGHT JOIN ProcessSequence PS ON PSCM.SequenceNo = PS.SequenceNo
                               LEFT JOIN Factory F ON PS.FactoryID = F.FactoryID
-                              WHERE PSCM.ColorNo = @ColorNo OR PS.FabricID = @FabricID";
+                              WHERE (PS.FabricID = @FabricID AND PSCM.ColorNo IS NULL) OR PSCM.ColorNo = @ColorNo";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },

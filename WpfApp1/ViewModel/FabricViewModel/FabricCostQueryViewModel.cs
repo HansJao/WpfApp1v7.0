@@ -37,7 +37,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 MessageBox.Show("請選擇一個顏色!!");
                 return;
             }
-            AddProcessSequenceDialog addProcessSequenceDialog = new AddProcessSequenceDialog(Fabric, FabricColor);
+            AddProcessSequenceDialog addProcessSequenceDialog = new AddProcessSequenceDialog(Fabric, FabricColor, ProcessSequenceListGroup);
             addProcessSequenceDialog.Show();
         }
 

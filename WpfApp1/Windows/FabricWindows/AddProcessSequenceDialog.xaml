@@ -19,35 +19,61 @@
         </ObjectDataProvider>
     </Window.Resources>
     <Grid>
-        <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="40,27,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelTextileName" Content="(布種名稱)" HorizontalAlignment="Left" Margin="101,27,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelTextileID" Content="id" HorizontalAlignment="Left" Margin="246,27,0,0" VerticalAlignment="Top"/>
-        <Label Content="布種顏色:" HorizontalAlignment="Left" Margin="40,58,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="LabelFabricColor" Content="顏色" HorizontalAlignment="Left" Margin="109,58,0,0" VerticalAlignment="Top"/>
-        <DataGrid ItemsSource="{Binding}" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" CanUserAddRows="True" Height="50">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem,Converter={StaticResource EnumConverter}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%}"></DataGridTextColumn>
-                <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C}"></DataGridTextColumn>
-                <DataGridTextColumn Header="順序" Binding="{Binding Order}"></DataGridTextColumn>
-                <DataGridTextColumn Header="群組" Binding="{Binding Group}"></DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="+" HorizontalAlignment="Left" Margin="146,216,0,0" VerticalAlignment="Top" Width="75"/>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="布種名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label x:Name="LabelTextileName" Content="(布種名稱)" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label x:Name="LabelTextileID" Content="id" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="布種顏色:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <Label x:Name="LabelFabricColor" Content="顏色" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="CheckBoxIsThisColor" VerticalAlignment="Center"/>
+                <Label Content="是否新增於此色"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="加工群組:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <ComboBox x:Name="ComboBoxProcessGroup" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxProcessGroup_SelectionChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="工廠名稱:"/>
+                <ComboBox x:Name="ComboBoxFactoryList" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="加工項目:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <ComboBox x:Name="ComboBoxProcessItem" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Process, Converter={StaticResource EnumConverter}}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="損  耗:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBox x:Name="TextBoxLoss" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="工  繳:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBox x:Name="TextBoxWorkPay" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            </StackPanel>
+            <Button x:Name="ButtonInsertProcessSequence" Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="ButtonInsertProcessSequence_Click"/>
+            <DataGrid x:Name="DataGridProcessSequence" ItemsSource="{Binding}" HorizontalAlignment="Left" VerticalAlignment="Top" CanUserAddRows="False" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem,Converter={StaticResource EnumConverter}}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="順序" Binding="{Binding Order}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="群組" Binding="{Binding Group}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <Button x:Name="ButtonNewProcessSequence" Content="新增" HorizontalAlignment="Left" Margin="109,369,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="ButtonEditProcessSequence" Content="修改" HorizontalAlignment="Left" Margin="192,369,0,0" VerticalAlignment="Top" Width="75"/>
 
-        <Label Content="加工項目:" HorizontalAlignment="Left" Margin="34,115,0,0" VerticalAlignment="Top"/>
-        <ComboBox ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Process, Converter={StaticResource EnumConverter}}" HorizontalAlignment="Left" Margin="100,119,0,0" VerticalAlignment="Top" Width="120">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Label Content="損  耗:" HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TextBoxLoss" HorizontalAlignment="Left" Height="23" Margin="101,148,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="工  繳:" HorizontalAlignment="Left" Margin="34,188,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="TextBoxWorkPay" HorizontalAlignment="Left" Height="23" Margin="101,188,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Fabric;
+using WpfApp1.Modules.FactoryModule;
+using WpfApp1.Modules.FactoryModule.Implement;
+using WpfApp1.Utility;
 
 namespace WpfApp1.Windows.FabricWindows
 {
@@ -20,13 +25,58 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class AddProcessSequenceDialog : Window
     {
-        public AddProcessSequenceDialog(Fabric fabric, FabricColor fabricColor)
+        protected IFactoryModule FactoryModule { get; } = new FactoryModule();
+        private Dictionary<int, ObservableCollection<ProcessSequenceDetail>> _processSequenceListGroup { get; set; }
+        private Fabric _fabric { get; set; }
+        private FabricColor _fabricColor { get; set; }
+        public AddProcessSequenceDialog(Fabric fabric, FabricColor fabricColor, Dictionary<int, ObservableCollection<ProcessSequenceDetail>> processSequenceListGroup)
         {
             InitializeComponent();
+            _fabric = fabric;
+            _fabricColor = fabricColor;
             LabelTextileID.Content = fabric.FabricID;
             LabelTextileName.Content = fabric.FabricName;
 
             LabelFabricColor.Content = fabricColor.Color;
+            _processSequenceListGroup = processSequenceListGroup;
+            ComboBoxProcessGroup.ItemsSource = processSequenceListGroup.Keys.ToList();
+            ComboBoxFactoryList.ItemsSource = FactoryModule.GetFactoryList();
+        }
+
+        private void ComboBoxProcessGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (ComboBox)sender;
+            DataGridProcessSequence.ItemsSource = _processSequenceListGroup[Convert.ToInt16(comboBox.SelectedItem)];
+        }
+
+        private void ButtonInsertProcessSequence_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxProcessGroup.SelectedIndex != -1)
+            {
+                int selectedGroup = Convert.ToInt16(ComboBoxProcessGroup.SelectedItem);
+                _processSequenceListGroup[selectedGroup].Add(new ProcessSequenceDetail
+                {
+                    FabricID = _fabric.FabricID,
+                    ColorNo = _fabricColor.ColorNo,
+                    ProcessItem = (DataClass.Enumeration.ProcessItem)ComboBoxProcessItem.SelectedItem,
+                    WorkPay = TextBoxWorkPay.Text.ToInt(),
+                    Loss = Convert.ToDecimal(TextBoxLoss.Text),
+                });
+            }
+            else
+            {
+                Factory factory = ComboBoxFactoryList.SelectedItem as Factory;
+                DataGridProcessSequence.Items.Add(new ProcessSequenceDetail
+                {
+                    FactoryID = factory.FactoryID,
+                    Name = factory.Name,
+                    FabricID = _fabric.FabricID,
+                    ColorNo = _fabricColor.ColorNo,
+                    ProcessItem = (DataClass.Enumeration.ProcessItem)ComboBoxProcessItem.SelectedItem,
+                    WorkPay = TextBoxWorkPay.Text.ToInt(),
+                    Loss = Convert.ToDecimal(TextBoxLoss.Text),
+                });
+            }
         }
     }
 }
