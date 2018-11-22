@@ -212,7 +212,7 @@ namespace WpfApp1.Adapter.MSSQL
         public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
         {
             var sqlCmd = @"SELECT TOP 1 FC.ColorNo,FP.[GROUP] FROM FabricColor FC
-                          Left JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
+                          LEFT JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
                           WHERE FabricID = @FabricID AND Color = @Color
                           ORDER BY FP.[GROUP] DESC";
             SqlParameter[] parameters = new SqlParameter[]
@@ -228,10 +228,10 @@ namespace WpfApp1.Adapter.MSSQL
         /// </summary>
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
-        public int InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
+        public List<int> InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
         {
             string sqlCmd = @"
-INSERT INTO [dbo].[ProcessSequence]
+            INSERT INTO [dbo].[ProcessSequence]
            ([FabricID]
            ,[FactoryID]
            ,[ProcessItem]
@@ -239,7 +239,8 @@ INSERT INTO [dbo].[ProcessSequence]
            ,[WorkPay]
            ,[Order]
            ,[Group])
-     VALUES
+             OUTPUT INSERTED.SequenceNo
+            VALUES
            (@FabricID
            ,@FactoryID
            ,@ProcessItem
@@ -247,8 +248,23 @@ INSERT INTO [dbo].[ProcessSequence]
            ,@WorkPay
            ,@Order
            ,@Group)";
-            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, processSequenceDetails);
-            return result;
+
+            List<int> sequenceNoList = new List<int>();
+            foreach (var item in processSequenceDetails)
+            {
+                SqlParameter[] parameters = new SqlParameter[]
+               {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = item.FabricID },
+                new SqlParameter("@FactoryID", SqlDbType.Int) { Value = item.FactoryID },
+                new SqlParameter("@ProcessItem", SqlDbType.TinyInt) { Value = item.ProcessItem },
+                new SqlParameter("@Loss", SqlDbType.Decimal) { Value = item.Loss },
+                new SqlParameter("@WorkPay", SqlDbType.SmallInt) { Value = item.WorkPay },
+                new SqlParameter("@Order", SqlDbType.TinyInt) { Value = item.Order },
+                new SqlParameter("@Group", SqlDbType.TinyInt) { Value = item.Group }
+               };
+                sequenceNoList.Add(DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters));
+            }
+            return sequenceNoList;
         }
         /// <summary>
         /// 取得布種加工程序群組標示
@@ -267,6 +283,57 @@ INSERT INTO [dbo].[ProcessSequence]
             };
             var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
+        }
+        /// <summary>
+        /// 新增加工程序顏色對照
+        /// </summary>
+        /// <param name="processSequenceColorMapping"></param>
+        /// <returns></returns>
+        public int InsertProcessSequenceColorMapping(IEnumerable<ProcessSequenceColorMapping> processSequenceColorMapping)
+        {
+            string sqlCmd = @"
+            INSERT INTO [dbo].[ProcessSequenceColorMapping]
+            ([ColorNo],[SequenceNo])
+            VALUES
+            (@ColorNo,@SequenceNo)";
+            int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, processSequenceColorMapping);
+            return count;
+        }
+        /// <summary>
+        /// 刪除加工程序
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public int DeleteProcessSequence(int colorNo, int group)
+        {
+            string sqlCmd = @"
+               DECLARE @SequenceList TABLE(SequenceNo int)
+         --將此顏色的加工程序暫存於此
+               INSERT INTO @SequenceList
+               SELECT PSCM.SequenceNo FROM ProcessSequenceColorMapping PSCM
+               INNER JOIN ProcessSequence PS ON PSCM.SequenceNo = PS.SequenceNo
+               WHERE PSCM.ColorNo = @ColorNo AND PS.[Group] = @Group
+         --如果存在@SequenceList代表此色有Mapping要先刪除Mapping
+         --然後再判斷Mapping裡是否還有,否則刪除加工程序內的資料
+               IF EXISTS(SELECT * FROM @SequenceList)
+               BEGIN
+	             DELETE ProcessSequenceColorMapping WHERE ColorNo = @ColorNo AND SequenceNo IN (SELECT SequenceNo FROM @SequenceList)
+	             IF NOT EXISTS(SELECT * FROM ProcessSequenceColorMapping WHERE SequenceNo IN (SELECT SequenceNo FROM @SequenceList))
+		            DELETE ProcessSequence WHERE SequenceNo IN (SELECT SequenceNo FROM @SequenceList)
+               END
+               ELSE 
+               BEGIN
+                 DELETE ProcessSequence WHERE SequenceNo IN (SELECT SequenceNo FROM @SequenceList)
+               END";
+
+            SqlParameter[] parameters = new SqlParameter[]
+              {
+                new SqlParameter("@ColorNo", SqlDbType.Int) { Value = colorNo },
+                new SqlParameter("@Group", SqlDbType.Int) { Value = group }
+              };
+            int count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
         }
     }
 }

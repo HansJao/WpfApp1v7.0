@@ -94,7 +94,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
-        int InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
+        List<int> InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
 
         /// <summary>
         /// 取得布種加工程序群組標示
@@ -102,5 +102,18 @@ namespace WpfApp1.Adapter
         /// <param name="fabricID"></param>
         /// <returns></returns>
         int GetGroupIndex(int fabricID);
+        /// <summary>
+        /// 新增加工程序顏色對照
+        /// </summary>
+        /// <param name="processSequenceColorMapping"></param>
+        /// <returns></returns>
+        int InsertProcessSequenceColorMapping(IEnumerable<ProcessSequenceColorMapping> processSequenceColorMapping);
+        /// <summary>
+        /// 刪除加工程序
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        int DeleteProcessSequence(int colorNo, int group);
     }
 }

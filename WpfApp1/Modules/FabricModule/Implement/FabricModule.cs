@@ -181,7 +181,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
         /// </summary>
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
-        public bool InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
+        public List<int> InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails)
         {
             int groupIndex = FabricAdapter.GetGroupIndex(processSequenceDetails.First().FabricID);
             int order = 0;
@@ -191,8 +191,29 @@ namespace WpfApp1.Modules.FabricModule.Implement
                 f.Order = order;
                 f.Group = groupIndex;
             });
-            int count = FabricAdapter.InsertProcessSequence(processSequenceDetails);
-            return count == processSequenceDetails.Count;
+            List<int> sequenceNoList = FabricAdapter.InsertProcessSequence(processSequenceDetails);
+            return sequenceNoList;
+        }
+        /// <summary>
+        /// 新增加工程序顏色對照
+        /// </summary>
+        /// <param name="processSequenceColorMapping"></param>
+        /// <returns></returns>
+        public bool InsertProcessSequenceColorMapping(IEnumerable<ProcessSequenceColorMapping> processSequenceColorMapping)
+        {
+            int count = FabricAdapter.InsertProcessSequenceColorMapping(processSequenceColorMapping);
+            return count == processSequenceColorMapping.Count();
+        }
+        /// <summary>
+        /// 刪除加工程序
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        public bool DeleteProcessSequence(int colorNo, int group)
+        {
+            int count = FabricAdapter.DeleteProcessSequence(colorNo, group);
+            return true;
         }
     }
 }

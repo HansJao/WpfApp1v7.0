@@ -143,6 +143,7 @@
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlowDate.cs" />
     <Compile Include="DataClass\Entity\ProcessSequence.cs" />
+    <Compile Include="DataClass\Entity\ProcessSequenceColorMapping.cs" />
     <Compile Include="DataClass\Entity\YarnPrice.cs" />
     <Compile Include="DataClass\Enumeration\ExcelEnum.cs" />
     <Compile Include="DataClass\Enumeration\FactoryEnum.cs" />

@@ -99,6 +99,21 @@ namespace WpfApp1.Modules.FabricModule
         /// </summary>
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
-        bool InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
+        List<int> InsertProcessSequence(List<ProcessSequenceDetail> processSequenceDetails);
+
+        /// <summary>
+        /// 新增加工程序顏色對照
+        /// </summary>
+        /// <param name="processSequenceColorMapping"></param>
+        /// <returns></returns>
+        bool InsertProcessSequenceColorMapping(IEnumerable<ProcessSequenceColorMapping> processSequenceColorMapping);
+
+        /// <summary>
+        /// 刪除加工程序
+        /// </summary>
+        /// <param name="colorNo"></param>
+        /// <param name="group"></param>
+        /// <returns></returns>
+        bool DeleteProcessSequence(int colorNo, int group);
     }
 }

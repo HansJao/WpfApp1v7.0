@@ -92,11 +92,34 @@ namespace WpfApp1.Windows.FabricWindows
             }
             if (CheckBoxIsThisColor.IsChecked == true)
             {
-                if(ComboBoxProcessGroup.SelectedIndex == -1)
+                if (ComboBoxProcessGroup.SelectedIndex == -1)
                 {
-                    bool success = FabricModule.InsertProcessSequence(processSequenceDetails);
+                    List<int> sequenceNoList = FabricModule.InsertProcessSequence(processSequenceDetails);
+                    var processSequenceColorMapping = sequenceNoList.Select(s => new ProcessSequenceColorMapping { ColorNo = _fabricColor.ColorNo, SequenceNo = s });
+                    bool success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
+                }
+                else
+                {
+                    var processSequenceColorMapping = processSequenceDetails.Select(s => new ProcessSequenceColorMapping { ColorNo = _fabricColor.ColorNo, SequenceNo = s.SequenceNo });
+                    bool success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
                 }
             }
+            else
+            {
+                List<int> sequenceNoList = FabricModule.InsertProcessSequence(processSequenceDetails);
+                bool success = sequenceNoList.Count() == processSequenceDetails.Count();
+            }
+        }
+
+        private void ButtonDeleteProcessSequence_Click(object sender, RoutedEventArgs e)
+        {
+            List<ProcessSequenceDetail> processSequenceDetails = new List<ProcessSequenceDetail>();
+            foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
+            {
+                processSequenceDetails.Add(processSequenceDetail);
+            }
+            int group = processSequenceDetails.First().Group;
+            bool success =  FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group);
         }
     }
 }

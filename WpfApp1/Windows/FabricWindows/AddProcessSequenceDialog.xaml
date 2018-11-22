@@ -73,6 +73,7 @@
         </StackPanel>
         <Button x:Name="ButtonNewProcessSequence" Content="新增" HorizontalAlignment="Left" Margin="109,369,0,0" VerticalAlignment="Top" Width="75" Click="ButtonNewProcessSequence_Click"/>
         <Button x:Name="ButtonEditProcessSequence" Content="修改" HorizontalAlignment="Left" Margin="192,369,0,0" VerticalAlignment="Top" Width="75"/>
+        <Button x:Name="ButtonDeleteProcessSequence" Content="刪除" HorizontalAlignment="Left" Margin="280,369,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteProcessSequence_Click"/>
 
 
 
