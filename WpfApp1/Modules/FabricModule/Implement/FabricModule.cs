@@ -137,6 +137,16 @@ namespace WpfApp1.Modules.FabricModule.Implement
 
         }
         /// <summary>
+        /// 新增紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        public bool InsertYarnPrice(YarnPrice yarnPrice)
+        {
+            int count = FabricAdapter.InsertYarnPrice(yarnPrice);
+            return count == 1;
+        }
+        /// <summary>
         /// 更新布種比例成分
         /// </summary>
         /// <param name="fabricIngredientProportions"></param>

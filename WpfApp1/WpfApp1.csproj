@@ -200,6 +200,9 @@
     <Compile Include="Pages\FabricPages\NewFabricPage.xaml.cs">
       <DependentUpon>NewFabricPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\FabricPages\YarnPricePage.xaml.cs">
+      <DependentUpon>YarnPricePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\FactoryManagePage.xaml.cs">
       <DependentUpon>FactoryManagePage.xaml</DependentUpon>
     </Compile>
@@ -240,6 +243,7 @@
     <Compile Include="ViewModel\CustomerViewModel\AddCustomerViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\FabricCostQueryViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\NewFabricViewModel.cs" />
+    <Compile Include="ViewModel\FabricViewModel\YarnPriceViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
@@ -303,6 +307,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\FabricPages\NewFabricPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FabricPages\YarnPricePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

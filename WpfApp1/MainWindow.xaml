@@ -48,6 +48,7 @@
                 <MenuItem Header="布種管理" >
                     <MenuItem Header="新增布種" Click="ButtonFabricManageFunction_Click" />
                     <MenuItem Header="布種成本查詢" Click="ButtonFabricCostQueryFunction_Click"/>
+                    <MenuItem Header="紗價管理" Click="ButtonYarnPriceFunction_Click"/>
                 </MenuItem>
             </Menu>
         </ToolBar>

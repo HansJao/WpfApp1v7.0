@@ -72,6 +72,12 @@ namespace WpfApp1.Modules.FabricModule
         IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList();
 
         /// <summary>
+        /// 新增紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        bool InsertYarnPrice(YarnPrice yarnPrice);
+        /// <summary>
         /// 更新布種比例成分
         /// </summary>
         /// <param name="fabricIngredientProportions"></param>

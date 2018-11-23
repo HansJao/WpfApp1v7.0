@@ -120,5 +120,9 @@ namespace WpfApp1
             this.MainFrame.NavigationService.Navigate(new FabricCostQueryPage());
         }
 
+        private void ButtonYarnPriceFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainFrame.NavigationService.Navigate(new YarnPricePage());
+        }
     }
 }

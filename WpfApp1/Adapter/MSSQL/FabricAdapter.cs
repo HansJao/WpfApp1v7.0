@@ -167,10 +167,34 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList()
         {
-            string sqlCmd = @"SELECT YP.YarnPriceNo,F.Name,YP.Ingredient,YP.Color,YP.YarnCount,YP.Price FROM YarnPrice YP
+            string sqlCmd = @"SELECT YP.*,F.Name FROM YarnPrice YP
                               INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID";
             var result = DapperHelper.QueryCollection<MerchantYarnPrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
             return result;
+        }
+        /// <summary>
+        /// 新增紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        public int InsertYarnPrice(YarnPrice yarnPrice)
+        {
+            string sqlCmd = @"INSERT INTO [dbo].[YarnPrice]
+           ([Ingredient]
+           ,[YarnCount]
+           ,[Color]
+           ,[Price]
+           ,[YarnMerchant]
+           ,[CreateDate])
+            VALUES
+           (@Ingredient
+           ,@YarnCount
+           ,@Color
+           ,@Price
+           ,@YarnMerchant
+           ,GETDATE())";
+            int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, yarnPrice);
+            return count;
         }
         /// <summary>
         /// 更新布種比例成分
