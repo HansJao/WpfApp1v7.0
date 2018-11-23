@@ -116,6 +116,17 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return processSequences;
         }
         /// <summary>
+        /// 以布種編號取得所有加工程序
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <returns></returns>
+        public List<ProcessSequenceDetail> GetProcessSequencesByFabricID(int fabricID)
+        {
+            IEnumerable<ProcessSequenceDetail> processSequenceDetails = FabricAdapter.GetProcessSequencesByFabricID(fabricID);
+            return processSequenceDetails.ToList();
+        }
+
+        /// <summary>
         /// 取得所有紗商的紗價
         /// </summary>
         /// <returns></returns>
@@ -209,10 +220,11 @@ namespace WpfApp1.Modules.FabricModule.Implement
         /// </summary>
         /// <param name="colorNo"></param>
         /// <param name="group"></param>
+        /// <param name="sequenceNoList"></param>
         /// <returns></returns>
-        public bool DeleteProcessSequence(int colorNo, int group)
+        public bool DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList)
         {
-            int count = FabricAdapter.DeleteProcessSequence(colorNo, group);
+            int count = FabricAdapter.DeleteProcessSequence(colorNo, group, sequenceNoList);
             return true;
         }
     }

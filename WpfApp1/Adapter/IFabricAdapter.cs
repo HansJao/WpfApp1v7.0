@@ -59,6 +59,12 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo);
         /// <summary>
+        /// 以布種編號取得所有加工程序
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessSequenceDetail> GetProcessSequencesByFabricID(int fabricID);
+        /// <summary>
         /// 取得所有紗商的紗價
         /// </summary>
         /// <returns></returns>
@@ -113,7 +119,9 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="colorNo"></param>
         /// <param name="group"></param>
+        /// <param name="sequenceNoList"></param>
         /// <returns></returns>
-        int DeleteProcessSequence(int colorNo, int group);
+        int DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList);
+      
     }
 }

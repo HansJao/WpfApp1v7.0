@@ -30,6 +30,7 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         protected IFabricModule FabricModule { get; } = new FabricModule();
         private Dictionary<int, ObservableCollection<ProcessSequenceDetail>> _processSequenceListGroup { get; set; }
+        private ObservableCollection<ProcessSequenceDetail> _processSequenceDetails { get; set; } = new ObservableCollection<ProcessSequenceDetail>();
         private Fabric _fabric { get; set; }
         private FabricColor _fabricColor { get; set; }
         public AddProcessSequenceDialog(Fabric fabric, FabricColor fabricColor, Dictionary<int, ObservableCollection<ProcessSequenceDetail>> processSequenceListGroup)
@@ -42,15 +43,27 @@ namespace WpfApp1.Windows.FabricWindows
 
             LabelFabricColor.Content = fabricColor.Color;
             _processSequenceListGroup = processSequenceListGroup;
-            ComboBoxProcessGroup.ItemsSource = processSequenceListGroup.Keys.ToList();
+            var processSequenceDetails = FabricModule.GetProcessSequencesByFabricID(_fabric.FabricID)
+                                                     .GroupBy(g => g.Group)
+                                                     .ToDictionary(g => g.Key, g => new ObservableCollection<ProcessSequenceDetail>(g.ToList()));
+            foreach (var item in processSequenceDetails)
+            {
+                if (!_processSequenceListGroup.Keys.Contains(item.Key))
+                    _processSequenceListGroup.Add(item.Key, item.Value);
+            }
+
+            ComboBoxProcessGroup.ItemsSource = _processSequenceListGroup.Keys.ToList();
             ComboBoxFactoryList.ItemsSource = FactoryModule.GetFactoryList();
+            DataGridProcessSequence.ItemsSource = _processSequenceDetails;
         }
 
         private void ComboBoxProcessGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
-            DataGridProcessSequence.Items.Clear();
-            DataGridProcessSequence.ItemsSource = _processSequenceListGroup[Convert.ToInt16(comboBox.SelectedItem)];
+            _processSequenceDetails = new ObservableCollection<ProcessSequenceDetail>(_processSequenceListGroup[Convert.ToInt16(comboBox.SelectedItem)]);
+            DataGridProcessSequence.ItemsSource = _processSequenceDetails;
+            CheckBoxIsThisColor.IsChecked = true;
+            CheckBoxIsThisColor.IsEnabled = false;
         }
 
         private void ButtonInsertProcessSequence_Click(object sender, RoutedEventArgs e)
@@ -58,9 +71,12 @@ namespace WpfApp1.Windows.FabricWindows
             if (ComboBoxProcessGroup.SelectedIndex != -1)
             {
                 int selectedGroup = Convert.ToInt16(ComboBoxProcessGroup.SelectedItem);
-                _processSequenceListGroup[selectedGroup].Add(new ProcessSequenceDetail
+                Factory factory = ComboBoxFactoryList.SelectedItem as Factory;
+                _processSequenceDetails.Add(new ProcessSequenceDetail
                 {
+                    FactoryID = factory.FactoryID,
                     FabricID = _fabric.FabricID,
+                    Name = factory.Name,
                     ColorNo = _fabricColor.ColorNo,
                     ProcessItem = (DataClass.Enumeration.ProcessItem)ComboBoxProcessItem.SelectedItem,
                     WorkPay = TextBoxWorkPay.Text.ToInt(),
@@ -70,7 +86,7 @@ namespace WpfApp1.Windows.FabricWindows
             else
             {
                 Factory factory = ComboBoxFactoryList.SelectedItem as Factory;
-                DataGridProcessSequence.Items.Add(new ProcessSequenceDetail
+                _processSequenceDetails.Add(new ProcessSequenceDetail
                 {
                     FactoryID = factory.FactoryID,
                     Name = factory.Name,
@@ -85,11 +101,11 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ButtonNewProcessSequence_Click(object sender, RoutedEventArgs e)
         {
-            List<ProcessSequenceDetail> processSequenceDetails = new List<ProcessSequenceDetail>();
-            foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
-            {
-                processSequenceDetails.Add(processSequenceDetail);
-            }
+            List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
+            //foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
+            //{
+            //    processSequenceDetails.Add(processSequenceDetail);
+            //}
             if (CheckBoxIsThisColor.IsChecked == true)
             {
                 if (ComboBoxProcessGroup.SelectedIndex == -1)
@@ -113,13 +129,13 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ButtonDeleteProcessSequence_Click(object sender, RoutedEventArgs e)
         {
-            List<ProcessSequenceDetail> processSequenceDetails = new List<ProcessSequenceDetail>();
-            foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
-            {
-                processSequenceDetails.Add(processSequenceDetail);
-            }
+            List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
+            //foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
+            //{
+            //    processSequenceDetails.Add(processSequenceDetail);
+            //}
             int group = processSequenceDetails.First().Group;
-            bool success =  FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group);
+            bool success = FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group, processSequenceDetails.Select(s => s.SequenceNo));
         }
     }
 }

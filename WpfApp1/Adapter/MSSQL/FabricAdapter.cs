@@ -142,6 +142,25 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<ProcessSequenceDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
+
+        /// <summary>
+        /// 以布種編號取得所有加工程序
+        /// </summary>
+        /// <param name="fabricID"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessSequenceDetail> GetProcessSequencesByFabricID(int fabricID)
+        {
+            string sqlCmd = @"SELECT PS.*,F.Name FROM ProcessSequence PS
+                              INNER JOIN Factory F ON PS.FactoryID = F.FactoryID
+                              WHERE FabricID = @FabricID";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID }
+            };
+            var result = DapperHelper.QueryCollection<ProcessSequenceDetail>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
         /// <summary>
         /// 取得所有紗商的紗價
         /// </summary>
@@ -304,10 +323,11 @@ namespace WpfApp1.Adapter.MSSQL
         /// </summary>
         /// <param name="colorNo"></param>
         /// <param name="group"></param>
+        /// <param name="sequenceNoList"></param>
         /// <returns></returns>
-        public int DeleteProcessSequence(int colorNo, int group)
+        public int DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList)
         {
-            string sqlCmd = @"
+            string sqlCmd = string.Format(@"
                DECLARE @SequenceList TABLE(SequenceNo int)
          --將此顏色的加工程序暫存於此
                INSERT INTO @SequenceList
@@ -324,8 +344,8 @@ namespace WpfApp1.Adapter.MSSQL
                END
                ELSE 
                BEGIN
-                 DELETE ProcessSequence WHERE SequenceNo IN (SELECT SequenceNo FROM @SequenceList)
-               END";
+                 DELETE ProcessSequence WHERE SequenceNo IN ({0})
+               END", string.Join(",", sequenceNoList));
 
             SqlParameter[] parameters = new SqlParameter[]
               {
