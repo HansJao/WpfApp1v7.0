@@ -42,7 +42,7 @@
                     <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"/>
                     <DataGridTextColumn Header="規格" Binding="{Binding Specification}"/>
                     <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem}"/>
-                    <DataGridTextColumn Header="注意事項" Binding="{Binding Precautions}"/>
+                    <DataGridTextColumn Header="注意事項" Width="280" Binding="{Binding Precautions}"/>
                     <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
                     <DataGridTextColumn Header="手感" Binding="{Binding HandFeel}"/>
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate}"/>

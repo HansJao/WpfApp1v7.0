@@ -76,6 +76,18 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         int InsertYarnPrice(YarnPrice yarnPrice);
         /// <summary>
+        /// 更新紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        int EditYarnPrice(YarnPrice yarnPrice);
+        /// <summary>
+        /// 刪除紗價
+        /// </summary>
+        /// <param name="yarnPriceNo"></param>
+        /// <returns></returns>
+        int DeleteYarnPrice(int yarnPriceNo);
+        /// <summary>
         /// 更新布種比例成分
         /// </summary>
         /// <param name="fabricIngredientProportions"></param>
@@ -128,6 +140,6 @@ namespace WpfApp1.Adapter
         /// <param name="sequenceNoList"></param>
         /// <returns></returns>
         int DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList);
-      
+       
     }
 }

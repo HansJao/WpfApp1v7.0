@@ -25,12 +25,15 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="fabric"></param>
         /// <returns></returns>
         int EditFabric(Fabric fabric);
+
+       
         /// <summary>
         /// 以布種編號取得布種顏色
         /// </summary>
         /// <param name="fabricIDList"></param>
         /// <returns></returns>
         IEnumerable<FabricColor> GetFabricColorListByFabricID(IEnumerable<int> fabricIDList);
+        
 
         /// <summary>
         /// 新增布種顏色
@@ -77,6 +80,18 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="yarnPrice"></param>
         /// <returns></returns>
         bool InsertYarnPrice(YarnPrice yarnPrice);
+        /// <summary>
+        /// 更新紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        bool EditYarnPrice(YarnPrice yarnPrice);
+        /// <summary>
+        /// 刪除紗價
+        /// </summary>
+        /// <param name="yarnPriceNo"></param>
+        /// <returns></returns>
+        bool DeleteYarnPrice(int yarnPriceNo);
         /// <summary>
         /// 更新布種比例成分
         /// </summary>
@@ -130,5 +145,6 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="sequenceNoList"></param>
         /// <returns></returns>
         bool DeleteProcessSequence(int colorNo, int group,IEnumerable<int> sequenceNoList);
+        
     }
 }

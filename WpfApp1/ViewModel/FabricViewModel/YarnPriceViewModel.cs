@@ -22,6 +22,12 @@ namespace WpfApp1.ViewModel.FabricViewModel
     {
         public ICommand AddYarnPriceClick { get { return new RelayCommand(AddYarnPriceExecute, CanExecute); } }
         public ICommand EditYarnPriceClick { get { return new RelayCommand(EditYarnPriceExecute, CanExecute); } }
+        public ICommand DeleteYarnPriceClick { get { return new RelayCommand(DeleteYarnPriceExecute, CanExecute); } }
+
+        private void DeleteYarnPriceExecute()
+        {
+            bool success = FabricModule.DeleteYarnPrice(MerchantYarnPrice.YarnPriceNo);
+        }
 
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         protected IFabricModule FabricModule { get; } = new FabricModule();
@@ -112,7 +118,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
             MerchantYarnPriceCVS = new CollectionViewSource();
 
 
-            MerchantYarnPrice = new MerchantYarnPrice();
             var merchantYarnPrices = FabricModule.GetMerchantYarnPriceList();
             MerchantYarnPrices = new ObservableCollection<MerchantYarnPrice>(merchantYarnPrices);
             MerchantYarnPriceCVS.Source = MerchantYarnPrices;
@@ -145,7 +150,16 @@ namespace WpfApp1.ViewModel.FabricViewModel
             }
             else
             {
-                bool success = FabricModule.InsertYarnPrice(MerchantYarnPrice);
+                YarnPrice yarnPrice = new YarnPrice
+                {
+                    YarnMerchant = Factory.FactoryID,
+                    Ingredient = Ingredient,
+                    Color = Color,
+                    Price = Price,
+                    YarnCount = YarnCount,
+
+                };
+                bool success = FabricModule.InsertYarnPrice(yarnPrice);
                 if (success)
                 {
                     MessageBox.Show("新增成功");
@@ -159,14 +173,39 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void EditYarnPriceExecute()
         {
-            bool success = FabricModule.InsertYarnPrice(MerchantYarnPrice);
-            if (success)
+            if (Ingredient == string.Empty || Price == 0 || YarnCount == 0 || Color == string.Empty)
             {
-                MessageBox.Show("新增成功");
+                MessageBox.Show("有數值未填");
+            }
+            else if (Factory == null)
+            {
+                MessageBox.Show("未選擇紗商");
+            }
+            else if (MerchantYarnPrice == null)
+            {
+                MessageBox.Show("未選擇一筆資料");
             }
             else
             {
-                MessageBox.Show("新增失敗");
+                YarnPrice yarnPrice = new YarnPrice
+                {
+                    YarnPriceNo = MerchantYarnPrice.YarnPriceNo,
+                    YarnMerchant = Factory.FactoryID,
+                    Ingredient = Ingredient,
+                    Color = Color,
+                    Price = Price,
+                    YarnCount = YarnCount,
+
+                };
+                bool success = FabricModule.EditYarnPrice(yarnPrice);
+                if (success)
+                {
+                    MessageBox.Show("新增成功");
+                }
+                else
+                {
+                    MessageBox.Show("新增失敗");
+                }
             }
         }
     }

@@ -197,6 +197,40 @@ namespace WpfApp1.Adapter.MSSQL
             return count;
         }
         /// <summary>
+        /// 更新紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        public int EditYarnPrice(YarnPrice yarnPrice)
+        {
+            string sqlCmd = @"UPDATE [dbo].[YarnPrice]
+                            SET [Ingredient] = @Ingredient
+                            ,[YarnCount] = @YarnCount
+                            ,[Color] = @Color
+                            ,[Price] = @Price
+                            ,[YarnMerchant] = @YarnMerchant
+                            ,[UpdateDate] = GETDATE()
+                            WHERE [YarnPriceNo] = @YarnPriceNo";
+            int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, yarnPrice);
+            return count;
+        }
+        /// <summary>
+        /// 刪除紗價
+        /// </summary>
+        /// <param name="yarnPriceNo"></param>
+        /// <returns></returns>
+        public int DeleteYarnPrice(int yarnPriceNo)
+        {
+            string sqlCmd = @"DELETE [dbo].[YarnPrice]
+                              WHERE [YarnPriceNo] = @YarnPriceNo";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                 new SqlParameter("@YarnPriceNo", SqlDbType.Int) { Value = yarnPriceNo },
+            };
+            int count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
+        }
+        /// <summary>
         /// 更新布種比例成分
         /// </summary>
         /// <param name="fabricIngredientProportions"></param>

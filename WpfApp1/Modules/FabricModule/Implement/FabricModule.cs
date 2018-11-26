@@ -64,6 +64,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.EditFabric(fabric);
             return count;
         }
+     
         /// <summary>
         /// 以布種編號取得布種顏色
         /// </summary>
@@ -144,6 +145,26 @@ namespace WpfApp1.Modules.FabricModule.Implement
         public bool InsertYarnPrice(YarnPrice yarnPrice)
         {
             int count = FabricAdapter.InsertYarnPrice(yarnPrice);
+            return count == 1;
+        }
+        /// <summary>
+        /// 更新紗價
+        /// </summary>
+        /// <param name="yarnPrice"></param>
+        /// <returns></returns>
+        public bool EditYarnPrice(YarnPrice yarnPrice)
+        {
+            int count = FabricAdapter.EditYarnPrice(yarnPrice);
+            return count == 1;
+        }
+        /// <summary>
+        /// 刪除紗價
+        /// </summary>
+        /// <param name="yarnPriceNo"></param>
+        /// <returns></returns>
+        public bool DeleteYarnPrice(int yarnPriceNo)
+        {
+            int count = FabricAdapter.DeleteYarnPrice(yarnPriceNo);
             return count == 1;
         }
         /// <summary>

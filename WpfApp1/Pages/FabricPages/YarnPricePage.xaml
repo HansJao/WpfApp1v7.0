@@ -42,7 +42,13 @@
                     <DataGridTextColumn Header="單價" Binding="{Binding Price}"></DataGridTextColumn>
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
                     <DataGridTextColumn Header="修改時間" Binding="{Binding UpdateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
-
+                    <DataGridTemplateColumn Header="刪除" >
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <Button  Content="刪除"  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.DeleteYarnPriceClick}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
