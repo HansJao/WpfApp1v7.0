@@ -40,6 +40,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             set
             {
                 _factory = value;
+                RaisePropertyChanged("Factory");
                 ComboBoxFactoryListSelected();
             }
         }
@@ -62,13 +63,27 @@ namespace WpfApp1.ViewModel.FabricViewModel
             get { return _merchantYarnPrice; }
             set
             {
+                if (value == null) return;
                 _merchantYarnPrice = value;
+                YarnMerchant = value.YarnMerchant;
                 Ingredient = value.Ingredient;
                 YarnCount = value.YarnCount;
                 Price = value.Price;
                 Color = value.Color;
-
+                var factory  = FactoryList.Where(w => w.FactoryID == value.YarnMerchant).First();
+                if (Factory == null || factory.FactoryID != Factory.FactoryID)
+                    Factory = factory;
                 RaisePropertyChanged("MerchantYarnPrice");
+            }
+        }
+        private int _yarnMerchant { get; set; }
+        public int YarnMerchant
+        {
+            get { return _yarnMerchant; }
+            set
+            {
+                _yarnMerchant = value;
+                RaisePropertyChanged("YarnMerchant");
             }
         }
         private string _ingredient { get; set; }
@@ -177,7 +192,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 MessageBox.Show("有數值未填");
             }
-            else if (Factory == null)
+            else if (YarnMerchant == 0)
             {
                 MessageBox.Show("未選擇紗商");
             }
@@ -190,7 +205,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 YarnPrice yarnPrice = new YarnPrice
                 {
                     YarnPriceNo = MerchantYarnPrice.YarnPriceNo,
-                    YarnMerchant = Factory.FactoryID,
+                    YarnMerchant = YarnMerchant,
                     Ingredient = Ingredient,
                     Color = Color,
                     Price = Price,
@@ -200,11 +215,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 bool success = FabricModule.EditYarnPrice(yarnPrice);
                 if (success)
                 {
-                    MessageBox.Show("新增成功");
+                    MessageBox.Show("修改成功");
                 }
                 else
                 {
-                    MessageBox.Show("新增失敗");
+                    MessageBox.Show("修改失敗");
                 }
             }
         }
