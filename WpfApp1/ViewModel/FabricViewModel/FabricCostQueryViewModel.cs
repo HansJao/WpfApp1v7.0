@@ -73,10 +73,12 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 if (value == null) return;
 
                 var fabricColorList = FabricModule.GetFabricColorListByFabricID(new List<int> { _fabric.FabricID });
-                foreach (var item in fabricColorList)
-                {
-                    FabricColorList.Add(item);
-                }
+
+                FabricColorList.AddRange<FabricColor>(fabricColorList);
+                //foreach (var item in fabricColorList)
+                //{
+                //    FabricColorList.Add(item);
+                //}
             }
         }
         private decimal _yarnCost { get; set; }
@@ -159,7 +161,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             VerticalAlignment = VerticalAlignment.Top,
                             AutoGenerateColumns = false,
                             CanUserAddRows = false,
-                            Margin = new Thickness(0,3,0,0),
+                            Margin = new Thickness(0, 3, 0, 0),
                             Name = string.Concat("Group", processSequenceList.Key)
                         };
                         CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);

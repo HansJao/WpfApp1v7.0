@@ -15,6 +15,7 @@ using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.Modules.FactoryModule;
 using WpfApp1.Modules.FactoryModule.Implement;
+using WpfApp1.Utility;
 
 namespace WpfApp1.ViewModel.FabricViewModel
 {
@@ -70,7 +71,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 YarnCount = value.YarnCount;
                 Price = value.Price;
                 Color = value.Color;
-                var factory  = FactoryList.Where(w => w.FactoryID == value.YarnMerchant).First();
+                var factory = FactoryList.Where(w => w.FactoryID == value.YarnMerchant).First();
                 if (Factory == null || factory.FactoryID != Factory.FactoryID)
                     Factory = factory;
                 RaisePropertyChanged("MerchantYarnPrice");
@@ -175,14 +176,9 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 };
                 bool success = FabricModule.InsertYarnPrice(yarnPrice);
-                if (success)
-                {
-                    MessageBox.Show("新增成功");
-                }
-                else
-                {
-                    MessageBox.Show("新增失敗");
-                }
+
+                success.CheckSuccessMessageBox("新增成功", "新增失敗");
+               
             }
         }
 
@@ -213,14 +209,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 };
                 bool success = FabricModule.EditYarnPrice(yarnPrice);
-                if (success)
-                {
-                    MessageBox.Show("修改成功");
-                }
-                else
-                {
-                    MessageBox.Show("修改失敗");
-                }
+                success.CheckSuccessMessageBox("修改成功", "修改失敗");               
             }
         }
     }

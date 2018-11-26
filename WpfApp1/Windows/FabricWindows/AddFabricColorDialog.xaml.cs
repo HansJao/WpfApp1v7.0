@@ -16,6 +16,7 @@ using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Fabric;
 using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
+using WpfApp1.Utility;
 using WpfApp1.ViewModel.FabricViewModel;
 
 namespace WpfApp1.Windows.FabricWindows
@@ -40,11 +41,11 @@ namespace WpfApp1.Windows.FabricWindows
 
             ComboBoxGroup.ItemsSource = dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0 
-                                                            ? _dictionaryFabricIngredientProportion[1] 
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0
+                                                            ? _dictionaryFabricIngredientProportion[1]
                                                             : null;
-            TextBoxColorName.Text = FabricColor == null 
-                                    ? string.Empty 
+            TextBoxColorName.Text = FabricColor == null
+                                    ? string.Empty
                                     : FabricColor.Color;
             ButtonControl(TextBoxColorName);
         }
@@ -55,14 +56,8 @@ namespace WpfApp1.Windows.FabricWindows
             List<FabricIngredientProportion> fabricIngredientProportion = GetFabricIngredientProportions();
             fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
             bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
-            if (success == false)
-            {
-                MessageBox.Show("好像有錯誤喔!!");
-            }
-            else
-            {
-                MessageBox.Show("新增成功!!");
-            }
+
+            success.CheckSuccessMessageBox("新增成功!!", "好像有錯誤喔!!");
         }
 
         private YarnSelectDialog _yarnSelectDialog { get; set; }
@@ -115,14 +110,8 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
         {
             bool success = FabricModule.UpdateFabricProportion(GetFabricIngredientProportions());
-            if (success == false)
-            {
-                MessageBox.Show("好像有錯誤喔!!");
-            }
-            else
-            {
-                MessageBox.Show("更新成功!!");
-            }
+
+            success.CheckSuccessMessageBox("更新成功!!", "好像有錯誤喔!!");
         }
 
         private List<FabricIngredientProportion> GetFabricIngredientProportions()
@@ -139,15 +128,7 @@ namespace WpfApp1.Windows.FabricWindows
         {
             int colorNo = FabricModule.InsertFabricColor(_fabric.FabricID, TextBoxColorName.Text);
             bool success = FabricModule.InsertFabricIngredientProportions(colorNo, GetFabricIngredientProportions());
-            if (success == false)
-            {
-                MessageBox.Show("好像有錯誤喔!!");
-            }
-            else
-            {
-                MessageBox.Show("新增成功!!");
-            }
-
+            success.CheckSuccessMessageBox("新增成功!!", "好像有錯誤喔!!");
         }
 
         private void ComboBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)

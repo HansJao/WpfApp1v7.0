@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace WpfApp1.Utility
 {
@@ -28,6 +29,19 @@ namespace WpfApp1.Utility
             {
                 observableCollection.Add(item);
             }
+        }
+
+        public static void CheckSuccessMessageBox(this bool success, string successMessage, string failMessage)
+        {
+            if (success == true)
+            {
+                MessageBox.Show(successMessage);
+            }
+            else
+            {
+                MessageBox.Show(failMessage);
+            }
+
         }
     }
 }

@@ -102,40 +102,38 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonNewProcessSequence_Click(object sender, RoutedEventArgs e)
         {
             List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
-            //foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
-            //{
-            //    processSequenceDetails.Add(processSequenceDetail);
-            //}
+            bool success = false;
             if (CheckBoxIsThisColor.IsChecked == true)
             {
                 if (ComboBoxProcessGroup.SelectedIndex == -1)
                 {
                     List<int> sequenceNoList = FabricModule.InsertProcessSequence(processSequenceDetails);
                     var processSequenceColorMapping = sequenceNoList.Select(s => new ProcessSequenceColorMapping { ColorNo = _fabricColor.ColorNo, SequenceNo = s });
-                    bool success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
+                    success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
                 }
                 else
                 {
                     var processSequenceColorMapping = processSequenceDetails.Select(s => new ProcessSequenceColorMapping { ColorNo = _fabricColor.ColorNo, SequenceNo = s.SequenceNo });
-                    bool success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
+                    success = FabricModule.InsertProcessSequenceColorMapping(processSequenceColorMapping);
                 }
             }
             else
             {
                 List<int> sequenceNoList = FabricModule.InsertProcessSequence(processSequenceDetails);
-                bool success = sequenceNoList.Count() == processSequenceDetails.Count();
+                success = sequenceNoList.Count() == processSequenceDetails.Count();
             }
+          
+            success.CheckSuccessMessageBox("新增成功!!", "新增失敗!!");
         }
 
         private void ButtonDeleteProcessSequence_Click(object sender, RoutedEventArgs e)
         {
             List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
-            //foreach (ProcessSequenceDetail processSequenceDetail in DataGridProcessSequence.Items)
-            //{
-            //    processSequenceDetails.Add(processSequenceDetail);
-            //}
+          
             int group = processSequenceDetails.First().Group;
             bool success = FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group, processSequenceDetails.Select(s => s.SequenceNo));
+            
+            success.CheckSuccessMessageBox("刪除成功!!", "刪除失敗!!");
         }
     }
 }

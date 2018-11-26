@@ -13,6 +13,7 @@ namespace WpfApp1.Utility
 {
     public class XamlHelper
     {
+       
     }
 
     public class ZeroToEmptyConverter : IValueConverter
