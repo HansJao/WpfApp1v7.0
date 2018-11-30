@@ -234,7 +234,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 MessageBox.Show("未選擇客戶!!");
                 return;
             }
-            var processOrderColorDetail = (ProcessOrderColorDetail)DataGridOrderColorFactoryShippingDetail.SelectedItem;
+            var processOrderColorDetail = (ProcessOrderColorFactoryShippingDetail)DataGridOrderColorFactoryShippingDetail.SelectedItem;
             var factoryShipping = new FactoryShippingName
             {
                 OrderColorDetailNo = processOrderColorDetail.OrderColorDetailNo,
@@ -245,6 +245,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             };
 
             var count = ProcessModule.InsertFactoryShipping(factoryShipping);
+            if (processOrderColorDetail.ShippingQuantity + factoryShipping.Quantity == processOrderColorDetail.Quantity)
+            {
+                ProcessModule.UpdateProcessOrderColorStatus(processOrderColorDetail.OrderColorDetailNo, ProcessOrderColorStatus.已出完);
+            }
+
             var factoryShippingList = ProcessModule.GetFactoryShipping(processOrderColorDetail.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
