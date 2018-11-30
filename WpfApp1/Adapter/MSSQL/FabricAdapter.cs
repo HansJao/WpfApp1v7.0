@@ -239,7 +239,8 @@ namespace WpfApp1.Adapter.MSSQL
         {
             var sqlCmd = @"UPDATE [dbo].[FabricProportion]
                            SET [YarnPriceNo] = @YarnPriceNo
-                           ,[UpdateDate] = GETDATE()
+                              ,[Proportion] = @Proportion
+                              ,[UpdateDate] = GETDATE()
                            WHERE ProportionNo=@ProportionNo";
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricIngredientProportions);
             return result;

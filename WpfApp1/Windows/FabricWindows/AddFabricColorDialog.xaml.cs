@@ -117,7 +117,7 @@ namespace WpfApp1.Windows.FabricWindows
         private List<FabricIngredientProportion> GetFabricIngredientProportions()
         {
             List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion>();
-            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.Items)
+            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.ItemsSource)
             {
                 fabricIngredientProportions.Add(item);
             }

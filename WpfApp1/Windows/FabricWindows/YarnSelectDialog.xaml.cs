@@ -45,6 +45,8 @@ namespace WpfApp1.Windows.FabricWindows
             AddFabricColorDialog addFabricColorDialog = (AddFabricColorDialog)this.DataContext;
             MerchantYarnPrice merchantYarnPrice = DataGridMerchantYarnPrice.SelectedItem as MerchantYarnPrice;
             int selectedIndex = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex;
+            //如果紗成分比例沒有選擇一個色的話則會新增一個比例
+            //否則會將選擇到的比例
             if (selectedIndex == -1)
             {
                 TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
@@ -61,6 +63,8 @@ namespace WpfApp1.Windows.FabricWindows
                 {
                     return;
                 }
+                //當新增一個比例時,不能用修改
+                addFabricColorDialog.ButtonEditFabricColor.IsEnabled = false;
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
                 if (_fabricIngredientProportion.Count == 0)
                 {
