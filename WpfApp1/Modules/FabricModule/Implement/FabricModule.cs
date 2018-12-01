@@ -64,7 +64,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.EditFabric(fabric);
             return count;
         }
-     
+
         /// <summary>
         /// 以布種編號取得布種顏色
         /// </summary>
@@ -231,7 +231,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             {
                 order++;
                 f.Order = order;
-                f.Group = groupIndex;
+                f.Group = groupIndex == -1 ? 1 : groupIndex;
             });
             List<int> sequenceNoList = FabricAdapter.InsertProcessSequence(processSequenceDetails);
             return sequenceNoList;

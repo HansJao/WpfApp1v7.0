@@ -10,7 +10,7 @@ namespace WpfApp1.DataClass.Entity
     {
         public int YarnPriceNo { get; set; }
         public string Ingredient { get; set; }
-        public int YarnCount { get; set; }
+        public string YarnCount { get; set; }
         public string Color { get; set; }
         public int Price { get; set; }
         public int YarnMerchant { get; set; }

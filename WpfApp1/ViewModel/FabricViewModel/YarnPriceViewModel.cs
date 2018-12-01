@@ -97,8 +97,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 RaisePropertyChanged("Ingredient");
             }
         }
-        private int _yarnCount { get; set; }
-        public int YarnCount
+        private string _yarnCount { get; set; }
+        public string YarnCount
         {
             get { return _yarnCount; }
             set
@@ -156,7 +156,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void AddYarnPriceExecute()
         {
-            if (Ingredient == string.Empty || Price == 0 || YarnCount == 0 || Color == string.Empty)
+            if (Ingredient == string.Empty || Price == 0 || string.IsNullOrEmpty(YarnCount) || Color == string.Empty)
             {
                 MessageBox.Show("有數值未填");
             }
@@ -184,7 +184,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void EditYarnPriceExecute()
         {
-            if (Ingredient == string.Empty || Price == 0 || YarnCount == 0 || Color == string.Empty)
+            if (Ingredient == string.Empty || Price == 0 || string.IsNullOrEmpty(YarnCount) || Color == string.Empty)
             {
                 MessageBox.Show("有數值未填");
             }

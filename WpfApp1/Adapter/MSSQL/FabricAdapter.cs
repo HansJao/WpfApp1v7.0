@@ -359,7 +359,7 @@ namespace WpfApp1.Adapter.MSSQL
             {
                 new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
             };
-            var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
         /// <summary>
