@@ -258,5 +258,18 @@ namespace WpfApp1.Modules.FabricModule.Implement
             int count = FabricAdapter.DeleteProcessSequence(colorNo, group, sequenceNoList);
             return true;
         }
+
+        /// <summary>
+        /// 檢查此加工程序是否有在加工程序顏色對應中
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        public bool CheckIsInProcessSequenceColorMapping(IEnumerable<ProcessSequenceDetail> processSequenceDetails)
+        {
+            int colorNo = processSequenceDetails.Select(s => s.ColorNo).First();
+            IEnumerable<int> processSequences = processSequenceDetails.Select(s => s.SequenceNo);
+            int count = FabricAdapter.CheckIsInProcessSequenceColorMapping(colorNo, processSequences);
+            return processSequences.Count() == count;
+        }
     }
 }

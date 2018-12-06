@@ -414,5 +414,24 @@ namespace WpfApp1.Adapter.MSSQL
             int count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return count;
         }
+
+        /// <summary>
+        /// 檢查此加工程序是否有在加工程序顏色對應中
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        public int CheckIsInProcessSequenceColorMapping(int colorNo, IEnumerable<int> processSequences)
+        {
+            string sqlCmd = @"SELECT COUNT(*) FROM [ProcessSequenceColorMapping]
+                              WHERE ColorNo = @ColorNo and SequenceNo IN @SequenceNo";
+            var parameter =
+               new
+               {
+                   ColorNo = colorNo,
+                   SequenceNo = processSequences
+               };
+            var result = DapperHelper.QueryCollection<int, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter).First();
+            return result;
+        }
     }
 }

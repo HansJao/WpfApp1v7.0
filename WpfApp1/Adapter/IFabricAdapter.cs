@@ -140,6 +140,11 @@ namespace WpfApp1.Adapter
         /// <param name="sequenceNoList"></param>
         /// <returns></returns>
         int DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList);
-       
+        /// <summary>
+        /// 檢查此加工程序是否有在加工程序顏色對應中
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        int CheckIsInProcessSequenceColorMapping(int colorNo, IEnumerable<int> processSequences);
     }
 }

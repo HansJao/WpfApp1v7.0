@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -145,6 +146,12 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="sequenceNoList"></param>
         /// <returns></returns>
         bool DeleteProcessSequence(int colorNo, int group,IEnumerable<int> sequenceNoList);
-        
+
+        /// <summary>
+        /// 檢查此加工程序是否有在加工程序顏色對應中
+        /// </summary>
+        /// <param name="processSequenceDetails"></param>
+        /// <returns></returns>
+        bool CheckIsInProcessSequenceColorMapping(IEnumerable<ProcessSequenceDetail> processSequenceDetails);
     }
 }

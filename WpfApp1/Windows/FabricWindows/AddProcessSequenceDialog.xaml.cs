@@ -102,6 +102,12 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonNewProcessSequence_Click(object sender, RoutedEventArgs e)
         {
             List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
+            bool isInProcessSequenceColorMapping = FabricModule.CheckIsInProcessSequenceColorMapping(_processSequenceDetails);
+            if (isInProcessSequenceColorMapping)
+            {
+                MessageBox.Show("已存於在資料庫!!");
+                return;
+            }
             bool success = false;
             if (CheckBoxIsThisColor.IsChecked == true)
             {
@@ -122,17 +128,17 @@ namespace WpfApp1.Windows.FabricWindows
                 List<int> sequenceNoList = FabricModule.InsertProcessSequence(processSequenceDetails);
                 success = sequenceNoList.Count() == processSequenceDetails.Count();
             }
-          
+
             success.CheckSuccessMessageBox("新增成功!!", "新增失敗!!");
         }
 
         private void ButtonDeleteProcessSequence_Click(object sender, RoutedEventArgs e)
         {
             List<ProcessSequenceDetail> processSequenceDetails = _processSequenceDetails.ToList();
-          
+
             int group = processSequenceDetails.First().Group;
             bool success = FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group, processSequenceDetails.Select(s => s.SequenceNo));
-            
+
             success.CheckSuccessMessageBox("刪除成功!!", "刪除失敗!!");
         }
     }

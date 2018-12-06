@@ -28,6 +28,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
         private void DeleteYarnPriceExecute()
         {
             bool success = FabricModule.DeleteYarnPrice(MerchantYarnPrice.YarnPriceNo);
+            success.CheckSuccessMessageBox("刪除成功!", "刪除失敗!");
         }
 
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
