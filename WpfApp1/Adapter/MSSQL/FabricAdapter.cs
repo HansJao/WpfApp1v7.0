@@ -433,5 +433,31 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<int, object>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter).First();
             return result;
         }
+        /// <summary>
+        /// 修改加工程序,可修改工繳,損耗,順序
+        /// </summary>
+        /// <param name="sequenceNo"></param>
+        /// <param name="loss"></param>
+        /// <param name="workPay"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        public int EditProcessSequence(int sequenceNo, decimal loss, int workPay, int order)
+        {
+            var sqlCmd = @"UPDATE [dbo].[ProcessSequence]
+                           SET 
+                            [Loss] = @Loss
+                           ,[WorkPay] = @WorkPay
+                           ,[Order] = @Order
+                           WHERE SequenceNo=@SequenceNo";
+            SqlParameter[] parameters = new SqlParameter[]
+              {
+                new SqlParameter("@SequenceNo", SqlDbType.Int) { Value = sequenceNo },
+                new SqlParameter("@Loss", SqlDbType.Decimal) { Value = loss },
+                new SqlParameter("@WorkPay", SqlDbType.Int) { Value = workPay },
+                new SqlParameter("@Order", SqlDbType.Int) { Value = order }
+              };
+            var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
     }
 }

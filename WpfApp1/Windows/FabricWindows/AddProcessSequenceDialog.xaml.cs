@@ -45,7 +45,7 @@ namespace WpfApp1.Windows.FabricWindows
             _processSequenceListGroup = processSequenceListGroup;
             var processSequenceDetails = FabricModule.GetProcessSequencesByFabricID(_fabric.FabricID)
                                                      .GroupBy(g => g.Group)
-                                                     .ToDictionary(g => g.Key, g => new ObservableCollection<ProcessSequenceDetail>(g.ToList()));
+                                                     .ToDictionary(g => g.Key, g => new ObservableCollection<ProcessSequenceDetail>(g.OrderBy(o => o.Order).ToList()));
             foreach (var item in processSequenceDetails)
             {
                 if (!_processSequenceListGroup.Keys.Contains(item.Key))
@@ -140,6 +140,13 @@ namespace WpfApp1.Windows.FabricWindows
             bool success = FabricModule.DeleteProcessSequence(_fabricColor.ColorNo, group, processSequenceDetails.Select(s => s.SequenceNo));
 
             success.CheckSuccessMessageBox("刪除成功!!", "刪除失敗!!");
+        }
+
+        private void ButtonEditProcessSequence_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessSequenceDetail processSequenceDetail = DataGridProcessSequence.SelectedItem as ProcessSequenceDetail;
+            bool success = FabricModule.EditProcessSequence(processSequenceDetail);
+            success.CheckSuccessMessageBox("修改成功!!", "修改失敗!!");
         }
     }
 }

@@ -60,20 +60,26 @@
                 <TextBox x:Name="TextBoxWorkPay" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             </StackPanel>
             <Button x:Name="ButtonInsertProcessSequence" Content="+" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Click="ButtonInsertProcessSequence_Click"/>
-            <DataGrid x:Name="DataGridProcessSequence" ItemsSource="{Binding}" HorizontalAlignment="Left" VerticalAlignment="Top" CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid x:Name="DataGridProcessSequence" ItemsSource="{Binding }" HorizontalAlignment="Left" VerticalAlignment="Top" CanUserAddRows="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem,Converter={StaticResource EnumConverter}}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="順序" Binding="{Binding Order}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="損耗" Binding="{Binding Loss,StringFormat={}{0}%,UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="工繳" Binding="{Binding WorkPay,StringFormat=C,UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="順序" Binding="{Binding Order,UpdateSourceTrigger=LostFocus}"></DataGridTextColumn>
                     <DataGridTextColumn Header="群組" Binding="{Binding Group}"></DataGridTextColumn>
+                    <DataGridTemplateColumn Header="修改" >
+                        <DataGridTemplateColumn.CellTemplate >
+                            <DataTemplate>
+                                <Button x:Name="ButtonEditProcessSequence" Content="修改" Click="ButtonEditProcessSequence_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
         <Button x:Name="ButtonNewProcessSequence" Content="新增" HorizontalAlignment="Left" Margin="109,369,0,0" VerticalAlignment="Top" Width="75" Click="ButtonNewProcessSequence_Click"/>
-        <Button x:Name="ButtonEditProcessSequence" Content="修改" HorizontalAlignment="Left" Margin="192,369,0,0" VerticalAlignment="Top" Width="75"/>
-        <Button x:Name="ButtonDeleteProcessSequence" Content="刪除" HorizontalAlignment="Left" Margin="280,369,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteProcessSequence_Click"/>
+        <Button x:Name="ButtonDeleteProcessSequence" Content="刪除" HorizontalAlignment="Left" Margin="200,369,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteProcessSequence_Click"/>
 
 
 

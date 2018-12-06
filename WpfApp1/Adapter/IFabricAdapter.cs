@@ -146,5 +146,15 @@ namespace WpfApp1.Adapter
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
         int CheckIsInProcessSequenceColorMapping(int colorNo, IEnumerable<int> processSequences);
+
+        /// <summary>
+        /// 修改加工程序,可修改工繳,損耗,順序
+        /// </summary>
+        /// <param name="sequenceNo"></param>
+        /// <param name="loss"></param>
+        /// <param name="workPay"></param>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        int EditProcessSequence(int sequenceNo, decimal loss, int workPay, int order);
     }
 }

@@ -153,5 +153,12 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="processSequenceDetails"></param>
         /// <returns></returns>
         bool CheckIsInProcessSequenceColorMapping(IEnumerable<ProcessSequenceDetail> processSequenceDetails);
+
+        /// <summary>
+        /// 修改加工程序,可修改工繳,損耗,順序
+        /// </summary>
+        /// <param name="processSequenceDetail"></param>
+        /// <returns></returns>
+        bool EditProcessSequence(ProcessSequenceDetail processSequenceDetail);
     }
 }

@@ -113,7 +113,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
         /// <returns></colorNo>
         public IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo)
         {
-            IEnumerable<ProcessSequenceDetail> processSequences = FabricAdapter.GetProcessSequences(fabricID, colorNo);
+            IEnumerable<ProcessSequenceDetail> processSequences = FabricAdapter.GetProcessSequences(fabricID, colorNo).OrderBy(o => o.Order);
             return processSequences;
         }
         /// <summary>
@@ -270,6 +270,16 @@ namespace WpfApp1.Modules.FabricModule.Implement
             IEnumerable<int> processSequences = processSequenceDetails.Select(s => s.SequenceNo);
             int count = FabricAdapter.CheckIsInProcessSequenceColorMapping(colorNo, processSequences);
             return processSequences.Count() == count;
+        }
+        /// <summary>
+        /// 修改加工程序,可修改工繳,損耗,順序
+        /// </summary>
+        /// <param name="processSequenceDetail"></param>
+        /// <returns></returns>
+        public bool EditProcessSequence(ProcessSequenceDetail processSequenceDetail)
+        {
+            int count = FabricAdapter.EditProcessSequence(processSequenceDetail.SequenceNo, processSequenceDetail.Loss, processSequenceDetail.WorkPay, processSequenceDetail.Order);
+            return count == 1;
         }
     }
 }
