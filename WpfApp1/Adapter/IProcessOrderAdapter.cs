@@ -201,5 +201,11 @@ namespace WpfApp1.Adapter
         /// <param name="dateTime"></param>
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime);
+        /// <summary>
+        /// 依據顏色取得加工訂單
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
     }
 }

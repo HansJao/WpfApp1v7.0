@@ -583,5 +583,23 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
+        /// <summary>
+        /// 依據顏色取得加工訂單
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color)
+        {
+            var sqlCmd = @"SELECT DISTINCT PO.* FROM ProcessOrderColorDetail POCD
+                           INNER JOIN ProcessOrder PO ON POCD.OrderNo = PO.OrderNo
+                           WHERE POCD.Color LIKE @Color
+                           ORDER BY PO.OrderNo";
+            SqlParameter[] parameter = new SqlParameter[]
+                {
+                        new SqlParameter("@Color", SqlDbType.NVarChar) { Value = "%" + color + "%" },
+                };
+            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
     }
 }

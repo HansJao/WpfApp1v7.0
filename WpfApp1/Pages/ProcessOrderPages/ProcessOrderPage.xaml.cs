@@ -119,8 +119,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
             UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
 
             DataGridFactoryShipping.ItemsSource = null;
-            ComboBoxCustomer.SelectedIndex = -1;
-            TextBoxQuantity.Text = string.Empty;
+            //ComboBoxCustomer.SelectedIndex = -1;
+            //TextBoxQuantity.Text = string.Empty;
             DataGridProcessOrderFlowDateDetail.ItemsSource = null;
 
 
@@ -193,6 +193,20 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 {
                     return (true);
                 };
+            }
+        }
+        private void TextBoxColorSearch_GotFocus(object sender, RoutedEventArgs e)
+        {
+            ButtonDisplayAllOrder_Click(sender, e);
+        }
+
+        private void TextBoxColorSearch_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                TextBox textBox = (TextBox)sender;
+                string color = textBox.Text;
+                DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByColor(color));
             }
         }
 
@@ -520,5 +534,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderByFactoryUpdateDate(DateTime.Now.ToShortDateString());
             DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(processOrderList);
         }
+
+
     }
 }

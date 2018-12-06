@@ -382,5 +382,15 @@ namespace WpfApp1.Modules.Process.Implement
             IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByFactoryUpdateDate(dateTime);
             return result;
         }
+        /// <summary>
+        /// 依據顏色取得加工訂單
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color)
+        {
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color);
+            return result;
+        }
     }
 }
