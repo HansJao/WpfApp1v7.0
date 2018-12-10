@@ -143,14 +143,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 //ProcessOrderColorStatus status;
                 //Enum.TryParse(ComboBoxStatus.SelectedIndex == -1 ? "" : ComboBoxStatus.SelectedItem.ToString(), out status);
                 ProcessModule.DeleteProcessOrder(processOrder);
+                int selectedIndex = DataGridProcessOrder.SelectedIndex - 1;
                 DataGridProcessOrderCollection.Remove(processOrder);
-                //DataGridProcessOrder.ItemsSource.
-                //DataGridProcessOrder.SelectedIndex = DataGridProcessOrder.SelectedIndex;
-                //DataGridProcessOrder.ItemsSource = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByStatus(status));
-
-                //DataGridOrderColorFactoryShippingDetail.ItemsSource = null;
-                //DataGridProcessOrderFlowDateDetail.ItemsSource = null;
-                //DataGridFactoryShipping.ItemsSource = null;
+                DataGridProcessOrder.SelectedIndex = selectedIndex;
             }
         }
 
