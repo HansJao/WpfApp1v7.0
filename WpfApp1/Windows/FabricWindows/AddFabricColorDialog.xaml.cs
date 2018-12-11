@@ -50,6 +50,7 @@ namespace WpfApp1.Windows.FabricWindows
             ButtonControl(TextBoxColorName);
         }
 
+
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
             IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, TextBoxColorName.Text);
@@ -72,9 +73,14 @@ namespace WpfApp1.Windows.FabricWindows
                 Top = this.Top,
                 DataContext = this
             };
+            _yarnSelectDialog.ChangeButtonEditFabricColorExecute += new YarnSelectDialog.ChangeButtonEditFabricColorAction(DisableChangeButtonEditFabricColor);
             _yarnSelectDialog.Show();
         }
 
+        private void DisableChangeButtonEditFabricColor()
+        {
+            ButtonEditFabricColor.IsEnabled = false;
+        }
         private void TextBoxColorName_TextChanged(object sender, TextChangedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -137,6 +143,11 @@ namespace WpfApp1.Windows.FabricWindows
             int groupNo = Convert.ToInt16(comboBox.SelectedItem);
             if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(groupNo);
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[groupNo];
+        }
+
+        private void ButtonDeleteFabricColor_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

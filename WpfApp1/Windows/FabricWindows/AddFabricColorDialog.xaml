@@ -15,7 +15,7 @@
         <!--<StackPanel x:Name="StackPanelArea" Margin="10,73,56,37">
             
         </StackPanel>-->
-        <DataGrid x:Name="DataGridFabricIngredientProportion" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,77,0,0" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid x:Name="DataGridFabricIngredientProportion" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0" AutoGenerateColumns="False" CanUserAddRows="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                 <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
@@ -28,7 +28,9 @@
         <Button x:Name="ButtonChangeYarn" Content="變更" HorizontalAlignment="Left" Margin="332,81,0,0" VerticalAlignment="Top" Width="50" Click="ButtonChangeYarn_Click"/>
         <Button x:Name="ButtonEditFabricColor" Content="修改" HorizontalAlignment="Left" Margin="202,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonEditFabricColor_Click"/>
         <Button x:Name="ButtonAddFabricColor" Content="新增顏色" HorizontalAlignment="Left" Margin="27,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAddFabricColor_Click"/>
-        <ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="216,20,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
+        <Label Content="群組:"  HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="70,73,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
+        <Button x:Name="ButtonDeleteFabricColor" Content="刪除" HorizontalAlignment="Left" Margin="282,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteFabricColor_Click"/>
 
     </Grid>
 </Window>

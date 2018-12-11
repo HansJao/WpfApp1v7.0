@@ -29,6 +29,11 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFabricModule FabricModule { get; } = new FabricModule();
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _fabricIngredientProportion;
         private int _groupNo { get; set; }
+
+        public delegate void ChangeButtonEditFabricColorAction();
+
+        public event ChangeButtonEditFabricColorAction ChangeButtonEditFabricColorExecute;
+
         public YarnSelectDialog(int groupNo, ref Dictionary<int, ObservableCollection<FabricIngredientProportion>> fabricIngredientProportion)
         {
             InitializeComponent();
@@ -70,7 +75,7 @@ namespace WpfApp1.Windows.FabricWindows
                     return;
                 }
                 //當新增一個比例時,不能用修改
-                addFabricColorDialog.ButtonEditFabricColor.IsEnabled = false;
+                ChangeButtonEditFabricColorExecute();
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
                 if (_fabricIngredientProportion.Count == 0)
                 {
