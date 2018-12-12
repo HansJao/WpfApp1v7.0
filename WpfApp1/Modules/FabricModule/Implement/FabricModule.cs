@@ -222,11 +222,11 @@ namespace WpfApp1.Modules.FabricModule.Implement
         /// 取得布種的成分群組資訊
         /// </summary>
         /// <param name="fabricID"></param>
-        /// <param name="color"></param>
+        /// <param name="fabricColorNo"></param>
         /// <returns></returns>
-        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
+        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, int fabricColorNo)
         {
-            IngredientGroupInfo ingredientGroupInfo = FabricAdapter.GetIngredientGroupInfo(fabricID, color);
+            IngredientGroupInfo ingredientGroupInfo = FabricAdapter.GetIngredientGroupInfo(fabricID, fabricColorNo);
             return ingredientGroupInfo;
         }
         /// <summary>

@@ -305,16 +305,16 @@ namespace WpfApp1.Adapter.MSSQL
         /// <param name="fabricID"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, string color)
+        public IngredientGroupInfo GetIngredientGroupInfo(int fabricID, int fabricColorNo)
         {
             var sqlCmd = @"SELECT TOP 1 FC.ColorNo,FP.[GROUP] FROM FabricColor FC
                           LEFT JOIN FabricProportion FP ON FC.ColorNo=FP.ColorNo
-                          WHERE FabricID = @FabricID AND Color = @Color
+                          WHERE FabricID = @FabricID AND FC.ColorNo = @ColorNo
                           ORDER BY FP.[GROUP] DESC";
             SqlParameter[] parameters = new SqlParameter[]
             {
                 new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
-                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = color }
+                new SqlParameter("@ColorNo", SqlDbType.Int) { Value = fabricColorNo }
             };
             var result = DapperHelper.Query<IngredientGroupInfo>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
