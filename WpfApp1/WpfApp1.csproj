@@ -257,8 +257,8 @@
     <Compile Include="Windows\CustomerEditDialog.xaml.cs">
       <DependentUpon>CustomerEditDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\FabricWindows\AddFabricColorDialog.xaml.cs">
-      <DependentUpon>AddFabricColorDialog.xaml</DependentUpon>
+    <Compile Include="Windows\FabricWindows\EditProportionGroupDialog.xaml.cs">
+      <DependentUpon>EditProportionGroupDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\FabricWindows\AddProcessSequenceDialog.xaml.cs">
       <DependentUpon>AddProcessSequenceDialog.xaml</DependentUpon>
@@ -362,7 +362,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\FabricWindows\AddFabricColorDialog.xaml">
+    <Page Include="Windows\FabricWindows\EditProportionGroupDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

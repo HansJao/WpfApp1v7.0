@@ -53,9 +53,9 @@ namespace WpfApp1.Windows.FabricWindows
         }
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
-            AddFabricColorDialog addFabricColorDialog = (AddFabricColorDialog)this.DataContext;
+            EditProportionGroupDialog editProportionGroupDialog = (EditProportionGroupDialog)this.DataContext;
             MerchantYarnPrice merchantYarnPrice = DataGridMerchantYarnPrice.SelectedItem as MerchantYarnPrice;
-            int selectedIndex = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex;
+            int selectedIndex = editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedIndex;
             //如果紗成分比例沒有選擇一個色的話則會新增一個比例
             //否則會將選擇到的比例
             if (selectedIndex == -1)
@@ -89,11 +89,11 @@ namespace WpfApp1.Windows.FabricWindows
             }
             else
             {
-                var selectedItem = addFabricColorDialog.DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
+                var selectedItem = editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, merchantYarnPrice);
                 _fabricIngredientProportion[_groupNo].RemoveAt(selectedIndex);
                 _fabricIngredientProportion[_groupNo].Insert(selectedIndex, fabricIngredientProportion);
-                addFabricColorDialog.DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
+                editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
             }
 
         }

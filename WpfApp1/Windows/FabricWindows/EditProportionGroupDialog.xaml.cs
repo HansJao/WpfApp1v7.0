@@ -24,7 +24,7 @@ namespace WpfApp1.Windows.FabricWindows
     /// <summary>
     /// AddFabricColor.xaml 的互動邏輯
     /// </summary>
-    public partial class AddFabricColorDialog : Window
+    public partial class EditProportionGroupDialog : Window
     {
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
@@ -33,7 +33,7 @@ namespace WpfApp1.Windows.FabricWindows
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
         private ObservableCollection<FabricColor> _fabricColorList;
         private int _fabricColorNo;
-        public AddFabricColorDialog(Fabric fabric, FabricColor FabricColor, Dictionary<int, ObservableCollection<FabricIngredientProportion>> dictionaryFabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
+        public EditProportionGroupDialog(Fabric fabric, FabricColor FabricColor, Dictionary<int, ObservableCollection<FabricIngredientProportion>> dictionaryFabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
         {
             InitializeComponent();
             _fabric = fabric;

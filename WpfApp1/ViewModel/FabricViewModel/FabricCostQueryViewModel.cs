@@ -48,12 +48,12 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 MessageBox.Show("未選取布種!!");
                 return;
             }
-            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList)
+            EditProportionGroupDialog editProportionGroupDialog = new EditProportionGroupDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList)
             {
                 Left = 500,
                 Top = 550
             };
-            addFabricColorDialog.Show();
+            editProportionGroupDialog.Show();
         }
 
         public ObservableCollection<Fabric> FabricList { get; set; }
