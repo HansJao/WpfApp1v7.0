@@ -107,6 +107,13 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         int InsertFabricIngredientProportions(IEnumerable<FabricProportion> list);
         /// <summary>
+        /// 刪除布種成分比例
+        /// </summary>
+        /// <param name="fabricColorNo"></param>
+        /// <param name="groupNo"></param>
+        /// <returns></returns>
+        int DeleteFabricIngredientProportions(int fabricColorNo, int groupNo);
+        /// <summary>
         /// 取得布種的成分群組資訊
         /// </summary>
         /// <param name="fabricID"></param>
@@ -156,5 +163,6 @@ namespace WpfApp1.Adapter
         /// <param name="order"></param>
         /// <returns></returns>
         int EditProcessSequence(int sequenceNo, decimal loss, int workPay, int order);
+      
     }
 }

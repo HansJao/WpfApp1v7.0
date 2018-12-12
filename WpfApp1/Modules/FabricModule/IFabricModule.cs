@@ -117,6 +117,13 @@ namespace WpfApp1.Modules.FabricModule
         bool InsertFabricIngredientProportions(int colorNo, List<FabricIngredientProportion> list);
 
         /// <summary>
+        /// 刪除布種成分比例
+        /// </summary>
+        /// <param name="fabricColorNo"></param>
+        /// <param name="groupNo"></param>
+        /// <returns></returns>
+        bool DeleteFabricIngredientProportions(int fabricColorNo, int groupNo);
+        /// <summary>
         /// 取得布種的成分群組資訊
         /// </summary>
         /// <param name="fabricID"></param>
@@ -160,5 +167,6 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="processSequenceDetail"></param>
         /// <returns></returns>
         bool EditProcessSequence(ProcessSequenceDetail processSequenceDetail);
+        
     }
 }

@@ -208,6 +208,17 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return count == list.Count;
         }
         /// <summary>
+        /// 刪除布種成分比例
+        /// </summary>
+        /// <param name="fabricColorNo"></param>
+        /// <param name="groupNo"></param>
+        /// <returns></returns>
+        public bool DeleteFabricIngredientProportions(int fabricColorNo, int groupNo)
+        {
+            int count = FabricAdapter.DeleteFabricIngredientProportions(fabricColorNo, groupNo);
+            return count >= 1;
+        }
+        /// <summary>
         /// 取得布種的成分群組資訊
         /// </summary>
         /// <param name="fabricID"></param>

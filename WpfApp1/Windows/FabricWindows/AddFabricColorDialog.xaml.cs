@@ -32,12 +32,14 @@ namespace WpfApp1.Windows.FabricWindows
         private Fabric _fabric;
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
         private ObservableCollection<FabricColor> _fabricColorList;
+        private int _fabricColorNo;
         public AddFabricColorDialog(Fabric fabric, FabricColor FabricColor, Dictionary<int, ObservableCollection<FabricIngredientProportion>> dictionaryFabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
         {
             InitializeComponent();
             _fabric = fabric;
             _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion;
             _fabricColorList = FabricColorList;
+            _fabricColorNo = FabricColor.ColorNo;
 
             ComboBoxGroup.ItemsSource = dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
@@ -145,9 +147,11 @@ namespace WpfApp1.Windows.FabricWindows
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[groupNo];
         }
 
-        private void ButtonDeleteFabricColor_Click(object sender, RoutedEventArgs e)
+        private void ButtonDeleteFabricIngredientProportions_Click(object sender, RoutedEventArgs e)
         {
-
+            int groupNo = Convert.ToInt16(ComboBoxGroup.SelectedItem);
+            bool success = FabricModule.DeleteFabricIngredientProportions(_fabricColorNo, groupNo);
+            success.CheckSuccessMessageBox("刪除成功!!", "好像有錯誤喔!!");
         }
     }
 }

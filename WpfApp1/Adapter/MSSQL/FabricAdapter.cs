@@ -282,6 +282,24 @@ namespace WpfApp1.Adapter.MSSQL
             return result;
         }
         /// <summary>
+        /// 刪除布種成分比例
+        /// </summary>
+        /// <param name="fabricColorNo"></param>
+        /// <param name="groupNo"></param>
+        /// <returns></returns>
+        public int DeleteFabricIngredientProportions(int fabricColorNo, int groupNo)
+        {
+            string sqlCmd = @"DELETE [dbo].[FabricProportion]
+                              WHERE [ColorNo] = @ColorNo AND [Group] = @Group";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                 new SqlParameter("@ColorNo", SqlDbType.Int) { Value = fabricColorNo },
+                 new SqlParameter("@Group", SqlDbType.Int) { Value = groupNo }
+            };
+            int count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return count;
+        }
+        /// <summary>
         /// 取得布種的成分群組資訊
         /// </summary>
         /// <param name="fabricID"></param>

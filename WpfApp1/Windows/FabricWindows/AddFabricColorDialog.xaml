@@ -30,7 +30,7 @@
         <Button x:Name="ButtonAddFabricColor" Content="新增顏色" HorizontalAlignment="Left" Margin="27,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAddFabricColor_Click"/>
         <Label Content="群組:"  HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="70,73,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
-        <Button x:Name="ButtonDeleteFabricColor" Content="刪除" HorizontalAlignment="Left" Margin="282,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteFabricColor_Click"/>
+        <Button x:Name="ButtonDeleteFabricIngredientProportions" Content="刪除群組" HorizontalAlignment="Left" Margin="282,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteFabricIngredientProportions_Click"/>
 
     </Grid>
 </Window>
