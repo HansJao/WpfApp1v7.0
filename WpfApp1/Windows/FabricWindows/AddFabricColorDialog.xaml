@@ -1,0 +1,16 @@
+﻿<Window x:Class="WpfApp1.Windows.FabricWindows.AddFabricColorDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
+        mc:Ignorable="d"
+        Title="新增布種顏色" Height="270" Width="261">
+    <Grid>
+        <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top"/>
+        <Label  Content="{Binding FabricName}" HorizontalAlignment="Left" Margin="70,16,0,0" VerticalAlignment="Top"/>
+        <Label Content="布種顏色:" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" Text="{Binding FabricColor}" Height="23" Margin="76,65,0,0" VerticalAlignment="Top" Width="120" />
+        <Button Content="新增" Command="{Binding AddFabricColorClick}" HorizontalAlignment="Left" Margin="121,114,0,0" VerticalAlignment="Top" Width="75"/>
+    </Grid>
+</Window>

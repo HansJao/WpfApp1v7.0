@@ -37,15 +37,18 @@ namespace WpfApp1.Windows.FabricWindows
         {
             InitializeComponent();
             _fabric = fabric;
-            _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion;
+
+            _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion.Count == 0
+                                                    ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>> { { 1, new ObservableCollection<FabricIngredientProportion>() } }
+                                                    : dictionaryFabricIngredientProportion;
             _fabricColorList = FabricColorList;
             _fabricColorNo = FabricColor.ColorNo;
 
-            ComboBoxGroup.ItemsSource = dictionaryFabricIngredientProportion.Select(s => s.Key);
+            ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0
-                                                            ? _dictionaryFabricIngredientProportion[1]
-                                                            : null;
+                                                            ? _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key]
+                                                            : new ObservableCollection<FabricIngredientProportion>();
             LabelColorName.Content = FabricColor == null
                                     ? string.Empty
                                     : FabricColor.Color;

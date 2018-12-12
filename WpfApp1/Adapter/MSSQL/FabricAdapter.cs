@@ -255,7 +255,6 @@ namespace WpfApp1.Adapter.MSSQL
         {
 
             var sqlCmd = @"INSERT INTO FabricColor
-                           OUTPUT INSERTED.ColorNo
                            VALUES
                            (@FabricID, @Color, GETDATE());";
             SqlParameter[] parameters = new SqlParameter[]
@@ -263,7 +262,7 @@ namespace WpfApp1.Adapter.MSSQL
                 new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
                 new SqlParameter("@Color", SqlDbType.NVarChar) { Value = text }
             };
-            var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
         /// <summary>

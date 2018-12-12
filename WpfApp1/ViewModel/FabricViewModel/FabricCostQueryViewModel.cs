@@ -22,8 +22,20 @@ namespace WpfApp1.ViewModel.FabricViewModel
     {
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
-        public ICommand AddFabricColorClick { get { return new RelayCommand(AddFabricColorExecute, CanExecute); } }
+        public ICommand EditProportionGroupClick { get { return new RelayCommand(EditProportionGroupExecute, CanExecute); } }
         public ICommand AddProcessSequenceClick { get { return new RelayCommand(AddProcessSequenceExecute, CanExecute); } }
+        public ICommand AddFabricColorClick { get { return new RelayCommand(AddFabricColorExecute, CanExecute); } }
+
+        private void AddFabricColorExecute()
+        {
+            if (Fabric == null)
+            {
+                MessageBox.Show("未選取布種!!");
+                return;
+            }
+            AddFabricColorDialog addFabricColorDialog = new AddFabricColorDialog(Fabric);
+            addFabricColorDialog.Show();
+        }
 
         private void AddProcessSequenceExecute()
         {
@@ -41,11 +53,16 @@ namespace WpfApp1.ViewModel.FabricViewModel
             addProcessSequenceDialog.Show();
         }
 
-        private void AddFabricColorExecute()
+        private void EditProportionGroupExecute()
         {
             if (Fabric == null)
             {
                 MessageBox.Show("未選取布種!!");
+                return;
+            }
+            if (FabricColor == null)
+            {
+                MessageBox.Show("未選取顏色!!");
                 return;
             }
             EditProportionGroupDialog editProportionGroupDialog = new EditProportionGroupDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList)
@@ -103,13 +120,14 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 _fabricColor = value;
                 _stackPanelProcessSequence.Children.Clear();
-                if (value == null) return;
+                _stackPanel.Children.Clear();
+                if (value == null)
+                    return;
                 IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricModule.GetFabricIngredientProportionByColorNo(new List<int> { value.ColorNo });
 
                 FabricIngredientProportionGroup = fabricIngredientProportions.Count() == 0
-                                                  ? FabricIngredientProportionGroup
+                                                  ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>>()
                                                   : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
-                _stackPanel.Children.Clear();
 
                 IEnumerable<ProcessSequenceDetail> processSequences = FabricModule.GetProcessSequences(Fabric.FabricID, FabricColor.ColorNo)
                                                                   .Select(s => new ProcessSequenceDetail

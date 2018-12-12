@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
-        Title="新增布種顏色" Height="300" Width="400">
+        Title="修改布種比例群組" Height="300" Width="400">
     <Grid>
         <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelFabricName" Content="Label" HorizontalAlignment="Left" Margin="70,16,0,0" VerticalAlignment="Top"/>        
@@ -16,16 +16,16 @@
 
         <DataGrid x:Name="DataGridFabricIngredientProportion" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0" AutoGenerateColumns="False" CanUserAddRows="False" >
             <DataGrid.Columns>
-                <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
-                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
-                <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
-                <DataGridTextColumn Header="比例" Binding="{Binding Proportion,StringFormat={}{0}%}"></DataGridTextColumn>
+                <DataGridTextColumn Header="紗商" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"/>
+                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"/>
+                <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"/>
+                <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"/>
+                <DataGridTextColumn Header="比例" Binding="{Binding Proportion,StringFormat={}{0}%}"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="ButtonChangeYarn" Content="選取成分" HorizontalAlignment="Left" Margin="320,81,0,0" VerticalAlignment="Top" Width="60" Click="ButtonChangeYarn_Click"/>
-        <Button x:Name="ButtonEditFabricColor" Content="修改" HorizontalAlignment="Left" Margin="153,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonEditFabricColor_Click"/>
+        <Button x:Name="ButtonEditFabricColor" Content="修改比例" HorizontalAlignment="Left" Margin="153,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonEditFabricColor_Click"/>
         <!--<Button x:Name="ButtonAddFabricColor" Content="新增顏色" HorizontalAlignment="Left" Margin="27,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonAddFabricColor_Click"/>-->
         <Button x:Name="ButtonAddIngredientGroup" Content="新增成分群組" HorizontalAlignment="Left" Margin="20,238,0,0" VerticalAlignment="Top" Width="90" Click="ButtonAddIngredientGroup_Click"/>
         <Button x:Name="ButtonDeleteFabricIngredientProportions" Content="刪除群組" HorizontalAlignment="Left" Margin="282,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteFabricIngredientProportions_Click"/>
