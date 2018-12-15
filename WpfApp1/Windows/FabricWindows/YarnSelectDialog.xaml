@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
-        Title="YarnSelectDialog" Height="300" Width="400">
+        Title="選取布種成分" Height="600" Width="400">
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
@@ -27,7 +27,7 @@
                     <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                     <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
                     <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="置換" >
+                    <DataGridTemplateColumn Header="" >
                         <DataGridTemplateColumn.CellTemplate >
                             <DataTemplate>
                                 <Button x:Name="ButtonChangeYarn" Content="確認" Click="ButtonChangeYarn_Click"/>

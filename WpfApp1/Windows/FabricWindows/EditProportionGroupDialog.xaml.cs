@@ -22,7 +22,7 @@ using WpfApp1.ViewModel.FabricViewModel;
 namespace WpfApp1.Windows.FabricWindows
 {
     /// <summary>
-    /// AddFabricColor.xaml 的互動邏輯
+    /// EditProportionGroupDialog.xaml 的互動邏輯
     /// </summary>
     public partial class EditProportionGroupDialog : Window
     {
@@ -46,15 +46,11 @@ namespace WpfApp1.Windows.FabricWindows
 
             ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion.Count != 0
-                                                            ? _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key]
-                                                            : new ObservableCollection<FabricIngredientProportion>();
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
             LabelColorName.Content = FabricColor == null
                                     ? string.Empty
                                     : FabricColor.Color;
-            //ButtonControl(TextBoxColorName);
         }
-
 
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
@@ -86,37 +82,6 @@ namespace WpfApp1.Windows.FabricWindows
         {
             ButtonEditFabricColor.IsEnabled = false;
         }
-        //private void TextBoxColorName_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    TextBox textBox = (TextBox)sender;
-        //    ButtonControl(textBox);
-        //}
-
-        //private void ButtonControl(TextBox textBox)
-        //{
-        //    int isInFabricColorList = _fabricColorList.Where(w => w.Color == textBox.Text).Count();
-        //    if (isInFabricColorList > 0)
-        //    {
-        //        ButtonAddIngredientGroup.IsEnabled = true;
-        //        ButtonAddFabricColor.IsEnabled = false;
-        //        ButtonEditFabricColor.IsEnabled = true;
-        //    }
-        //    else if (textBox.Text == string.Empty)
-        //    {
-        //        ButtonAddIngredientGroup.IsEnabled = false;
-        //        ButtonAddFabricColor.IsEnabled = false;
-        //        ButtonEditFabricColor.IsEnabled = false;
-        //    }
-        //    else
-        //    {
-        //        ButtonAddIngredientGroup.IsEnabled = false;
-        //        ButtonAddFabricColor.IsEnabled = true;
-        //        ButtonEditFabricColor.IsEnabled = false;
-        //    }
-
-        //    if (DataGridFabricIngredientProportion.Items.Count == 0)
-        //        ButtonEditFabricColor.IsEnabled = false;
-        //}
 
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
         {
@@ -134,13 +99,6 @@ namespace WpfApp1.Windows.FabricWindows
             }
             return fabricIngredientProportions;
         }
-
-        //private void ButtonAddFabricColor_Click(object sender, RoutedEventArgs e)
-        //{
-        //    int colorNo = FabricModule.InsertFabricColor(_fabric.FabricID, TextBoxColorName.Text);
-        //    bool success = FabricModule.InsertFabricIngredientProportions(colorNo, GetFabricIngredientProportions());
-        //    success.CheckSuccessMessageBox("新增成功!!", "好像有錯誤喔!!");
-        //}
 
         private void ComboBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

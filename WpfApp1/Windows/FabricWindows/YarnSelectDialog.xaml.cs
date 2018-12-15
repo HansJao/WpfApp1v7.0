@@ -136,7 +136,7 @@ namespace WpfApp1.Windows.FabricWindows
         {
             string ingredient = TextBoxIngredient.Text.ToUpper();
             string color = TextBoxColor.Text.ToUpper();
-            int yarnMerchant = ((MerchantYarnPrice)ComboBoxYarnMerchant.SelectedItem).YarnMerchant;
+            int yarnMerchant = ComboBoxYarnMerchant.SelectedIndex == -1 ? 0 : ((MerchantYarnPrice)ComboBoxYarnMerchant.SelectedItem).YarnMerchant;
             bool checkNoneFilterCondition = string.IsNullOrEmpty(ingredient) && yarnMerchant == 0 && string.IsNullOrEmpty(color);
 
             if (!checkNoneFilterCondition)

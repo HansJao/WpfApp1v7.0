@@ -385,6 +385,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 return;
             }
             var dataGridFactoryShippingDetailItems = DataGridOrderColorFactoryShippingDetail.SelectedItems;
+            if (dataGridFactoryShippingDetailItems.Count == 0)
+            {
+                return;
+            }
             List<ProcessOrderColorFactoryShippingDetail> factoryShippingDetails = new List<ProcessOrderColorFactoryShippingDetail>();
             factoryShippingDetails.AddRange(dataGridFactoryShippingDetailItems.Cast<ProcessOrderColorFactoryShippingDetail>());
 
