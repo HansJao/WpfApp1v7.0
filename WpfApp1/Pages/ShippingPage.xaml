@@ -15,7 +15,7 @@
             <Grid>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <Label Content="客戶名稱:" VerticalAlignment="Top"/>
-                    <TextBox x:Name="TextBoxCustomerName" VerticalAlignment ="Top" Height="24" Width="85" TextChanged="TextBoxCustomerName_TextChanged" />
+                    <TextBox x:Name="TextBoxCustomerName" VerticalAlignment ="Top" Height="24" Width="85" TextChanged="TextBoxCustomerName_TextChanged" KeyUp="TextBoxCustomerName_KeyUp" />
                 </StackPanel>
                 <DataGrid x:Name="DataGridCustomerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,38,0,0" CanUserAddRows="False" AutoGenerateColumns="False" SelectionChanged="DataGridCustomerName_SelectionChanged">
                     <DataGrid.Columns >
@@ -32,13 +32,13 @@
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
                         <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
                         <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
-                        <DataGridTemplateColumn Header="出貨數量"  Width="100" >
+                        <DataGridTemplateColumn Header="出貨數量"  Width="60" >
                             <DataGridTemplateColumn.CellTemplate >
                                 <DataTemplate  >
                                     <StackPanel Orientation="Horizontal">
                                         <!--<TextBlock Text="+"/>-->
                                         <!--<TextBlock Text="-"/>-->
-                                        <TextBox x:Name="TextBoxShippingCount" Margin="3,1" Text="{Binding ShippingNumber, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ZeroToEmptyConverter}}"  Width="60"/>
+                                        <TextBox x:Name="TextBoxShippingCount" Margin="3,1" Text="{Binding ShippingNumber, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ZeroToEmptyConverter}}"  Width="30"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>

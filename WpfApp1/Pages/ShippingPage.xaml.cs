@@ -116,7 +116,7 @@ namespace WpfApp1.Pages
                 };
             };
             DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
-           
+
             GetShippingCacheNameList();
         }
 
@@ -132,7 +132,7 @@ namespace WpfApp1.Pages
             if (selectedItem == null)
                 return;
             string textileName = (sender as ComboBox).SelectedItem.ToString();
-         
+
             ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
             IList selectedTextiles = new ObservableCollection<SelectedTextile>();
 
@@ -296,10 +296,8 @@ namespace WpfApp1.Pages
                     fs.Write(title, 0, title.Length);
                 }
             }
-
             GetShippingCacheNameList();
             ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
-
         }
 
         private void ExportToExcel()
@@ -418,7 +416,6 @@ namespace WpfApp1.Pages
                             {
                                 break;
                             }
-
                         }
                         colorIndex++;
                         //如果是配件碼布的話只要加1
@@ -465,7 +462,7 @@ namespace WpfApp1.Pages
             cell.CellStyle = style;
         }
 
-      
+
 
         private void ButtonShippingDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -482,7 +479,6 @@ namespace WpfApp1.Pages
             {
                 ShippingSheetStructure.ElementAt(selectedItem.Array0).TextileShippingDatas.ElementAt(selectedItem.Array1).ShippingSheetDatas.RemoveAt(selectedItem.Array2);
             }
-
             DataGridShippingDisplay();
         }
 
@@ -542,8 +538,6 @@ namespace WpfApp1.Pages
                 });
                 array0Index++;
             }
-
-
         }
         private string[] GetFileNames(string path, string filter)
         {
@@ -599,6 +593,14 @@ namespace WpfApp1.Pages
                 {
                     return (true);
                 };
+            }
+        }
+
+        private void TextBoxCustomerName_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                DataGridCustomerName.SelectedIndex = -1;
             }
         }
 
