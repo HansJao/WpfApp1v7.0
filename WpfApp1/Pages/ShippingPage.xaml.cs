@@ -54,67 +54,7 @@ namespace WpfApp1.Pages
                 ISheet sheet = _workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 textileList.Add(sheet.SheetName);
             }
-
-            ComboBoxTextileList.ItemsSource = textileList;
-            ComboBoxTextileList.Loaded += (ls, le) =>
-            {
-                var targetTextBox = ComboBoxTextileList?.Template.FindName("PART_EditableTextBox", ComboBoxTextileList) as TextBox;
-
-                if (targetTextBox == null) return;
-
-                ComboBoxTextileList.Tag = "TextInput";
-                ComboBoxTextileList.StaysOpenOnEdit = true;
-                ComboBoxTextileList.IsEditable = true;
-                ComboBoxTextileList.IsTextSearchEnabled = false;
-
-                targetTextBox.TextChanged += (o, args) =>
-                {
-                    var textBox = (TextBox)o;
-
-                    var searchText = textBox.Text;
-
-                    if (ComboBoxTextileList.Tag.ToString() == "Selection")
-                    {
-                        ComboBoxTextileList.Tag = "TextInput";
-                        ComboBoxTextileList.IsDropDownOpen = true;
-                    }
-                    else if (ComboBoxTextileList.Tag.ToString() == "TextInput" && ComboBoxTextileList.Items.Contains(searchText) || searchText == "　")
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        if (ComboBoxTextileList.SelectionBoxItem != null)
-                        {
-                            ComboBoxTextileList.SelectedItem = null;
-                            targetTextBox.Text = searchText;
-                            ComboBoxTextileList.IsDropDownOpen = true;
-                            targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                        }
-
-                        if (string.IsNullOrEmpty(searchText))
-                        {
-                            ComboBoxTextileList.Items.Filter = item => true;
-                            ComboBoxTextileList.SelectedItem = default(object);
-                        }
-                        else
-                            ComboBoxTextileList.Items.Filter = item =>
-                                    item.ToString().ToLower().Contains(searchText.ToLower());
-
-                        //Keyboard.ClearFocus();
-                        //Keyboard.Focus(targetTextBox);
-                        ComboBoxTextileList.IsDropDownOpen = true;
-                        targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                    }
-                };
-
-                ComboBoxTextileList.SelectionChanged += (o, args) =>
-                {
-                    var comboBox = o as ComboBox;
-                    if (comboBox?.SelectedItem == null) return;
-                    comboBox.Tag = "Selection";
-                };
-            };
+            DataGridTextileList.ItemsSource = textileList;
             DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
 
             GetShippingCacheNameList();
@@ -126,38 +66,6 @@ namespace WpfApp1.Pages
             ComboBoxShippingCacheName.ItemsSource = existsFileName.ToList();
         }
 
-        private void ComboBoxTextileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var selectedItem = (sender as ComboBox).SelectedItem;
-            if (selectedItem == null)
-                return;
-            string textileName = (sender as ComboBox).SelectedItem.ToString();
-
-            ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
-            IList selectedTextiles = new ObservableCollection<SelectedTextile>();
-
-            DataGridSelectedTextile.ItemsSource = selectedTextiles;
-            IRow row;
-            for (int i = 1; i <= sheet.LastRowNum; i++)
-            {
-                row = sheet.GetRow(i);
-                if (row == null)
-                {
-                    break;
-                }
-                var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
-                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false) ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString(); //獲取i行j列數據
-                selectedTextiles.Add(new SelectedTextile
-                {
-                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
-                    CountInventory = cellValue,
-                    ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
-                    Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
-                });
-            }
-        }
-
         private void SelectedTextile_Click(object sender, RoutedEventArgs e)
         {
             if (((ObservableCollection<SelectedTextile>)DataGridSelectedTextile.ItemsSource).Select(s => s.ShippingNumber).Sum() <= 0)
@@ -166,7 +74,7 @@ namespace WpfApp1.Pages
                 return;
             }
             var customerName = TextBoxCustomerName.Text.ToString();
-            var textileName = ComboBoxTextileList.Text.ToString();
+            var textileName = DataGridTextileList.SelectedItem.ToString();
             //若表中有此客戶
             if (ShippingSheetStructure.Count > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).Count() > 0)
             {
@@ -462,8 +370,6 @@ namespace WpfApp1.Pages
             cell.CellStyle = style;
         }
 
-
-
         private void ButtonShippingDelete_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = DataGridShippingSheet.SelectedItem as ShippingSheetData;
@@ -596,17 +502,76 @@ namespace WpfApp1.Pages
             }
         }
 
-        private void TextBoxCustomerName_KeyUp(object sender, KeyEventArgs e)
+        private void DataGridCustomerName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.Key == Key.Back || e.Key == Key.Delete)
+            if (DataGridCustomerName.SelectedIndex != -1)
             {
-                DataGridCustomerName.SelectedIndex = -1;
+                TextBoxCustomerName.Text = DataGridCustomerName.SelectedItem as string;
             }
         }
 
-        private void DataGridCustomerName_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TextBoxTextile_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBoxCustomerName.Text = DataGridCustomerName.SelectedItem as string;
+            TextBox textBoxName = (TextBox)sender;
+            string filterText = textBoxName.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                cv.Filter = o =>
+                {
+                    /* change to get data row value */
+                    string p = o as string;
+                    return (p.ToUpper().Contains(filterText.ToUpper()));
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                cv.Filter = o =>
+                {
+                    return (true);
+                };
+            }
+        }
+
+        private void TextBoxTextile_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                DataGridTextileList.SelectedIndex = -1;
+            }
+        }
+
+        private void DataGridTextileList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = (sender as DataGrid).SelectedItem;
+            if (selectedItem == null)
+                return;
+            string textileName = selectedItem.ToString();
+
+            ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
+            IList selectedTextiles = new ObservableCollection<SelectedTextile>();
+
+            DataGridSelectedTextile.ItemsSource = selectedTextiles;
+            IRow row;
+            for (int i = 1; i <= sheet.LastRowNum; i++)
+            {
+                row = sheet.GetRow(i);
+                if (row == null)
+                {
+                    break;
+                }
+                var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
+                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false) ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString(); //獲取i行j列數據
+                selectedTextiles.Add(new SelectedTextile
+                {
+                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                    CountInventory = cellValue,
+                    ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
+                    Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
+                });
+            }
         }
     }
 }
