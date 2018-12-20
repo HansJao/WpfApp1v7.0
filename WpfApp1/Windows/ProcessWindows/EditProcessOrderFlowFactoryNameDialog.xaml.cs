@@ -29,7 +29,6 @@ namespace WpfApp1.Windows.ProcessWindows
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         private IEnumerable<Factory> _factories;
-        private ProcessOrderFlowDateDetail _processOrderFlowDateDetail;
         public EditProcessOrderFlowFactoryNameDialog(ProcessOrderFlowDateDetail processOrderFlowDateDetail)
         {
 
@@ -37,21 +36,16 @@ namespace WpfApp1.Windows.ProcessWindows
             _factories = FactoryModule.GetFactoryList();
             ComboBoxFactoryName.ItemsSource = _factories.Select(s => s.Name);
             ComboBoxFactoryName.SelectedItem = processOrderFlowDateDetail.Name;
-            _processOrderFlowDateDetail = processOrderFlowDateDetail;
         }
+
+        public delegate void EditProcessOrderFlowFactoryAction(Factory selectedFactory);
+        public event EditProcessOrderFlowFactoryAction EditProcessOrderFlowFactoryExecute;
 
         private void ButtonEditProcessOrderFlowFactory_Click(object sender, RoutedEventArgs e)
         {
-            ProcessOrderPage page = (ProcessOrderPage)this.DataContext;
             var selectedFactory = _factories.Where(w => w.Name == ComboBoxFactoryName.SelectedItem.ToString()).First();
-            bool success = ProcessModule.EditProcessOrderFlowFactory(selectedFactory.FactoryID, _processOrderFlowDateDetail.OrderFlowNo);
-            if (success)
-            {
-                var processOrderFlowDateDetail = page.DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
-                processOrderFlowDateDetail.Name = selectedFactory.Name;
-                page.DataGridProcessOrderFlowDateDetail.CommitEdit();
-                page.DataGridProcessOrderFlowDateDetail.Items.Refresh();
-            }
+            EditProcessOrderFlowFactoryExecute(selectedFactory);
+        
             this.Close();
         }
     }

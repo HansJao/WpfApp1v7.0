@@ -24,6 +24,13 @@ using WpfApp1.Windows.ProcessWindows;
 
 namespace WpfApp1.Pages.ProcessOrderPages
 {
+    public class TestDataGrid :DataGrid
+    {
+        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
+        {
+            base.OnSelectionChanged(e);
+        }
+    }
     /// <summary>
     /// ProcessOrderPage.xaml 的互動邏輯
     /// </summary>
@@ -42,7 +49,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             ComboBoxStatus.ItemsSource = Enum.GetValues(typeof(ProcessOrderColorStatus)).Cast<ProcessOrderColorStatus>();
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
-
             ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerNameList();
             ComboBoxCustomer.Loaded += (ls, le) =>
             {
@@ -527,11 +533,23 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
             var selected = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
             EditProcessOrderFlowFactoryNameDialog editProcessOrderFlowFactoryNameDialog = new EditProcessOrderFlowFactoryNameDialog(selected);
+            editProcessOrderFlowFactoryNameDialog.EditProcessOrderFlowFactoryExecute += EditProcessOrderFlowFactoryExecute;
             DataGridProcessOrderFlowDateDetail.CancelEdit();
-            editProcessOrderFlowFactoryNameDialog.DataContext = this;
             editProcessOrderFlowFactoryNameDialog.Show();
         }
 
+        private void EditProcessOrderFlowFactoryExecute(Factory selectedFactory)
+        {
+            bool success = ProcessModule.EditProcessOrderFlowFactory(selectedFactory.FactoryID, (DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail).OrderFlowNo);
+            if (success)
+            {
+                var processOrderFlowDateDetail = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
+                processOrderFlowDateDetail.Name = selectedFactory.Name;
+                DataGridProcessOrderFlowDateDetail.CommitEdit();
+                DataGridProcessOrderFlowDateDetail.Items.Refresh();
+                DataGridProcessOrderFlowDateDetail.SelectedIndex = -1;
+            }
+        }
         private void ButtonUpdateProcessOrderRemark_Click(object sender, RoutedEventArgs e)
         {
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
