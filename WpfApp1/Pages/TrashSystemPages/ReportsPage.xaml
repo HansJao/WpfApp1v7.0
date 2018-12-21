@@ -11,21 +11,24 @@
     <Page.DataContext>
         <viewModel:ReportsViewModel/>
     </Page.DataContext>
-        <Grid>                        
-            <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashShippeds}" Margin="10,114,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}"/>
-                    <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>
-                    <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>
-                    <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Button x:Name="ButtonExport" Content="匯出" HorizontalAlignment="Left" Margin="211,74,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ButtonExportExecuteClick}"/>
-            <TextBox x:Name="TextBoxFilter" HorizontalAlignment="Left" Height="23" Margin="166,42,0,0" TextWrapping="Wrap" Text="{Binding FilterText}" VerticalAlignment="Top" Width="120"/>
-            <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="100,42,0,0" VerticalAlignment="Top"/>
-            <DatePicker x:Name="DatePickerBegin" HorizontalAlignment="Left" SelectedDate="{Binding DatePickerBegin}" Margin="75,10,0,0" VerticalAlignment="Top"/>
-            <DatePicker x:Name="DatePickerEnd" HorizontalAlignment="Left" SelectedDate="{Binding DatePickerEnd}" Margin="204,10,0,0" VerticalAlignment="Top"/>
-            <Button HorizontalAlignment="Left" Content="檢查" Margin="412,42,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportShippingCheckExecuteClick}" />
-            <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding ShippingCheckDate}" Margin="412,10,0,0" VerticalAlignment="Top"/>
-        </Grid>
+    <Grid>
+        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashShippeds}" Margin="10,230,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}"/>
+                <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>
+                <DataGridTextColumn Header="特徵" Binding="{Binding I_03}"/>
+                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="ButtonExport" Content="出貨紀錄匯出" HorizontalAlignment="Left" Margin="111,74,0,0" VerticalAlignment="Top" Width="80" Command="{Binding ButtonExportExecuteClick}"/>
+        <TextBox x:Name="TextBoxFilter" HorizontalAlignment="Left" Height="23" Margin="71,46,0,0" TextWrapping="Wrap" Text="{Binding FilterText}" VerticalAlignment="Top" Width="120"/>
+        <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="DatePickerBegin" HorizontalAlignment="Left" SelectedDate="{Binding DatePickerBegin}" Margin="75,10,0,0" VerticalAlignment="Top"/>
+        <DatePicker x:Name="DatePickerEnd" HorizontalAlignment="Left" SelectedDate="{Binding DatePickerEnd}" Margin="204,10,0,0" VerticalAlignment="Top"/>
+        <Button HorizontalAlignment="Left" Content="檢查" Margin="688,42,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportShippingCheckExecuteClick}" />
+        <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding ShippingCheckDate}" Margin="688,10,0,0" VerticalAlignment="Top"/>
+        <ComboBox HorizontalAlignment="Left" Margin="270,47,0,0" VerticalAlignment="Top" Width="120"/>
+        <Label Content="客戶名稱:" HorizontalAlignment="Left" Margin="204,46,0,0" VerticalAlignment="Top"/>
+        <Button Content="客戶出貨紀錄匯出" HorizontalAlignment="Left" Margin="290,74,0,0" VerticalAlignment="Top" Width="100"/>
+    </Grid>
 </Page>

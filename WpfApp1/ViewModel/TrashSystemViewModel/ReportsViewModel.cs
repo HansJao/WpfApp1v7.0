@@ -28,7 +28,14 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
         protected ITrashModule TrashModule { get; } = new TrashModule();
         public ICommand ExportShippingCheckExecuteClick { get { return new RelayCommand(ExportShippingCheckExecute, CanExecute); } }
-        public ICommand ButtonExportExecuteClick { get { return new RelayCommand(ButtonExport_Click, CanExecute); } }
+        public ICommand ButtonExportExecuteClick { get { return new RelayCommand(ButtonExportExecute, CanExecute); } }
+        public ICommand ButtonExportCustomerClick { get { return new RelayCommand(ButtonExportCustomerExecute, CanExecute); } }
+
+        private void ButtonExportCustomerExecute()
+        {
+            //TrashModule.GetTrashCustomerList(DatePickerBegin, DatePickerEnd,)
+        }
+
         public DateTime ShippingCheckDate { get; set; } = DateTime.Now;
 
         public DateTime DatePickerBegin { get; set; } = DateTime.Now;
@@ -50,7 +57,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         }
 
 
-        private void ButtonExport_Click()
+        private void ButtonExportExecute()
         {
 
             _trashShippeds.AddRange(TrashModule.GetTrashShippedList(DatePickerBegin, DatePickerEnd));

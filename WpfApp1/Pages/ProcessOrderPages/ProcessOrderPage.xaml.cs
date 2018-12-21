@@ -537,7 +537,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridProcessOrderFlowDateDetail.CancelEdit();
             editProcessOrderFlowFactoryNameDialog.Show();
         }
-
         private void EditProcessOrderFlowFactoryExecute(Factory selectedFactory)
         {
             bool success = ProcessModule.EditProcessOrderFlowFactory(selectedFactory.FactoryID, (DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail).OrderFlowNo);
@@ -547,6 +546,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 processOrderFlowDateDetail.Name = selectedFactory.Name;
                 DataGridProcessOrderFlowDateDetail.CommitEdit();
                 DataGridProcessOrderFlowDateDetail.Items.Refresh();
+                //暫時以此方式解決，避免更新工廠名稱時會同時更新顏色狀態
                 DataGridProcessOrderFlowDateDetail.SelectedIndex = -1;
             }
         }
