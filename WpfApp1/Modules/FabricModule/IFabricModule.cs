@@ -167,6 +167,8 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="processSequenceDetail"></param>
         /// <returns></returns>
         bool EditProcessSequence(ProcessSequenceDetail processSequenceDetail);
-        
+
+        Dictionary<int, ObservableCollection<FabricIngredientProportion>> GetDictionaryFabricIngredientProportion(List<int> colorNo);
+
     }
 }

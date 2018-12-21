@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -291,6 +292,16 @@ namespace WpfApp1.Modules.FabricModule.Implement
         {
             int count = FabricAdapter.EditProcessSequence(processSequenceDetail.SequenceNo, processSequenceDetail.Loss, processSequenceDetail.WorkPay, processSequenceDetail.Order);
             return count == 1;
+        }
+
+        public Dictionary<int, ObservableCollection<FabricIngredientProportion>> GetDictionaryFabricIngredientProportion(List<int> colorNo)
+        {
+            IEnumerable<FabricIngredientProportion> fabricIngredientProportions = GetFabricIngredientProportionByColorNo(colorNo);
+
+            Dictionary<int, ObservableCollection<FabricIngredientProportion>> fabricIngredientProportionGroup = fabricIngredientProportions.Count() == 0
+                                              ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>>()
+                                              : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
+            return fabricIngredientProportionGroup;
         }
     }
 }

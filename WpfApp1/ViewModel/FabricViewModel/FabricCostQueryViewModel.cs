@@ -123,11 +123,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 _stackPanel.Children.Clear();
                 if (value == null)
                     return;
-                IEnumerable<FabricIngredientProportion> fabricIngredientProportions = FabricModule.GetFabricIngredientProportionByColorNo(new List<int> { value.ColorNo });
 
-                FabricIngredientProportionGroup = fabricIngredientProportions.Count() == 0
-                                                  ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>>()
-                                                  : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
+                FabricIngredientProportionGroup = FabricModule.GetDictionaryFabricIngredientProportion(new List<int> { value.ColorNo });
 
                 IEnumerable<ProcessSequenceDetail> processSequences = FabricModule.GetProcessSequences(Fabric.FabricID, FabricColor.ColorNo)
                                                                   .Select(s => new ProcessSequenceDetail

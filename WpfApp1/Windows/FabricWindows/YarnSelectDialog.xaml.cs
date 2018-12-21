@@ -36,8 +36,8 @@ namespace WpfApp1.Windows.FabricWindows
         private int _groupNo { get; set; }
 
         public delegate void ChangeButtonEditFabricColorAction();
-
         public event ChangeButtonEditFabricColorAction ChangeButtonEditFabricColorExecute;
+
 
         public YarnSelectDialog(int groupNo, ref Dictionary<int, ObservableCollection<FabricIngredientProportion>> fabricIngredientProportion)
         {

@@ -42,23 +42,25 @@ namespace WpfApp1.Windows.FabricWindows
             InitializeComponent();
             _fabric = fabric;
 
-            _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion.Count == 0
-                                                    ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>> { { 1, new ObservableCollection<FabricIngredientProportion>() } }
-                                                    : dictionaryFabricIngredientProportion;
+            //_dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion.Count == 0
+            //                                        ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>> { { 1, new ObservableCollection<FabricIngredientProportion>() } }
+            //                                        : dictionaryFabricIngredientProportion;
             _fabricColorList = FabricColorList;
             _fabricColorNo = FabricColor.ColorNo;
 
-            ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
+            //ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
-            LabelColorName.Content = FabricColor == null
-                                    ? string.Empty
-                                    : FabricColor.Color;
+            //DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
+            IEnumerable<FabricColor> fabricColors = FabricModule.GetFabricColorListByFabricID(new List<int> { fabric.FabricID });
+            ComboBoxFabricColor.ItemsSource = fabricColors;
+            int selectedIndex = fabricColors.Select(s => s.ColorNo).ToList().IndexOf(FabricColor.ColorNo);
+            ComboBoxFabricColor.SelectedIndex = selectedIndex;
         }
 
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
-            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, _fabricColorNo);
+            FabricColor fabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
+            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, fabricColor.ColorNo);
             List<FabricIngredientProportion> fabricIngredientProportion = GetFabricIngredientProportions();
             fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
             bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
@@ -107,15 +109,40 @@ namespace WpfApp1.Windows.FabricWindows
         private void ComboBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = (ComboBox)sender;
+            if (comboBox.SelectedIndex == -1)
+            {
+                DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
+                return;
+            }
             int groupNo = Convert.ToInt16(comboBox.SelectedItem);
             if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(groupNo);
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[groupNo];
         }
 
+        private void ComboBoxFabricColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxGroup.SelectedIndex = -1;
+            ComboBox comboBox = (ComboBox)sender;
+            FabricColor fabricColor = comboBox.SelectedItem as FabricColor;
+
+
+            var dictionaryFabricIngredientProportion = FabricModule.GetDictionaryFabricIngredientProportion(new List<int> { fabricColor.ColorNo });
+
+            _dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion.Count == 0
+                                                    ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>> { { 1, new ObservableCollection<FabricIngredientProportion>() } }
+                                                    : dictionaryFabricIngredientProportion;
+
+            DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
+            ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
+            ComboBoxGroup.SelectedIndex = 0;
+
+        }
+
         private void ButtonDeleteFabricIngredientProportions_Click(object sender, RoutedEventArgs e)
         {
+            FabricColor fabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
             int groupNo = Convert.ToInt16(ComboBoxGroup.SelectedItem);
-            bool success = FabricModule.DeleteFabricIngredientProportions(_fabricColorNo, groupNo);
+            bool success = FabricModule.DeleteFabricIngredientProportions(fabricColor.ColorNo, groupNo);
             success.CheckSuccessMessageBox("刪除成功!!", "好像有錯誤喔!!");
         }
     }
