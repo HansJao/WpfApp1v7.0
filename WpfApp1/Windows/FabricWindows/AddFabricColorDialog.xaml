@@ -6,11 +6,17 @@
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
         Title="新增布種顏色" Height="270" Width="261">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Esc" />
+    </Window.InputBindings>
     <Grid>
         <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top"/>
         <Label  Content="{Binding FabricName}" HorizontalAlignment="Left" Margin="70,16,0,0" VerticalAlignment="Top"/>
         <Label Content="布種顏色:" HorizontalAlignment="Left" Margin="10,65,0,0" VerticalAlignment="Top"/>
-        <TextBox HorizontalAlignment="Left" Text="{Binding FabricColor}" Height="23" Margin="76,65,0,0" VerticalAlignment="Top" Width="120" />
-        <Button Content="新增" Command="{Binding AddFabricColorClick}" HorizontalAlignment="Left" Margin="121,114,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox HorizontalAlignment="Left" Text="{Binding FabricColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="23" Margin="76,65,0,0" VerticalAlignment="Top" Width="120" />
+        <Button Content="新增" Command="{Binding AddFabricColorClick}" IsDefault="True" HorizontalAlignment="Left" Margin="121,114,0,0" VerticalAlignment="Top" Width="75"/>
     </Grid>
 </Window>

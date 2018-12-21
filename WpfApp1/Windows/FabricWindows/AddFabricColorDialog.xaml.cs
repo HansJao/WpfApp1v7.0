@@ -21,6 +21,10 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class AddFabricColorDialog : Window
     {
+        private void OnCloseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
+        }
         public AddFabricColorDialog(Fabric fabric)
         {
             InitializeComponent();

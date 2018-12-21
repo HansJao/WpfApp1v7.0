@@ -26,6 +26,10 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class EditProportionGroupDialog : Window
     {
+        private void OnCloseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
+        }
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
 

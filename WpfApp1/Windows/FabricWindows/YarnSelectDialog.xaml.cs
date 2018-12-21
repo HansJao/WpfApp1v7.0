@@ -26,6 +26,11 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class YarnSelectDialog : Window
     {
+        private void OnCloseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         protected IFabricModule FabricModule { get; } = new FabricModule();
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _fabricIngredientProportion;
         private int _groupNo { get; set; }

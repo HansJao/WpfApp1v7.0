@@ -9,6 +9,12 @@
         xmlns:FactoryEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
         xmlns:convert="clr-namespace:WpfApp1.Utility"
         Title="AddProcessSequenceDialog" Height="450" Width="400">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Esc" />
+    </Window.InputBindings>
     <Window.Resources>
         <convert:EnumConverter x:Key="EnumConverter" />
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"

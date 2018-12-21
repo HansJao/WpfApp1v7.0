@@ -6,6 +6,12 @@
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
         Title="修改布種比例群組" Height="300" Width="400">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Esc" />
+    </Window.InputBindings>
     <Grid>
         <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelFabricName" Content="Label" HorizontalAlignment="Left" Margin="70,16,0,0" VerticalAlignment="Top"/>        

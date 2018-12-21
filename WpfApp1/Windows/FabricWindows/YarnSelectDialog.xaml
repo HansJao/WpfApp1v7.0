@@ -6,6 +6,12 @@
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
         Title="選取布種成分" Height="600" Width="400">
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="OnCloseExecuted" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="Close" Key="Esc" />
+    </Window.InputBindings>
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">

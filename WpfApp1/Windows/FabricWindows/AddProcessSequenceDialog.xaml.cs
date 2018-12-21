@@ -27,6 +27,10 @@ namespace WpfApp1.Windows.FabricWindows
     /// </summary>
     public partial class AddProcessSequenceDialog : Window
     {
+        private void OnCloseExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
+        }
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         protected IFabricModule FabricModule { get; } = new FabricModule();
         private Dictionary<int, ObservableCollection<ProcessSequenceDetail>> _processSequenceListGroup { get; set; }

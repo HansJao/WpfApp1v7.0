@@ -22,6 +22,7 @@ namespace WpfApp1.Windows.CommonWindows
         public TextBoxMessageDialog()
         {
             InitializeComponent();
+            TextBoxProportion.Focus();
         }
 
         private void ButonDialogOk_Click(object sender, RoutedEventArgs e)
