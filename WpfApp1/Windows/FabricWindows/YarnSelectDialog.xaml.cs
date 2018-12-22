@@ -32,18 +32,15 @@ namespace WpfApp1.Windows.FabricWindows
         }
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
-        private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _fabricIngredientProportion;
         private int _groupNo { get; set; }
 
-        public delegate void ChangeButtonEditFabricColorAction();
-        public event ChangeButtonEditFabricColorAction ChangeButtonEditFabricColorExecute;
+        public delegate void ChangeYarnAction(MerchantYarnPrice merchantYarnPrice, int groupNo);
+        public event ChangeYarnAction ChangeYarnExecute;
 
-
-        public YarnSelectDialog(int groupNo, ref Dictionary<int, ObservableCollection<FabricIngredientProportion>> fabricIngredientProportion)
+        public YarnSelectDialog(int groupNo)
         {
             InitializeComponent();
             _groupNo = groupNo;
-            _fabricIngredientProportion = fabricIngredientProportion;
             IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricModule.GetMerchantYarnPriceList();
             DataGridMerchantYarnPrice.ItemsSource = merchantYarnPrices;
             var comboBoxItems = merchantYarnPrices.Select(s => new MerchantYarnPrice { YarnMerchant = s.YarnMerchant, Name = s.Name }).Distinct(d => d.YarnMerchant).ToList();
@@ -58,68 +55,10 @@ namespace WpfApp1.Windows.FabricWindows
         }
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
-            EditProportionGroupDialog editProportionGroupDialog = (EditProportionGroupDialog)this.DataContext;
             MerchantYarnPrice merchantYarnPrice = DataGridMerchantYarnPrice.SelectedItem as MerchantYarnPrice;
-            int selectedIndex = editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedIndex;
-            //如果紗成分比例沒有選擇一個色的話則會新增一個比例
-            //否則會將選擇到的比例
-            if (selectedIndex == -1)
-            {
-                TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
-                {
-                    Left = this.Left + 100,
-                    Top = this.Top + 130
-                };
-                decimal proportion = 0;
-                if (textBoxMessageDialog.ShowDialog() == true)
-                {
-                    proportion = decimal.Parse(textBoxMessageDialog.TextBoxProportion.Text);
-                }
-                else
-                {
-                    return;
-                }
-                //當新增一個比例時,不能用修改
-                ChangeButtonEditFabricColorExecute();
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
-
-                _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
-
-            }
-            else
-            {
-                var selectedItem = editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, merchantYarnPrice);
-                _fabricIngredientProportion[_groupNo].RemoveAt(selectedIndex);
-                _fabricIngredientProportion[_groupNo].Insert(selectedIndex, fabricIngredientProportion);
-                editProportionGroupDialog.DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
-            }
-
+            ChangeYarnExecute(merchantYarnPrice, _groupNo);
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
-        /// <param name="proportion">成分比例,同一布種比例應相同</param>
-        /// <param name="merchantYarnPrice"></param>
-        /// <returns></returns>
-        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, MerchantYarnPrice merchantYarnPrice)
-        {
-            FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
-            {
-                ProportionNo = proportionNo,
-                YarnPriceNo = merchantYarnPrice.YarnPriceNo,
-                Name = merchantYarnPrice.Name,
-                Color = merchantYarnPrice.Color,
-                Ingredient = merchantYarnPrice.Ingredient,
-                Price = merchantYarnPrice.Price,
-                Proportion = proportion,
-                YarnCount = merchantYarnPrice.YarnCount,
-                //Group = 3
-            };
-            return fabricIngredientProportion;
-        }
+       
         private ICollectionView cv;
         private void ComboBoxYarnMerchant_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

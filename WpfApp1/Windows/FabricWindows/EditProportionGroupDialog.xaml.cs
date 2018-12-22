@@ -18,6 +18,7 @@ using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.Utility;
 using WpfApp1.ViewModel.FabricViewModel;
+using WpfApp1.Windows.CommonWindows;
 
 namespace WpfApp1.Windows.FabricWindows
 {
@@ -67,15 +68,75 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
             int groupNo = Convert.ToInt16(ComboBoxGroup.SelectedItem);
-            _yarnSelectDialog = new YarnSelectDialog(groupNo, ref _dictionaryFabricIngredientProportion)
+            _yarnSelectDialog = new YarnSelectDialog(groupNo)
             {
                 Owner = this,
                 Left = this.Left + this.Width,
                 Top = this.Top,
                 DataContext = this
             };
-            _yarnSelectDialog.ChangeButtonEditFabricColorExecute += new YarnSelectDialog.ChangeButtonEditFabricColorAction(DisableChangeButtonEditFabricColor);
+            _yarnSelectDialog.ChangeYarnExecute += new YarnSelectDialog.ChangeYarnAction(ChangeYarn);
             _yarnSelectDialog.Show();
+        }
+        private void ChangeYarn(MerchantYarnPrice merchantYarnPrice, int groupNo)
+        {
+            int selectedIndex = DataGridFabricIngredientProportion.SelectedIndex;
+            //如果紗成分比例沒有選擇一個色的話則會新增一個比例
+            //否則會將選擇到的比例
+            if (selectedIndex == -1)
+            {
+                TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
+                {
+                    Left = this.Left + 100,
+                    Top = this.Top + 130
+                };
+                decimal proportion = 0;
+                if (textBoxMessageDialog.ShowDialog() == true)
+                {
+                    proportion = decimal.Parse(textBoxMessageDialog.TextBoxProportion.Text);
+                }
+                else
+                {
+                    return;
+                }
+                //當新增一個比例時,不能用修改
+                DisableChangeButtonEditFabricColor();
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
+
+                _dictionaryFabricIngredientProportion[groupNo].Add(fabricIngredientProportion);
+            }
+            else
+            {
+                var selectedItem = DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, merchantYarnPrice);
+                _dictionaryFabricIngredientProportion[groupNo].RemoveAt(selectedIndex);
+                _dictionaryFabricIngredientProportion[groupNo].Insert(selectedIndex, fabricIngredientProportion);
+                DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
+        /// <param name="proportion">成分比例,同一布種比例應相同</param>
+        /// <param name="merchantYarnPrice"></param>
+        /// <returns></returns>
+        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, MerchantYarnPrice merchantYarnPrice)
+        {
+            FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
+            {
+                ProportionNo = proportionNo,
+                YarnPriceNo = merchantYarnPrice.YarnPriceNo,
+                Name = merchantYarnPrice.Name,
+                Color = merchantYarnPrice.Color,
+                Ingredient = merchantYarnPrice.Ingredient,
+                Price = merchantYarnPrice.Price,
+                Proportion = proportion,
+                YarnCount = merchantYarnPrice.YarnCount,
+                //Group = 3
+            };
+            return fabricIngredientProportion;
         }
 
         private void DisableChangeButtonEditFabricColor()
@@ -115,7 +176,7 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ComboBoxFabricColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            
+
             ComboBoxGroup.SelectedIndex = -1;
             ComboBox comboBox = (ComboBox)sender;
             FabricColor fabricColor = comboBox.SelectedItem as FabricColor;
