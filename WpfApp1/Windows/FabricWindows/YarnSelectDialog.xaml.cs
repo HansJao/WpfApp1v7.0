@@ -82,15 +82,9 @@ namespace WpfApp1.Windows.FabricWindows
                 //當新增一個比例時,不能用修改
                 ChangeButtonEditFabricColorExecute();
                 FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
-                if (_fabricIngredientProportion.Count == 0)
-                {
-                    List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion> { fabricIngredientProportion };
-                    _fabricIngredientProportion.Add(_groupNo, new ObservableCollection<FabricIngredientProportion>(fabricIngredientProportions));
-                }
-                else
-                {
-                    _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
-                }
+
+                _fabricIngredientProportion[_groupNo].Add(fabricIngredientProportion);
+
             }
             else
             {

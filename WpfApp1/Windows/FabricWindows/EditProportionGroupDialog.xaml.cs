@@ -35,32 +35,26 @@ namespace WpfApp1.Windows.FabricWindows
 
         private Fabric _fabric;
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
-        private ObservableCollection<FabricColor> _fabricColorList;
         private int _fabricColorNo;
-        public EditProportionGroupDialog(Fabric fabric, FabricColor FabricColor, Dictionary<int, ObservableCollection<FabricIngredientProportion>> dictionaryFabricIngredientProportion, ObservableCollection<FabricColor> FabricColorList)
+        public EditProportionGroupDialog(Fabric fabric, FabricColor FabricColor, ObservableCollection<FabricColor> fabricColorList)
         {
             InitializeComponent();
-            _fabric = fabric;
 
-            //_dictionaryFabricIngredientProportion = dictionaryFabricIngredientProportion.Count == 0
-            //                                        ? new Dictionary<int, ObservableCollection<FabricIngredientProportion>> { { 1, new ObservableCollection<FabricIngredientProportion>() } }
-            //                                        : dictionaryFabricIngredientProportion;
-            _fabricColorList = FabricColorList;
+            _fabric = fabric;
             _fabricColorNo = FabricColor.ColorNo;
 
-            //ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
             LabelFabricName.Content = fabric.FabricName;
-            //DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
-            IEnumerable<FabricColor> fabricColors = FabricModule.GetFabricColorListByFabricID(new List<int> { fabric.FabricID });
-            ComboBoxFabricColor.ItemsSource = fabricColors;
-            int selectedIndex = fabricColors.Select(s => s.ColorNo).ToList().IndexOf(FabricColor.ColorNo);
+
+            ComboBoxFabricColor.ItemsSource = fabricColorList;
+
+            int selectedIndex = fabricColorList.Select(s => s.ColorNo).ToList().IndexOf(FabricColor.ColorNo);
             ComboBoxFabricColor.SelectedIndex = selectedIndex;
         }
 
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
-            FabricColor fabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
-            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, fabricColor.ColorNo);
+            FabricColor selectedFabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
+            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, selectedFabricColor.ColorNo);
             List<FabricIngredientProportion> fabricIngredientProportion = GetFabricIngredientProportions();
             fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
             bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
@@ -121,10 +115,11 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ComboBoxFabricColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             ComboBoxGroup.SelectedIndex = -1;
             ComboBox comboBox = (ComboBox)sender;
             FabricColor fabricColor = comboBox.SelectedItem as FabricColor;
-
+            if (fabricColor == null) return;//未知發生的錯誤，有時間再來查看看什麼問題
 
             var dictionaryFabricIngredientProportion = FabricModule.GetDictionaryFabricIngredientProportion(new List<int> { fabricColor.ColorNo });
 
@@ -135,7 +130,6 @@ namespace WpfApp1.Windows.FabricWindows
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[_dictionaryFabricIngredientProportion.First().Key];
             ComboBoxGroup.ItemsSource = _dictionaryFabricIngredientProportion.Select(s => s.Key);
             ComboBoxGroup.SelectedIndex = 0;
-
         }
 
         private void ButtonDeleteFabricIngredientProportions_Click(object sender, RoutedEventArgs e)

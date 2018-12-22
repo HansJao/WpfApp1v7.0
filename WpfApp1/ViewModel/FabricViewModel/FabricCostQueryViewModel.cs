@@ -65,7 +65,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 MessageBox.Show("未選取顏色!!");
                 return;
             }
-            EditProportionGroupDialog editProportionGroupDialog = new EditProportionGroupDialog(Fabric, FabricColor, FabricIngredientProportionGroup, FabricColorList)
+            EditProportionGroupDialog editProportionGroupDialog = new EditProportionGroupDialog(Fabric, FabricColor, FabricColorList)
             {
                 Left = 500,
                 Top = 550
@@ -92,10 +92,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 var fabricColorList = FabricModule.GetFabricColorListByFabricID(new List<int> { _fabric.FabricID });
 
                 FabricColorList.AddRange<FabricColor>(fabricColorList);
-                //foreach (var item in fabricColorList)
-                //{
-                //    FabricColorList.Add(item);
-                //}
             }
         }
         private decimal _yarnCost { get; set; }
