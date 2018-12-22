@@ -142,6 +142,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
+                    Label splitLine = new Label { Content = "" };
+                    Label recommendPrice = new Label();
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
                     _stackPanelProcessSequence.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
@@ -195,6 +197,10 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         dataGrid.ItemsSource = dataGridProcessSequenceList;
 
                         _stackPanelProcessSequence.Children.Add(dataGrid);
+                        decimal price = dataGridProcessSequenceList.Last().Cost * (1.1M);
+                        recommendPrice.Content = string.Concat("一成售價:", price);
+                        _stackPanelProcessSequence.Children.Add(recommendPrice);
+                        _stackPanelProcessSequence.Children.Add(splitLine);
                     }
                 }
             }
