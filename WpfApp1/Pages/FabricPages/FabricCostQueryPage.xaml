@@ -26,7 +26,7 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" Height="24" VerticalAlignment="Top">
                         <Label Content="布種搜尋:" />
-                        <TextBox Height="24" Width="100" VerticalAlignment="Top" />
+                        <TextBox Text="{Binding FabricName,UpdateSourceTrigger=PropertyChanged}" Height="24" Width="100" VerticalAlignment="Top" />
                     </StackPanel>
                     <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding FabricList}" SelectedItem="{Binding Fabric}" Height="300" AutoGenerateColumns="False" CanUserAddRows="False">
                         <DataGrid.Columns >

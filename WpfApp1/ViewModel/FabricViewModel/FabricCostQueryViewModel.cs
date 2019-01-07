@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -74,6 +75,37 @@ namespace WpfApp1.ViewModel.FabricViewModel
         }
 
         public ObservableCollection<Fabric> FabricList { get; set; }
+
+        private string _fabricName { get; set; }
+        public string FabricName
+        {
+            get
+            {
+                return _fabricName;
+            }
+            set
+            {
+                _fabricName = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(FabricList);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    cv.Filter = o =>
+                    {
+                        /* change to get data row value */
+                        Fabric p = o as Fabric;
+                        return (p.FabricName.ToUpper().Contains(value.ToUpper()));
+                        /* end change to get data row value */
+                    };
+                }
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                }; }
+        }
+
         private Fabric _fabric { get; set; }
         public Fabric Fabric
         {
@@ -142,7 +174,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
-                   
+
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
                     _stackPanelProcessSequence.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
@@ -182,7 +214,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             Header = "加工項目",
                             Binding = new Binding("ProcessItem")
                             {
-                                Converter = new EnumConverter()
+                                Converter = new WpfApp1.Utility.EnumConverter()
                             }
                         };
                         dataGrid.Columns.Add(processItem);
@@ -240,7 +272,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
             _stackPanel.Children.Add(dataGrid);
 
-           
+
             return fabricIngredientPropertionItemYarnCost;
         }
 
