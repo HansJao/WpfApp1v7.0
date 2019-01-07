@@ -58,7 +58,7 @@ namespace WpfApp1.Windows.FabricWindows
             MerchantYarnPrice merchantYarnPrice = DataGridMerchantYarnPrice.SelectedItem as MerchantYarnPrice;
             ChangeYarnExecute(merchantYarnPrice, _groupNo);
         }
-       
+
         private ICollectionView cv;
         private void ComboBoxYarnMerchant_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -74,8 +74,9 @@ namespace WpfApp1.Windows.FabricWindows
         {
             string ingredient = TextBoxIngredient.Text.ToUpper();
             string color = TextBoxColor.Text.ToUpper();
+            string yarnCount = TextBoxYarnCount.Text.ToUpper();
             int yarnMerchant = ComboBoxYarnMerchant.SelectedIndex == -1 ? 0 : ((MerchantYarnPrice)ComboBoxYarnMerchant.SelectedItem).YarnMerchant;
-            bool checkNoneFilterCondition = string.IsNullOrEmpty(ingredient) && yarnMerchant == 0 && string.IsNullOrEmpty(color);
+            bool checkNoneFilterCondition = string.IsNullOrEmpty(ingredient) && yarnMerchant == 0 && string.IsNullOrEmpty(color) && string.IsNullOrEmpty(yarnCount);
 
             if (!checkNoneFilterCondition)
             {
@@ -86,8 +87,8 @@ namespace WpfApp1.Windows.FabricWindows
                     bool checkYarnMerchant = yarnMerchant == 0 ? true : yarnMerchant == p.YarnMerchant;
                     bool checkColor = string.IsNullOrEmpty(color) ? true : p.Color.ToUpper().Contains(color);
                     bool checkIngredient = string.IsNullOrEmpty(ingredient) ? true : p.Ingredient.ToUpper().Contains(ingredient);
-
-                    return (checkYarnMerchant && checkColor && checkIngredient);
+                    bool checkYarnCount = string.IsNullOrEmpty(yarnCount) ? true : p.YarnCount.ToUpper().Contains(yarnCount);
+                    return (checkYarnMerchant && checkColor && checkIngredient && checkYarnCount);
                     /* end change to get data row value */
                 };
             }
@@ -101,6 +102,11 @@ namespace WpfApp1.Windows.FabricWindows
         }
 
         private void TextBoxColor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckDataGridFilterCondition();
+        }
+
+        private void TextBoxYarnCount_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckDataGridFilterCondition();
         }

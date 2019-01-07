@@ -15,16 +15,20 @@
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="紗商:"/>
+                <Label Content="紗    商:"/>
                 <ComboBox x:Name="ComboBoxYarnMerchant" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxYarnMerchant_SelectionChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="成分:"/>
+                <Label Content="成    分:"/>
                 <TextBox x:Name="TextBoxIngredient"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxIngredient_TextChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="顏色:"/>
+                <Label Content="顏    色:"/>
                 <TextBox x:Name="TextBoxColor"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColor_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="紗支數:"/>
+                <TextBox x:Name="TextBoxYarnCount"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxYarnCount_TextChanged"/>
             </StackPanel>
             <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
                 <DataGrid.Columns >
