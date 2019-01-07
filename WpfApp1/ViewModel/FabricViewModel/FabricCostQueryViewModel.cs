@@ -142,8 +142,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
-                    Label splitLine = new Label { Content = "" };
-                    Label recommendPrice = new Label();
+                   
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
                     _stackPanelProcessSequence.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
@@ -174,7 +173,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             VerticalAlignment = VerticalAlignment.Top,
                             AutoGenerateColumns = false,
                             CanUserAddRows = false,
-                            Margin = new Thickness(0, 3, 0, 0),
                             Name = string.Concat("Group", processSequenceList.Key)
                         };
                         CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);
@@ -198,6 +196,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                         _stackPanelProcessSequence.Children.Add(dataGrid);
                         decimal price = dataGridProcessSequenceList.Last().Cost * (1.1M);
+                        Label splitLine = new Label { Content = "" };
+                        Label recommendPrice = new Label();
                         recommendPrice.Content = string.Concat("一成售價:", price);
                         _stackPanelProcessSequence.Children.Add(recommendPrice);
                         _stackPanelProcessSequence.Children.Add(splitLine);
@@ -225,7 +225,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
             CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
 
             dataGrid.ItemsSource = fabricIngredientPropertionItem.Value;
-            _stackPanel.Children.Add(dataGrid);
 
             decimal fabricIngredientPropertionItemYarnCost = 0;
             foreach (var fabricIngredientProportionItem in fabricIngredientPropertionItem.Value)
@@ -238,6 +237,10 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Content = string.Concat("紗價成本:", fabricIngredientPropertionItemYarnCost)
             };
             _stackPanel.Children.Add(label);
+
+            _stackPanel.Children.Add(dataGrid);
+
+           
             return fabricIngredientPropertionItemYarnCost;
         }
 
