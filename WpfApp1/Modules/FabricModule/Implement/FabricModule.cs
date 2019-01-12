@@ -243,7 +243,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             {
                 order++;
                 f.Order = order;
-                f.Group = groupIndex == -1 ? 1 : groupIndex;
+                f.Group = groupIndex;
             });
             List<int> sequenceNoList = FabricAdapter.InsertProcessSequence(processSequenceDetails);
             return sequenceNoList;

@@ -10,30 +10,54 @@
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Label Content="紗   商:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <ComboBox ItemsSource="{Binding FactoryList}" SelectedItem="{Binding Factory}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="紗   商:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <ComboBox ItemsSource="{Binding FactoryList}" SelectedItem="{Binding Factory}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="紗支數:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnCount}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="成   分:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Ingredient}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="顏   色:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Color}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="單   價:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Price}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding AddYarnPriceClick}" Content="新增" Width="50"/>
+                        <Button Command="{Binding EditYarnPriceClick}" Content="修改" Width="50"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <Label Content="搜尋區塊" Width="58"/>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="紗  商:" Width="50"/>
+                        <ComboBox ItemsSource="{Binding FactoryList}" SelectedItem="{Binding SearchFactory}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="紗支數:" Width="50"/>
+                        <TextBox Width="120" Text="{Binding SearchYarnCount,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="成  份:" Width="50"/>
+                        <TextBox Width="120" Text="{Binding SearchIngredient,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                   
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="顏  色:" Width="50"/>
+                        <TextBox Width="120"  Text="{Binding SearchColor,UpdateSourceTrigger=PropertyChanged}"/>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="成   分:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Text="{Binding Path=Ingredient}" VerticalAlignment="Top" Width="120"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="紗支數:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnCount}" VerticalAlignment="Top" Width="120"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="顏   色:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Text="{Binding Path=Color}" VerticalAlignment="Top" Width="120"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="單   價:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Text="{Binding Path=Price}" VerticalAlignment="Top" Width="120"/>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Command="{Binding AddYarnPriceClick}" Content="新增" Width="50"/>
-                <Button Command="{Binding EditYarnPriceClick}" Content="修改" Width="50"/>
-            </StackPanel>
-            <DataGrid ItemsSource="{Binding MerchantYarnPriceView}" SelectedItem="{Binding MerchantYarnPrice}" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid ItemsSource="{Binding MerchantYarnPriceView}" SelectedItem="{Binding MerchantYarnPrice}" Height="400" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>

@@ -376,8 +376,8 @@ namespace WpfApp1.Adapter.MSSQL
             {
                 new SqlParameter("@FabricID", SqlDbType.Int) { Value = fabricID },
             };
-            var result = DapperHelper.Query<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
-            return result;
+            var result = DapperHelper.QueryCollection<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result.Count() == 0 ? 1 : result.First();
         }
         /// <summary>
         /// 新增加工程序顏色對照

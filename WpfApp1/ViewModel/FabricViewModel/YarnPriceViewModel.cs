@@ -43,7 +43,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 _factory = value;
                 RaisePropertyChanged("Factory");
-                ComboBoxFactoryListSelected();
+                //ComboBoxFactoryListSelected();
             }
         }
 
@@ -128,6 +128,79 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 RaisePropertyChanged("Price");
             }
         }
+        private string _searchIngredient { get; set; }
+        public string SearchIngredient
+        {
+            get { return _searchIngredient; }
+            set
+            {
+                _searchIngredient = value;
+                CheckDataGridFilterCondition();
+            }
+        }
+
+        private void CheckDataGridFilterCondition()
+        {
+            string ingredient = _searchIngredient?.ToUpper();
+            string color = _searchColor?.ToUpper();
+            string yarnCount = _searchYarnCount?.ToUpper();
+            int yarnMerchant = _searchFactory == null ? 0 : _searchFactory.FactoryID;
+            bool checkNoneFilterCondition = string.IsNullOrEmpty(ingredient) && yarnMerchant == 0 && string.IsNullOrEmpty(color) && string.IsNullOrEmpty(yarnCount);
+
+            if (!checkNoneFilterCondition)
+            {
+                MerchantYarnPriceView.Filter = o =>
+                {
+                    /* change to get data row value */
+                    MerchantYarnPrice p = o as MerchantYarnPrice;
+                    bool checkYarnMerchant = yarnMerchant == 0 ? true : yarnMerchant == p.YarnMerchant;
+                    bool checkColor = string.IsNullOrEmpty(color) ? true : p.Color.ToUpper().Contains(color);
+                    bool checkIngredient = string.IsNullOrEmpty(ingredient) ? true : p.Ingredient.ToUpper().Contains(ingredient);
+                    bool checkYarnCount = string.IsNullOrEmpty(yarnCount) ? true : p.YarnCount.ToUpper().Contains(yarnCount);
+                    return (checkYarnMerchant && checkColor && checkIngredient && checkYarnCount);
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                MerchantYarnPriceView.Filter = o =>
+                {
+                    return (true);
+                };
+            }
+        }
+
+        private string _searchColor { get; set; }
+        public string SearchColor
+        {
+            get { return _searchColor; }
+            set
+            {
+                _searchColor = value;
+                CheckDataGridFilterCondition();
+            }
+        }
+        private string _searchYarnCount { get; set; }
+        public string SearchYarnCount
+        {
+            get { return _searchYarnCount; }
+            set
+            {
+                _searchYarnCount = value;
+                CheckDataGridFilterCondition();
+            }
+        }
+        private Factory _searchFactory { get; set; }
+        public Factory SearchFactory
+        {
+            get { return _searchFactory; }
+            set
+            {
+                _searchFactory = value;
+                CheckDataGridFilterCondition();
+            }
+        }
+
         public YarnPriceViewModel()
         {
             var factoryList = FactoryModule.GetFactoryList().Where(w => w.Process == DataClass.Enumeration.ProcessItem.Yarn);
@@ -138,7 +211,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             var merchantYarnPrices = FabricModule.GetMerchantYarnPriceList();
             MerchantYarnPrices = new ObservableCollection<MerchantYarnPrice>(merchantYarnPrices);
             MerchantYarnPriceCVS.Source = MerchantYarnPrices;
-            MerchantYarnPriceCVS.Filter += ApplyFilter;
+            //MerchantYarnPriceCVS.Filter += ApplyFilter;
         }
 
         void ApplyFilter(object sender, FilterEventArgs e)
@@ -179,7 +252,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 bool success = FabricModule.InsertYarnPrice(yarnPrice);
 
                 success.CheckSuccessMessageBox("新增成功", "新增失敗");
-               
+
             }
         }
 
@@ -210,7 +283,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
                 };
                 bool success = FabricModule.EditYarnPrice(yarnPrice);
-                success.CheckSuccessMessageBox("修改成功", "修改失敗");               
+                success.CheckSuccessMessageBox("修改成功", "修改失敗");
             }
         }
     }

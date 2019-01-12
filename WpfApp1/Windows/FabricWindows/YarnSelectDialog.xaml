@@ -19,6 +19,10 @@
                 <ComboBox x:Name="ComboBoxYarnMerchant" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxYarnMerchant_SelectionChanged"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
+                <Label Content="紗支數:"/>
+                <TextBox x:Name="TextBoxYarnCount"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxYarnCount_TextChanged"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Label Content="成    分:"/>
                 <TextBox x:Name="TextBoxIngredient"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxIngredient_TextChanged"/>
             </StackPanel>
@@ -26,26 +30,24 @@
                 <Label Content="顏    色:"/>
                 <TextBox x:Name="TextBoxColor"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColor_TextChanged"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Label Content="紗支數:"/>
-                <TextBox x:Name="TextBoxYarnCount"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxYarnCount_TextChanged"/>
+            <StackPanel>
+                <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=ActualHeight}">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <Button x:Name="ButtonChangeYarn" Content="確認" Click="ButtonChangeYarn_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
             </StackPanel>
-            <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
-                <DataGrid.Columns >
-                    <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="" >
-                        <DataGridTemplateColumn.CellTemplate >
-                            <DataTemplate>
-                                <Button x:Name="ButtonChangeYarn" Content="確認" Click="ButtonChangeYarn_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
         </StackPanel>
     </Grid>
 </Window>
