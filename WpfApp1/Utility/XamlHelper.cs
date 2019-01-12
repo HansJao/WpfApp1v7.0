@@ -13,7 +13,7 @@ namespace WpfApp1.Utility
 {
     public class XamlHelper
     {
-       
+
     }
 
     public class ZeroToEmptyConverter : IValueConverter
@@ -68,6 +68,24 @@ namespace WpfApp1.Utility
                 }
             }
             return en.ToString();
+        }
+    }
+
+    public class HeightConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (double.TryParse(value.ToString(), out double number) && double.TryParse(parameter.ToString(), out double coefficient))
+            {
+                return number / coefficient;
+            }
+
+            return 100;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value;
         }
     }
 }
