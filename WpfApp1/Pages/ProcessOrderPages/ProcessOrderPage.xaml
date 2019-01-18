@@ -20,7 +20,7 @@
         </ObjectDataProvider>
     </Page.Resources>
     <Grid>
-        <DockPanel>
+        <DockPanel LastChildFill="True" MaxHeight="500">
             <DockPanel DockPanel.Dock="Top">
                 <Button x:Name="ButtonDisplayAllOrder" Content="顯示所有訂單" Width="100" Margin="2,0,3,0" Click="ButtonDisplayAllOrder_Click"/>
                 <ComboBox x:Name="ComboBoxStatus" Width="120" SelectionChanged="ComboBoxStatus_SelectionChanged" />
@@ -32,12 +32,106 @@
                 <TextBox x:Name="TextBoxColorSearch" Width="100" Height="26" KeyDown="TextBoxColorSearch_KeyDown" GotFocus="TextBoxColorSearch_GotFocus"   />
                 <Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Click="ButtonUpdateDateOrder_Click"/>
             </DockPanel>
-            <DataGrid x:Name="DataGridFactoryList" Height="185" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
+            <DataGrid DockPanel.Dock="Left" x:Name="DataGridFactoryList" AlternatingRowBackground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"/>
                 </DataGrid.Columns>
-            </DataGrid>
-            <DataGrid DockPanel.Dock="Top" x:Name="DataGridProcessOrder" Height="185"  HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrder_SelectionChanged">
+            </DataGrid>            
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+                <StackPanel Orientation="Vertical">
+                    <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridOrderColorFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="顏色" Binding="{Binding Color}"/>
+                            <DataGridTextColumn Header="色號" Binding="{Binding ColorNumber}"/>
+                            <DataGridTextColumn Header="疋數" Binding="{Binding Quantity}"/>
+                            <DataGridTextColumn Header="已出貨數量" Binding="{Binding ShippingQuantity}"/>
+                            <DataGridTemplateColumn Header="狀態">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ComboBox SelectedItem="{Binding Status}" ItemsSource="{Binding Source={StaticResource dataFromEnum}, Mode=OneWay}"
+                                        SelectionChanged="SomeSelectionChanged " />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="刪除" >
+                                <DataGridTemplateColumn.CellTemplate >
+                                    <DataTemplate>
+                                        <Button x:Name="ButtonDeleteFactoryShippingDetail" Content="刪除" Click="ButtonDeleteFactoryShippingDetail_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
+                </StackPanel>
+                <StackPanel>
+                    <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
+                            <DataGridTemplateColumn Header="轉入時間"  Width="100" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <DatePicker x:Name="DatePickerInputDate" SelectedDate="{Binding InputDate ,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerInputDate_SelectedDateChanged"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="完成時間"  Width="100" >
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <DatePicker x:Name="DatePickerCompleteDate" SelectedDate="{Binding CompleteDate,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerCompleteDate_SelectedDateChanged" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="ButtonAddFactory" Content="新增工廠" Width="60" Height="24" HorizontalAlignment="Right" Click="ButtonAddFactory_Click"/>
+
+                </StackPanel>
+                <StackPanel>
+                    <DockPanel x:Name="DockPanelCustomer" >
+                        <Label Content="客戶:"/>
+                        <ComboBox x:Name="ComboBoxCustomer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="120" IsEditable="True"/>
+                    </DockPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <DockPanel Width="250">
+                            <Label Content="數量:"/>
+                            <TextBox x:Name="TextBoxQuantity" Height="25" Width="50"/>
+                            <DatePicker x:Name="DatePickerShippingDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}" />
+                            <Button x:Name="ButtonNewFactoryShipping" Content="新增" DockPanel.Dock="Left" VerticalAlignment="Top" Width="50" Click="ButtonNewFactoryShipping_Click"/>
+
+                        </DockPanel>
+                    </StackPanel>
+                    <DataGrid x:Name="DataGridFactoryShipping"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="客戶" Binding="{Binding Name}"/>
+                            <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
+                            <DataGridTextColumn Header="出貨時間" Binding="{Binding ShippingDate, StringFormat=yyyy/MM/dd}"/>
+                            <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate}"/>
+                            <DataGridTemplateColumn Header="刪除" >
+                                <DataGridTemplateColumn.CellTemplate >
+                                    <DataTemplate>
+                                        <Button x:Name="ButtonDeleteFactoryShipping" Content="刪除" Click="ButtonDeleteFactoryShipping_Click"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+                <StackPanel>
+                    <RichTextBox x:Name="RichTextBoxProcessOrderRemark" Width="210" Background="#FFDAD9D9">
+                        <FlowDocument>
+                            <Paragraph>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                    <Button x:Name="ButtonUpdateProcessOrderRemark"  Content="更新" HorizontalAlignment="Right" Width="50" Click="ButtonUpdateProcessOrderRemark_Click"/>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="DataGridProcessOrder" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrder_SelectionChanged">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"/>
                     <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"/>
@@ -56,103 +150,6 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
-                        <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridOrderColorFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"/>
-                                <DataGridTextColumn Header="色號" Binding="{Binding ColorNumber}"/>
-                                <DataGridTextColumn Header="疋數" Binding="{Binding Quantity}"/>
-                                <DataGridTextColumn Header="已出貨數量" Binding="{Binding ShippingQuantity}"/>
-                                <DataGridTemplateColumn Header="狀態">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <ComboBox SelectedItem="{Binding Status}" ItemsSource="{Binding Source={StaticResource dataFromEnum}, Mode=OneWay}"
-                                        SelectionChanged="SomeSelectionChanged " />
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="刪除" >
-                                    <DataGridTemplateColumn.CellTemplate >
-                                        <DataTemplate>
-                                            <Button x:Name="ButtonDeleteFactoryShippingDetail" Content="刪除" Click="ButtonDeleteFactoryShippingDetail_Click"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
-                    </StackPanel>
-                    <StackPanel>
-                        <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
-                                <DataGridTemplateColumn Header="轉入時間"  Width="100" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <DatePicker x:Name="DatePickerInputDate" SelectedDate="{Binding InputDate ,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerInputDate_SelectedDateChanged"/>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="完成時間"  Width="100" >
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <DatePicker x:Name="DatePickerCompleteDate" SelectedDate="{Binding CompleteDate,UpdateSourceTrigger=PropertyChanged}"  Margin="3,1" SelectedDateChanged="DatePickerCompleteDate_SelectedDateChanged" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                        <Button x:Name="ButtonAddFactory" Content="新增工廠" Width="60" Height="24" HorizontalAlignment="Right" Click="ButtonAddFactory_Click"/>
-
-                    </StackPanel>
-                    <StackPanel>
-                        <DockPanel x:Name="DockPanelCustomer" >
-                            <Label Content="客戶:"/>
-                            <ComboBox x:Name="ComboBoxCustomer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="120" IsEditable="True"/>
-                        </DockPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <DockPanel Width="250">
-                                <Label Content="數量:"/>
-                                <TextBox x:Name="TextBoxQuantity" Height="25" Width="50"/>
-                                <DatePicker x:Name="DatePickerShippingDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}" />
-                                <Button x:Name="ButtonNewFactoryShipping" Content="新增" DockPanel.Dock="Left" VerticalAlignment="Top" Width="50" Click="ButtonNewFactoryShipping_Click"/>
-
-                            </DockPanel>
-                        </StackPanel>
-                        <DataGrid x:Name="DataGridFactoryShipping"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="客戶" Binding="{Binding Name}"/>
-                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
-                                <DataGridTextColumn Header="出貨時間" Binding="{Binding ShippingDate, StringFormat=yyyy/MM/dd}"/>
-                                <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate}"/>
-                                <DataGridTemplateColumn Header="刪除" >
-                                    <DataGridTemplateColumn.CellTemplate >
-                                        <DataTemplate>
-                                            <Button x:Name="ButtonDeleteFactoryShipping" Content="刪除" Click="ButtonDeleteFactoryShipping_Click"/>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
-                    </StackPanel>
-                    <StackPanel>
-                        <RichTextBox x:Name="RichTextBoxProcessOrderRemark" Width="210" Background="#FFDAD9D9">
-                            <FlowDocument>
-                                <Paragraph>
-                                </Paragraph>
-                            </FlowDocument>
-                        </RichTextBox>
-                        <Button x:Name="ButtonUpdateProcessOrderRemark"  Content="更新" HorizontalAlignment="Right" Width="50" Click="ButtonUpdateProcessOrderRemark_Click"/>
-                    </StackPanel>
-                </StackPanel>
-
-            </StackPanel>
         </DockPanel>
     </Grid>
 </Page>

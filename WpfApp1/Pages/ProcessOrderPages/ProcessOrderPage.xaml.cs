@@ -301,6 +301,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
             {
                 var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
+                
                 if (item.Status == ProcessOrderColorStatus.已出完)
                 {
                     row.Background = Brushes.Gray;
