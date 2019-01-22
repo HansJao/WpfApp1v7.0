@@ -47,7 +47,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
                 }
              
                 var colorList = new List<StoreData>();
-                for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
+                for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
                     if (rowIndex > 100)
                         break;
