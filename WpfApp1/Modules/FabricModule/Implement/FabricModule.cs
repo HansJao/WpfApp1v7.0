@@ -107,7 +107,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return fabricIngredientProportions;
         }
         /// <summary>
-        /// 取得加工順序
+        /// 取得加工順序,如有自定加工程序則過濾其他的
         /// </summary>
         /// <param name="fabricID"></param>
         /// <param name="fabricID"></param>
@@ -115,7 +115,11 @@ namespace WpfApp1.Modules.FabricModule.Implement
         public IEnumerable<ProcessSequenceDetail> GetProcessSequences(int fabricID, int colorNo)
         {
             IEnumerable<ProcessSequenceDetail> processSequences = FabricAdapter.GetProcessSequences(fabricID, colorNo).OrderBy(o => o.Order);
-            return processSequences;
+            if (processSequences.Where(w => w.ColorNo > 0).Count() > 0)
+            {
+                return processSequences.Where(w => w.ColorNo > 0);
+            }
+                return processSequences;
         }
         /// <summary>
         /// 以布種編號取得所有加工程序

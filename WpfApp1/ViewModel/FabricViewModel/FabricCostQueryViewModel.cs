@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Fabric;
@@ -103,7 +104,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     {
                         return (true);
                     };
-                }; }
+                };
+            }
         }
 
         private Fabric _fabric { get; set; }
@@ -171,12 +173,17 @@ namespace WpfApp1.ViewModel.FabricViewModel
                                                                       Cost = 0
                                                                   });
                 ProcessSequenceListGroup = processSequences.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<ProcessSequenceDetail>(g.ToList()));
-
+                int countIndex = 0;
                 foreach (var fabricIngredientPropertionItem in FabricIngredientProportionGroup)
                 {
-
+                    StackPanel groupStackPanel = new StackPanel
+                    {
+                        Background = countIndex % 2 == 0 ? Brushes.LightBlue : Brushes.LightPink
+                    };
+                    countIndex++;
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
-                    _stackPanelProcessSequence.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
+                    
+                    groupStackPanel.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
                     foreach (var processSequenceList in ProcessSequenceListGroup)
                     {
@@ -205,7 +212,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             VerticalAlignment = VerticalAlignment.Top,
                             AutoGenerateColumns = false,
                             CanUserAddRows = false,
-                            Name = string.Concat("Group", processSequenceList.Key)
+                            Name = string.Concat("Group", processSequenceList.Key),
+                            Margin = new Thickness(5, 5, 5, 5)
                         };
                         CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);
 
@@ -214,7 +222,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             Header = "加工項目",
                             Binding = new Binding("ProcessItem")
                             {
-                                Converter = new WpfApp1.Utility.EnumConverter()
+                                Converter = new Utility.EnumConverter()
                             }
                         };
                         dataGrid.Columns.Add(processItem);
@@ -225,15 +233,25 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
                         CreateDataGridTextColumn(dataGrid, "成本", "Cost", null);
                         dataGrid.ItemsSource = dataGridProcessSequenceList;
+                        Grid grid = new Grid();
+                        if (dataGridProcessSequenceList.Where(w => w.ColorNo > 0).Count() > 0)
+                        {
+                            grid.Background = Brushes.Gray;
+                        }
 
-                        _stackPanelProcessSequence.Children.Add(dataGrid);
+                        grid.Children.Add(dataGrid);
+                        groupStackPanel.Children.Add(grid);
+
                         decimal price = dataGridProcessSequenceList.Last().Cost * (1.1M);
                         Label splitLine = new Label { Content = "" };
-                        Label recommendPrice = new Label();
-                        recommendPrice.Content = string.Concat("一成售價:", price);
-                        _stackPanelProcessSequence.Children.Add(recommendPrice);
-                        _stackPanelProcessSequence.Children.Add(splitLine);
+                        Label recommendPrice = new Label
+                        {
+                            Content = string.Concat("一成售價:", price)
+                        };
+                        groupStackPanel.Children.Add(recommendPrice);
+                        groupStackPanel.Children.Add(splitLine);
                     }
+                    _stackPanelProcessSequence.Children.Add(groupStackPanel);
                 }
             }
         }
