@@ -208,6 +208,7 @@ namespace WpfApp1.Adapter.MSSQL
                             ,[YarnCount] = @YarnCount
                             ,[Color] = @Color
                             ,[Price] = @Price
+                            ,[PiecePrice] = @PiecePrice
                             ,[YarnMerchant] = @YarnMerchant
                             ,[UpdateDate] = GETDATE()
                             WHERE [YarnPriceNo] = @YarnPriceNo";

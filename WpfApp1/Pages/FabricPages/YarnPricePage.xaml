@@ -32,6 +32,10 @@
                         <TextBox HorizontalAlignment="Left" Text="{Binding Path=Price}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
+                        <Label Content="紗   價:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=PiecePrice}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Button Command="{Binding AddYarnPriceClick}" Content="新增" Width="50"/>
                         <Button Command="{Binding EditYarnPriceClick}" Content="修改" Width="50"/>
                     </StackPanel>
@@ -64,6 +68,7 @@
                     <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
                     <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                     <DataGridTextColumn Header="單價" Binding="{Binding Price}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="紗價" Binding="{Binding PiecePrice}"></DataGridTextColumn>
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
                     <DataGridTextColumn Header="修改時間" Binding="{Binding UpdateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
                     <DataGridTemplateColumn Header="刪除" >

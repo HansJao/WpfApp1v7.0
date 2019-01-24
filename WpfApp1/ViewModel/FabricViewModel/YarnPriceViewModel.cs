@@ -72,6 +72,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 YarnCount = value.YarnCount;
                 Price = value.Price;
                 Color = value.Color;
+                PiecePrice = value.PiecePrice;
                 var factory = FactoryList.Where(w => w.FactoryID == value.YarnMerchant).First();
                 if (Factory == null || factory.FactoryID != Factory.FactoryID)
                     Factory = factory;
@@ -126,6 +127,16 @@ namespace WpfApp1.ViewModel.FabricViewModel
             {
                 _price = value;
                 RaisePropertyChanged("Price");
+            }
+        }
+        private int _piecePrice { get; set; }
+        public int PiecePrice
+        {
+            get { return _piecePrice; }
+            set
+            {
+                _piecePrice = value;
+                RaisePropertyChanged("PiecePrice");
             }
         }
         private string _searchIngredient { get; set; }
@@ -246,6 +257,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     Ingredient = Ingredient,
                     Color = Color,
                     Price = Price,
+                    PiecePrice = PiecePrice,
                     YarnCount = YarnCount,
 
                 };
@@ -279,6 +291,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     Ingredient = Ingredient,
                     Color = Color,
                     Price = Price,
+                    PiecePrice = PiecePrice,
                     YarnCount = YarnCount,
 
                 };
