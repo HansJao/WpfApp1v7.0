@@ -184,6 +184,7 @@ namespace WpfApp1.Adapter.MSSQL
            ,[YarnCount]
            ,[Color]
            ,[Price]
+           ,[PiecePrice]
            ,[YarnMerchant]
            ,[CreateDate])
             VALUES
@@ -191,6 +192,7 @@ namespace WpfApp1.Adapter.MSSQL
            ,@YarnCount
            ,@Color
            ,@Price
+           ,@PiecePrice
            ,@YarnMerchant
            ,GETDATE())";
             int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, yarnPrice);
