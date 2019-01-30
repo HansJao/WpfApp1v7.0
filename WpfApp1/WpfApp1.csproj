@@ -198,6 +198,9 @@
     <Compile Include="Pages\FabricPages\FabricCostQueryPage.xaml.cs">
       <DependentUpon>FabricCostQueryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\FabricPages\MalFunctionPage.xaml.cs">
+      <DependentUpon>MalFunctionPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\FabricPages\NewFabricPage.xaml.cs">
       <DependentUpon>NewFabricPage.xaml</DependentUpon>
     </Compile>
@@ -234,6 +237,7 @@
     <Compile Include="Pages\TrashSystemPages\FeatureSearchPage.xaml.cs">
       <DependentUpon>FeatureSearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utility\CustomController\CustomerDataGrid.cs" />
     <Compile Include="Utility\DapperHelper.cs" />
     <Compile Include="Utility\ExcelHelper.cs" />
     <Compile Include="Utility\ExtensionHelper.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="ViewModel\CustomerViewModel\AddCustomerViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\AddFabricColorViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\FabricCostQueryViewModel.cs" />
+    <Compile Include="ViewModel\FabricViewModel\MalFunctionViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\NewFabricViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\YarnPriceViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
@@ -308,6 +313,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\FabricPages\FabricCostQueryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FabricPages\MalFunctionPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

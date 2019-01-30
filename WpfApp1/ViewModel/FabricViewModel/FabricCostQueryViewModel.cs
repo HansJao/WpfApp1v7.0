@@ -236,7 +236,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         Grid grid = new Grid();
                         if (dataGridProcessSequenceList.Where(w => w.ColorNo > 0).Count() > 0)
                         {
-                            grid.Background = Brushes.Gray;
+                            grid.Background = Brushes.OrangeRed;
                         }
 
                         grid.Children.Add(dataGrid);
