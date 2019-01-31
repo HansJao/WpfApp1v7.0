@@ -8,7 +8,7 @@
         Title="NewFabricPage" Height="450" Width="800"
         xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.FabricViewModel">
     <Page.DataContext>
-        <viewModel:NewFabricViewModel/>
+        <viewModel:FabricViewModel/>
     </Page.DataContext>
     <Grid>
         <DockPanel>            
@@ -36,7 +36,7 @@
                 <Button Content="檢查未匯入布種" Command="{Binding CheckFabricClick}" HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="90"/>
                 <ListBox HorizontalAlignment="Left" ItemsSource="{Binding FabricNameList}" SelectedItem="{Binding SelectedFabricName}" Height="100" Margin="0,37,0,0" VerticalAlignment="Top" Width="163">
                     <ListBox.Resources>
-                        <viewModel:NewFabricViewModel x:Key="myResources" x:Name="myTestResources"/>
+                        <viewModel:FabricViewModel x:Key="myResources" x:Name="myTestResources"/>
                     </ListBox.Resources>
                     <ListBox.ItemTemplate >
                         <DataTemplate>

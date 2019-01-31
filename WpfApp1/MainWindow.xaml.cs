@@ -124,7 +124,7 @@ namespace WpfApp1
         {
             this.MainFrame.NavigationService.Navigate(new YarnPricePage());
         }
-        private void ButtonMalFunction_Click(object sender, RoutedEventArgs e)
+        private void ButtonNewMalFunction_Click(object sender, RoutedEventArgs e)
         {
             this.MainFrame.NavigationService.Navigate(new MalFunctionPage());
         }

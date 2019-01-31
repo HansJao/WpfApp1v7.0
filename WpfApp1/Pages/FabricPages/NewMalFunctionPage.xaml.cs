@@ -24,7 +24,7 @@ namespace WpfApp1.Pages.FabricPages
         public MalFunctionPage()
         {
             InitializeComponent();
-            this.DataContext = new MalFunctionViewModel();
+            this.DataContext = new NewMalFunctionViewModel();
         }
     }
 }

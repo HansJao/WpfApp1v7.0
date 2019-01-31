@@ -22,7 +22,7 @@ using WpfApp1.Utility;
 
 namespace WpfApp1.ViewModel.FabricViewModel
 {
-    public class NewFabricViewModel : ViewModelBase
+    public class FabricViewModel : ViewModelBase
     {
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
@@ -76,7 +76,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         public string SelectedFabricName { get; set; }
 
-        public NewFabricViewModel()
+        public FabricViewModel()
         {
             FabricNameList = new ObservableCollection<string>();
             FabricList = new ObservableCollection<Fabric>(FabricModule.GetFabricList());
