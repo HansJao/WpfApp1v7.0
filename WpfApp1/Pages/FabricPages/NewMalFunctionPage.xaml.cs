@@ -73,5 +73,28 @@ namespace WpfApp1.Pages.FabricPages
              view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
             */
         }
+
+        private void FactoryList_KeyUp(object sender, KeyEventArgs e)
+        {
+            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(FactoryList.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (String.IsNullOrEmpty(FactoryList.Text)) return false;
+                else
+                {
+                    if ((((Factory)o).Name).Contains(FactoryList.Text)) return true;
+                    else return false;
+                }
+            });
+
+            itemsViewOriginal.Refresh();
+
+            // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
+            /* 
+             DataView view = (DataView) Cmb.ItemsSource; 
+             view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
+            */
+        }
     }
 }

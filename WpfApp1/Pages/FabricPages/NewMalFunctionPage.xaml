@@ -33,7 +33,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="布種顏色:"/>
-                    <ComboBox x:Name="FabricColorList" Width="100" ItemsSource="{Binding FabricColorList}" DisplayMemberPath="Color" SelectedItem="{Binding FabricColor}" IsEditable="True" KeyUp="FabricList_KeyUp" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
+                    <ComboBox x:Name="FabricColorList" Width="100" ItemsSource="{Binding FabricColorList}" DisplayMemberPath="Color" SelectedItem="{Binding FabricColor}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="重修項目:"/>
@@ -47,11 +47,11 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="狀   態:"/>
-                    <ComboBox Width="100" IsEditable="True"/>
+                    <ComboBox Width="100"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="故障工廠:"/>
-                    <ComboBox Width="100" IsEditable="True"/>
+                    <ComboBox x:Name="FactoryList" Width="100" ItemsSource="{Binding FactoryList}" DisplayMemberPath="Name" SelectedItem="{Binding Factory}" IsEditable="True" KeyUp="FactoryList_KeyUp" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
                 </StackPanel>             
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="重修訂單:"/>
@@ -61,7 +61,7 @@
                     <Label Width="60"  Content="數   量:"/>
                     <TextBox Width="100"/>
                 </StackPanel>
-                <TextBlock Text="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" TextWrapping="Wrap" />
+                <Label Content="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
                 <TextBox Width="160" Height="150" TextWrapping="Wrap" AcceptsReturn="True"/>
             </StackPanel>
         </StackPanel>
