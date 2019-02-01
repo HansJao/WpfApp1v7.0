@@ -28,73 +28,73 @@ namespace WpfApp1.Pages.FabricPages
             this.DataContext = new NewMalFunctionViewModel();
         }
 
-        private void CustomerList_KeyUp(object sender, KeyEventArgs e)
-        {
-            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(CustomerList.ItemsSource);
+        //private void CustomerList_KeyUp(object sender, KeyEventArgs e)
+        //{
+        //    CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(CustomerList.ItemsSource);
 
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (String.IsNullOrEmpty(CustomerList.Text)) return true;
-                else
-                {
-                    if ((((Customer)o).Name).Contains(CustomerList.Text)) return true;
-                    else return false;
-                }
-            });
+        //    itemsViewOriginal.Filter = ((o) =>
+        //    {
+        //        if (String.IsNullOrEmpty(CustomerList.Text)) return true;
+        //        else
+        //        {
+        //            if ((((Customer)o).Name).Contains(CustomerList.Text)) return true;
+        //            else return false;
+        //        }
+        //    });
 
-            itemsViewOriginal.Refresh();
+        //    itemsViewOriginal.Refresh();
 
-            // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
-            /* 
-             DataView view = (DataView) Cmb.ItemsSource; 
-             view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
-            */
-        }
+        //    // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
+        //    /* 
+        //     DataView view = (DataView) Cmb.ItemsSource; 
+        //     view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
+        //    */
+        //}
 
-        private void FabricList_KeyUp(object sender, KeyEventArgs e)
-        {
-            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(FabricList.ItemsSource);
+        //private void FabricList_KeyUp(object sender, KeyEventArgs e)
+        //{
+        //    CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(FabricList.ItemsSource);
 
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (String.IsNullOrEmpty(FabricList.Text)) return true;
-                else
-                {
-                    if ((((Fabric)o).FabricName).Contains(FabricList.Text)) return true;
-                    else return false;
-                }
-            });
+        //    itemsViewOriginal.Filter = ((o) =>
+        //    {
+        //        if (String.IsNullOrEmpty(FabricList.Text)) return true;
+        //        else
+        //        {
+        //            if ((((Fabric)o).FabricName).Contains(FabricList.Text)) return true;
+        //            else return false;
+        //        }
+        //    });
 
-            itemsViewOriginal.Refresh();
+        //    itemsViewOriginal.Refresh();
 
-            // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
-            /* 
-             DataView view = (DataView) Cmb.ItemsSource; 
-             view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
-            */
-        }
+        //    // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
+        //    /* 
+        //     DataView view = (DataView) Cmb.ItemsSource; 
+        //     view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
+        //    */
+        //}
 
-        private void FactoryList_KeyUp(object sender, KeyEventArgs e)
-        {
-            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(FactoryList.ItemsSource);
+        //private void FactoryList_KeyUp(object sender, KeyEventArgs e)
+        //{
+        //    CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(FactoryList.ItemsSource);
 
-            itemsViewOriginal.Filter = ((o) =>
-            {
-                if (String.IsNullOrEmpty(FactoryList.Text)) return false;
-                else
-                {
-                    if ((((Factory)o).Name).Contains(FactoryList.Text)) return true;
-                    else return false;
-                }
-            });
+        //    itemsViewOriginal.Filter = ((o) =>
+        //    {
+        //        if (String.IsNullOrEmpty(FactoryList.Text)) return false;
+        //        else
+        //        {
+        //            if ((((Factory)o).Name).Contains(FactoryList.Text)) return true;
+        //            else return false;
+        //        }
+        //    });
 
-            itemsViewOriginal.Refresh();
+        //    itemsViewOriginal.Refresh();
 
-            // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
-            /* 
-             DataView view = (DataView) Cmb.ItemsSource; 
-             view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
-            */
-        }
+        //    // if datasource is a DataView, then apply RowFilter as below and replace above logic with below one
+        //    /* 
+        //     DataView view = (DataView) Cmb.ItemsSource; 
+        //     view.RowFilter = ("Name like '*" + Cmb.Text + "*'"); 
+        //    */
+        //}
     }
 }
