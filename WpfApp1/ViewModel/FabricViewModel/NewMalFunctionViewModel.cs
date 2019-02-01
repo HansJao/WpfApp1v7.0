@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
+using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.Modules.CustomerModule;
 using WpfApp1.Modules.CustomerModule.Implement;
@@ -21,6 +23,13 @@ namespace WpfApp1.ViewModel.FabricViewModel
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
 
+
+        public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
+
+        private void AddMalFunctionExecute()
+        {
+            
+        }
 
         private Customer _customer { get; set; }
         public Customer Customer
@@ -119,6 +128,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         public IEnumerable<FabricColor> FabricColorList { get; set; }
         public FabricColor FabricColor { get; set; }
+
+        public DateTime MalFunctionTime { get; set; } = DateTime.Now;
         public NewMalFunctionViewModel()
         {
             CustomerList = CustomerModule.GetCustomerList();

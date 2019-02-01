@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1.Pages.FabricPages"
-      xmlns:CustomController="clr-namespace:WpfApp1.Utility.CustomController" x:Class="WpfApp1.Pages.FabricPages.MalFunctionPage"
+      x:Class="WpfApp1.Pages.FabricPages.MalFunctionPage"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="新增故障處理"
@@ -57,7 +57,10 @@
                     <Label Width="60"  Content="狀   態:"/>
                     <ComboBox Width="100"/>
                 </StackPanel>
-
+                <StackPanel Orientation="Horizontal">
+                    <Label Width="60"  Content="退貨時間:"/>
+                    <DatePicker  SelectedDate="{Binding MalFunctionTime}"/>
+                </StackPanel>
             </StackPanel>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
@@ -81,7 +84,7 @@
         <StackPanel>
             <Label Content="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
             <TextBox Height="100" TextWrapping="Wrap" AcceptsReturn="True" />
-            <Button HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
+            <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
         </StackPanel>
     </StackPanel>
 </Page>
