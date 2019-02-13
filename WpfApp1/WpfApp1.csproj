@@ -174,7 +174,7 @@
     <Compile Include="DataClass\StoreSearch\StoreData.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
-    <Compile Include="DataClass\TrashSystem\TrashCustomerList.cs" />
+    <Compile Include="DataClass\TrashSystem\TrashCustomerShipped.cs" />
     <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
     <Compile Include="DataClass\TrashSystem\TrashShipped.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />

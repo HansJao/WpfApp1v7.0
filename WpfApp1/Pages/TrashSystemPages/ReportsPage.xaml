@@ -41,17 +41,17 @@
                 <Label Content="客戶出貨紀錄查詢"/>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="開始時間:"/>
-                    <DatePicker SelectedDate="{Binding DatePickerBegin}"/>
+                    <DatePicker SelectedDate="{Binding CustomerDatePickerBegin}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="終止時間:"/>
-                    <DatePicker SelectedDate="{Binding DatePickerEnd}"/>
+                    <DatePicker SelectedDate="{Binding CustomerDatePickerEnd}"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="客戶名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                 </StackPanel>
-                <Button Content="客戶出貨紀錄匯出" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"/>
+                <Button Content="客戶出貨紀錄匯出" Command="{Binding ButtonExportCustomerClick}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"/>
             </StackPanel>
         </StackPanel>
         <Button HorizontalAlignment="Left" Content="檢查" Margin="688,42,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportShippingCheckExecuteClick}" />

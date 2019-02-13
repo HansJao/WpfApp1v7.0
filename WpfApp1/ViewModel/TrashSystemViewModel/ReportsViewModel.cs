@@ -31,9 +31,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand ButtonExportExecuteClick { get { return new RelayCommand(ButtonExportExecute, CanExecute); } }
         public ICommand ButtonExportCustomerClick { get { return new RelayCommand(ButtonExportCustomerExecute, CanExecute); } }
 
+        public string CustomerName { get; set; }
+        public DateTime CustomerDatePickerBegin { get; set; }
+        public DateTime CustomerDatePickerEnd { get; set; } = DateTime.Now;
         private void ButtonExportCustomerExecute()
         {
-            //TrashModule.GetTrashCustomerList(DatePickerBegin, DatePickerEnd,)
+            IEnumerable<TrashCustomerShipped> trashCustomerShippedList = TrashModule.GetCustomerShippedList(CustomerName, CustomerDatePickerBegin, CustomerDatePickerEnd);
         }
 
         public DateTime ShippingCheckDate { get; set; } = DateTime.Now;

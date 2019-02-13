@@ -50,5 +50,19 @@ namespace WpfApp1.Modules.TrashModule.Implement
         {
             TrashAdapter.UpdateProductName(v);
         }
+
+        /// <summary>
+        /// 取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="customerName"></param>
+        /// <param name="customerDatePickerBegin"></param>
+        /// <param name="customerDatePickerEnd"></param>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
+        {
+            IEnumerable<TrashCustomerShipped> trashCustomerShipped = TrashAdapter.GetCustomerShippedList(customerName, customerDatePickerBegin, customerDatePickerEnd);
+            return trashCustomerShipped;
+        }
+
     }
 }

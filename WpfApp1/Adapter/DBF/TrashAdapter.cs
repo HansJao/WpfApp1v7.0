@@ -67,9 +67,29 @@ namespace WpfApp1.Adapter.DBF
                         new SqlParameter("@F_01", SqlDbType.NVarChar) { Value = item.F_01 },
                         new SqlParameter("@I_01", SqlDbType.NVarChar) { Value = item.I_01 },
                    };
-             var count =  DapperHelper.QueryDbfCollection<int>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd2, parameters);
+                var count = DapperHelper.QueryDbfCollection<int>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd2, parameters);
             }
-
         }
+
+
+        /// <summary>
+        /// 取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="customerName"></param>
+        /// <param name="customerDatePickerBegin"></param>
+        /// <param name="customerDatePickerEnd"></param>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
+        {
+            string sqlCmd = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,SUM(invosub.QUANTITY) as Quantity FROM INVOSUB.dbf invosub " +
+                          "INNER JOIN ITEM.dbf item ON invosub.I_01 = item.I_01 AND invosub.F_01 = item.F_01 " +
+                          "INNER JOIN CUST.dbf cust ON C_Name = " +
+                          "WHERE invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "') " +
+                          "GROUP BY invosub.IN_DATE,invosub.I_01,item.I_03 " +
+                          "ORDER BY invosub.IN_DATE,invosub.I_01";
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
+
     }
 }

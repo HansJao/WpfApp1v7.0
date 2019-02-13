@@ -15,9 +15,13 @@
             <DatePicker x:Name="DatePickerBegin" HorizontalAlignment="Left" Margin="105,10,0,0" VerticalAlignment="Top"/>
             <DatePicker x:Name="DatePickerEnd" HorizontalAlignment="Left" Margin="204,10,0,0" VerticalAlignment="Top"/>-->
             <StackPanel Orientation="Vertical">
+                <Label Content="INVO.dbf"/>
                 <DataGrid x:Name="DataGridInvo" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="INVOSUB.dbf"/>
                 <DataGrid x:Name="DataGridInvoSub" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="ITEM.dbf"/>
                 <DataGrid x:Name="DataGridItem" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="CUST.dbf"/>
                 <DataGrid x:Name="DataGridCust" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
             </StackPanel>
         </Grid>
