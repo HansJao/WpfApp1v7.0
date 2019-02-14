@@ -81,13 +81,15 @@ namespace WpfApp1.Adapter.DBF
         /// <returns></returns>
         public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
         {
-            string sqlCmd = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,SUM(invosub.QUANTITY) as Quantity FROM INVOSUB.dbf invosub " +
-                          "INNER JOIN ITEM.dbf item ON invosub.I_01 = item.I_01 AND invosub.F_01 = item.F_01 " +
-                          "INNER JOIN CUST.dbf cust ON C_Name = " +
-                          "WHERE invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "') " +
-                          "GROUP BY invosub.IN_DATE,invosub.I_01,item.I_03 " +
-                          "ORDER BY invosub.IN_DATE,invosub.I_01";
-            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
+            string sqlCmd = @"SELECT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+                            INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
+                            INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 
+                            WHERE cust.C_Name = @CustomerName AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@CustomerName", SqlDbType.NVarChar) { Value = customerName },
+            };
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
 

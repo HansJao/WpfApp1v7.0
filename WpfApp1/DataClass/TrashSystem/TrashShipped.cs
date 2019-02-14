@@ -20,6 +20,6 @@ namespace WpfApp1.DataClass.TrashSystem
         [Description("布種顏色")]
         public string I_03 { get; set; }
         [Description("數量")]
-        public int Quantity { get; set; }
+        public double Quantity { get; set; }
     }
 }

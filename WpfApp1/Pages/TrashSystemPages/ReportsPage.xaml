@@ -49,7 +49,11 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="客戶名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                    <TextBox Text="{Binding CustomerName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="布種名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox Text="{Binding TextileName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                 </StackPanel>
                 <Button Content="客戶出貨紀錄匯出" Command="{Binding ButtonExportCustomerClick}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"/>
             </StackPanel>

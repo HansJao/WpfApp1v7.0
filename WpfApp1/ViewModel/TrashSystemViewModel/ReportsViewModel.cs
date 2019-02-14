@@ -32,11 +32,15 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand ButtonExportCustomerClick { get { return new RelayCommand(ButtonExportCustomerExecute, CanExecute); } }
 
         public string CustomerName { get; set; }
-        public DateTime CustomerDatePickerBegin { get; set; }
+        public string TextileName { get; set; }
+        public DateTime CustomerDatePickerBegin { get; set; } = DateTime.Now.AddYears(-1);
         public DateTime CustomerDatePickerEnd { get; set; } = DateTime.Now;
         private void ButtonExportCustomerExecute()
         {
-            IEnumerable<TrashCustomerShipped> trashCustomerShippedList = TrashModule.GetCustomerShippedList(CustomerName, CustomerDatePickerBegin, CustomerDatePickerEnd);
+            IEnumerable<TrashCustomerShipped> trashCustomerShippedList = TrashModule.GetCustomerShippedList(CustomerName, CustomerDatePickerBegin, CustomerDatePickerEnd)
+                .GroupBy(g => new { g.C_Name, g.I_03 })
+                .Select(s => new TrashCustomerShipped { C_Name = s.Key.C_Name, I_03 = s.Key.I_03, Quantity = s.Sum(item => item.Quantity) });
+            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = string.IsNullOrEmpty(TextileName) ? trashCustomerShippedList : trashCustomerShippedList.Where(w => w.I_03.Contains(TextileName)).OrderBy(o => o.I_03);
         }
 
         public DateTime ShippingCheckDate { get; set; } = DateTime.Now;
