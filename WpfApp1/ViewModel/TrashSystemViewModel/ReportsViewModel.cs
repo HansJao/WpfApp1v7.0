@@ -40,7 +40,43 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             IEnumerable<TrashCustomerShipped> trashCustomerShippedList = TrashModule.GetCustomerShippedList(CustomerName, CustomerDatePickerBegin, CustomerDatePickerEnd)
                 .GroupBy(g => new { g.C_Name, g.I_03 })
                 .Select(s => new TrashCustomerShipped { C_Name = s.Key.C_Name, I_03 = s.Key.I_03, Quantity = s.Sum(item => item.Quantity) });
-            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = string.IsNullOrEmpty(TextileName) ? trashCustomerShippedList : trashCustomerShippedList.Where(w => w.I_03.Contains(TextileName)).OrderBy(o => o.I_03);
+            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = string.IsNullOrEmpty(TextileName) ? trashCustomerShippedList.OrderBy(o => o.I_03) : trashCustomerShippedList.Where(w => w.I_03.Contains(TextileName)).OrderBy(o => o.I_03);
+
+            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            {
+                new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "布種名稱"
+                },
+                 new ColumnFormat
+                {
+                    CoiumnWidth = 3000,
+                    ColumnTitle = "重量"
+                }
+
+            };
+
+            var excelHelper = new ExcelHelper();
+            excelHelper.CreateExcelFile<TrashCustomerShipped>(CreateCustomerShippedExcelAction, trashCustomerShippeds.ToList(), columnFormats);
+        }
+
+        private string CreateCustomerShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, TrashCustomerShipped storeData)
+        {
+            ICellStyle estyle = wb.CreateCellStyle();
+            estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+            estyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle a2style = wb.CreateCellStyle();
+            a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+            a2style.FillPattern = FillPattern.SolidForeground;
+
+            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.I_03, positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 1, storeData.Quantity.ToString(), positionStyle);
+
+            rowIndex++;
+            return storeData.C_Name + TextileName + "出貨紀錄";
         }
 
         public DateTime ShippingCheckDate { get; set; } = DateTime.Now;

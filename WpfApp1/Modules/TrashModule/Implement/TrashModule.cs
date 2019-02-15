@@ -61,6 +61,7 @@ namespace WpfApp1.Modules.TrashModule.Implement
         public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
         {
             IEnumerable<TrashCustomerShipped> trashCustomerShipped = TrashAdapter.GetCustomerShippedList(customerName, customerDatePickerBegin, customerDatePickerEnd);
+            //var test = trashCustomerShipped.Where(w => w.I_03.Contains("仿韓國棉黑")).OrderBy(o => o.I_03);
             return trashCustomerShipped;
         }
 

@@ -81,7 +81,7 @@ namespace WpfApp1.Adapter.DBF
         /// <returns></returns>
         public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
         {
-            string sqlCmd = @"SELECT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+            string sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
                             INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
                             INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 
                             WHERE cust.C_Name = @CustomerName AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";

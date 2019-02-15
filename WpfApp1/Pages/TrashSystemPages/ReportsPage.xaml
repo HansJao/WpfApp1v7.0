@@ -28,7 +28,7 @@
                     <TextBox x:Name="TextBoxFilter" Height="23" TextWrapping="Wrap" Text="{Binding FilterText}" Width="120"/>
                 </StackPanel>
                 <Button x:Name="ButtonExport" Content="出貨紀錄匯出" HorizontalAlignment="Right" Width="80" Command="{Binding ButtonExportExecuteClick}"/>
-                <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashShippeds}" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashShippeds}" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Height="300">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}"/>
                         <DataGridTextColumn Header="貨號" Binding="{Binding I_01}"/>
