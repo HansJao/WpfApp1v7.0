@@ -149,7 +149,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             return list;
         }
 
-        private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryPrice> storeData)
+        private void CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryPrice> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -167,35 +167,37 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 ExcelHelper.CreateCell(rowTextile, 3, (countInventoryTotal * 20 * textile.AverageCost).ToString(), positionStyle);
             }
             rowIndex++;
-            return "庫存成本清單";
         }
 
         private void ExportInventoryPriceToExcel()
         {
             ExcelHelper excelHelper = new ExcelHelper();
-            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            ExcelFormat columnFormats = new ExcelFormat()
             {
-                new ColumnFormat
+                FileName = "庫存成本清單",
+                ColumnFormats = new List<ColumnFormat>
                 {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "布種名稱",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2800,
-                    ColumnTitle = "庫存總數",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "庫存總價格",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "庫存總成本",
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "布種名稱",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2800,
+                        ColumnTitle = "庫存總數",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "庫存總價格",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "庫存總成本",
+                    }
                 }
-
             };
             excelHelper.InventoryCheckSheet<StoreSearchData<InventoryPrice>>(GetAllInventoryAction, CreateInventoryPriceExcelAction, 0, columnFormats);
         }

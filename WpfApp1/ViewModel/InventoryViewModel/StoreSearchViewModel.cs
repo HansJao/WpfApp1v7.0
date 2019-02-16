@@ -334,7 +334,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         /// <param name="rowIndex"></param>
         /// <param name="storeData"></param>
         /// <returns></returns>
-        private string CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        private void CreateIsShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -350,7 +350,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             }
 
             rowIndex++;
-            return "庫存盤點清單";
         }
 
         /// <summary>
@@ -359,50 +358,54 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public void InventoryCheckSheetClick()
         {
             ExcelHelper excelHelper = new ExcelHelper();
-            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            ExcelFormat excelFormat = new ExcelFormat()
             {
-                new ColumnFormat
+                FileName = "庫存盤點清單",
+                ColumnFormats = new List<ColumnFormat>
                 {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "顏色",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2800,
-                    ColumnTitle = "儲位",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2600,
-                    ColumnTitle = "數量",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "清點資訊",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "顏色",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2800,
-                    ColumnTitle = "儲位",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2600,
-                    ColumnTitle = "數量",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "清點資訊",
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "顏色",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2800,
+                        ColumnTitle = "儲位",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2600,
+                        ColumnTitle = "數量",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "清點資訊",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "顏色",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2800,
+                        ColumnTitle = "儲位",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2600,
+                        ColumnTitle = "數量",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "清點資訊",
+                    }
                 }
             };
-            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(IsShippedAction, CreateIsShippedExcelAction, 0, columnFormats);
+            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(IsShippedAction, CreateIsShippedExcelAction, 0, excelFormat);
         }
 
         /// <summary>
@@ -462,7 +465,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         /// <param name="rowIndex"></param>
         /// <param name="storeData"></param>
         /// <returns></returns>
-        private string CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
+        private void CreateCheckDateExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, StoreSearchData<InventoryCheck> storeData)
         {
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
             ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
@@ -480,7 +483,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             }
 
             rowIndex++;
-            return "檢查時間盤點清單";
         }
 
         /// <summary>
@@ -489,36 +491,39 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         private void ExportCheckDateToExcel()
         {
             ExcelHelper excelHelper = new ExcelHelper();
-            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            ExcelFormat excelFormat = new ExcelFormat()
             {
-                new ColumnFormat
+                FileName = "檢查時間盤點清單",
+                ColumnFormats = new List<ColumnFormat>
                 {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "顏色",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2800,
-                    ColumnTitle = "儲位",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "數量",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "清點日期",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "清點資訊",
-                },
-
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "顏色",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2800,
+                        ColumnTitle = "儲位",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "數量",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "清點日期",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "清點資訊",
+                    },
+                }
             };
-            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(CheckDateAction, CreateCheckDateExcelAction, DateRange, columnFormats);
+            excelHelper.InventoryCheckSheet<StoreSearchData<InventoryCheck>>(CheckDateAction, CreateCheckDateExcelAction, DateRange, excelFormat);
         }
     }
 

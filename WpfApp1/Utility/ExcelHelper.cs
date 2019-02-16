@@ -229,7 +229,7 @@ namespace WpfApp1.Utility
         }
 
         public delegate List<T> ReadExcelAction<T>(List<T> list, IRow row, string sheetName, int timeRange);
-        public delegate string CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, T storeData);
+        public delegate void CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, T storeData);
 
         public List<string> GetExcelSheetName()
         {
@@ -254,8 +254,8 @@ namespace WpfApp1.Utility
         /// <param name="readExcelAction"></param>
         /// <param name="createExcelAction"></param>
         /// <param name="timeRange"></param>
-        /// <param name="columnFormats"></param>
-        public void InventoryCheckSheet<T>(ReadExcelAction<T> readExcelAction, CreateExcelAction<T> createExcelAction, int timeRange, List<ColumnFormat> columnFormats)
+        /// <param name="excelFormat"></param>
+        public void InventoryCheckSheet<T>(ReadExcelAction<T> readExcelAction, CreateExcelAction<T> createExcelAction, int timeRange, ExcelFormat excelFormat)
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
@@ -267,7 +267,7 @@ namespace WpfApp1.Utility
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 IRow row;
                 var firstRow = sheet.GetRow(0);
-                               
+
                 for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
                     if (rowIndex > 70)
@@ -289,10 +289,10 @@ namespace WpfApp1.Utility
                     }
                 }
             }
-            CreateExcelFile(createExcelAction, list, columnFormats);
+            CreateExcelFile(createExcelAction, list, excelFormat);
         }
 
-        public void CreateExcelFile<T>(CreateExcelAction<T> createExcelAction, List<T> list, List<ColumnFormat> columnFormats)
+        public void CreateExcelFile<T>(CreateExcelAction<T> createExcelAction, List<T> list, ExcelFormat excelFormat)
         {
             //建立Excel 2003檔案
             IWorkbook wb = new XSSFWorkbook();
@@ -305,24 +305,23 @@ namespace WpfApp1.Utility
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
-            foreach (var item in columnFormats)
+            foreach (var item in excelFormat.ColumnFormats)
             {
-                ws.SetColumnWidth(columnFormats.IndexOf(item), item.CoiumnWidth);
-                CreateCell(row, columnFormats.IndexOf(item), item.ColumnTitle, positionStyle);
+                ws.SetColumnWidth(excelFormat.ColumnFormats.IndexOf(item), item.CoiumnWidth);
+                CreateCell(row, excelFormat.ColumnFormats.IndexOf(item), item.ColumnTitle, positionStyle);
             }
 
             int rowIndex = 1;
-            string createFileName = string.Empty;
             foreach (var storeData in list)
             {
-                createFileName = createExcelAction(wb, ws, positionStyle, ref rowIndex, storeData);
+                createExcelAction(wb, ws, positionStyle, ref rowIndex, storeData);
             }
-            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", createFileName, DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
+            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", excelFormat.FileName, DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
             file.Close();
         }
 
-        public static string GetCellString(IRow row,int cellNum)
+        public static string GetCellString(IRow row, int cellNum)
         {
             row.GetCell(cellNum).SetCellType(CellType.String);
             string result = row.GetCell(cellNum).StringCellValue;

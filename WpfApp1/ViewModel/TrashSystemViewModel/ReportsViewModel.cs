@@ -42,31 +42,34 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 .Select(s => new TrashCustomerShipped { C_Name = s.Key.C_Name, I_03 = s.Key.I_03, Quantity = s.Sum(item => item.Quantity) });
             IEnumerable<TrashCustomerShipped> trashCustomerShippeds = string.IsNullOrEmpty(TextileName) ? trashCustomerShippedList.OrderBy(o => o.I_03) : trashCustomerShippedList.Where(w => w.I_03.Contains(TextileName)).OrderBy(o => o.I_03);
 
-            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            ExcelFormat excelFormat = new ExcelFormat()
             {
-                 new ColumnFormat
+                FileName = string.Concat(CustomerName, TextileName + "出貨紀錄"),
+                ColumnFormats = new List<ColumnFormat>
                 {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "客戶名稱"
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 5000,
-                    ColumnTitle = "布種名稱"
-                },
-                 new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "重量"
-                }
-
+                     new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "客戶名稱"
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 5000,
+                        ColumnTitle = "布種名稱"
+                    },
+                     new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "重量"
+                    }
+                 }
             };
 
             var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<TrashCustomerShipped>(CreateCustomerShippedExcelAction, trashCustomerShippeds.ToList(), columnFormats);
+            excelHelper.CreateExcelFile<TrashCustomerShipped>(CreateCustomerShippedExcelAction, trashCustomerShippeds.ToList(), excelFormat);
         }
 
-        private string CreateCustomerShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, TrashCustomerShipped storeData)
+        private void CreateCustomerShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, TrashCustomerShipped storeData)
         {
             ICellStyle estyle = wb.CreateCellStyle();
             estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
@@ -82,7 +85,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             ExcelHelper.CreateCell(rowTextile, 2, storeData.Quantity.ToString(), positionStyle);
 
             rowIndex++;
-            return storeData.C_Name + TextileName + "出貨紀錄";
         }
 
         public DateTime ShippingCheckDate { get; set; } = DateTime.Now;
@@ -238,46 +240,49 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 });
             }
 
-            List<ColumnFormat> columnFormats = new List<ColumnFormat>()
+            ExcelFormat columnFormats = new ExcelFormat()
             {
-                new ColumnFormat
+                FileName = "庫存對照清單",
+                ColumnFormats = new List<ColumnFormat>
                 {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "布種顏色",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 2800,
-                    ColumnTitle = "出貨重量",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "約略出貨數",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 3000,
-                    ColumnTitle = "布種名稱",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "顏色",
-                },
-                new ColumnFormat
-                {
-                    CoiumnWidth = 1850,
-                    ColumnTitle = "出貨數量",
-                },
-
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "布種顏色",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 2800,
+                        ColumnTitle = "出貨重量",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "約略出貨數",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 3000,
+                        ColumnTitle = "布種名稱",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "顏色",
+                    },
+                    new ColumnFormat
+                    {
+                        CoiumnWidth = 1850,
+                        ColumnTitle = "出貨數量",
+                    }
+                }
             };
 
             var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<Container>(CreateInventoryPriceExcelAction, newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)).ToList(), columnFormats);
+            excelHelper.CreateExcelFile<Container>(CreateShippingCheckExcelAction, newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)).ToList(), columnFormats);
         }
 
-        private string CreateInventoryPriceExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)
+        private void CreateShippingCheckExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)
         {
             ICellStyle estyle = wb.CreateCellStyle();
             estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
@@ -300,9 +305,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             ExcelHelper.CreateCell(rowTextile, 4, storeData.ColorName, positionStyle);
             ExcelHelper.CreateCell(rowTextile, 5, storeData.ShippedCount.ToString(), isEqual ? positionStyle : estyle);
 
-
             rowIndex++;
-            return "庫存對照清單";
         }
 
 

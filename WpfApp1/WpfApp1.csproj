@@ -151,6 +151,7 @@
     <Compile Include="DataClass\Enumeration\MalFunctionEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelFormat.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
     <Compile Include="DataClass\Fabric\IngredientGroupInfo.cs" />
     <Compile Include="DataClass\Fabric\MerchantYarnPrice.cs" />
