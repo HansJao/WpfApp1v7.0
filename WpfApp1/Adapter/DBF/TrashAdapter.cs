@@ -81,15 +81,26 @@ namespace WpfApp1.Adapter.DBF
         /// <returns></returns>
         public IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd)
         {
-            string sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+            string sqlCmd = "";
+            if (string.IsNullOrEmpty(customerName))
+            {
+                sqlCmd = string.Concat(@"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
                             INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
                             INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 
-                            WHERE cust.C_Name = @CustomerName AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";
-            SqlParameter[] parameters = new SqlParameter[]
+                            WHERE invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')");
+            }
+            else
             {
-                new SqlParameter("@CustomerName", SqlDbType.NVarChar) { Value = customerName },
-            };
-            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
+                sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+                            INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
+                            INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 
+                            WHERE cust.C_Name = " + customerName + " AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";
+            }
+            //SqlParameter[] parameters = new SqlParameter[]
+            //{
+            //    new SqlParameter("@CustomerName", SqlDbType.NVarChar) { Value = customerName },
+            //};
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
 

@@ -44,9 +44,14 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             List<ColumnFormat> columnFormats = new List<ColumnFormat>()
             {
-                new ColumnFormat
+                 new ColumnFormat
                 {
                     CoiumnWidth = 3000,
+                    ColumnTitle = "客戶名稱"
+                },
+                new ColumnFormat
+                {
+                    CoiumnWidth = 5000,
                     ColumnTitle = "布種名稱"
                 },
                  new ColumnFormat
@@ -72,8 +77,9 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             a2style.FillPattern = FillPattern.SolidForeground;
 
             XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-            ExcelHelper.CreateCell(rowTextile, 0, storeData.I_03, positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 1, storeData.Quantity.ToString(), positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 0, storeData.C_Name, positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 1, storeData.I_03, positionStyle);
+            ExcelHelper.CreateCell(rowTextile, 2, storeData.Quantity.ToString(), positionStyle);
 
             rowIndex++;
             return storeData.C_Name + TextileName + "出貨紀錄";
