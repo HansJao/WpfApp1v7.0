@@ -9,7 +9,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="新增故障處理"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      xmlns:FactoryEnum="clr-namespace:WpfApp1.DataClass.Enumeration"    
+      xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"    
       xmlns:convert="clr-namespace:WpfApp1.Utility">
     <Page.Resources>
         <Style TargetType="{x:Type ComboBox}">
@@ -23,12 +23,17 @@
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type Type="FactoryEnum:ProcessItem"/>
+                <x:Type Type="EnumLocal:ProcessItem"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <ObjectDataProvider x:Key="Status"  MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type Type="EnumLocal:MalFunctionEnum"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Page.Resources>
-    <StackPanel Width="320" HorizontalAlignment="Left">
-        <StackPanel Orientation="Horizontal">
+    <StackPanel Width="350" HorizontalAlignment="Left">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <StackPanel.Resources>
                 <Style TargetType="{x:Type StackPanel}">
                     <Setter Property="Margin" Value="0,5,0,0" />
@@ -45,7 +50,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="重修項目:"/>
-                    <ComboBox Width="100" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Process, Converter={StaticResource EnumConverter}}">
+                    <ComboBox Width="100" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Path=MalFunction.RepaireItem, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
@@ -55,14 +60,20 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="狀   態:"/>
-                    <ComboBox Width="100"/>
+                    <ComboBox ItemsSource="{Binding Source={StaticResource Status}}" SelectedItem="{Binding Path=MalFunction.Status, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}" Width="100">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="退貨時間:"/>
-                    <DatePicker  SelectedDate="{Binding MalFunctionTime}"/>
+                    <DatePicker  SelectedDate="{Binding Path=MalFunction.MalFunctionTime, UpdateSourceTrigger=LostFocus}"/>
                 </StackPanel>
             </StackPanel>
-            <StackPanel>
+            <StackPanel HorizontalAlignment="Left">
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="布種名稱:"/>
                     <ComboBox x:Name="FabricList" Width="100" ItemsSource="{Binding FabricList}" Text="{Binding SearchFabric}" DisplayMemberPath="FabricName" SelectedItem="{Binding Fabric}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
@@ -73,17 +84,17 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Width="60"  Content="重修訂單:"/>
-                    <TextBox Width="100"/>
+                    <TextBox  Text="{Binding Path=MalFunction.RepairOrderNo, UpdateSourceTrigger=LostFocus}" Width="100"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel  Orientation="Horizontal">
                     <Label Width="60"  Content="數   量:"/>
-                    <TextBox Width="100"/>
+                    <TextBox Text="{Binding Path=MalFunction.Quantity, UpdateSourceTrigger=LostFocus}" Width="100" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-        <StackPanel>
+        <StackPanel >
             <Label Content="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
-            <TextBox Height="100" TextWrapping="Wrap" AcceptsReturn="True" />
+            <TextBox Height="100" Text="{Binding Path=MalFunction.Reason, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" AcceptsReturn="True" />
             <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
         </StackPanel>
     </StackPanel>

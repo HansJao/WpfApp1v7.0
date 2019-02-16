@@ -138,6 +138,7 @@
     <Compile Include="DataClass\Entity\FabricProportion.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
     <Compile Include="DataClass\Entity\FactoryShipping.cs" />
+    <Compile Include="DataClass\Entity\Fabric\MalFunction.cs" />
     <Compile Include="DataClass\Entity\ProcessOrder.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderColorDetail.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="DataClass\Entity\YarnPrice.cs" />
     <Compile Include="DataClass\Enumeration\ExcelEnum.cs" />
     <Compile Include="DataClass\Enumeration\FactoryEnum.cs" />
+    <Compile Include="DataClass\Enumeration\MalFunctionEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />

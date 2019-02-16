@@ -25,10 +25,20 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
 
         public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
-
+        private MalFunction _malFunction { get; set; } = new MalFunction();
+        public MalFunction MalFunction
+        {
+            get
+            { return _malFunction ; }
+            set
+            { _malFunction = value; }
+        }
         private void AddMalFunctionExecute()
         {
-            
+            MalFunction.CustomerID = Customer.CustomerID;
+            MalFunction.FactoryID = Factory.FactoryID;
+            MalFunction.ColorNo = FabricColor.ColorNo;
+
         }
 
         private Customer _customer { get; set; }
@@ -129,7 +139,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
         public IEnumerable<FabricColor> FabricColorList { get; set; }
         public FabricColor FabricColor { get; set; }
 
-        public DateTime MalFunctionTime { get; set; } = DateTime.Now;
         public NewMalFunctionViewModel()
         {
             CustomerList = CustomerModule.GetCustomerList();

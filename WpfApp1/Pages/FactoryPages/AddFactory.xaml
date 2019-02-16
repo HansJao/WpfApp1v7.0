@@ -8,17 +8,16 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      xmlns:FactoryEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
+      xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
       xmlns:convert="clr-namespace:WpfApp1.Utility"
       Title="AddFactory">
     <Page.Resources>
         <convert:EnumConverter x:Key="EnumConverter" />
-        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
-                            ObjectType="{x:Type sys:Enum}">
+        <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
             <ObjectDataProvider.MethodParameters>
-                <x:Type Type="FactoryEnumLocal:ProcessItem"/>
+                <x:Type Type="EnumLocal:ProcessItem"/>
             </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
+        </ObjectDataProvider>      
     </Page.Resources>
     <Page.DataContext>
         <viewModel:AddFactoryViewModel/>
