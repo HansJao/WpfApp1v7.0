@@ -32,70 +32,82 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
     </Page.Resources>
-    <StackPanel Width="350" HorizontalAlignment="Left">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <StackPanel.Resources>
-                <Style TargetType="{x:Type StackPanel}">
-                    <Setter Property="Margin" Value="0,5,0,0" />
-                </Style>
-            </StackPanel.Resources>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="客戶名稱:"/>
-                    <ComboBox x:Name="CustomerList" Width="100" ItemsSource="{Binding CustomerList}" Text="{Binding SearchCustomer}" DisplayMemberPath="Name" SelectedItem="{Binding Customer}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Width="350" HorizontalAlignment="Left">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <StackPanel.Resources>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Setter Property="Margin" Value="0,5,0,0" />
+                    </Style>
+                </StackPanel.Resources>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="客戶名稱:"/>
+                        <ComboBox x:Name="CustomerList" Width="100" ItemsSource="{Binding CustomerList}" Text="{Binding SearchCustomer}" DisplayMemberPath="Name" SelectedItem="{Binding Customer}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="故障工廠:"/>
+                        <ComboBox x:Name="FactoryList" Width="100" Text="{Binding SearchFactory}" ItemsSource="{Binding FactoryList}" DisplayMemberPath="Name" SelectedItem="{Binding Factory}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="重修項目:"/>
+                        <ComboBox Width="100" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Path=MalFunction.RepaireItem, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="狀   態:"/>
+                        <ComboBox ItemsSource="{Binding Source={StaticResource Status}}" SelectedItem="{Binding Path=MalFunction.Status, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}" Width="100">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="退貨時間:"/>
+                        <DatePicker  SelectedDate="{Binding Path=MalFunction.MalFunctionTime, UpdateSourceTrigger=LostFocus}"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="故障工廠:"/>
-                    <ComboBox x:Name="FactoryList" Width="100" Text="{Binding SearchFactory}" ItemsSource="{Binding FactoryList}" DisplayMemberPath="Name" SelectedItem="{Binding Factory}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="重修項目:"/>
-                    <ComboBox Width="100" ItemsSource="{Binding Source={StaticResource dataFromEnum}}" SelectedItem="{Binding Path=MalFunction.RepaireItem, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="狀   態:"/>
-                    <ComboBox ItemsSource="{Binding Source={StaticResource Status}}" SelectedItem="{Binding Path=MalFunction.Status, UpdateSourceTrigger=LostFocus, Converter={StaticResource EnumConverter}}" Width="100">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=., Converter={StaticResource EnumConverter}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="退貨時間:"/>
-                    <DatePicker  SelectedDate="{Binding Path=MalFunction.MalFunctionTime, UpdateSourceTrigger=LostFocus}"/>
+                <StackPanel HorizontalAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="布種名稱:"/>
+                        <ComboBox x:Name="FabricList" Width="100" ItemsSource="{Binding FabricList}" Text="{Binding SearchFabric}" DisplayMemberPath="FabricName" SelectedItem="{Binding Fabric}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="布種顏色:"/>
+                        <ComboBox x:Name="FabricColorList" Width="100" ItemsSource="{Binding FabricColorList}" DisplayMemberPath="Color" SelectedItem="{Binding FabricColor}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Width="60"  Content="重修訂單:"/>
+                        <TextBox  Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" LostFocus="{Binding AddFabricColorClick}" Width="100"/>
+                    </StackPanel>
+                    <StackPanel  Orientation="Horizontal">
+                        <Label Width="60"  Content="數   量:"/>
+                        <TextBox Text="{Binding Path=MalFunction.Quantity, UpdateSourceTrigger=LostFocus}" Width="100" />
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <StackPanel HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="布種名稱:"/>
-                    <ComboBox x:Name="FabricList" Width="100" ItemsSource="{Binding FabricList}" Text="{Binding SearchFabric}" DisplayMemberPath="FabricName" SelectedItem="{Binding Fabric}" IsEditable="True" IsTextSearchEnabled="False" StaysOpenOnEdit="True"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="布種顏色:"/>
-                    <ComboBox x:Name="FabricColorList" Width="100" ItemsSource="{Binding FabricColorList}" DisplayMemberPath="Color" SelectedItem="{Binding FabricColor}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Width="60"  Content="重修訂單:"/>
-                    <TextBox  Text="{Binding Path=MalFunction.RepairOrderNo, UpdateSourceTrigger=LostFocus}" Width="100"/>
-                </StackPanel>
-                <StackPanel  Orientation="Horizontal">
-                    <Label Width="60"  Content="數   量:"/>
-                    <TextBox Text="{Binding Path=MalFunction.Quantity, UpdateSourceTrigger=LostFocus}" Width="100" />
-                </StackPanel>
+            <StackPanel >
+                <Label Content="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
+                <TextBox Height="100" Text="{Binding Path=MalFunction.Reason, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" AcceptsReturn="True" />
+                <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
             </StackPanel>
         </StackPanel>
-        <StackPanel >
-            <Label Content="退貨原因:" VerticalAlignment="Top" HorizontalAlignment="Left" Width="60" />
-            <TextBox Height="100" Text="{Binding Path=MalFunction.Reason, UpdateSourceTrigger=LostFocus}" TextWrapping="Wrap" AcceptsReturn="True" />
-            <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
-        </StackPanel>
+        <DataGrid ItemsSource="{Binding ProcessOrderList}" Visibility="{Binding ProcessOrderVisbility}" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"/>
+                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"/>
+                <DataGridTextColumn Header="規格" Binding="{Binding Specification}"/>
+                <DataGridTextColumn Header="加工項目" Binding="{Binding ProcessItem}"/>
+                <DataGridTextColumn Header="注意事項" Width="140" Binding="{Binding Precautions}"/>
+                <DataGridTextColumn Header="手感" Width="80" Binding="{Binding HandFeel}"/>              
+            </DataGrid.Columns>
+        </DataGrid>
     </StackPanel>
 </Page>

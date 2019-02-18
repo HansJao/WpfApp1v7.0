@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.Command;
@@ -14,6 +15,8 @@ using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.Modules.FactoryModule;
 using WpfApp1.Modules.FactoryModule.Implement;
+using WpfApp1.Modules.Process;
+using WpfApp1.Modules.Process.Implement;
 
 namespace WpfApp1.ViewModel.FabricViewModel
 {
@@ -22,14 +25,19 @@ namespace WpfApp1.ViewModel.FabricViewModel
         protected IFabricModule FabricModule { get; } = new FabricModule();
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
-
+        protected IProcessModule ProcessModule { get; } = new ProcessModule();
 
         public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
+
+        public Visibility ProcessOrderVisbility { get; set; } = Visibility.Collapsed;
+
+        public IEnumerable<ProcessOrder> ProcessOrderList { get; set; }
+
         private MalFunction _malFunction { get; set; } = new MalFunction();
         public MalFunction MalFunction
         {
             get
-            { return _malFunction ; }
+            { return _malFunction; }
             set
             { _malFunction = value; }
         }
@@ -38,7 +46,43 @@ namespace WpfApp1.ViewModel.FabricViewModel
             MalFunction.CustomerID = Customer.CustomerID;
             MalFunction.FactoryID = Factory.FactoryID;
             MalFunction.ColorNo = FabricColor.ColorNo;
-
+        }
+        private string _repairOrderString { get; set; }
+        public string RepairOrderString
+        {
+            get { return _repairOrderString; }
+            set
+            {
+                _repairOrderString = value;
+                if (string.IsNullOrEmpty(value))
+                {
+                    ProcessOrderVisbility = Visibility.Collapsed;
+                }
+                else
+                {
+                    ProcessOrderVisbility = Visibility.Visible;
+                    RaisePropertyChanged("ProcessOrderVisbility");
+                    string filterText = value;
+                    ICollectionView cv = CollectionViewSource.GetDefaultView(ProcessOrderList);
+                    if (!string.IsNullOrEmpty(filterText))
+                    {
+                        cv.Filter = o =>
+                        {
+                            /* change to get data row value */
+                            ProcessOrder p = o as ProcessOrder;
+                            return (p.OrderString.ToUpper().Contains(filterText.ToUpper()));
+                            /* end change to get data row value */
+                        };
+                    }
+                    else
+                    {
+                        cv.Filter = o =>
+                        {
+                            return (true);
+                        };
+                    }
+                }
+            }
         }
 
         private Customer _customer { get; set; }
@@ -144,6 +188,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             CustomerList = CustomerModule.GetCustomerList();
             FabricList = FabricModule.GetFabricList();
             FactoryList = FactoryModule.GetFactoryList();
+            ProcessOrderList = ProcessModule.GetProcessOrder();
         }
     }
 }
