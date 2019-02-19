@@ -9,7 +9,8 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="新增故障處理"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"    
+      xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration" 
+      xmlns:Behavior="clr-namespace:WpfApp1.Utility.ControllerBehavior"
       xmlns:convert="clr-namespace:WpfApp1.Utility">
     <Page.Resources>
         <Style TargetType="{x:Type ComboBox}">
@@ -85,7 +86,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Width="60"  Content="重修訂單:"/>
-                        <TextBox  Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" LostFocus="{Binding AddFabricColorClick}" Width="100"/>
+                        <TextBox Behavior:TextBoxBehavior.OnLostFocus="{Binding TextBoxUnFocusCommand}"  Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
                         <Label Width="60"  Content="數   量:"/>
@@ -99,7 +100,7 @@
                 <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding ProcessOrderList}" Visibility="{Binding ProcessOrderVisbility}" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid ItemsSource="{Binding ProcessOrderList}" SelectedItem="{Binding ProcessOrder, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ProcessOrderVisbility}" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"/>
                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"/>

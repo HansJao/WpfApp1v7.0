@@ -27,11 +27,22 @@ namespace WpfApp1.ViewModel.FabricViewModel
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
 
-        public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
-
-        public Visibility ProcessOrderVisbility { get; set; } = Visibility.Collapsed;
-
+        public IEnumerable<Customer> CustomerList { get; set; }
+        private Customer _customer { get; set; }
+        public Customer Customer
+        {
+            get { return _customer; }
+            set { _customer = value; }
+        }
         public IEnumerable<ProcessOrder> ProcessOrderList { get; set; }
+        public ProcessOrder ProcessOrder { get; set; }
+        public NewMalFunctionViewModel()
+        {
+            CustomerList = CustomerModule.GetCustomerList();
+            FabricList = FabricModule.GetFabricList();
+            FactoryList = FactoryModule.GetFactoryList();
+            ProcessOrderList = ProcessModule.GetProcessOrder();
+        }
 
         private MalFunction _malFunction { get; set; } = new MalFunction();
         public MalFunction MalFunction
@@ -41,12 +52,23 @@ namespace WpfApp1.ViewModel.FabricViewModel
             set
             { _malFunction = value; }
         }
+        public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
         private void AddMalFunctionExecute()
         {
+
             MalFunction.CustomerID = Customer.CustomerID;
             MalFunction.FactoryID = Factory.FactoryID;
             MalFunction.ColorNo = FabricColor.ColorNo;
         }
+
+        public Visibility ProcessOrderVisbility { get; set; } = Visibility.Collapsed;
+        public ICommand TextBoxUnFocusCommand { get { return new RelayCommand(TextBoxUnFocusExecute, CanExecute); } }
+        private void TextBoxUnFocusExecute()
+        {
+            ProcessOrderVisbility = Visibility.Collapsed;
+            RaisePropertyChanged("ProcessOrderVisbility");
+        }
+      
         private string _repairOrderString { get; set; }
         public string RepairOrderString
         {
@@ -84,15 +106,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 }
             }
         }
-
-        private Customer _customer { get; set; }
-        public Customer Customer
-        {
-            get { return _customer; }
-            set { _customer = value; }
-        }
-
-        public IEnumerable<Customer> CustomerList { get; set; }
+        
         private string _searchCustomer { get; set; }
         public string SearchCustomer
         {
@@ -113,7 +127,8 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 });
             }
         }
-
+        public IEnumerable<FabricColor> FabricColorList { get; set; }
+        public FabricColor FabricColor { get; set; }
         private Fabric _fabric { get; set; }
         public Fabric Fabric
         {
@@ -178,17 +193,6 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     }
                 });
             }
-        }
-
-        public IEnumerable<FabricColor> FabricColorList { get; set; }
-        public FabricColor FabricColor { get; set; }
-
-        public NewMalFunctionViewModel()
-        {
-            CustomerList = CustomerModule.GetCustomerList();
-            FabricList = FabricModule.GetFabricList();
-            FactoryList = FactoryModule.GetFactoryList();
-            ProcessOrderList = ProcessModule.GetProcessOrder();
         }
     }
 }
