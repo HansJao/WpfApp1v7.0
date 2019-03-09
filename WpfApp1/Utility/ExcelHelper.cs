@@ -268,7 +268,7 @@ namespace WpfApp1.Utility
                 IRow row;
                 var firstRow = sheet.GetRow(0);
 
-                for (int rowIndex = 1; rowIndex < sheet.LastRowNum; rowIndex++)  //對工作表每一行  
+                for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
                     if (rowIndex > 70)
                         break;
