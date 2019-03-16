@@ -29,10 +29,13 @@ namespace WpfApp1.Pages.ProcessOrderPages
     {
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
+
+
+
+        private IWorkbook workbook = null;  //新建IWorkbook對象
         public NewProcessOrderPage()
         {
             InitializeComponent();
-            IWorkbook workbook = null;  //新建IWorkbook對象  
             string fileName = string.Concat(AppSettingConfig.ProcessOrderFilePath(), AppSettingConfig.ProcessOrderFileName());
             try
             {
@@ -56,76 +59,34 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private IEnumerable<FactoryIdentity> FactoryList;
         private void ComboBoxProcessOrderSheet_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //StackPanelBrushed.Visibility = Visibility.Visible;
-            //StackPanelClear.Visibility = Visibility.Visible;
-            //StackPanelDye.Visibility = Visibility.Visible;
-            //StackPanelDyeClear.Visibility = Visibility.Visible;
-            //ComboBoxProcessPlan.Visibility = Visibility.Visible;
-            //ComboBoxItemDyeClear2.Visibility = Visibility.Visible;
-            //ComboBoxItemFabricClear.Visibility = Visibility.Visible;
-            //ComboBoxItemFabricDyeClear.Visibility = Visibility.Visible;
-            //ComboBoxItemFabric.Visibility = Visibility.Visible;
-            //ComboBoxItemClear.Visibility = Visibility.Visible;
-            //ComboBoxItemDyeClear.Visibility = Visibility.Visible;
+            var selectedValue = ((ComboBox)sender).SelectedValue;
+            if (selectedValue == null)
+                return;
+            var orderString = selectedValue.ToString();
+
+            ProcessOrder processOrder = GetProcessOrder(orderString);
 
             TextBoxDyeClearFactory.Text = string.Empty;
-            if (((ComboBox)sender).SelectedValue == null)
-                return;
-            var orderString = ((ComboBox)sender).SelectedValue.ToString();
 
-            IWorkbook workbook = null;  //新建IWorkbook對象  
-            string fileName = string.Concat(AppSettingConfig.ProcessOrderFilePath(), AppSettingConfig.ProcessOrderFileName());
-            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-
-            var processOrderSheet = new List<string>();
             ISheet sheet = workbook.GetSheet(orderString);
 
             IRow rowFive = sheet.GetRow(5);
 
-            int widthCellNum = (int)ExcelEnum.ProcessOrderColumnIndexEnum.Width;
-            string width = ExcelHelper.GetCellString(rowFive, widthCellNum);
-
-
-            string clearType = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType);
-
             string factoryString = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).Replace(" ", "");
 
-            string handFeel = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel); 
-            TextBoxHandFeel.Text = handFeel;
+            TextBoxHandFeel.Text = processOrder.HandFeel;
 
             var factoryList = factoryString.Split('一').ToList();
-            FactoryList = FactoryModule.GetFactoryIdentiys(factoryList);
-            var notInDbFactoryName = CheckFactoryList(factoryList, FactoryList.ToList());
-            if (notInDbFactoryName.Count() > 0)
-            {
-                MessageBox.Show(string.Concat("以下工廠尚未存在於清單:\n", string.Join(",", notInDbFactoryName), "\n點選確認將跳轉至新增工廠頁面!!"));
-                var addFactory = new AddFactory();
-                addFactory.DataContext = new AddFactoryViewModel { Name = notInDbFactoryName.First() };
-                this.NavigationService.Navigate(addFactory);
-                return;
-            }
+            var factoryNameExist = CheckFactoryListExist(factoryList);
+            if (!factoryNameExist) return;
+
+            TextBoxFabric.Text = processOrder.Fabric;
+            TextBoxSpecification.Text = processOrder.Specification;
+            TextBoxMemo.Text = processOrder.Memo;
+            TextBoxProcessItem.Text = processOrder.ProcessItem;
+            TextBoxPrecautions.Text = processOrder.Precautions;
+
             var factoryDictionary = GetFactoryName(factoryList);
-
-            IRow rowSix = sheet.GetRow(6);
-            string fabric = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Fabric);
-            TextBoxFabric.Text = fabric;
-
-            var weight = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight);
-
-            TextBoxSpecification.Text = string.Concat(clearType, " ", width, "X", weight);
-
-            IRow rowNine = sheet.GetRow(9);
-            string memo = ExcelHelper.GetCellString(rowNine, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Memo);
-            TextBoxMemo.Text = Regex.Replace(memo, " {2,}", " ");
-
-            IRow rowSeven = sheet.GetRow(7);
-            string processItem = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ProcessItem);
-            TextBoxProcessItem.Text = processItem;
-
-            string precautions = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Precations);
-            TextBoxPrecautions.Text = precautions;
-
             factoryDictionary.TryGetValue("FabricFactory", out string fabricFactory);
             TextBoxFabricFactory.Text = fabricFactory;
             factoryDictionary.TryGetValue("DyeFactory", out string dyeFactory);
@@ -144,7 +105,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 if (string.IsNullOrEmpty(color) || string.IsNullOrEmpty(color.Trim()))
                     break;
                 var colorNumber = ExcelHelper.GetCellString(row, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorNumber);
-               
+
                 var quantityCellString = ExcelHelper.GetCellString(row, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ColorQuantity);
                 Int32.TryParse(quantityCellString.Replace("疋", "").Replace("約", ""), out int quantity);
 
@@ -154,20 +115,56 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     ColorNumber = colorNumber,
                     Quantity = quantity,
                     Status = ProcessOrderColorStatus.未完成
-                }
-                );
+                });
             }
             DataGridProcessOrderColor.ItemsSource = processOrderColor;
         }
 
-        private List<string> CheckFactoryList(List<string> factoryList, List<FactoryIdentity> factoryIdentities)
+        private ProcessOrder GetProcessOrder(string orderString)
         {
+            ISheet sheet = workbook.GetSheet(orderString);
+            IRow rowFive = sheet.GetRow(5);
+            int widthCellNum = (int)ExcelEnum.ProcessOrderColumnIndexEnum.Width;
+            string width = ExcelHelper.GetCellString(rowFive, widthCellNum);
+            string clearType = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ClearType);
+            string factoryString = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).Replace(" ", "");
+            string handFeel = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.HandFeel);
+            IRow rowSix = sheet.GetRow(6);
+            string fabric = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Fabric);
+            var weight = ExcelHelper.GetCellString(rowSix, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Weight);
+            IRow rowNine = sheet.GetRow(9);
+            string memo = ExcelHelper.GetCellString(rowNine, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Memo);
+            IRow rowSeven = sheet.GetRow(7);
+            string processItem = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.ProcessItem);
+            string precautions = ExcelHelper.GetCellString(rowSeven, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Precations);
+            ProcessOrder processOrder = new ProcessOrder()
+            {
+                HandFeel = handFeel,
+                Fabric = fabric,
+                Specification = string.Concat(clearType, " ", width, "X", weight),
+                Memo = Regex.Replace(memo, " {2,}", " "),
+                ProcessItem = processItem,
+                Precautions = precautions,
+            };
+            return processOrder;
+        }
+
+        private bool CheckFactoryListExist(List<string> factoryList)
+        {
+            FactoryList = FactoryModule.GetFactoryIdentiys(factoryList);
             List<string> remainFactoryList = new List<string>();
-            //if (factoryList.Count() != factoryIdentities.Count())
-            //{
-            remainFactoryList = factoryList.Where(w => !factoryIdentities.Select(s => s.Name).Contains(w)).ToList();
-            //}
-            return remainFactoryList;
+            remainFactoryList = factoryList.Where(w => !FactoryList.ToList().Select(s => s.Name).Contains(w)).ToList();
+            if (remainFactoryList.Count() > 0)
+            {
+                MessageBox.Show(string.Concat("以下工廠尚未存在於清單:\n", string.Join(",", remainFactoryList), "\n點選確認將跳轉至新增工廠頁面!!"));
+                var addFactory = new AddFactory
+                {
+                    DataContext = new AddFactoryViewModel { Name = remainFactoryList.First() }
+                };
+                this.NavigationService.Navigate(addFactory);
+                return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -186,39 +183,21 @@ namespace WpfApp1.Pages.ProcessOrderPages
             switch (factoryList.Count())
             {
                 case (1):
-                    //StackPanelDye.Visibility = Visibility.Collapsed;
-                    //StackPanelBrushed.Visibility = Visibility.Collapsed;
-                    //StackPanelDyeClear.Visibility = Visibility.Collapsed;
-                    //StackPanelClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemDyeClear2.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemFabricClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemFabricDyeClear.Visibility = Visibility.Collapsed;
                     ComboBoxProcessPlan.SelectedIndex = 0;
                     break;
 
                 //兩個加工廠則預設第二個工廠為定型廠
                 case (2):
-                    //StackPanelDye.Visibility = Visibility.Collapsed;
-                    //StackPanelBrushed.Visibility = Visibility.Collapsed;
-                    //StackPanelDyeClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemFabric.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxItemDyeClear.Visibility = Visibility.Collapsed;
                     factoryDictionary.Add("ClearFactory", factoryList.Last());
                     ComboBoxProcessPlan.SelectedIndex = 3;
                     break;
                 //三個加工廠則預設第二個工廠為染廠,第三個為定型廠
                 case (3):
-                    //StackPanelBrushed.Visibility = Visibility.Collapsed;
-                    //StackPanelDyeClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxProcessPlan.Visibility = Visibility.Collapsed;
                     factoryDictionary.Add("DyeFactory", factoryList.Skip(1).Take(1).First());
                     factoryDictionary.Add("ClearFactory", factoryList.Last());
                     break;
                 //四個加工廠則預設第二個工廠為染廠,第三個為刷毛廠,第四個為定型廠
                 case (4):
-                    //StackPanelDyeClear.Visibility = Visibility.Collapsed;
-                    //ComboBoxProcessPlan.Visibility = Visibility.Collapsed;
                     factoryDictionary.Add("DyeFactory", factoryList[1]);
                     factoryDictionary.Add("BrushedFactory", factoryList[2]);
                     factoryDictionary.Add("ClearFactory", factoryList.Last());
@@ -237,25 +216,31 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 MessageBox.Show("請選擇一筆訂單");
                 return;
             }
-            var oldProcessOrder = ProcessModule.GetProcessOrder();
-            var processOrder = new ProcessOrder()
-            {
-                OrderString = ComboBoxProcessOrderSheet.SelectedValue.ToString(),
-                Fabric = TextBoxFabric.Text,
-                Specification = TextBoxSpecification.Text,
-                ProcessItem = TextBoxProcessItem.Text,
-                Precautions = TextBoxPrecautions.Text,
-                Memo = TextBoxMemo.Text,
-                HandFeel = TextBoxHandFeel.Text,
-                CreateDate = DateTime.Now
-            };
+            //var oldProcessOrder = ProcessModule.GetProcessOrder();
+            ProcessOrder processOrder = CheckNewProcessOrder();
+            //{
+            //    OrderString = ComboBoxProcessOrderSheet.SelectedValue.ToString(),
+            //    Fabric = TextBoxFabric.Text,
+            //    Specification = TextBoxSpecification.Text,
+            //    ProcessItem = TextBoxProcessItem.Text,
+            //    Precautions = TextBoxPrecautions.Text,
+            //    Memo = TextBoxMemo.Text,
+            //    HandFeel = TextBoxHandFeel.Text,
+            //    CreateDate = DateTime.Now
+            //};
 
-            if (oldProcessOrder.Select(s => s.OrderString.Trim()).Contains(processOrder.OrderString))
-            {
-                MessageBox.Show("此筆訂單已存在於紀錄中!!");
-                return;
-            }
+            //if (oldProcessOrder.Select(s => s.OrderString.Trim()).Contains(processOrder.OrderString))
+            //{
+            //    MessageBox.Show("此筆訂單已存在於紀錄中!!");
+            //    return;
+            //}
 
+            OnNewProcessOrder(processOrder);
+        }
+
+        private void OnNewProcessOrder(ProcessOrder processOrder)
+        {
+            if (processOrder == null) return;
             using (var scope = new TransactionScope())
             {
                 var processOrderNo = ProcessModule.InsertProcessOrder(processOrder);
@@ -275,12 +260,35 @@ namespace WpfApp1.Pages.ProcessOrderPages
                         ColorNumber = item.ColorNumber,
                         Quantity = item.Quantity,
                         Status = item.Status
-                    }
-                    );
+                    });
                 }
                 ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, processOrderNo);
                 scope.Complete();
             }
+        }
+
+        private ProcessOrder CheckNewProcessOrder()
+        {
+            var oldProcessOrder = ProcessModule.GetProcessOrder();
+            if (oldProcessOrder.Select(s => s.OrderString.Trim()).Contains(ComboBoxProcessOrderSheet.SelectedValue.ToString()))
+            {
+                MessageBox.Show(string.Format("此筆訂單{0}已存在於紀錄中!!", ComboBoxProcessOrderSheet.SelectedValue.ToString()));
+                return null;
+            }
+
+            var processOrder = new ProcessOrder()
+            {
+                OrderString = ComboBoxProcessOrderSheet.SelectedValue.ToString(),
+                Fabric = TextBoxFabric.Text,
+                Specification = TextBoxSpecification.Text,
+                ProcessItem = TextBoxProcessItem.Text,
+                Precautions = TextBoxPrecautions.Text,
+                Memo = TextBoxMemo.Text,
+                HandFeel = TextBoxHandFeel.Text,
+                CreateDate = DateTime.Now
+            };
+
+            return processOrder;
         }
 
         private List<ProcessOrderFlow> GetProcessOrderFlowList(int processOrderNo)
@@ -392,6 +400,33 @@ namespace WpfApp1.Pages.ProcessOrderPages
             items.Remove((ProcessOrderColor)selectedItem);
             DataGridProcessOrderColor.ItemsSource = null;
             DataGridProcessOrderColor.ItemsSource = items;
+        }
+
+        private void BatchNewProcessOrder_Click(object sender, RoutedEventArgs e)
+        {
+            BatchInsertProcessOrder();
+        }
+
+        private void BatchInsertProcessOrder()
+        {
+            foreach (string item in ComboBoxProcessOrderSheet.Items)
+            {
+                ISheet sheet = workbook.GetSheet(item);
+                IRow rowFive = sheet.GetRow(5);
+                string factoryString = ExcelHelper.GetCellString(rowFive, (int)ExcelEnum.ProcessOrderColumnIndexEnum.Factory).Replace(" ", "");
+                var factoryList = factoryString.Split('一').ToList();
+                bool factoryListExist = CheckFactoryListExist(factoryList);
+                if (!factoryListExist)
+                {
+                    return;
+                }
+            }
+            for (int index = 0; index < ComboBoxProcessOrderSheet.Items.Count; index++)
+            {
+                ComboBoxProcessOrderSheet.SelectedIndex = index;
+                ProcessOrder processOrder = CheckNewProcessOrder();
+                OnNewProcessOrder(processOrder);
+            }
         }
     }
 }
