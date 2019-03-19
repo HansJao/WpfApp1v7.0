@@ -36,7 +36,7 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"/>
                 </DataGrid.Columns>
-            </DataGrid>            
+            </DataGrid>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                 <StackPanel Orientation="Vertical">
                     <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridOrderColorFactoryShippingDetail" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding"  >
@@ -94,15 +94,15 @@
                 <StackPanel>
                     <DockPanel x:Name="DockPanelCustomer" >
                         <Label Content="客戶:"/>
-                        <ComboBox x:Name="ComboBoxCustomer" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="120" IsEditable="True"/>
+                        <ComboBox x:Name="ComboBoxCustomer" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="115" IsEditable="True"/>
+                        <Button x:Name="CustomerRelate" Content="新增客戶關連" Width="85" HorizontalAlignment="Right" Click="CustomerRelate_Click"/>
                     </DockPanel>
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="0,3,0,0">
                         <DockPanel Width="250">
                             <Label Content="數量:"/>
                             <TextBox x:Name="TextBoxQuantity" Height="25" Width="50"/>
                             <DatePicker x:Name="DatePickerShippingDate" Width="100" SelectedDate="{x:Static sys:DateTime.Now}" />
-                            <Button x:Name="ButtonNewFactoryShipping" Content="新增" DockPanel.Dock="Left" VerticalAlignment="Top" Width="50" Click="ButtonNewFactoryShipping_Click"/>
-
+                            <Button x:Name="ButtonNewFactoryShipping" Content="新增" DockPanel.Dock="Left" VerticalAlignment="Top" Width="50" Click="ButtonNewFactoryShipping_Click" HorizontalAlignment="Right"/>
                         </DockPanel>
                     </StackPanel>
                     <DataGrid x:Name="DataGridFactoryShipping"  VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">

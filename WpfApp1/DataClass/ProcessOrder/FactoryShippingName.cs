@@ -10,6 +10,7 @@ namespace WpfApp1.DataClass.ProcessOrder
     {
         public int ShippingNo { get; set; }
         public int OrderColorDetailNo { get; set; }
+        public int CustomerID { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
         public DateTime CreateDate { get; set; }

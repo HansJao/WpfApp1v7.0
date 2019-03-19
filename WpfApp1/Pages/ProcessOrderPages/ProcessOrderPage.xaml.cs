@@ -49,7 +49,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             ComboBoxStatus.ItemsSource = Enum.GetValues(typeof(ProcessOrderColorStatus)).Cast<ProcessOrderColorStatus>();
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
-            ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerNameList();
+            ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerList();
             ComboBoxCustomer.Loaded += (ls, le) =>
             {
                 var targetTextBox = ComboBoxCustomer?.Template.FindName("PART_EditableTextBox", ComboBoxCustomer) as TextBox;
@@ -76,7 +76,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     {
                         if (ComboBoxCustomer.SelectionBoxItem != null)
                         {
-                            ComboBoxCustomer.SelectedItem = null;
+                            //ComboBoxCustomer.SelectedItem = null;
                             targetTextBox.Text = searchText;
                             ComboBoxCustomer.IsDropDownOpen = true;
                             targetTextBox.SelectionStart = targetTextBox.Text.Length;
@@ -88,11 +88,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
                             ComboBoxCustomer.SelectedItem = default(object);
                         }
                         else
+                        {
                             ComboBoxCustomer.Items.Filter = item =>
-                                    item.ToString().StartsWith(searchText);
-
-                        //Keyboard.ClearFocus();
-                        //Keyboard.Focus(targetTextBox);
+                                    ((Customer)item).Name.Contains(searchText);
+                        }
                         ComboBoxCustomer.IsDropDownOpen = true;
                         targetTextBox.SelectionStart = targetTextBox.Text.Length;
                     }
@@ -257,10 +256,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 return;
             }
             var processOrderColorDetail = (ProcessOrderColorFactoryShippingDetail)DataGridOrderColorFactoryShippingDetail.SelectedItem;
+            Customer customer = ComboBoxCustomer.SelectedItem as Customer;
             var factoryShipping = new FactoryShippingName
             {
                 OrderColorDetailNo = processOrderColorDetail.OrderColorDetailNo,
-                Name = ComboBoxCustomer.SelectedItem.ToString(),
+                CustomerID = customer.CustomerID,
                 Quantity = TextBoxQuantity.Text.ToInt(),
                 CreateDate = DateTime.Now,
                 ShippingDate = DatePickerShippingDate.SelectedDate
@@ -520,11 +520,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
         }
 
-        public void Test()
-        {
-
-        }
-
         private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataGridProcessOrderFlowDateDetail.SelectedIndex == -1)
@@ -592,6 +587,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }
 
-
+        private void CustomerRelate_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessOrder processOrder = DataGridProcessOrder.SelectedItem as ProcessOrder;
+            //ComboBoxCustomer.SelectedItem as 
+        }
     }
 }

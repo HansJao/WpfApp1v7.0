@@ -145,10 +145,7 @@ namespace WpfApp1.Adapter.MSSQL
 
         public int InsertFactoryShipping(FactoryShippingName factoryShippingName)
         {
-            string sql = @"declare @CustomerID int
-                           select @CustomerID = CustomerID from Customer
-                           where Name = @Customer
-                           INSERT INTO FactoryShipping
+            string sql = @"INSERT INTO FactoryShipping
                             ([OrderColorDetailNo]
                             ,[CustomerID]
                             ,[Quantity]
@@ -159,7 +156,7 @@ namespace WpfApp1.Adapter.MSSQL
             SqlParameter[] parameters = new SqlParameter[]
            {
                 new SqlParameter("@OrderColorDetailNo", SqlDbType.Int) { Value = factoryShippingName.OrderColorDetailNo },
-                new SqlParameter("@Customer", SqlDbType.NVarChar) { Value = factoryShippingName.Name },
+                new SqlParameter("@CustomerID", SqlDbType.Int) { Value = factoryShippingName.CustomerID },
                 new SqlParameter("@Quantity", SqlDbType.Int) { Value = factoryShippingName.Quantity },
                 new SqlParameter("@CreateDate", SqlDbType.DateTime) { Value = factoryShippingName.CreateDate },
                 new SqlParameter("@ShippingDate", SqlDbType.DateTime) { Value = factoryShippingName.ShippingDate },
