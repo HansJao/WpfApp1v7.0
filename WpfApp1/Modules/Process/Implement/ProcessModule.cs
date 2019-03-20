@@ -435,5 +435,16 @@ namespace WpfApp1.Modules.Process.Implement
             int count = ProcessOrderAdapter.DeleteCustomerOrderRelate(customerOrderID);
             return count == 1;
         }
+        /// <summary>
+        /// 檢查是否已存在於客戶關連
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public bool CheckInCustomerOrderRelate(int orderNo, int customerID)
+        {
+            int count = ProcessOrderAdapter.CheckInCustomerOrderRelate(orderNo, customerID);
+            return count > 0;
+        }
     }
 }

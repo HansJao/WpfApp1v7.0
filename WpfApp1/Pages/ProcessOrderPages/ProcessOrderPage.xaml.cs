@@ -668,13 +668,23 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 MessageBox.Show("尚未選擇客戶！！");
                 return;
             }
-
+            bool inCustomerOrderRelate = ProcessModule.CheckInCustomerOrderRelate(processOrder.OrderNo, customer.CustomerID);
+            if (inCustomerOrderRelate)
+            {
+                MessageBox.Show(string.Format("{0}已關連至{1},{2}！！", customer.Name, processOrder.OrderString, processOrder.Fabric));
+                return;
+            }
             CustomerOrderRelate customerOrderRelate = new CustomerOrderRelate
             {
                 CustomerID = customer.CustomerID,
                 ProcessOrderID = processOrder.OrderNo
             };
             bool success = ProcessModule.InsertCustomerOrderRelate(customerOrderRelate);
+
+            if (success)
+                MessageBox.Show(string.Format("已將{0}關連至{1},{2}", customer.Name, processOrder.OrderString, processOrder.Fabric));
+            else
+                MessageBox.Show("新增錯誤");
         }
 
         private void ButtonDeleteCustomerOrder_Click(object sender, RoutedEventArgs e)

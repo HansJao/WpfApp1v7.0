@@ -232,5 +232,12 @@ namespace WpfApp1.Adapter
         /// <param name="customerOrderID"></param>
         /// <returns></returns>
         int DeleteCustomerOrderRelate(int customerOrderID);
+        /// <summary>
+        /// 檢查是否已存在於客戶關連
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        int CheckInCustomerOrderRelate(int orderNo, int customerID);
     }
 }

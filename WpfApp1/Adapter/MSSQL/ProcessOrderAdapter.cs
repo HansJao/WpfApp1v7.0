@@ -668,5 +668,23 @@ namespace WpfApp1.Adapter.MSSQL
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return count;
         }
+        /// <summary>
+        /// 檢查是否已存在於客戶關連
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public int CheckInCustomerOrderRelate(int orderNo, int customerID)
+        {
+            var sqlCmd = @"SELECT CustomerOrderID FROM CustomerOrderRelate
+                           WHERE ProcessOrderID = @ProcessOrderID AND CustomerID = @CustomerID";
+            SqlParameter[] parameter = new SqlParameter[]
+            {
+                new SqlParameter("@ProcessOrderID", SqlDbType.Int) {Value = orderNo},
+                new SqlParameter("@CustomerID", SqlDbType.Int) {Value = customerID},
+            };
+            var result = DapperHelper.QueryCollection<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
     }
 }
