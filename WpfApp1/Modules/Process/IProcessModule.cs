@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.ProcessOrderFile;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ProcessOrder;
 
@@ -195,6 +196,14 @@ namespace WpfApp1.Modules.Process
         /// <returns></returns>
         bool UpdateProcessOrderRemark(int processOrderNo, string text);
 
+
+        /// <summary>
+        /// 以客戶編號取得加工訂單
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByCustomer(int customerID);
+
         /// <summary>
         /// 取得加工訂單備註
         /// </summary>
@@ -210,6 +219,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNoList"></param>
         /// <returns></returns>
         bool UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
+        
 
         /// <summary>
         /// 新增加工訂單流程
@@ -232,5 +242,26 @@ namespace WpfApp1.Modules.Process
         /// <param name="color"></param>
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
+
+        /// <summary>
+        /// 新增客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderRelate"></param>
+        /// <returns></returns>
+        bool InsertCustomerOrderRelate(CustomerOrderRelate customerOrderRelate);
+
+        /// <summary>
+        /// 依據訂單編號取得顧客資料
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrderCustomerRelate> GetCustomerByOrderNo(int orderNo);
+
+        /// <summary>
+        /// 刪除客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderID"></param>
+        /// <returns></returns>
+        bool DeleteCustomerOrderRelate(int customerOrderID);
     }
 }

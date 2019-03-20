@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.ProcessOrderFile;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ProcessOrder;
 using WpfApp1.Modules.CustomerModule;
@@ -24,7 +25,7 @@ using WpfApp1.Windows.ProcessWindows;
 
 namespace WpfApp1.Pages.ProcessOrderPages
 {
-    public class TestDataGrid :DataGrid
+    public class TestDataGrid : DataGrid
     {
         protected override void OnSelectionChanged(SelectionChangedEventArgs e)
         {
@@ -50,6 +51,14 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
             ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerList();
+            OnComboBoxCustomerLoad();
+            ComboBoxCustomerNameSearch.ItemsSource = CustomerModule.GetCustomerList();
+            OnComboBoxCustomerNameSearch();
+            DataGridFactoryList.ItemsSource = FactoryModule.GetFactoryList();
+        }
+
+        private void OnComboBoxCustomerLoad()
+        {
             ComboBoxCustomer.Loaded += (ls, le) =>
             {
                 var targetTextBox = ComboBoxCustomer?.Template.FindName("PART_EditableTextBox", ComboBoxCustomer) as TextBox;
@@ -104,8 +113,66 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     comboBox.Tag = "Selection";
                 };
             };
+        }
 
-            DataGridFactoryList.ItemsSource = FactoryModule.GetFactoryList();
+        private void OnComboBoxCustomerNameSearch()
+        {
+            ComboBoxCustomerNameSearch.Loaded += (ls, le) =>
+            {
+                if (!(ComboBoxCustomerNameSearch?.Template.FindName("PART_EditableTextBox", ComboBoxCustomerNameSearch) is TextBox targetTextBox))
+                    return;
+
+                ComboBoxCustomerNameSearch.Tag = "TextInput";
+                ComboBoxCustomerNameSearch.StaysOpenOnEdit = true;
+                ComboBoxCustomerNameSearch.IsEditable = true;
+                ComboBoxCustomerNameSearch.IsTextSearchEnabled = false;
+
+                targetTextBox.TextChanged += (o, args) =>
+                {
+                    var textBox = (TextBox)o;
+
+                    var searchText = textBox.Text;
+
+                    if (ComboBoxCustomerNameSearch.Tag.ToString() == "Selection")
+                    {
+                        ComboBoxCustomerNameSearch.Tag = "TextInput";
+                        ComboBoxCustomerNameSearch.IsDropDownOpen = true;
+                    }
+                    else
+                    {
+                        if (ComboBoxCustomerNameSearch.SelectionBoxItem != null)
+                        {
+                            //ComboBoxCustomer.SelectedItem = null;
+                            targetTextBox.Text = searchText;
+                            ComboBoxCustomerNameSearch.IsDropDownOpen = true;
+                            targetTextBox.SelectionStart = targetTextBox.Text.Length;
+                        }
+
+                        if (string.IsNullOrEmpty(searchText))
+                        {
+                            ComboBoxCustomerNameSearch.Items.Filter = item => true;
+                            ComboBoxCustomerNameSearch.SelectedItem = default(object);
+                        }
+                        else
+                        {
+                            ComboBoxCustomerNameSearch.Items.Filter = item =>
+                                    ((Customer)item).Name.Contains(searchText);
+                        }
+                        ComboBoxCustomerNameSearch.IsDropDownOpen = true;
+                        targetTextBox.SelectionStart = targetTextBox.Text.Length;
+                    }
+                };
+
+                ComboBoxCustomerNameSearch.SelectionChanged += (o, args) =>
+                {
+                    var comboBox = o as ComboBox;
+                    if (comboBox?.SelectedItem == null) return;
+                    comboBox.Tag = "Selection";
+                    DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByCustomer(((Customer)comboBox.SelectedItem).CustomerID));
+                    DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
+
+                };
+            };
         }
 
         private void DataGridProcessOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -115,10 +182,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 return;
             }
+
             var processOrder = dataGrid.SelectedItem as ProcessOrder;
 
-            //var processOrderFlow = ProcessModule.GetProcessOrderFlow(processOrder.OrderNo);
-            //DataGridProcessOrderFlow.ItemsSource = processOrderFlow;
+            IEnumerable<ProcessOrderCustomerRelate> customerOrderRelate = ProcessModule.GetCustomerByOrderNo(processOrder.OrderNo);
+            DataGridCustomerOrder.ItemsSource = customerOrderRelate;
 
             string processOrderRemark = ProcessModule.GetProcessOrderRemark(processOrder.OrderNo);
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
@@ -301,7 +369,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
             {
                 var row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-                
+
                 if (item.Status == ProcessOrderColorStatus.已出完)
                 {
                     row.Background = Brushes.Gray;
@@ -576,6 +644,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         {
             ComboBoxStatus.SelectedIndex = -1;
             DataGridFactoryList.SelectedIndex = -1;
+            ComboBoxCustomerNameSearch.SelectedIndex = -1;
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrder());
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }
@@ -589,8 +658,33 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void CustomerRelate_Click(object sender, RoutedEventArgs e)
         {
-            ProcessOrder processOrder = DataGridProcessOrder.SelectedItem as ProcessOrder;
-            //ComboBoxCustomer.SelectedItem as 
+            if (!(DataGridProcessOrder.SelectedItem is ProcessOrder processOrder))
+            {
+                MessageBox.Show("尚未選擇一筆訂單！！");
+                return;
+            }
+            if (!(ComboBoxCustomer.SelectedItem is Customer customer))
+            {
+                MessageBox.Show("尚未選擇客戶！！");
+                return;
+            }
+
+            CustomerOrderRelate customerOrderRelate = new CustomerOrderRelate
+            {
+                CustomerID = customer.CustomerID,
+                ProcessOrderID = processOrder.OrderNo
+            };
+            bool success = ProcessModule.InsertCustomerOrderRelate(customerOrderRelate);
+        }
+
+        private void ButtonDeleteCustomerOrder_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessOrderCustomerRelate processOrderCustomerRelate = DataGridCustomerOrder.SelectedItem as ProcessOrderCustomerRelate;
+            bool success = ProcessModule.DeleteCustomerOrderRelate(processOrderCustomerRelate.CustomerOrderID);
+            if (success)
+                MessageBox.Show(string.Concat("已刪除！！"));
+            else
+                MessageBox.Show("刪除失敗！！");
         }
     }
 }

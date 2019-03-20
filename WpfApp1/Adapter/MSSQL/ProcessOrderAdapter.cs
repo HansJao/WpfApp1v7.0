@@ -11,6 +11,7 @@ using WpfApp1.DataClass.ProcessOrder;
 using WpfApp1.Modules.Process;
 using WpfApp1.Utility;
 using System.Transactions;
+using WpfApp1.DataClass.Entity.ProcessOrderFile;
 
 namespace WpfApp1.Adapter.MSSQL
 {
@@ -597,6 +598,75 @@ namespace WpfApp1.Adapter.MSSQL
                 };
             var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
+        }
+        /// <summary>
+        /// 新增客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderRelate"></param>
+        /// <returns></returns>
+        public int InsertCustomerOrderRelate(CustomerOrderRelate customerOrderRelate)
+        {
+            var sqlCmd = @"INSERT INTO CustomerOrderRelate
+                           (CustomerID,ProcessOrderID) 
+                           VALUES 
+                           (@CustomerID,@ProcessOrderID)";
+            SqlParameter[] parameter = new SqlParameter[]
+            {
+                new SqlParameter("@CustomerID", SqlDbType.Int) { Value = customerOrderRelate.CustomerID },
+                new SqlParameter("@ProcessOrderID", SqlDbType.Int) { Value = customerOrderRelate.ProcessOrderID }
+            };
+            return DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+        }
+        /// <summary>
+        /// 以客戶編號取得加工訂單
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByCustomer(int customerID)
+        {
+            var sqlCmd = @"SELECT DISTINCT PO.* FROM ProcessOrder PO
+                           INNER JOIN CustomerOrderRelate COR ON COR.ProcessOrderID = PO.OrderNo
+                           WHERE COR.CustomerID = @CustomerID";
+            SqlParameter[] parameter = new SqlParameter[]
+            {
+                new SqlParameter("@CustomerID", SqlDbType.Int) {Value = customerID},
+            };
+            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
+
+        /// <summary>
+        /// 依據訂單編號取得顧客資料
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrderCustomerRelate> GetCustomerByOrderNo(int orderNo)
+        {
+            var sqlCmd = @"SELECT COR.CustomerOrderID,C.Name FROM Customer C
+                           INNER JOIN CustomerOrderRelate COR ON COR.CustomerID = C.CustomerID 
+                           WHERE COR.ProcessOrderID = @ProcessOrderID";
+            SqlParameter[] parameter = new SqlParameter[]
+            {
+                new SqlParameter("@ProcessOrderID", SqlDbType.Int) {Value = orderNo},
+            };
+            var result = DapperHelper.QueryCollection<ProcessOrderCustomerRelate>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
+            return result;
+        }
+        /// <summary>
+        /// 刪除客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderID"></param>
+        /// <returns></returns>
+        public int DeleteCustomerOrderRelate(int customerOrderID)
+        {
+            string sql = @"DELETE FROM CustomerOrderRelate
+                           WHERE CustomerOrderID = @CustomerOrderID";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+               new SqlParameter("@CustomerOrderID", SqlDbType.Int) { Value = customerOrderID }
+            };
+            var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
+            return count;
         }
     }
 }

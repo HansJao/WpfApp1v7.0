@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.ProcessOrderFile;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ProcessOrder;
 
@@ -207,5 +208,29 @@ namespace WpfApp1.Adapter
         /// <param name="color"></param>
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
+        /// <summary>
+        /// 新增客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderRelate"></param>
+        /// <returns></returns>
+        int InsertCustomerOrderRelate(CustomerOrderRelate customerOrderRelate);
+        /// <summary>
+        /// 以客戶編號取得加工訂單
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrder> GetProcessOrderByCustomer(int customerID);
+        /// <summary>
+        /// 依據訂單編號取得顧客資料
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        IEnumerable<ProcessOrderCustomerRelate> GetCustomerByOrderNo(int orderNo);
+        /// <summary>
+        /// 刪除客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderID"></param>
+        /// <returns></returns>
+        int DeleteCustomerOrderRelate(int customerOrderID);
     }
 }

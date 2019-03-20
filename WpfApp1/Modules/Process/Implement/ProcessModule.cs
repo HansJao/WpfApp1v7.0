@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.ProcessOrderFile;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ProcessOrder;
 
@@ -391,6 +392,48 @@ namespace WpfApp1.Modules.Process.Implement
         {
             IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color);
             return result;
+        }
+        /// <summary>
+        /// 新增客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderRelate"></param>
+        /// <returns></returns>
+        public bool InsertCustomerOrderRelate(CustomerOrderRelate customerOrderRelate)
+        {
+            int count = ProcessOrderAdapter.InsertCustomerOrderRelate(customerOrderRelate);
+            return count == 1;
+        }
+
+        /// <summary>
+        /// 以客戶編號取得加工訂單
+        /// </summary>
+        /// <param name="customerID"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderByCustomer(int customerID)
+        {
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByCustomer(customerID);
+            return result;
+        }
+
+        /// <summary>
+        /// 依據訂單編號取得顧客資料
+        /// </summary>
+        /// <param name="orderNo"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrderCustomerRelate> GetCustomerByOrderNo(int orderNo)
+        {
+            IEnumerable<ProcessOrderCustomerRelate> result = ProcessOrderAdapter.GetCustomerByOrderNo(orderNo);
+            return result;
+        }
+        /// <summary>
+        /// 刪除客戶訂單關連
+        /// </summary>
+        /// <param name="customerOrderID"></param>
+        /// <returns></returns>
+        public bool DeleteCustomerOrderRelate(int customerOrderID)
+        {
+            int count = ProcessOrderAdapter.DeleteCustomerOrderRelate(customerOrderID);
+            return count == 1;
         }
     }
 }

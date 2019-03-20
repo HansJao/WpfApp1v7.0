@@ -143,6 +143,7 @@
     <Compile Include="DataClass\Entity\ProcessOrderColorDetail.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlowDate.cs" />
+    <Compile Include="DataClass\Entity\ProcessOrderFile\CustomerOrderRelate.cs" />
     <Compile Include="DataClass\Entity\ProcessSequence.cs" />
     <Compile Include="DataClass\Entity\ProcessSequenceColorMapping.cs" />
     <Compile Include="DataClass\Entity\YarnPrice.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="DataClass\Fabric\ProcessSequenceDetail.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
+    <Compile Include="DataClass\ProcessOrder\ProcessOrderCustomerRelate.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderDetailFactoryName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderColor.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessFactoryShippingDetail.cs" />
