@@ -238,9 +238,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
             OnNewProcessOrder(processOrder);
         }
 
-        private void OnNewProcessOrder(ProcessOrder processOrder)
+        private string OnNewProcessOrder(ProcessOrder processOrder)
         {
-            if (processOrder == null) return;
+            string orderString = string.Empty;
+            if (processOrder == null) return null;
             using (var scope = new TransactionScope())
             {
                 var processOrderNo = ProcessModule.InsertProcessOrder(processOrder);
@@ -263,8 +264,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     });
                 }
                 ProcessModule.CreateProcessOrderColorFlow(processOrderColorDetailList, processOrderNo);
+                orderString = processOrder.OrderString;
                 scope.Complete();
             }
+            return orderString;
         }
 
         private ProcessOrder CheckNewProcessOrder()
@@ -421,12 +424,15 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     return;
                 }
             }
+            List<string> orderStringList = new List<string>();
             for (int index = 0; index < ComboBoxProcessOrderSheet.Items.Count; index++)
             {
                 ComboBoxProcessOrderSheet.SelectedIndex = index;
                 ProcessOrder processOrder = CheckNewProcessOrder();
-                OnNewProcessOrder(processOrder);
+                string orderString = OnNewProcessOrder(processOrder);
+                orderStringList.Add(orderString);
             }
+            MessageBox.Show(string.Format("以下訂單\n{0}\n新增成功", string.Join("\n", orderStringList)));
         }
     }
 }
