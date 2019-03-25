@@ -684,7 +684,7 @@ namespace WpfApp1.Adapter.MSSQL
                 new SqlParameter("@CustomerID", SqlDbType.Int) {Value = customerID},
             };
             var result = DapperHelper.QueryCollection<int>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
-            return result;
+            return result.Count();
         }
     }
 }

@@ -682,9 +682,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
             bool success = ProcessModule.InsertCustomerOrderRelate(customerOrderRelate);
 
             if (success)
-                MessageBox.Show(string.Format("已將{0}關連至{1},{2}", customer.Name, processOrder.OrderString, processOrder.Fabric));
+                MessageBox.Show(string.Format("成功將{0}關連至{1},{2}！！", customer.Name, processOrder.OrderString, processOrder.Fabric));
             else
-                MessageBox.Show("新增錯誤");
+                MessageBox.Show("新增錯誤！！");
         }
 
         private void ButtonDeleteCustomerOrder_Click(object sender, RoutedEventArgs e)
