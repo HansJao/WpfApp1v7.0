@@ -11,16 +11,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.Shipping;
 using WpfApp1.Modules.CustomerModule;
@@ -73,6 +67,13 @@ namespace WpfApp1.Pages
                 MessageBox.Show("未輸入出布數量!!");
                 return;
             }
+
+            IEnumerable<SelectedTextile> selectedTextiles = DataGridSelectedTextile.Items.Cast<SelectedTextile>().Where(w => w.ShippingNumber > 0);
+            AddCustomerShippingFabric(selectedTextiles);
+        }
+
+        private void AddCustomerShippingFabric(IEnumerable<SelectedTextile> selectedTextiles)
+        {
             var customerName = TextBoxCustomerName.Text.ToString();
             var textileName = DataGridTextileList.SelectedItem.ToString();
             //若表中有此客戶
@@ -83,20 +84,21 @@ namespace WpfApp1.Pages
                 {
                     //將新的布種顏色資料加入原有的布種資料
                     var currentTextileShippingData = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Where(w => w.TextileName == textileName).First();
-                    foreach (var item in DataGridSelectedTextile.Items)
+                    foreach (SelectedTextile item in selectedTextiles)
                     {
-                        var selectedTextile = item as SelectedTextile;
-                        if ((selectedTextile.ShippingNumber == 0 ? 0 : selectedTextile.ShippingNumber) > 0)
+                        if (currentTextileShippingData.ShippingSheetDatas.Where(w => w.ColorName == item.ColorName).Count() > 0)
                         {
+                            currentTextileShippingData.ShippingSheetDatas.Where(w => w.ColorName == item.ColorName).First().ShippingNumber = item.ShippingNumber;
+                        }
+                        else
                             currentTextileShippingData.ShippingSheetDatas.Add(new ShippingSheetData
                             {
-                                ColorName = selectedTextile.ColorName,
-                                CountInventory = selectedTextile.CountInventory,
-                                StorageSpaces = selectedTextile.StorageSpaces,
-                                ShippingNumber = selectedTextile.ShippingNumber,
-                                Memo = selectedTextile.Memo
+                                ColorName = item.ColorName,
+                                CountInventory = item.CountInventory,
+                                StorageSpaces = item.StorageSpaces,
+                                ShippingNumber = item.ShippingNumber,
+                                Memo = item.Memo
                             });
-                        }
                     }
                 }
                 else
@@ -104,20 +106,16 @@ namespace WpfApp1.Pages
                     //新增新的布種與顏色
                     var currentTextileShippingDatas = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas;
                     var shippingSheetDatas = new List<ShippingSheetData>();
-                    foreach (var item in DataGridSelectedTextile.Items)
+                    foreach (SelectedTextile item in selectedTextiles)
                     {
-                        var selectedTextile = item as SelectedTextile;
-                        if ((selectedTextile.ShippingNumber == 0 ? 0 : selectedTextile.ShippingNumber) > 0)
+                        shippingSheetDatas.Add(new ShippingSheetData
                         {
-                            shippingSheetDatas.Add(new ShippingSheetData
-                            {
-                                ColorName = selectedTextile.ColorName,
-                                CountInventory = selectedTextile.CountInventory,
-                                StorageSpaces = selectedTextile.StorageSpaces,
-                                ShippingNumber = selectedTextile.ShippingNumber,
-                                Memo = selectedTextile.Memo
-                            });
-                        }
+                            ColorName = item.ColorName,
+                            CountInventory = item.CountInventory,
+                            StorageSpaces = item.StorageSpaces,
+                            ShippingNumber = item.ShippingNumber,
+                            Memo = item.Memo
+                        });
                     }
                     currentTextileShippingDatas.Add(new TextileShippingData
                     {
@@ -130,20 +128,16 @@ namespace WpfApp1.Pages
             {
                 //新增新的客戶和布種與顏色
                 var shippingSheetDatas = new List<ShippingSheetData>();
-                foreach (var item in DataGridSelectedTextile.Items)
+                foreach (SelectedTextile item in selectedTextiles)
                 {
-                    var selectedTextile = item as SelectedTextile;
-                    if ((selectedTextile.ShippingNumber == 0 ? 0 : selectedTextile.ShippingNumber) > 0)
+                    shippingSheetDatas.Add(new ShippingSheetData
                     {
-                        shippingSheetDatas.Add(new ShippingSheetData
-                        {
-                            ColorName = selectedTextile.ColorName,
-                            CountInventory = selectedTextile.CountInventory,
-                            StorageSpaces = selectedTextile.StorageSpaces,
-                            ShippingNumber = selectedTextile.ShippingNumber,
-                            Memo = selectedTextile.Memo
-                        });
-                    }
+                        ColorName = item.ColorName,
+                        CountInventory = item.CountInventory,
+                        StorageSpaces = item.StorageSpaces,
+                        ShippingNumber = item.ShippingNumber,
+                        Memo = item.Memo
+                    });
                 }
                 var textileShippingDatas = new List<TextileShippingData>() {
                     new TextileShippingData
@@ -572,6 +566,62 @@ namespace WpfApp1.Pages
                     Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
                 });
             }
+        }
+
+        private void TextBoxColor_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox textBoxName = (TextBox)sender;
+            string filterText = textBoxName.Text;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridSelectedTextile.ItemsSource);
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                cv.Filter = o =>
+                {
+                    /* change to get data row value */
+                    SelectedTextile p = o as SelectedTextile;
+                    return (p.ColorName.ToUpper().Contains(filterText.ToUpper()));
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                cv.Filter = o =>
+                {
+                    return (true);
+                };
+            }
+        }
+
+        private void ButtonAddQuantity_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedTextile selectedTextile = DataGridSelectedTextile.SelectedItem as SelectedTextile;
+            string customerName = TextBoxCustomerName.Text;
+            string textileName = DataGridTextileList.SelectedItem.ToString();
+            selectedTextile.ShippingNumber = 1;
+            if (ShippingSheetStructure.Count > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).Count() > 0)
+            {
+                //若客戶中有此布種
+                if (ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Count() > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Where(w => w.TextileName == textileName).Count() > 0)
+                {
+                    if (ShippingSheetStructure.Where(w => w.Customer == customerName).First()
+                         .TextileShippingDatas
+                         .Where(w => w.TextileName == textileName).First()
+                         .ShippingSheetDatas.Where(w => w.ColorName == selectedTextile.ColorName).Count() > 0)
+                    {
+                        ShippingSheetData shippingSheetData = ShippingSheetStructure.Where(w => w.Customer == customerName).First()
+                             .TextileShippingDatas
+                             .Where(w => w.TextileName == textileName).First()
+                             .ShippingSheetDatas.Where(w => w.ColorName == selectedTextile.ColorName).First();
+
+                        selectedTextile.ShippingNumber = shippingSheetData.ShippingNumber + 1;
+                    }
+                }
+            }
+            List<SelectedTextile> selectedTextiles = new List<SelectedTextile>
+            {
+                selectedTextile
+            };
+            AddCustomerShippingFabric(selectedTextiles);
         }
     }
 }

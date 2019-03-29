@@ -14,8 +14,8 @@
         <DockPanel>
             <Grid>
                 <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical">
-                        <StackPanel Orientation="Horizontal" >
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" >
                             <TextBlock Text="客戶名稱:" VerticalAlignment="Top" Width="30" Height="40" TextWrapping="Wrap" />
                             <TextBox x:Name="TextBoxCustomerName" VerticalAlignment ="Top" Margin="0,5,0,0" Height="24" Width="60" TextChanged="TextBoxCustomerName_TextChanged" />
                         </StackPanel>
@@ -24,9 +24,9 @@
                                 <DataGridTextColumn Header="客戶名稱" Binding="{Binding}"/>
                             </DataGrid.Columns >
                         </DataGrid>
-                    </StackPanel>
-                    <StackPanel >
-                        <StackPanel Orientation="Horizontal" Margin="3,8,0,0">
+                    </DockPanel>
+                    <DockPanel>
+                        <StackPanel Orientation="Horizontal" Margin="3,8,0,0" DockPanel.Dock="Top">
                             <TextBlock Text="布種:" />
                             <TextBox x:Name="TextBoxTextile" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="80" TextChanged="TextBoxTextile_TextChanged" KeyUp="TextBoxTextile_KeyUp"/>
                         </StackPanel>
@@ -35,58 +35,59 @@
                                 <DataGridTextColumn Header="布種名稱" Binding="{Binding}"/>
                             </DataGrid.Columns >
                         </DataGrid>
-                    </StackPanel>
+                    </DockPanel>
                 </StackPanel>
             </Grid>
-            <Grid DockPanel.Dock="Left">
-                <StackPanel>
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                    <Label Content="顏色:" />
+                    <TextBox x:Name="TextBoxColor" Width="75" TextChanged="TextBoxColor_TextChanged"/>
                     <Button Content="確認" HorizontalAlignment="Right"  VerticalAlignment="Top" Width="75" Click="SelectedTextile_Click"/>
-                    <DataGrid x:Name="DataGridSelectedTextile" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False" Height="600">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
-                            <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
-                            <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
-                            <DataGridTemplateColumn Header="出貨數量"  Width="60" >
-                                <DataGridTemplateColumn.CellTemplate >
-                                    <DataTemplate  >
-                                        <StackPanel Orientation="Horizontal">
-                                            <!--<TextBlock Text="+"/>-->
-                                            <!--<TextBlock Text="-"/>-->
-                                            <TextBox x:Name="TextBoxShippingCount" Margin="3,1" Text="{Binding ShippingNumber, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ZeroToEmptyConverter}}"  Width="30"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory}"/>
-                            <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
                 </StackPanel>
-            </Grid>
-            <StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="10,0">
+                <DataGrid x:Name="DataGridSelectedTextile" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
+                        <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
+                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
+                        <DataGridTemplateColumn Header="出貨數量"  Width="60" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate  >
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox x:Name="TextBoxShippingCount" Margin="3,1" Text="{Binding ShippingNumber, UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ZeroToEmptyConverter}}"  Width="30"/>
+                                        <Button x:Name="ButtonAddQuantity" Content="+" Click="ButtonAddQuantity_Click"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory}"/>
+                        <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0">
                     <ComboBox x:Name="ComboBoxShippingCacheName" Width="150" HorizontalAlignment="Right" VerticalAlignment="Top" SelectionChanged="ComboBoxShippingCacheName_SelectionChanged"/>
                     <Button Content="匯出" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="Export_Click"/>
                 </StackPanel>
-                <DataGrid x:Name="DataGridShippingSheet" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Height="600">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn  Header="客戶" Binding="{Binding Customer}" />
-                            <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"/>
-                            <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
-                            <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
-                            <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
-                            <DataGridTextColumn Header="出貨數量" Binding="{Binding ShippingNumber,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                            <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
-                            <DataGridTemplateColumn Header="刪除" >
-                                <DataGridTemplateColumn.CellTemplate >
-                                    <DataTemplate>
-                                        <Button x:Name="ButtonShippingDelete" Content="刪除" Click="ButtonShippingDelete_Click"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-            </StackPanel>
+                <DataGrid x:Name="DataGridShippingSheet" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn  Header="客戶" Binding="{Binding Customer}" />
+                        <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"/>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
+                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
+                        <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
+                        <DataGridTextColumn Header="出貨數量" Binding="{Binding ShippingNumber,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                        <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
+                        <DataGridTemplateColumn Header="刪除" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <Button x:Name="ButtonShippingDelete" Content="刪除" Click="ButtonShippingDelete_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
         </DockPanel>
     </Grid>
 </Page>
