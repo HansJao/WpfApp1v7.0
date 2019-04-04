@@ -11,15 +11,16 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration" 
       xmlns:Behavior="clr-namespace:WpfApp1.Utility.ControllerBehavior"
-      xmlns:convert="clr-namespace:WpfApp1.Utility">
+      xmlns:convert="clr-namespace:WpfApp1.Utility"    
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     <Page.Resources>
-        <Style TargetType="{x:Type ComboBox}">
+        <!--<Style TargetType="{x:Type ComboBox}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="IsDropDownOpen" Value="true" />
                 </Trigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
         <convert:EnumConverter x:Key="EnumConverter" />
         <ObjectDataProvider x:Key="dataFromEnum" MethodName="GetValues"
                             ObjectType="{x:Type sys:Enum}">
@@ -86,7 +87,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Width="60"  Content="重修訂單:"/>
-                        <TextBox Behavior:TextBoxBehavior.OnLostFocus="{Binding TextBoxUnFocusCommand}"  Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                        <TextBox Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
                         <Label Width="60"  Content="數   量:"/>
@@ -100,7 +101,12 @@
                 <Button Command="{Binding AddFabricColorClick}" HorizontalAlignment="Right" Content="新  增" Margin="0,5,0,0" Width="50"/>
             </StackPanel>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding ProcessOrderList}" SelectedItem="{Binding ProcessOrder, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ProcessOrderVisbility}" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+        <DataGrid ItemsSource="{Binding ProcessOrderList}" SelectedItem="{Binding ProcessOrder, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ProcessOrderVisbility}" Behavior:DataGridBehavior.OnGotFocus="{Binding DataGridFocusCommand}" HorizontalAlignment="Left" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding DataGridSelectionChangeCommand}" CommandParameter="{Binding ElementName=DataGridStoreSearchListByShipped, Path=SelectedItem}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"/>
                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"/>

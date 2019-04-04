@@ -55,20 +55,19 @@ namespace WpfApp1.ViewModel.FabricViewModel
         public ICommand AddFabricColorClick { get { return new RelayCommand(AddMalFunctionExecute, CanExecute); } }
         private void AddMalFunctionExecute()
         {
-
             MalFunction.CustomerID = Customer.CustomerID;
             MalFunction.FactoryID = Factory.FactoryID;
             MalFunction.ColorNo = FabricColor.ColorNo;
+            MalFunction.RepairOrderNo = ProcessOrder.OrderNo;
         }
 
-        public Visibility ProcessOrderVisbility { get; set; } = Visibility.Collapsed;
-        public ICommand TextBoxUnFocusCommand { get { return new RelayCommand(TextBoxUnFocusExecute, CanExecute); } }
-        private void TextBoxUnFocusExecute()
+        public ICommand DataGridSelectionChangeCommand { get { return new RelayCommand(DataSelectionChangeExecute, CanExecute); } }
+        private void DataSelectionChangeExecute()
         {
-            ProcessOrderVisbility = Visibility.Collapsed;
-            RaisePropertyChanged("ProcessOrderVisbility");
+            RepairOrderString = ProcessOrder.OrderString;
+            RaisePropertyChanged("RepairOrderString");
         }
-      
+
         private string _repairOrderString { get; set; }
         public string RepairOrderString
         {
@@ -76,37 +75,27 @@ namespace WpfApp1.ViewModel.FabricViewModel
             set
             {
                 _repairOrderString = value;
-                if (string.IsNullOrEmpty(value))
+                RaisePropertyChanged("ProcessOrderVisbility");
+                string filterText = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(ProcessOrderList);
+                if (!string.IsNullOrEmpty(filterText))
                 {
-                    ProcessOrderVisbility = Visibility.Collapsed;
+                    cv.Filter = o =>
+                    {
+                        ProcessOrder p = o as ProcessOrder;
+                        return (p.OrderString.ToUpper().Contains(filterText.ToUpper()));
+                    };
                 }
                 else
                 {
-                    ProcessOrderVisbility = Visibility.Visible;
-                    RaisePropertyChanged("ProcessOrderVisbility");
-                    string filterText = value;
-                    ICollectionView cv = CollectionViewSource.GetDefaultView(ProcessOrderList);
-                    if (!string.IsNullOrEmpty(filterText))
+                    cv.Filter = o =>
                     {
-                        cv.Filter = o =>
-                        {
-                            /* change to get data row value */
-                            ProcessOrder p = o as ProcessOrder;
-                            return (p.OrderString.ToUpper().Contains(filterText.ToUpper()));
-                            /* end change to get data row value */
-                        };
-                    }
-                    else
-                    {
-                        cv.Filter = o =>
-                        {
-                            return (true);
-                        };
-                    }
+                        return (true);
+                    };
                 }
             }
         }
-        
+
         private string _searchCustomer { get; set; }
         public string SearchCustomer
         {

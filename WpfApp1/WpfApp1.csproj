@@ -242,6 +242,7 @@
     <Compile Include="Pages\TrashSystemPages\FeatureSearchPage.xaml.cs">
       <DependentUpon>FeatureSearchPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utility\ControllerBehavior\DataGridBehavior.cs" />
     <Compile Include="Utility\ControllerBehavior\TextBoxBehavior.cs" />
     <Compile Include="Utility\CustomController\CustomerDataGrid.cs" />
     <Compile Include="Utility\DapperHelper.cs" />
