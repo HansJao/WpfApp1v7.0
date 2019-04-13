@@ -33,22 +33,28 @@
                 <Label Content="顏    色:"/>
                 <TextBox x:Name="TextBoxColor"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColor_TextChanged"/>
             </StackPanel>
-            <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Height="{Binding Converter={StaticResource HeightConverter}, ConverterParameter=1.3,RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight}">
-                <DataGrid.Columns >
-                    <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="" >
-                        <DataGridTemplateColumn.CellTemplate >
-                            <DataTemplate>
-                                <Button x:Name="ButtonChangeYarn" Content="確認" Click="ButtonChangeYarn_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <StackPanel Orientation="Horizontal">
+                <DataGrid x:Name="DataGridYarnSpecification" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridYarnSpecification_SelectionChanged">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid x:Name="DataGridMerchantYarnPrice" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" Height="{Binding Converter={StaticResource HeightConverter}, ConverterParameter=1.3,RelativeSource={RelativeSource AncestorType={x:Type Grid}}, Path=ActualHeight}">
+                    <DataGrid.Columns >
+                        <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="單價" Binding="{Binding Price,StringFormat={}{0:C}}"></DataGridTextColumn>
+                        <DataGridTemplateColumn Header="" >
+                            <DataGridTemplateColumn.CellTemplate >
+                                <DataTemplate>
+                                    <Button x:Name="ButtonChangeYarn" Content="確認" Click="ButtonChangeYarn_Click"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

@@ -78,7 +78,7 @@ namespace WpfApp1.Windows.FabricWindows
             _yarnSelectDialog.ChangeYarnExecute += new YarnSelectDialog.ChangeYarnAction(ChangeYarn);
             _yarnSelectDialog.Show();
         }
-        private void ChangeYarn(MerchantYarnPrice merchantYarnPrice, int groupNo)
+        private void ChangeYarn(SpecificationYarnPrice specificationYarnPrice, int groupNo)
         {
             int selectedIndex = DataGridFabricIngredientProportion.SelectedIndex;
             //如果紗成分比例沒有選擇一個色的話則會新增一個比例
@@ -101,14 +101,14 @@ namespace WpfApp1.Windows.FabricWindows
                 }
                 //當新增一個比例時,不能用修改
                 DisableChangeButtonEditFabricColor();
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, merchantYarnPrice);
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, specificationYarnPrice);
 
                 _dictionaryFabricIngredientProportion[groupNo].Add(fabricIngredientProportion);
             }
             else
             {
                 var selectedItem = DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, merchantYarnPrice);
+                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, specificationYarnPrice);
                 _dictionaryFabricIngredientProportion[groupNo].RemoveAt(selectedIndex);
                 _dictionaryFabricIngredientProportion[groupNo].Insert(selectedIndex, fabricIngredientProportion);
                 DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
@@ -120,21 +120,20 @@ namespace WpfApp1.Windows.FabricWindows
         /// </summary>
         /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
         /// <param name="proportion">成分比例,同一布種比例應相同</param>
-        /// <param name="merchantYarnPrice"></param>
+        /// <param name="specificationYarnPrice"></param>
         /// <returns></returns>
-        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, MerchantYarnPrice merchantYarnPrice)
+        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, SpecificationYarnPrice specificationYarnPrice)
         {
             FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
             {
                 ProportionNo = proportionNo,
-                YarnPriceNo = merchantYarnPrice.YarnPriceNo,
-                Name = merchantYarnPrice.Name,
-                //Color = merchantYarnPrice.Color,
-                //Ingredient = merchantYarnPrice.Ingredient,
-                Price = merchantYarnPrice.Price,
+                YarnPriceNo = specificationYarnPrice.YarnPriceNo,
+                Name = specificationYarnPrice.Name,
+                Color = specificationYarnPrice.Color,
+                Ingredient = specificationYarnPrice.Ingredient,
+                Price = specificationYarnPrice.Price,
                 Proportion = proportion,
-                //YarnCount = merchantYarnPrice.YarnCount,
-                //Group = 3
+                YarnCount = specificationYarnPrice.YarnCount
             };
             return fabricIngredientProportion;
         }

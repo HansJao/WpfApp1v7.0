@@ -18,6 +18,7 @@ using WpfApp1.Modules.FabricModule;
 using WpfApp1.Modules.FabricModule.Implement;
 using WpfApp1.Windows.CommonWindows;
 using WpfApp1.Utility;
+using WpfApp1.DataClass.Entity.FabricEntity;
 
 namespace WpfApp1.Windows.FabricWindows
 {
@@ -34,19 +35,17 @@ namespace WpfApp1.Windows.FabricWindows
         protected IFabricModule FabricModule { get; } = new FabricModule();
         private int _groupNo { get; set; }
 
-        public delegate void ChangeYarnAction(MerchantYarnPrice merchantYarnPrice, int groupNo);
+        public delegate void ChangeYarnAction(SpecificationYarnPrice specificationYarnPrice, int groupNo);
         public event ChangeYarnAction ChangeYarnExecute;
 
         public YarnSelectDialog(int groupNo)
         {
             InitializeComponent();
             _groupNo = groupNo;
-            IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricModule.GetMerchantYarnPriceList();
-            DataGridMerchantYarnPrice.ItemsSource = merchantYarnPrices;
-            var comboBoxItems = merchantYarnPrices.Select(s => new MerchantYarnPrice {  Name = s.Name }).ToList();
-            comboBoxItems.Insert(0, new MerchantYarnPrice { Name = "全部" });
-            ComboBoxYarnMerchant.ItemsSource = comboBoxItems;
-            cv = CollectionViewSource.GetDefaultView(DataGridMerchantYarnPrice.ItemsSource);
+            IEnumerable<YarnSpecification> specificationYarnPrices = FabricModule.GetYarnSpecificationList();
+            DataGridYarnSpecification.ItemsSource = specificationYarnPrices;
+
+
         }
 
         public void ChangeGroupNo(int groupNo)
@@ -55,8 +54,19 @@ namespace WpfApp1.Windows.FabricWindows
         }
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
+            YarnSpecification yarnSpecification = DataGridYarnSpecification.SelectedItem as YarnSpecification;
             MerchantYarnPrice merchantYarnPrice = DataGridMerchantYarnPrice.SelectedItem as MerchantYarnPrice;
-            ChangeYarnExecute(merchantYarnPrice, _groupNo);
+            SpecificationYarnPrice specificationYarnPrice = new SpecificationYarnPrice
+            {
+                YarnPriceNo = merchantYarnPrice.YarnPriceNo,
+                Ingredient = yarnSpecification.Ingredient,
+                Name = merchantYarnPrice.Name,
+                Color = yarnSpecification.Color,
+                YarnCount = yarnSpecification.YarnCount,
+                YarnMerchant = merchantYarnPrice.YarnMerchant,
+                Price = merchantYarnPrice.Price
+            };
+            ChangeYarnExecute(specificationYarnPrice, _groupNo);
         }
 
         private ICollectionView cv;
@@ -109,6 +119,20 @@ namespace WpfApp1.Windows.FabricWindows
         private void TextBoxYarnCount_TextChanged(object sender, TextChangedEventArgs e)
         {
             //CheckDataGridFilterCondition();
+        }
+
+        private void DataGridYarnSpecification_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataGrid dataGrid = sender as DataGrid;
+            YarnSpecification yarnSpecification = dataGrid.SelectedItem as YarnSpecification;
+            IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricModule.GetYarnPriceByYarnSpecificationNo(yarnSpecification.YarnSpecificationNo);
+            DataGridMerchantYarnPrice.ItemsSource = merchantYarnPrices;
+
+
+            //var comboBoxItems = merchantYarnPrices.Select(s => new MerchantYarnPrice { Name = s.Name }).ToList();
+            //comboBoxItems.Insert(0, new MerchantYarnPrice { Name = "全部" });
+            //ComboBoxYarnMerchant.ItemsSource = comboBoxItems;
+            //cv = CollectionViewSource.GetDefaultView(DataGridMerchantYarnPrice.ItemsSource);
         }
     }
 }
