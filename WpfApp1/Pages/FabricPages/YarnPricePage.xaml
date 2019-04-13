@@ -6,38 +6,43 @@
       xmlns:local="clr-namespace:WpfApp1.Pages.FabricPages"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="YarnPricePage">
+      Title="YarnPricePage"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     <Grid>
         <DockPanel>
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Content="紗   商:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <ComboBox ItemsSource="{Binding FactoryList}" SelectedItem="{Binding Factory}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
                         <Label Content="紗支數:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnCount}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnSpecification.YarnCount}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="成   分:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Ingredient}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnSpecification.Ingredient}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="顏   色:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Color}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnSpecification.Color}" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding AddYarnSpecificationClick}" Content="新增紗規格" Width="70"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="紗   商:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
+                        <ComboBox ItemsSource="{Binding FactoryList}" SelectedValue="{Binding Path=YarnPrice.YarnMerchant}" SelectedValuePath="FactoryID" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="單   價:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=Price}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnPrice.Price}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="紗   價:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
-                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=PiecePrice}" VerticalAlignment="Top" Width="120"/>
+                        <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnPrice.PiecePrice}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button Command="{Binding AddYarnPriceClick}" Content="新增" Width="50"/>
-                        <Button Command="{Binding EditYarnPriceClick}" Content="修改" Width="50"/>
+                        <Button Command="{Binding AddYarnPriceClick}" Content="新增紗價" Width="60"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel>
@@ -54,30 +59,31 @@
                         <Label Content="成  份:" Width="50"/>
                         <TextBox Width="120" Text="{Binding SearchIngredient,UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
-                   
                     <StackPanel Orientation="Horizontal">
                         <Label Content="顏  色:" Width="50"/>
                         <TextBox Width="120"  Text="{Binding SearchColor,UpdateSourceTrigger=PropertyChanged}"/>
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
-            <DataGrid ItemsSource="{Binding MerchantYarnPriceView}" SelectedItem="{Binding MerchantYarnPrice}" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray">
+            <DataGrid x:Name="DataGridYarnSpecification" ItemsSource="{Binding YarnSpecificationList}" SelectedItem="{Binding SelectedYarnSpecification}" SelectedValue="{Binding YarnPrice.YarnSpecificationNo}" SelectedValuePath="YarnSpecificationNo" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding OnSelectionChangedCommand}" CommandParameter="{Binding ElementName=DataGridYarnSpecification, Path=SelectedItem}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="成分" Binding="{Binding Ingredient}"></DataGridTextColumn>
                     <DataGridTextColumn Header="紗支數" Binding="{Binding YarnCount}"></DataGridTextColumn>
                     <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid ItemsSource="{Binding MerchantYarnPrices}" SelectedItem="{Binding MerchantYarnPrice}" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
                     <DataGridTextColumn Header="單價" Binding="{Binding Price}"></DataGridTextColumn>
                     <DataGridTextColumn Header="紗價" Binding="{Binding PiecePrice}"></DataGridTextColumn>
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="修改時間" Binding="{Binding UpdateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
-                    <DataGridTemplateColumn Header="刪除" >
-                        <DataGridTemplateColumn.CellTemplate >
-                            <DataTemplate>
-                                <Button  Content="刪除"  Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.DeleteYarnPriceClick}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

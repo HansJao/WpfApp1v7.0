@@ -129,11 +129,11 @@ namespace WpfApp1.Windows.FabricWindows
                 ProportionNo = proportionNo,
                 YarnPriceNo = merchantYarnPrice.YarnPriceNo,
                 Name = merchantYarnPrice.Name,
-                Color = merchantYarnPrice.Color,
-                Ingredient = merchantYarnPrice.Ingredient,
+                //Color = merchantYarnPrice.Color,
+                //Ingredient = merchantYarnPrice.Ingredient,
                 Price = merchantYarnPrice.Price,
                 Proportion = proportion,
-                YarnCount = merchantYarnPrice.YarnCount,
+                //YarnCount = merchantYarnPrice.YarnCount,
                 //Group = 3
             };
             return fabricIngredientProportion;

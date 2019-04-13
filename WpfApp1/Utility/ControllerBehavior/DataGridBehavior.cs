@@ -53,5 +53,48 @@ namespace WpfApp1.Utility.ControllerBehavior
                 command.Execute(e);
             }
         }
+
+        public static DependencyProperty OnSelectionChangedProperty = DependencyProperty.RegisterAttached(
+          "OnSelectionChanged",
+          typeof(ICommand),
+          typeof(DataGridBehavior),
+          new UIPropertyMetadata(OnSelectionChanged));
+
+        public static void SetOnSelectionChanged(DependencyObject target, ICommand value)
+        {
+            target.SetValue(OnSelectionChangedProperty, value);
+        }
+
+        /// <summary>
+        /// PropertyChanged callback for OnDoubleClickProperty.  Hooks up an event handler with the 
+        /// actual target.
+        /// </summary>
+        private static void OnSelectionChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        {
+            var element = target as DataGrid;
+            if (element == null)
+            {
+                throw new InvalidOperationException("This behavior can be attached to a TextBox item only.");
+            }
+
+            if ((e.NewValue != null) && (e.OldValue == null))
+            {
+                element.SelectionChanged += OnPreviewSelectionChanged;
+            }
+            else if ((e.NewValue == null) && (e.OldValue != null))
+            {
+                element.SelectionChanged -= OnPreviewSelectionChanged;
+            }
+        }
+
+        private static void OnPreviewSelectionChanged(object sender, RoutedEventArgs e)
+        {
+            UIElement element = (UIElement)sender;
+            ICommand command = (ICommand)element.GetValue(DataGridBehavior.OnSelectionChangedProperty);
+            if (command != null)
+            {
+                command.Execute(e);
+            }
+        }
     }
 }

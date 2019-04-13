@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.FabricEntity;
 using WpfApp1.DataClass.Fabric;
 using WpfApp1.Utility;
 
@@ -161,15 +162,32 @@ namespace WpfApp1.Adapter.MSSQL
             return result;
         }
         /// <summary>
-        /// <summary>
         /// 取得所有紗商的紗價
         /// </summary>
         /// <returns></returns>
         public IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList()
         {
-            string sqlCmd = @"SELECT YP.*,F.Name FROM YarnPrice YP
-                              INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID";
+            string sqlCmd = @"SELECT * FROM YarnPrice";
             var result = DapperHelper.QueryCollection<MerchantYarnPrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
+
+        /// <summary>
+        /// 以紗規格編號取得紗價
+        /// </summary>
+        /// <param name="yarnSpecificationNo"></param>
+        /// <returns></returns>
+        public IEnumerable<MerchantYarnPrice> GetYarnPriceByYarnSpecificationNo(int yarnSpecificationNo)
+        {
+            string sqlCmd = @"SELECT F.Name,YP.YarnPriceNo,YP.YarnSpecificationNo,YP.Price,YP.PiecePrice,YP.CreateDate 
+                              FROM YarnPrice YP
+							  INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID
+                              WHERE YarnSpecificationNo = @YarnSpecificationNo";
+            SqlParameter[] parameters = new SqlParameter[]
+          {
+                new SqlParameter("@YarnSpecificationNo", SqlDbType.Int) { Value = yarnSpecificationNo }
+          };
+            var result = DapperHelper.QueryCollection<MerchantYarnPrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
         /// <summary>
@@ -180,21 +198,15 @@ namespace WpfApp1.Adapter.MSSQL
         public int InsertYarnPrice(YarnPrice yarnPrice)
         {
             string sqlCmd = @"INSERT INTO [dbo].[YarnPrice]
-           ([Ingredient]
-           ,[YarnCount]
-           ,[Color]
-           ,[Price]
-           ,[PiecePrice]
-           ,[YarnMerchant]
-           ,[CreateDate])
-            VALUES
-           (@Ingredient
-           ,@YarnCount
-           ,@Color
-           ,@Price
-           ,@PiecePrice
-           ,@YarnMerchant
-           ,GETDATE())";
+                              ([YarnSpecificationNo]
+                              ,[YarnMerchant]
+                              ,[Price]
+                              ,[PiecePrice])
+                              VALUES
+                              (@YarnSpecificationNo
+                              ,@YarnMerchant
+                              ,@Price
+                              ,@PiecePrice)";
             int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, yarnPrice);
             return count;
         }
@@ -477,6 +489,41 @@ namespace WpfApp1.Adapter.MSSQL
                 new SqlParameter("@Order", SqlDbType.Int) { Value = order }
               };
             var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 新增紗規格
+        /// </summary>
+        /// <param name="yarnSpecification"></param>
+        /// <returns></returns>
+        public int AddYarnSpecification(YarnSpecification yarnSpecification)
+        {
+            string sqlCmd = @"INSERT INTO [dbo].[YarnSpecification]
+            ([Ingredient],[YarnCount],[Color])
+            VALUES
+            (@Ingredient,@YarnCount,@Color)";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@Ingredient", SqlDbType.NVarChar) { Value = yarnSpecification.Ingredient },
+                new SqlParameter("@YarnCount", SqlDbType.NVarChar) { Value = yarnSpecification.YarnCount },
+                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = yarnSpecification.Color }
+            };
+            var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<YarnSpecification> GetYarnSpecificationList()
+        {
+            string sqlCmd = @"SELECT [YarnSpecificationNo]
+                              ,[Ingredient]
+                              ,[YarnCount]
+                              ,[Color]
+                              ,[CreateDate] 
+                              FROM [YarnSpecification]";
+            var result = DapperHelper.QueryCollection<YarnSpecification>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
     }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.FabricEntity;
 using WpfApp1.DataClass.Fabric;
 using WpfApp1.Utility;
 
@@ -119,7 +120,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
             {
                 return processSequences.Where(w => w.ColorNo > 0);
             }
-                return processSequences;
+            return processSequences;
         }
         /// <summary>
         /// 以布種編號取得所有加工程序
@@ -141,6 +142,16 @@ namespace WpfApp1.Modules.FabricModule.Implement
             IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricAdapter.GetMerchantYarnPriceList();
             return merchantYarnPrices;
 
+        }
+        /// <summary>
+        /// 以紗規格編號取得紗價
+        /// </summary>
+        /// <param name="yarnSpecificationNo"></param>
+        /// <returns></returns>
+        public IEnumerable<MerchantYarnPrice> GetYarnPriceByYarnSpecificationNo(int yarnSpecificationNo)
+        {
+            IEnumerable<MerchantYarnPrice> yarnPrices = FabricAdapter.GetYarnPriceByYarnSpecificationNo(yarnSpecificationNo);
+            return yarnPrices;
         }
         /// <summary>
         /// 新增紗價
@@ -307,5 +318,27 @@ namespace WpfApp1.Modules.FabricModule.Implement
                                               : fabricIngredientProportions.GroupBy(g => g.Group).ToDictionary(g => g.Key, g => new ObservableCollection<FabricIngredientProportion>(g.ToList()));
             return fabricIngredientProportionGroup;
         }
+
+        /// <summary>
+        /// 新增紗規格
+        /// </summary>
+        /// <param name="yarnSpecification"></param>
+        /// <returns></returns>
+        public bool AddYarnSpecification(YarnSpecification yarnSpecification)
+        {
+            int count = FabricAdapter.AddYarnSpecification(yarnSpecification);
+            return count == 1;
+        }
+
+        /// <summary>
+        /// 取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<YarnSpecification> GetYarnSpecificationList()
+        {
+            IEnumerable<YarnSpecification> yarnSpecificationList = FabricAdapter.GetYarnSpecificationList();
+            return yarnSpecificationList;
+        }
+
     }
 }

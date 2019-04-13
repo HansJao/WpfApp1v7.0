@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Enumeration;
 
-namespace WpfApp1.DataClass.Entity
+namespace WpfApp1.DataClass.Entity.FabricEntity
 {
     public class MalFunction
     {

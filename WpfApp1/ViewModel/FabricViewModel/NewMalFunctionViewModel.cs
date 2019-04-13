@@ -9,6 +9,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.FabricEntity;
 using WpfApp1.Modules.CustomerModule;
 using WpfApp1.Modules.CustomerModule.Implement;
 using WpfApp1.Modules.FabricModule;

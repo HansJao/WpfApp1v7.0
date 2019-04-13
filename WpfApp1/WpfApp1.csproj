@@ -136,9 +136,10 @@
     <Compile Include="DataClass\Entity\Fabric.cs" />
     <Compile Include="DataClass\Entity\FabricColor.cs" />
     <Compile Include="DataClass\Entity\FabricProportion.cs" />
+    <Compile Include="DataClass\Entity\FabricEntity\YarnSpecification.cs" />
     <Compile Include="DataClass\Entity\Factory.cs" />
     <Compile Include="DataClass\Entity\FactoryShipping.cs" />
-    <Compile Include="DataClass\Entity\Fabric\MalFunction.cs" />
+    <Compile Include="DataClass\Entity\FabricEntity\MalFunction.cs" />
     <Compile Include="DataClass\Entity\ProcessOrder.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderColorDetail.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
     <Compile Include="DataClass\Fabric\IngredientGroupInfo.cs" />
     <Compile Include="DataClass\Fabric\MerchantYarnPrice.cs" />
+    <Compile Include="DataClass\Fabric\MerchantYarnSpecification.cs" />
     <Compile Include="DataClass\Fabric\ProcessSequenceDetail.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />

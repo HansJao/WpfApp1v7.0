@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Entity;
+using WpfApp1.DataClass.Entity.FabricEntity;
 using WpfApp1.DataClass.Fabric;
 
 namespace WpfApp1.Adapter
@@ -69,6 +70,12 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <returns></returns>
         IEnumerable<MerchantYarnPrice> GetMerchantYarnPriceList();
+        /// <summary>
+        /// 以紗規格編號取得紗價
+        /// </summary>
+        /// <param name="yarnSpecificationNo"></param>
+        /// <returns></returns>
+        IEnumerable<MerchantYarnPrice> GetYarnPriceByYarnSpecificationNo(int yarnSpecificationNo);
         /// <summary>
         /// 新增紗價
         /// </summary>
@@ -147,6 +154,8 @@ namespace WpfApp1.Adapter
         /// <param name="sequenceNoList"></param>
         /// <returns></returns>
         int DeleteProcessSequence(int colorNo, int group, IEnumerable<int> sequenceNoList);
+     
+
         /// <summary>
         /// 檢查此加工程序是否有在加工程序顏色對應中
         /// </summary>
@@ -163,6 +172,16 @@ namespace WpfApp1.Adapter
         /// <param name="order"></param>
         /// <returns></returns>
         int EditProcessSequence(int sequenceNo, decimal loss, int workPay, int order);
-      
+        /// <summary>
+        /// 新增紗規格
+        /// </summary>
+        /// <param name="yarnSpecification"></param>
+        /// <returns></returns>
+        int AddYarnSpecification(YarnSpecification yarnSpecification);
+        /// <summary>
+        /// 取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<YarnSpecification> GetYarnSpecificationList();
     }
 }
