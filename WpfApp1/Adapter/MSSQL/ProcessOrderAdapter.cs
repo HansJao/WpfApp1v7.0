@@ -302,7 +302,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<ProcessOrder> GetProcessOrderFilter(IEnumerable<int> factoryIDList, List<ProcessOrderColorStatus> statusList, bool containFinish)
         {
-            var sqlCmd = @"SELECT DISTINCT PO.OrderNo,PO.OrderString,PO.Fabric,PO.Specification,PO.ProcessItem,PO.Precautions,PO.Memo,PO.HandFeel,PO.CreateDate 
+            var sqlCmd = @"SELECT DISTINCT PO.OrderNo,PO.OrderString,PO.Fabric,PO.Specification,PO.ProcessItem,PO.Precautions,PO.Memo,PO.HandFeel,PO.CreateDate,PO.Remark
                           FROM ProcessOrder PO
                           LEFT JOIN ProcessOrderFlow POF ON PO.OrderNo = POF.OrderNo
                           LEFT JOIN ProcessOrderColorDetail POCD ON PO.OrderNo = POCD.OrderNo
@@ -311,9 +311,9 @@ namespace WpfApp1.Adapter.MSSQL
 
             sqlCmd = string.Format(sqlCmd, BuildProcessOrderFilterCommand(factoryIDList, statusList));
             SqlParameter[] parameters = new SqlParameter[]
-           {
+            {
                 new SqlParameter("@Status", SqlDbType.Int) { Value = containFinish ? 0:1 }
-           };
+            };
             var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
@@ -508,23 +508,6 @@ namespace WpfApp1.Adapter.MSSQL
             var count = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return count;
         }
-        /// <summary>
-        /// 取得加工訂單備註
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        public string GetProcessOrderRemark(int orderNo)
-        {
-            var sqlCmd = @"SELECT Remark FROM ProcessOrder
-                           WHERE OrderNo = @OrderNo";
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@OrderNo", SqlDbType.Int) { Value = orderNo },
-            };
-            var remark = DapperHelper.Query<string>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
-            return remark;
-        }
-
 
         public int UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList)
         {

@@ -345,16 +345,6 @@ namespace WpfApp1.Modules.Process.Implement
             int count = ProcessOrderAdapter.UpdateProcessOrderRemark(processOrderNo, text);
             return count == 1;
         }
-        /// <summary>
-        /// 取得加工訂單備註
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        public string GetProcessOrderRemark(int orderNo)
-        {
-            string remark = ProcessOrderAdapter.GetProcessOrderRemark(orderNo);
-            return remark;
-        }
 
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成

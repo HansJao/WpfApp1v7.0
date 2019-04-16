@@ -206,14 +206,6 @@ namespace WpfApp1.Modules.Process
         IEnumerable<ProcessOrder> GetProcessOrderByCustomer(int customerID);
 
         /// <summary>
-        /// 取得加工訂單備註
-        /// </summary>
-        /// <param name="orderNo"></param>
-        /// <returns></returns>
-        string GetProcessOrderRemark(int orderNo);
-
-
-        /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成
         /// </summary>
         /// <param name="orderFlowNo"></param>

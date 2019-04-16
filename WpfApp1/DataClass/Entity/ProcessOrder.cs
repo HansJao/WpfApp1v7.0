@@ -16,6 +16,7 @@ namespace WpfApp1.DataClass.Entity
         public string Precautions { get; set; }
         public string Memo { get; set; }
         public string HandFeel { get; set; }
+        public string Remark { get; set; }
         public DateTime CreateDate { get; set; }
 
     }
