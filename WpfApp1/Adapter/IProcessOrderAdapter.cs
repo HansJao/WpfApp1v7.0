@@ -109,8 +109,9 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="factoryList"></param>
         /// <param name="statusList"></param>
+        /// <param name="containFinish"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderFilter(IEnumerable<int> factoryIDList, List<ProcessOrderColorStatus> statusList);
+        IEnumerable<ProcessOrder> GetProcessOrderFilter(IEnumerable<int> factoryIDList, List<ProcessOrderColorStatus> statusList, bool containFinish);
         /// <summary>
         /// 取得加工訂單顏色明細
         /// </summary>

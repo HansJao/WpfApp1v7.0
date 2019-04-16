@@ -22,17 +22,20 @@
     <Grid>
         <DockPanel LastChildFill="True" MaxHeight="500">
             <DockPanel DockPanel.Dock="Top">
-                <Button x:Name="ButtonDisplayAllOrder" Content="顯示所有訂單" Width="100" Margin="2,0,3,0" Click="ButtonDisplayAllOrder_Click"/>
-                <ComboBox x:Name="ComboBoxStatus" Width="120" SelectionChanged="ComboBoxStatus_SelectionChanged" />
-                <Label DockPanel.Dock="Left" VerticalAlignment="Top" Content="訂單編號搜尋:"/>
-                <TextBox x:Name="TextBoxOrderStringSearch"  Height="26" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxOrderStringSearch_TextChanged"/>
-                <Label DockPanel.Dock="Left" VerticalAlignment="Top" Content="布種搜尋:"/>
-                <TextBox x:Name="TextBoxFabricSearch"  Height="26" DockPanel.Dock="Left" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxFabricSearch_TextChanged"/>
-                <Label Content="顏色搜尋:"/>
+                <StackPanel>
+                    <CheckBox x:Name="CheckBoxContainFinish" VerticalAlignment="Center" Content="包含已出完訂單" Click="CheckBoxContainFinish_Click" />
+                    <Button x:Name="ButtonDisplayAllOrder" Content="顯示所有訂單" Width="100" Margin="2,0,3,0" Click="ButtonDisplayAllOrder_Click"/>
+                </StackPanel>
+                <ComboBox x:Name="ComboBoxStatus" Width="120" Height="25" SelectionChanged="ComboBoxStatus_SelectionChanged" />
+                <Label VerticalAlignment="Center" Content="訂單編號搜尋:"/>
+                <TextBox x:Name="TextBoxOrderStringSearch"  Height="26"  Width="120" TextChanged="TextBoxOrderStringSearch_TextChanged"/>
+                <Label  VerticalAlignment="Center" Content="布種搜尋:"/>
+                <TextBox x:Name="TextBoxFabricSearch"  Height="26" Width="120" TextChanged="TextBoxFabricSearch_TextChanged"/>
+                <Label Content="顏色搜尋:" VerticalAlignment="Center"/>
                 <TextBox x:Name="TextBoxColorSearch" Width="100" Height="26" KeyDown="TextBoxColorSearch_KeyDown" GotFocus="TextBoxColorSearch_GotFocus"   />
-                <Label Content="客戶搜尋:"/>
+                <Label Content="客戶搜尋:" VerticalAlignment="Center"/>
                 <ComboBox x:Name="ComboBoxCustomerNameSearch" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="24" Width="115" IsEditable="True"/>
-                <Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Click="ButtonUpdateDateOrder_Click"/>
+                <Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Height="25" Click="ButtonUpdateDateOrder_Click"/>
             </DockPanel>
             <DataGrid DockPanel.Dock="Left" x:Name="DataGridFactoryList" AlternatingRowBackground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
                 <DataGrid.Columns>

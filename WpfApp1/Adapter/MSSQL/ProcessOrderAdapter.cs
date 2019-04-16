@@ -293,16 +293,28 @@ namespace WpfApp1.Adapter.MSSQL
             return count;
         }
 
-        public IEnumerable<ProcessOrder> GetProcessOrderFilter(IEnumerable<int> factoryIDList, List<ProcessOrderColorStatus> statusList)
+        /// <summary>
+        /// 依據狀態,工廠取得加工訂單
+        /// </summary>
+        /// <param name="factoryList"></param>
+        /// <param name="statusList"></param>
+        /// <param name="containFinish"></param>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrder> GetProcessOrderFilter(IEnumerable<int> factoryIDList, List<ProcessOrderColorStatus> statusList, bool containFinish)
         {
-            var sqlCmd = @"select distinct po.OrderNo,po.OrderString,po.Fabric,po.Specification,po.ProcessItem,po.Precautions,po.Memo,po.HandFeel,po.CreateDate 
-                          from ProcessOrder po
-                          left join ProcessOrderFlow pof on po.OrderNo = pof.OrderNo
-                          left join ProcessOrderColorDetail pocd on po.OrderNo = pocd.OrderNo
+            var sqlCmd = @"SELECT DISTINCT PO.OrderNo,PO.OrderString,PO.Fabric,PO.Specification,PO.ProcessItem,PO.Precautions,PO.Memo,PO.HandFeel,PO.CreateDate 
+                          FROM ProcessOrder PO
+                          LEFT JOIN ProcessOrderFlow POF ON PO.OrderNo = POF.OrderNo
+                          LEFT JOIN ProcessOrderColorDetail POCD ON PO.OrderNo = POCD.OrderNo
+                          WHERE POCD.Status != @Status
                            {0}";
 
             sqlCmd = string.Format(sqlCmd, BuildProcessOrderFilterCommand(factoryIDList, statusList));
-            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
+            SqlParameter[] parameters = new SqlParameter[]
+           {
+                new SqlParameter("@Status", SqlDbType.Int) { Value = containFinish ? 0:1 }
+           };
+            var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
 
@@ -311,14 +323,14 @@ namespace WpfApp1.Adapter.MSSQL
             var sqlCmd = string.Empty;
             if (factoryIDList.Count() != 0)
             {
-                sqlCmd = string.Concat("WHERE FactoryID IN (", string.Join(",", factoryIDList), ") ");
+                sqlCmd = string.Concat("AND FactoryID IN (", string.Join(",", factoryIDList), ") ");
             }
 
-            if (string.IsNullOrEmpty(sqlCmd) && statusList.Count != 0)
-            {
-                sqlCmd = string.Concat(sqlCmd, "WHERE Status IN (", string.Join(",", statusList.Select(s => Convert.ToInt32(s)), ") "));
-            }
-            else if (statusList.Count != 0)
+            //if (string.IsNullOrEmpty(sqlCmd) && statusList.Count != 0)
+            //{
+            //    sqlCmd = string.Concat(sqlCmd, "WHERE Status IN (", string.Join(",", statusList.Select(s => Convert.ToInt32(s))), ") ");
+            //}
+            if (statusList.Count != 0)
             {
                 sqlCmd = string.Concat(sqlCmd, "AND Status IN (", string.Join(",", statusList.Select(s => Convert.ToInt32(s))), ") ");
             }

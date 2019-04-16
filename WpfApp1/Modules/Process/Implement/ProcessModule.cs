@@ -206,11 +206,16 @@ namespace WpfApp1.Modules.Process.Implement
         /// </summary>
         /// <param name="factoryList"></param>
         /// <param name="statusList"></param>
+        /// <param name="containFinish"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList)
+        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish)
         {
             IEnumerable<int> factoryIDList = factoryList.Select(s => s.FactoryID);
-            var result = ProcessOrderAdapter.GetProcessOrderFilter(factoryIDList, statusList).OrderByDescending(o => o.OrderNo);
+            if (statusList.Count == 1 && statusList.Where(w => w == ProcessOrderColorStatus.已出完).Count() == 1)
+            {
+                containFinish = true;
+            }
+            var result = ProcessOrderAdapter.GetProcessOrderFilter(factoryIDList, statusList, containFinish).OrderByDescending(o => o.OrderNo);
             return result;
         }
         /// <summary>

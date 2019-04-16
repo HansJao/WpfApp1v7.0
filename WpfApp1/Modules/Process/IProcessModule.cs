@@ -58,7 +58,7 @@ namespace WpfApp1.Modules.Process
         int DeleteProcessOrder(ProcessOrder processOrder);
 
         int UpdateProcessOrderFlowDate(List<ProcessOrderFlowFactoryName> processOrderFlowFactoryName);
-        
+
 
         /// <summary>
         /// 更新加工訂單流程工廠名稱
@@ -140,10 +140,11 @@ namespace WpfApp1.Modules.Process
         /// </summary>
         /// <param name="factoryList"></param>
         /// <param name="statusList"></param>
+        /// <param name="containFinish"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList);
+        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish);
 
-       
+
 
         /// <summary>
         /// 取得加工訂單顏色明細
@@ -166,7 +167,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNo"></param>
         /// <param name="quantity"></param>
         /// <returns></returns>
-        int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo,int quantity);
+        int UpdateProcessOrderColorDetailQuantity(int orderColorDetailNo, int quantity);
         /// <summary>
         /// 修改加工訂單顏色明細顏色
         /// </summary>
@@ -210,7 +211,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderNo"></param>
         /// <returns></returns>
         string GetProcessOrderRemark(int orderNo);
-      
+
 
         /// <summary>
         /// 更新加工訂單顏色明細狀態為已完成
@@ -219,7 +220,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="orderColorDetailNoList"></param>
         /// <returns></returns>
         bool UpdateProcessOrderColorDetailStatusByLastComplete(int orderFlowNo, IEnumerable<int> orderColorDetailNoList);
-        
+
 
         /// <summary>
         /// 新增加工訂單流程
