@@ -34,7 +34,7 @@
                 <Label Content="顏色搜尋:" VerticalAlignment="Center"/>
                 <TextBox x:Name="TextBoxColorSearch" Width="100" Height="26" KeyDown="TextBoxColorSearch_KeyDown" GotFocus="TextBoxColorSearch_GotFocus"   />
                 <Label Content="客戶搜尋:" VerticalAlignment="Center"/>
-                <ComboBox x:Name="ComboBoxCustomerNameSearch" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="24" Width="115" IsEditable="True"/>
+                <ComboBox x:Name="ComboBoxCustomerNameSearch" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="24" Width="115" IsEditable="True" KeyUp="ComboBoxCustomerNameSearch_KeyUp" SelectionChanged="ComboBoxCustomerNameSearch_SelectionChanged"/>
                 <Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Height="25" Click="ButtonUpdateDateOrder_Click"/>
             </DockPanel>
             <DataGrid DockPanel.Dock="Left" x:Name="DataGridFactoryList" AlternatingRowBackground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
@@ -99,7 +99,7 @@
                 <StackPanel>
                     <DockPanel x:Name="DockPanelCustomer" >
                         <Label Content="客戶:"/>
-                        <ComboBox x:Name="ComboBoxCustomer" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="115" IsEditable="True"/>
+                        <ComboBox x:Name="ComboBoxCustomer" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Height="24" Width="115" IsEditable="True" KeyUp="ComboBoxCustomer_KeyUp" StaysOpenOnEdit="True" IsTextSearchEnabled="False"/>
                         <Button x:Name="CustomerRelate" Content="新增客戶關連" Width="85" HorizontalAlignment="Right" Click="CustomerRelate_Click"/>
                     </DockPanel>
                     <StackPanel Orientation="Horizontal" Margin="0,3,0,0">

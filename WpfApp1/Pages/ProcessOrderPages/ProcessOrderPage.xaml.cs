@@ -51,125 +51,68 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DisplayAllOrder();
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
             ComboBoxCustomer.ItemsSource = CustomerModule.GetCustomerList();
-            OnComboBoxCustomerLoad();
             ComboBoxCustomerNameSearch.ItemsSource = CustomerModule.GetCustomerList();
-            OnComboBoxCustomerNameSearch();
             DataGridFactoryList.ItemsSource = FactoryModule.GetFactoryList();
         }
 
-        private void OnComboBoxCustomerLoad()
-        {
-            ComboBoxCustomer.Loaded += (ls, le) =>
-            {
-                TextBox targetTextBox = ComboBoxCustomer?.Template.FindName("PART_EditableTextBox", ComboBoxCustomer) as TextBox;
+        #region 舊的combobox filter 邏輯
+        //private void OnComboBoxCustomerLoad()
+        //{
+        //    ComboBoxCustomer.Loaded += (ls, le) =>
+        //    {
+        //        TextBox targetTextBox = ComboBoxCustomer?.Template.FindName("PART_EditableTextBox", ComboBoxCustomer) as TextBox;
 
-                if (targetTextBox == null) return;
+        //        if (targetTextBox == null) return;
 
-                ComboBoxCustomer.Tag = "TextInput";
-                ComboBoxCustomer.StaysOpenOnEdit = true;
-                ComboBoxCustomer.IsEditable = true;
-                ComboBoxCustomer.IsTextSearchEnabled = false;
+        //        ComboBoxCustomer.Tag = "TextInput";
+        //        ComboBoxCustomer.StaysOpenOnEdit = true;
+        //        ComboBoxCustomer.IsEditable = true;
+        //        ComboBoxCustomer.IsTextSearchEnabled = false;
 
-                targetTextBox.TextChanged += (o, args) =>
-                {
-                    if (ComboBoxCustomer.Tag.ToString() == "Selection")
-                    {
-                        ComboBoxCustomer.Tag = "TextInput";
-                        ComboBoxCustomer.IsDropDownOpen = true;
-                    }
-                    else
-                    {
-                        TextBox textBox = (TextBox)o;
-                        string searchText = textBox.Text;
+        //        targetTextBox.TextChanged += (o, args) =>
+        //        {
+        //            if (ComboBoxCustomer.Tag.ToString() == "Selection")
+        //            {
+        //                ComboBoxCustomer.Tag = "TextInput";
+        //                ComboBoxCustomer.IsDropDownOpen = true;
+        //            }
+        //            else
+        //            {
+        //                TextBox textBox = (TextBox)o;
+        //                string searchText = textBox.Text;
 
-                        if (ComboBoxCustomer.SelectionBoxItem != null)
-                        {
-                            //ComboBoxCustomer.SelectedItem = null;
-                            targetTextBox.Text = searchText;
-                            ComboBoxCustomer.IsDropDownOpen = true;
-                            targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                        }
+        //                if (ComboBoxCustomer.SelectionBoxItem != null)
+        //                {
+        //                    //ComboBoxCustomer.SelectedItem = null;
+        //                    targetTextBox.Text = searchText;
+        //                    ComboBoxCustomer.IsDropDownOpen = true;
+        //                    targetTextBox.SelectionStart = targetTextBox.Text.Length;
+        //                }
 
-                        if (string.IsNullOrEmpty(searchText))
-                        {
-                            ComboBoxCustomer.Items.Filter = item => true;
-                            ComboBoxCustomer.SelectedItem = default(object);
-                        }
-                        else
-                        {
-                            ComboBoxCustomer.Items.Filter = item =>
-                                    ((Customer)item).Name.Contains(searchText);
-                        }
-                        ComboBoxCustomer.IsDropDownOpen = true;
-                        targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                    }
-                };
+        //                if (string.IsNullOrEmpty(searchText))
+        //                {
+        //                    ComboBoxCustomer.Items.Filter = item => true;
+        //                    ComboBoxCustomer.SelectedItem = default(object);
+        //                }
+        //                else
+        //                {
+        //                    ComboBoxCustomer.Items.Filter = item =>
+        //                            ((Customer)item).Name.Contains(searchText);
+        //                }
+        //                ComboBoxCustomer.IsDropDownOpen = true;
+        //                targetTextBox.SelectionStart = targetTextBox.Text.Length;
+        //            }
+        //        };
 
-                ComboBoxCustomer.SelectionChanged += (o, args) =>
-                {
-                    ComboBox comboBox = o as ComboBox;
-                    if (comboBox?.SelectedItem == null) return;
-                    comboBox.Tag = "Selection";
-                };
-            };
-        }
-
-        private void OnComboBoxCustomerNameSearch()
-        {
-            ComboBoxCustomerNameSearch.Loaded += (ls, le) =>
-            {
-                if (!(ComboBoxCustomerNameSearch?.Template.FindName("PART_EditableTextBox", ComboBoxCustomerNameSearch) is TextBox targetTextBox))
-                    return;
-
-                ComboBoxCustomerNameSearch.Tag = "TextInput";
-                ComboBoxCustomerNameSearch.StaysOpenOnEdit = true;
-                ComboBoxCustomerNameSearch.IsEditable = true;
-                ComboBoxCustomerNameSearch.IsTextSearchEnabled = false;
-
-                targetTextBox.TextChanged += (o, args) =>
-                {
-                    if (ComboBoxCustomerNameSearch.Tag.ToString() == "Selection")
-                    {
-                        ComboBoxCustomerNameSearch.Tag = "TextInput";
-                        ComboBoxCustomerNameSearch.IsDropDownOpen = true;
-                    }
-                    else
-                    {
-                        TextBox textBox = (TextBox)o;
-                        string searchText = textBox.Text;
-                        if (ComboBoxCustomerNameSearch.SelectionBoxItem != null)
-                        {
-                            //ComboBoxCustomer.SelectedItem = null;
-                            targetTextBox.Text = searchText;
-                            ComboBoxCustomerNameSearch.IsDropDownOpen = true;
-                            targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                        }
-
-                        if (string.IsNullOrEmpty(searchText))
-                        {
-                            ComboBoxCustomerNameSearch.Items.Filter = item => true;
-                            ComboBoxCustomerNameSearch.SelectedItem = default(object);
-                        }
-                        else
-                        {
-                            ComboBoxCustomerNameSearch.Items.Filter = item =>
-                                    ((Customer)item).Name.Contains(searchText);
-                        }
-                        ComboBoxCustomerNameSearch.IsDropDownOpen = true;
-                        targetTextBox.SelectionStart = targetTextBox.Text.Length;
-                    }
-                };
-
-                ComboBoxCustomerNameSearch.SelectionChanged += (o, args) =>
-                {
-                    ComboBox comboBox = o as ComboBox;
-                    if (comboBox?.SelectedItem == null) return;
-                    comboBox.Tag = "Selection";
-                    DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByCustomer(((Customer)comboBox.SelectedItem).CustomerID));
-                    DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
-                };
-            };
-        }
+        //        ComboBoxCustomer.SelectionChanged += (o, args) =>
+        //        {
+        //            ComboBox comboBox = o as ComboBox;
+        //            if (comboBox?.SelectedItem == null) return;
+        //            comboBox.Tag = "Selection";
+        //        };
+        //    };
+        //}
+        #endregion
 
         private void DataGridProcessOrder_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -678,6 +621,53 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void CheckBoxContainFinish_Click(object sender, RoutedEventArgs e)
         {
             GetProcessOrderByFactoryAndStatus();
+        }
+
+        private void ComboBoxCustomer_KeyUp(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(cmb.Text)) return false;
+                else
+                {
+                    if (((Customer)o).Name.Contains(cmb.Text)) return true;
+                    else return false;
+                }
+            });
+
+            cmb.IsDropDownOpen = true;
+            itemsViewOriginal.Refresh();
+        }
+
+        private void ComboBoxCustomerNameSearch_KeyUp(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(cmb.Text)) return false;
+                else
+                {
+                    if (((Customer)o).Name.Contains(cmb.Text)) return true;
+                    else return false;
+                }
+            });
+
+            cmb.IsDropDownOpen = true;
+            itemsViewOriginal.Refresh();
+        }
+
+        private void ComboBoxCustomerNameSearch_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = sender as ComboBox;
+            if (comboBox?.SelectedItem == null) return;
+            comboBox.Tag = "Selection";
+            DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByCustomer(((Customer)comboBox.SelectedItem).CustomerID));
+            DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }
     }
 }
