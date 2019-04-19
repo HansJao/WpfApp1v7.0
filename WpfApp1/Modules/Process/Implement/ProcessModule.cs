@@ -57,7 +57,7 @@ namespace WpfApp1.Modules.Process.Implement
 
         public IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo)
         {
-            var result = ProcessOrderAdapter.GetProcessOrderColorFactoryShippingDetail(orderNo);
+            var result = ProcessOrderAdapter.GetProcessOrderColorFactoryShippingDetail(orderNo).OrderByDescending(o=>o.Status);
             return result;
         }
 

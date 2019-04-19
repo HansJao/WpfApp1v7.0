@@ -297,22 +297,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
         {
             IEnumerable<ProcessOrderColorFactoryShippingDetail> processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo);
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
-
-            DataGridOrderColorFactoryShippingDetail.UpdateLayout();
-
-            foreach (ProcessOrderColorFactoryShippingDetail item in DataGridOrderColorFactoryShippingDetail.ItemsSource)
-            {
-                DataGridRow row = DataGridOrderColorFactoryShippingDetail.ItemContainerGenerator.ContainerFromItem(item) as DataGridRow;
-
-                if (item.Status == ProcessOrderColorStatus.已出完)
-                {
-                    row.Background = Brushes.Gray;
-                }
-                else if (item.Status == ProcessOrderColorStatus.已完成)
-                {
-                    row.Background = Brushes.Pink;
-                }
-            }
         }
 
         private void SomeSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -668,6 +652,20 @@ namespace WpfApp1.Pages.ProcessOrderPages
             comboBox.Tag = "Selection";
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByCustomer(((Customer)comboBox.SelectedItem).CustomerID));
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
+        }
+
+        private void DataGridOrderColorFactoryShippingDetail_LoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            DataGridRow row = e.Row;
+            ProcessOrderColorFactoryShippingDetail item =(ProcessOrderColorFactoryShippingDetail)row.Item;
+            if (item.Status == ProcessOrderColorStatus.已出完)
+            {
+                row.Background = Brushes.Gray;
+            }
+            else if (item.Status == ProcessOrderColorStatus.已完成)
+            {
+                row.Background = Brushes.Pink;
+            }
         }
     }
 }
