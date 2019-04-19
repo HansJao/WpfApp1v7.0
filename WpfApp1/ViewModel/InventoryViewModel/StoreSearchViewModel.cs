@@ -16,7 +16,6 @@ using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.Modules.ExcelModule;
 using WpfApp1.Modules.ExcelModule.Implement;
 using WpfApp1.Utility;
-using static WpfApp1.Pages.StoreSearchPage;
 
 namespace WpfApp1.ViewModel.InventoryViewModel
 {

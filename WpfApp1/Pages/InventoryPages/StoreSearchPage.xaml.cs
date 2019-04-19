@@ -21,7 +21,7 @@ using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.Utility;
 
-namespace WpfApp1.Pages
+namespace WpfApp1.Pages.InvertoryPages
 {
     /// <summary>
     /// StoreSearchPage.xaml 的互動邏輯

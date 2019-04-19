@@ -239,7 +239,7 @@
     <Compile Include="Pages\ShippingPage.xaml.cs">
       <DependentUpon>ShippingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\StoreSearchPage.xaml.cs">
+    <Compile Include="Pages\InventoryPages\StoreSearchPage.xaml.cs">
       <DependentUpon>StoreSearchPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TrashSystemPages\FeatureSearchPage.xaml.cs">
@@ -370,7 +370,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\StoreSearchPage.xaml">
+    <Page Include="Pages\InventoryPages\StoreSearchPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
