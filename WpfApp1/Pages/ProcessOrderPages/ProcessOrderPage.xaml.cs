@@ -295,7 +295,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         public void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
         {
-            IEnumerable<ProcessOrderColorFactoryShippingDetail> processOrderColorFactoryShippingDetail = ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo);
+            ObservableCollection<ProcessOrderColorFactoryShippingDetail> processOrderColorFactoryShippingDetail = new ObservableCollection<ProcessOrderColorFactoryShippingDetail>(ProcessModule.GetProcessOrderColorFactoryShippingDetail(processOrderNo));
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
         }
 
