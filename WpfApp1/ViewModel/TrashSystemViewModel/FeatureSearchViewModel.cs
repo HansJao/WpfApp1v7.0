@@ -11,12 +11,23 @@ using WpfApp1.Command;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.TrashModule;
 using WpfApp1.Modules.TrashModule.Implement;
+using WpfApp1.Windows.TrashSystemWindows;
 
 namespace WpfApp1.ViewModel.TrashSystemViewModel
 {
     public class FeatureSearchViewModel : ViewModelBase
     {
         protected ITrashModule TrashModule { get; } = new TrashModule();
+
+        public ICommand DataGridDoubleClick { get { return new RelayCommand(DataGridDoubleClicExecute, CanExecute); } }
+
+        public TrashItem TrashItem { get; set; }
+
+        private void DataGridDoubleClicExecute()
+        {
+            CustomerOrderHistoryByFeatureDialog customerOrderHistoryByFeatureDialog = new CustomerOrderHistoryByFeatureDialog(TrashItem);
+            customerOrderHistoryByFeatureDialog.Show();
+        }
 
         private string _feature { get; set; }
         public string Feature

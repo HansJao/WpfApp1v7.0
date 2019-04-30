@@ -23,6 +23,12 @@
                 <DataGrid x:Name="DataGridItem" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
                 <Label Content="CUST.dbf"/>
                 <DataGrid x:Name="DataGridCust" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="PURC.dbf"/>
+                <DataGrid x:Name="DataGridPurc" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="PURCSUB.dbf"/>
+                <DataGrid x:Name="DataGridPurcsub" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
+                <Label Content="IN_CASH.dbf"/>
+                <DataGrid x:Name="DataGridInCash" HorizontalAlignment="Left" Height="200" VerticalAlignment="Top"/>
             </StackPanel>
         </Grid>
     </ScrollViewer>

@@ -103,6 +103,24 @@ namespace WpfApp1.Adapter.DBF
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
+        /// <summary>
+        /// 以布種取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="trashItem"></param>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetCustomerShippedListByFeature(TrashItem trashItem)
+        {
+            var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,CU.C_Name,INSub.Price FROM INVOSUB.dbf AS INSub
+                           INNER JOIN CUST.dbf AS CU ON CU.CARD_NO = INSub.C_01
+                           WHERE INSub.F_01 = @F_01 AND INSub.I_01 = @I_01";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@F_01", SqlDbType.NVarChar) { Value = trashItem.F_01 },
+                new SqlParameter("@I_01", SqlDbType.NVarChar) { Value = trashItem.I_01 }
+            };
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
 
     }
 }

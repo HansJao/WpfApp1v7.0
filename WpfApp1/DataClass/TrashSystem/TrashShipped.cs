@@ -21,5 +21,7 @@ namespace WpfApp1.DataClass.TrashSystem
         public string I_03 { get; set; }
         [Description("數量")]
         public double Quantity { get; set; }
+        [Description("單價")]
+        public double Price { get; set; }        
     }
 }

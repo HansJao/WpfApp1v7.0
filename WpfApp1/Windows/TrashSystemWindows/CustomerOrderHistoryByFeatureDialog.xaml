@@ -1,0 +1,33 @@
+﻿<Window x:Class="WpfApp1.Windows.TrashSystemWindows.CustomerOrderHistoryByFeatureDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1.Windows.TrashSystemWindows"
+        mc:Ignorable="d"
+        Title="{Binding Path=TrashItem.I_03}" Height="420" Width="220">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="工廠代號:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <Label Content="{Binding Path=TrashItem.F_01}" Width="100" Height="24" HorizontalAlignment="Left" />
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="貨        號:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <Label Content="{Binding Path=TrashItem.I_01}" Width="100" Height="24" HorizontalAlignment="Left" />
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="布種名稱:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <Label Content="{Binding Path=TrashItem.I_03}" Width="150" Height="24" HorizontalAlignment="Left" />
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding TrashCustomerShippeds}" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" AlternatingRowBackground="LightGray" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE,StringFormat=yyyyMMdd}"/>
+                    <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
+                    <DataGridTextColumn Header="單價" Binding="{Binding Price}"/>
+                    <DataGridTextColumn Header="客戶" Binding="{Binding C_Name}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>

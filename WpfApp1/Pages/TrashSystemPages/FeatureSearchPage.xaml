@@ -7,6 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="FeatureSearchPage"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.TrashSystemViewModel">
     <Page.DataContext>
         <viewModel:FeatureSearchViewModel/>
@@ -14,7 +15,12 @@
     <Grid>
         <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <DataGrid HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25">
+        <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding TrashItem}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding DataGridDoubleClick}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
             <DataGrid.Style>
                 <Style TargetType="DataGrid">
                     <Setter Property="AlternatingRowBackground" Value="LightCoral"/>

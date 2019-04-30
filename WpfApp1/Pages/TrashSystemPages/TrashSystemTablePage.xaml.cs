@@ -28,24 +28,39 @@ namespace WpfApp1.Pages.TrashSystemPages
             string databaseDirectory = AppSettingConfig.DbfFilePath();
 
             string invo = "INVO.dbf";
-            string invoSql = "SELECT * FROM " + invo;
+            string invoSql = "SELECT TOP 100 * FROM " + invo;
             DataTable invoDt = GetOleDbDbfDataTable(databaseDirectory, invoSql);
             DataGridInvo.ItemsSource = invoDt.DefaultView;
 
             string invosub = "INVOSUB.dbf";
-            string invosubSql = "SELECT * FROM " + invosub;//+ " where IN_DATE Between cDate('" + DateTime.Now.AddDays(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "') ";
+            string invosubSql = "SELECT TOP 100 * FROM " + invosub;//+ " where IN_DATE Between cDate('" + DateTime.Now.AddDays(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "') ";
             DataTable invosubDt = GetOleDbDbfDataTable(databaseDirectory, invosubSql);
             DataGridInvoSub.ItemsSource = invosubDt.DefaultView;
 
             string item = "ITEM.dbf";
-            string itemSql = "SELECT * FROM " + item;
+            string itemSql = "SELECT TOP 100 * FROM " + item;
             DataTable itemDt = GetOleDbDbfDataTable(databaseDirectory, itemSql);
             DataGridItem.ItemsSource = itemDt.DefaultView;
 
             string cust = "CUST.dbf";
-            string custoSql = "SELECT * FROM " + cust;
+            string custoSql = "SELECT TOP 100 * FROM " + cust;
             DataTable custDt = GetOleDbDbfDataTable(databaseDirectory, custoSql);
             DataGridCust.ItemsSource = custDt.DefaultView;
+
+            string purc = "PURC.dbf";
+            string purcSql = "SELECT TOP 100 * FROM " + purc;
+            DataTable purcDt = GetOleDbDbfDataTable(databaseDirectory, purcSql);
+            DataGridPurc.ItemsSource = purcDt.DefaultView;
+
+            string purcSub = "PURCSUB.dbf";
+            string purcSubSql = "SELECT TOP 100 * FROM " + purcSub;
+            DataTable purcSubDt = GetOleDbDbfDataTable(databaseDirectory, purcSubSql);
+            DataGridPurcsub.ItemsSource = purcSubDt.DefaultView;
+
+            string inCash = "IN_CASH.dbf";
+            string inCashSql = "SELECT * FROM " + inCash;
+            DataTable inCashDt = GetOleDbDbfDataTable(databaseDirectory, inCashSql);
+            DataGridInCash.ItemsSource = inCashDt.DefaultView;
         }
 
         private void ButtonExport_Click(object sender, RoutedEventArgs e)
