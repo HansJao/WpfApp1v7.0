@@ -109,7 +109,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     }
                     else if (cell.CellType == CellType.Numeric)
                     {
-                        return (T)Convert.ChangeType(string.Concat(cell.NumericCellValue," ~N"), typeof(T));
+                        return (T)Convert.ChangeType(cell.NumericCellValue.ToString(), typeof(T));
                     }
                     else
                     {
