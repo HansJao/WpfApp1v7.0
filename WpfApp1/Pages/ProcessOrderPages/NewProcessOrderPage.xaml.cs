@@ -30,8 +30,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
 
-
-
         private IWorkbook workbook = null;  //新建IWorkbook對象
         public NewProcessOrderPage()
         {

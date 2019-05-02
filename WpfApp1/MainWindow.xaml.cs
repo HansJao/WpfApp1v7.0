@@ -24,11 +24,11 @@ using WpfApp1.Pages.CustomerPages;
 using WpfApp1.Pages.FabricPages;
 using WpfApp1.Pages.FactoryPages;
 using WpfApp1.Pages.ProcessOrderPages;
-using WpfApp1.Pages.InvertoryPages;
 using WpfApp1.Pages.TrashSystemPages;
 using WpfApp1.ViewModel.InventoryViewModel;
 using WpfApp1.ViewModel.ProcessOrderViewModel;
 using WpfApp1.Windows;
+using WpfApp1.Pages.InventoryPages;
 
 //using Microsoft.Office.Interop.Excel;
 
@@ -129,6 +129,9 @@ namespace WpfApp1
         {
             this.MainFrame.NavigationService.Navigate(new MalFunctionPage());
         }
-        
+        private void ButtonInventoryRecordCompareFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.MainFrame.NavigationService.Navigate(new InventoryRecordComparePage());
+        }
     }
 }

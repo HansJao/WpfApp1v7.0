@@ -24,6 +24,10 @@ namespace WpfApp1.Utility
             {
                 return (int)value == 0 ? "" : value;
             }
+            if (value is double)
+            {
+                return (double)value == 0 ? "" : value;
+            }
             return string.Empty;
         }
 

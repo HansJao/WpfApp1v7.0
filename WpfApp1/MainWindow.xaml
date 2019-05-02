@@ -12,6 +12,7 @@
                 <MenuItem Header="庫存管理">
                     <MenuItem Header="庫存查詢" Click="ButtonStoreSearchFunction_Click"/>
                     <MenuItem Header="庫存盤點表匯出" Click="ButtonStorageInventroyExportFunction_Click"/>
+                    <MenuItem Header="庫存歷史紀錄" Click="ButtonInventoryRecordCompareFunction_Click"/>
                 </MenuItem>
             </Menu>
             <!--<Button x:Name="ButtonStoreSearchFunction" Content="庫存查詢" Click="ButtonStoreSearchFunction_Click" />-->

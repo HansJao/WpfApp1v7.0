@@ -1,10 +1,5 @@
-﻿using NPOI.SS.UserModel;
-using NPOI.SS.Util;
-using NPOI.XSSF.UserModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,20 +12,19 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WpfApp1.DataClass.Enumeration;
-using WpfApp1.DataClass.StoreSearch;
-using WpfApp1.Utility;
+using WpfApp1.ViewModel.InventoryViewModel;
 
 namespace WpfApp1.Pages.InventoryPages
 {
     /// <summary>
-    /// StoreSearchPage.xaml 的互動邏輯
+    /// InventoryRecordCompare.xaml 的互動邏輯
     /// </summary>
-    public partial class StoreSearchPage : Page
+    public partial class InventoryRecordComparePage : Page
     {
-        public StoreSearchPage()
+        public InventoryRecordComparePage()
         {
             InitializeComponent();
+            this.DataContext = new InventoryRecordCompareViewModel();
         }
     }
 }

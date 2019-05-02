@@ -154,6 +154,7 @@
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\TextileInventory.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />
     <Compile Include="DataClass\Fabric\IngredientGroupInfo.cs" />
     <Compile Include="DataClass\Fabric\MerchantYarnPrice.cs" />
@@ -224,6 +225,9 @@
     <Compile Include="Pages\FactoryPages\FactoryListPage.xaml.cs">
       <DependentUpon>FactoryListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\InventoryPages\InventoryRecordComparePage.xaml.cs">
+      <DependentUpon>InventoryRecordComparePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\ProcessOrderPages\NewProcessOrderPage.xaml.cs">
       <DependentUpon>NewProcessOrderPage.xaml</DependentUpon>
     </Compile>
@@ -262,6 +266,7 @@
     <Compile Include="ViewModel\FabricViewModel\FabricViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\YarnPriceViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
+    <Compile Include="ViewModel\InventoryViewModel\InventoryRecordCompareViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProcessOrderViewModel\ExportProcessOrderRecordViewModel.cs" />
@@ -351,6 +356,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\FactoryPages\FactoryListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InventoryPages\InventoryRecordComparePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

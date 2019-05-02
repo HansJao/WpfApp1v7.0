@@ -69,6 +69,10 @@ namespace WpfApp1
         {
             return getAppSettings("ProcessOrderRecordDateFileName");
         }
+        public static string InventoryHistoryRecordFilePath()
+        {
+            return getAppSettings("InventoryHistoryRecordFilePath");
+        }
 
         #region Helper
         /// <summary>
