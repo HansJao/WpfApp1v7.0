@@ -16,6 +16,7 @@ namespace WpfApp1.DataClass.Enumeration
 
         public enum ExcelInventoryColumnIndexEnum
         {
+            Index = 0,
             ColorName = 1,
             StorageSpaces = 2,
             Inventory = 3,

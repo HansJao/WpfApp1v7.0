@@ -45,21 +45,25 @@
                     </i:Interaction.Triggers>
                 </ComboBox>
             </StackPanel>
-            <DataGrid ItemsSource="{Binding TextileColorList}"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False">               
+            <DataGrid ItemsSource="{Binding TextileColorList}"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False">
+                <DataGrid.Resources>
+                    <local:BindingProxy x:Key="proxy" Data="{Binding}" />
+                </DataGrid.Resources>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="{Binding Data.Textile, Source={StaticResource proxy}}" Binding="{Binding Index}"/>
                     <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
                     <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
                     <DataGridTextColumn Header="庫存量" Binding="{Binding Inventory}"/>
                     <DataGridTextColumn Header="不同缸數量" Binding="{Binding DifferentCylinder}" Width="50"/>
-                    <DataGridTextColumn Header="出貨1" Binding="{Binding ShippingDate1,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨2" Binding="{Binding ShippingDate2,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨3" Binding="{Binding ShippingDate3,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨4" Binding="{Binding ShippingDate4,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨5" Binding="{Binding ShippingDate5,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨6" Binding="{Binding ShippingDate6,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨7" Binding="{Binding ShippingDate7,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨8" Binding="{Binding ShippingDate8,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                    <DataGridTextColumn Header="出貨9" Binding="{Binding ShippingDate9,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate1, Source={StaticResource proxy}}" Binding="{Binding ShippingDate1,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate2, Source={StaticResource proxy}}" Binding="{Binding ShippingDate2,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate3, Source={StaticResource proxy}}" Binding="{Binding ShippingDate3,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate4, Source={StaticResource proxy}}" Binding="{Binding ShippingDate4,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate5, Source={StaticResource proxy}}" Binding="{Binding ShippingDate5,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate6, Source={StaticResource proxy}}" Binding="{Binding ShippingDate6,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate7, Source={StaticResource proxy}}" Binding="{Binding ShippingDate7,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate8, Source={StaticResource proxy}}" Binding="{Binding ShippingDate8,Converter={StaticResource ZeroToEmptyConverter}}"/>
+                    <DataGridTextColumn Header="{Binding Data.ShippingDate9, Source={StaticResource proxy}}" Binding="{Binding ShippingDate9,Converter={StaticResource ZeroToEmptyConverter}}"/>
                     <DataGridTextColumn Header="織廠" Binding="{Binding TextileFactory}"/>
                     <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory}"/>
                     <DataGridTextColumn Header="計算庫存量" Binding="{Binding CountInventory}" Width="50"/>

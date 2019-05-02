@@ -23,6 +23,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public IEnumerable<TextileColorInventory> TextileColorList { get; set; }
         private void ComboBoxTextileSelectionChangedExecute()
         {
+            if (string.IsNullOrEmpty(Textile)) return;
+            RaisePropertyChanged("Textile");
             if (!_workbookDictionary.TryGetValue(FileName, out IWorkbook workbook))
                 return;
 
@@ -37,17 +39,14 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     break;
                 }
                 var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
-                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false) 
-                    ? "" 
+                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false)
+                    ? ""
                     : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString();
-                //double inventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory) == null
-                //    ? 0
-                //    : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory).CellType == CellType.String
-                //        ? 999
-                //        : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory).NumericCellValue;
+
                 double inventory = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
                 selectedTextiles.Add(new TextileColorInventory
                 {
+                    Index = CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
                     ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
                     StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
                     Inventory = inventory,
@@ -74,17 +73,20 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
         private T CheckExcelCellType<T>(CellType cellType, ICell cell)
         {
-            if (cell == null) return default(T);
             switch (cellType)
             {
                 case CellType.Unknown:
                     return default(T);
                 case CellType.Numeric:
-                    if (cell.CellType == cellType)
+                    if (cell == null)
+                    {
+                        return (T)Convert.ChangeType(-1, typeof(T));
+                    }
+                    else if (cell.CellType == cellType)
                     {
                         return (T)Convert.ChangeType(cell.NumericCellValue, typeof(T));
                     }
-                    else if(cell.CellType == CellType.Blank)
+                    else if (cell.CellType == CellType.Blank)
                     {
                         return default(T);
                     }
@@ -93,7 +95,11 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         return (T)Convert.ChangeType(999, typeof(T));
                     }
                 case CellType.String:
-                    if (cell.CellType == cellType)
+                    if (cell == null)
+                    {
+                        return (T)Convert.ChangeType("null", typeof(T));
+                    }
+                    else if (cell.CellType == cellType)
                     {
                         return (T)Convert.ChangeType(cell.StringCellValue, typeof(T)); ;
                     }
@@ -101,9 +107,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     {
                         return default(T);
                     }
+                    else if (cell.CellType == CellType.Numeric)
+                    {
+                        return (T)Convert.ChangeType(string.Concat(cell.NumericCellValue," ~N"), typeof(T));
+                    }
                     else
                     {
-                        return (T)Convert.ChangeType("NotString", typeof(T)); ;
+                        return (T)Convert.ChangeType("Unknown", typeof(T));
                     }
                 case CellType.Formula:
                     return default(T);
@@ -116,8 +126,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 default:
                     return default(T);
             }
-
-
         }
 
         private void ComboBoxTextileKeyUpExecute()
@@ -156,6 +164,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ISheet sheet = Workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                     textileList.Add(sheet.SheetName);
                 }
+                GetShippingDate(Workbook.GetSheetAt(1));
                 _workbookDictionary.Add(FileName, Workbook);
             }
             else
@@ -165,9 +174,42 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ISheet sheet = dictionaryWorkbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                     textileList.Add(sheet.SheetName);
                 }
+                GetShippingDate(dictionaryWorkbook.GetSheetAt(1));
             }
             TextileList = textileList;
             RaisePropertyChanged("TextileList");
+        }
+
+        public string ShippingDate1 { get; set; }
+        public string ShippingDate2 { get; set; }
+        public string ShippingDate3 { get; set; }
+        public string ShippingDate4 { get; set; }
+        public string ShippingDate5 { get; set; }
+        public string ShippingDate6 { get; set; }
+        public string ShippingDate7 { get; set; }
+        public string ShippingDate8 { get; set; }
+        public string ShippingDate9 { get; set; }
+        public void GetShippingDate(ISheet sheet)
+        {
+            ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1));
+            RaisePropertyChanged("ShippingDate1");
+            ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2));
+            RaisePropertyChanged("ShippingDate2");
+            ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3));
+            RaisePropertyChanged("ShippingDate3");
+            ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4));
+            RaisePropertyChanged("ShippingDate4");
+            ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5));
+            RaisePropertyChanged("ShippingDate5");
+            ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6));
+            RaisePropertyChanged("ShippingDate6");
+            ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7));
+            RaisePropertyChanged("ShippingDate7");
+            ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8));
+            RaisePropertyChanged("ShippingDate8");
+            ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9));
+            RaisePropertyChanged("ShippingDate9");
+
         }
 
         public IEnumerable<string> InventoryRecordFileList { get; set; }

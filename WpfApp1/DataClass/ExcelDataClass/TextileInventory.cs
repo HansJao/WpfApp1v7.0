@@ -8,6 +8,7 @@ namespace WpfApp1.DataClass.ExcelDataClass
 {
     public class TextileColorInventory
     {
+        public string Index { get; set; }
         public string ColorName { get; set; }
         public string StorageSpaces { get; set; }
         public double Inventory { get; set; }
