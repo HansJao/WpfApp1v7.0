@@ -11,6 +11,7 @@ using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.Windows.InventoryWindows;
 
 namespace WpfApp1.ViewModel.InventoryViewModel
 {
@@ -19,16 +20,27 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public ICommand ComboBoxSelectionChanged { get { return new RelayCommand(ComboBoxSelectionChangedExecute, CanExecute); } }
         public ICommand ComboBoxTextileKeyUp { get { return new RelayCommand(ComboBoxTextileKeyUpExecute, CanExecute); } }
         public ICommand ComboBoxTextileSelectionChanged { get { return new RelayCommand(ComboBoxTextileSelectionChangedExecute, CanExecute); } }
+        public ICommand InventoryDataGridDoubleClick { get { return new RelayCommand(InventoryDataGridDoubleClickExecute, CanExecute); } }
+
+        private void InventoryDataGridDoubleClickExecute()
+        {
+            List<TextileColorInventory> textileColorInventorys = new List<TextileColorInventory>
+            {
+                TextileColor
+            };
+            InventoryListDialog inventoryListDialog = new InventoryListDialog(FileName, TextileInventoryHeader, textileColorInventorys);
+            inventoryListDialog.Show();
+        }
 
         public IEnumerable<TextileColorInventory> TextileColorList { get; set; }
+        public TextileColorInventory TextileColor { get; set; }
         private void ComboBoxTextileSelectionChangedExecute()
         {
-            if (string.IsNullOrEmpty(Textile)) return;
-            RaisePropertyChanged("Textile");
+            if (string.IsNullOrEmpty(TextileInventoryHeader.Textile)) return;
             if (!_workbookDictionary.TryGetValue(FileName, out IWorkbook workbook))
                 return;
 
-            ISheet sheet = workbook.GetSheet(Textile);  //獲取工作表
+            ISheet sheet = workbook.GetSheet(TextileInventoryHeader.Textile);  //獲取工作表
             List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
             IRow row;
             for (int i = 1; i <= sheet.LastRowNum; i++)
@@ -149,10 +161,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         private Dictionary<string, IWorkbook> _workbookDictionary { get; set; } = new Dictionary<string, IWorkbook>();
         public IEnumerable<string> TextileList { get; set; }
         public string TextileText { get; set; }
-        public string Textile { get; set; }
         public string FileName { get; set; }
         private void ComboBoxSelectionChangedExecute()
         {
+            TextileColorList = null;
+            TextileList = null;
+            RaisePropertyChanged("TextileColorList");
+            RaisePropertyChanged("TextileList");
             List<string> textileList = new List<string>();
             if (!_workbookDictionary.TryGetValue(FileName, out IWorkbook dictionaryWorkbook))
             {
@@ -179,37 +194,22 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             TextileList = textileList;
             RaisePropertyChanged("TextileList");
         }
-
-        public string ShippingDate1 { get; set; }
-        public string ShippingDate2 { get; set; }
-        public string ShippingDate3 { get; set; }
-        public string ShippingDate4 { get; set; }
-        public string ShippingDate5 { get; set; }
-        public string ShippingDate6 { get; set; }
-        public string ShippingDate7 { get; set; }
-        public string ShippingDate8 { get; set; }
-        public string ShippingDate9 { get; set; }
+        public TextileInventoryHeader TextileInventoryHeader { get; set; }
         public void GetShippingDate(ISheet sheet)
         {
-            ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1));
-            RaisePropertyChanged("ShippingDate1");
-            ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2));
-            RaisePropertyChanged("ShippingDate2");
-            ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3));
-            RaisePropertyChanged("ShippingDate3");
-            ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4));
-            RaisePropertyChanged("ShippingDate4");
-            ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5));
-            RaisePropertyChanged("ShippingDate5");
-            ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6));
-            RaisePropertyChanged("ShippingDate6");
-            ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7));
-            RaisePropertyChanged("ShippingDate7");
-            ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8));
-            RaisePropertyChanged("ShippingDate8");
-            ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9));
-            RaisePropertyChanged("ShippingDate9");
-
+            TextileInventoryHeader = new TextileInventoryHeader
+            {
+                ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
+            };
+            RaisePropertyChanged("TextileInventoryHeader");
         }
 
         public IEnumerable<string> InventoryRecordFileList { get; set; }

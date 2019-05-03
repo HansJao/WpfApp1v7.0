@@ -7,7 +7,8 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="InventoryRecordCompare"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"      
-      xmlns:local="clr-namespace:WpfApp1.Utility">
+      xmlns:local="clr-namespace:WpfApp1.Utility"
+      xmlns:commonControl="clr-namespace:WpfApp1.Utility.CustomController">
     <Page.Resources>
         <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />
         <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -34,7 +35,7 @@
             </StackPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Label Content=" 布  種  清  單 :"/>
-                <ComboBox ItemsSource="{Binding TextileList}" Text="{Binding TextileText}" SelectedItem="{Binding Textile}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
+                <ComboBox ItemsSource="{Binding TextileList}" Text="{Binding TextileText}" SelectedItem="{Binding TextileInventoryHeader.Textile}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="KeyUp">
                             <i:InvokeCommandAction Command="{Binding ComboBoxTextileKeyUp}"/>
@@ -45,7 +46,9 @@
                     </i:Interaction.Triggers>
                 </ComboBox>
             </StackPanel>
-            <DataGrid ItemsSource="{Binding TextileColorList}"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False" AlternatingRowBackground="LightGray">
+            <commonControl:InventoryDataGrid>                
+            </commonControl:InventoryDataGrid>
+            <!--<DataGrid ItemsSource="{Binding TextileColorList}"  AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" CanUserAddRows="False" AlternatingRowBackground="LightGray">
                 <DataGrid.Resources>
                     <local:BindingProxy x:Key="proxy" Data="{Binding}" />
                 </DataGrid.Resources>
@@ -71,7 +74,7 @@
                     <DataGridTextColumn Header="清點時間" Binding="{Binding CheckDate}"/>
                     <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
                 </DataGrid.Columns>
-            </DataGrid>
+            </DataGrid>-->
         </DockPanel>
 
     </Grid>

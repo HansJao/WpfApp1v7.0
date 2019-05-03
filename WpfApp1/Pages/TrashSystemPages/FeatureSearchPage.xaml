@@ -15,7 +15,7 @@
     <Grid>
         <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
         <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding TrashItem}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25">
+        <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding TrashItem}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding DataGridDoubleClick}"/>
