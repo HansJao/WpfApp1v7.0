@@ -35,7 +35,7 @@
             </StackPanel>
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Label Content=" 布  種  清  單 :"/>
-                <ComboBox ItemsSource="{Binding TextileList}" Text="{Binding TextileText}" SelectedItem="{Binding TextileInventoryHeader.Textile}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
+                <ComboBox ItemsSource="{Binding TextileList}" Text="{Binding TextileText}" SelectedItem="{Binding SelectedTextile}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="KeyUp">
                             <i:InvokeCommandAction Command="{Binding ComboBoxTextileKeyUp}"/>

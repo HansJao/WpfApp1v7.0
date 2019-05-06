@@ -22,6 +22,14 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public ICommand ComboBoxTextileSelectionChanged { get { return new RelayCommand(ComboBoxTextileSelectionChangedExecute, CanExecute); } }
         public ICommand InventoryDataGridDoubleClick { get { return new RelayCommand(InventoryDataGridDoubleClickExecute, CanExecute); } }
 
+        public IEnumerable<string> InventoryRecordFileList { get; set; }
+        public InventoryRecordCompareViewModel()
+        {
+            IEnumerable<string> existsFileName = Directory.GetFiles(AppSettingConfig.InventoryHistoryRecordFilePath(), "*.xlsx").Select(System.IO.Path.GetFileName).OrderByDescending(o => o);
+            InventoryRecordFileList = existsFileName;
+        }
+
+        public TextileColorInventory TextileColor { get; set; }
         private void InventoryDataGridDoubleClickExecute()
         {
             List<TextileColorInventory> textileColorInventorys = new List<TextileColorInventory>
@@ -33,14 +41,14 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         }
 
         public IEnumerable<TextileColorInventory> TextileColorList { get; set; }
-        public TextileColorInventory TextileColor { get; set; }
         private void ComboBoxTextileSelectionChangedExecute()
         {
-            if (string.IsNullOrEmpty(TextileInventoryHeader.Textile)) return;
+            if (string.IsNullOrEmpty(SelectedTextile)) return;
             if (!_workbookDictionary.TryGetValue(FileName, out IWorkbook workbook))
                 return;
-
-            ISheet sheet = workbook.GetSheet(TextileInventoryHeader.Textile);  //獲取工作表
+            TextileInventoryHeader.Textile = SelectedTextile;
+            RaisePropertyChanged("TextileInventoryHeader");
+            ISheet sheet = workbook.GetSheet(SelectedTextile);  //獲取工作表
             List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
             IRow row;
             for (int i = 1; i <= sheet.LastRowNum; i++)
@@ -162,6 +170,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public IEnumerable<string> TextileList { get; set; }
         public string TextileText { get; set; }
         public string FileName { get; set; }
+
         private void ComboBoxSelectionChangedExecute()
         {
             TextileColorList = null;
@@ -195,6 +204,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             RaisePropertyChanged("TextileList");
         }
         public TextileInventoryHeader TextileInventoryHeader { get; set; }
+        public string SelectedTextile { get; set; }
         public void GetShippingDate(ISheet sheet)
         {
             TextileInventoryHeader = new TextileInventoryHeader
@@ -210,13 +220,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
             };
             RaisePropertyChanged("TextileInventoryHeader");
-        }
-
-        public IEnumerable<string> InventoryRecordFileList { get; set; }
-        public InventoryRecordCompareViewModel()
-        {
-            IEnumerable<string> existsFileName = Directory.GetFiles(AppSettingConfig.InventoryHistoryRecordFilePath(), "*.xlsx").Select(System.IO.Path.GetFileName).OrderByDescending(o => o);
-            InventoryRecordFileList = existsFileName;
         }
     }
 }
