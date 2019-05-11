@@ -162,6 +162,7 @@
     <Compile Include="DataClass\Fabric\MerchantYarnSpecification.cs" />
     <Compile Include="DataClass\Fabric\ProcessSequenceDetail.cs" />
     <Compile Include="DataClass\Fabric\SpecificationYarnPrice.cs" />
+    <Compile Include="DataClass\Fabric\TextileNameMapping.cs" />
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderCustomerRelate.cs" />

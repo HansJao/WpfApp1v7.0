@@ -11,12 +11,16 @@ using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.Modules.ExcelModule;
+using WpfApp1.Modules.ExcelModule.Implement;
 using WpfApp1.Windows.InventoryWindows;
 
 namespace WpfApp1.ViewModel.InventoryViewModel
 {
     public class InventoryRecordCompareViewModel : ViewModelBase
     {
+        protected IExcelModule ExcelModule { get; } = new ExcelModule();
+
         public ICommand ComboBoxSelectionChanged { get { return new RelayCommand(ComboBoxSelectionChangedExecute, CanExecute); } }
         public ICommand ComboBoxTextileKeyUp { get { return new RelayCommand(ComboBoxTextileKeyUpExecute, CanExecute); } }
         public ICommand ComboBoxTextileSelectionChanged { get { return new RelayCommand(ComboBoxTextileSelectionChangedExecute, CanExecute); } }
@@ -63,26 +67,26 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ? ""
                     : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString();
 
-                double inventory = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
+                double inventory = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
                 selectedTextiles.Add(new TextileColorInventory
                 {
-                    Index = CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
+                    Index = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
                     ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
                     StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
                     Inventory = inventory,
-                    DifferentCylinder = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder)),
-                    ShippingDate1 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
-                    ShippingDate2 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
-                    ShippingDate3 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
-                    ShippingDate4 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
-                    ShippingDate5 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
-                    ShippingDate6 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
-                    ShippingDate7 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
-                    ShippingDate8 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
-                    ShippingDate9 = CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9)),
+                    DifferentCylinder = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder)),
+                    ShippingDate1 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                    ShippingDate2 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                    ShippingDate3 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                    ShippingDate4 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                    ShippingDate5 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                    ShippingDate6 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                    ShippingDate7 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                    ShippingDate8 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                    ShippingDate9 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9)),
                     CountInventory = cellValue,
-                    IsChecked = CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.IsChecked)),
-                    CheckDate = CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate)),
+                    IsChecked = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.IsChecked)),
+                    CheckDate = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate)),
                     ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
                     Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
                 });
@@ -91,62 +95,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             RaisePropertyChanged("TextileColorList");
         }
 
-        private T CheckExcelCellType<T>(CellType cellType, ICell cell)
-        {
-            switch (cellType)
-            {
-                case CellType.Unknown:
-                    return default(T);
-                case CellType.Numeric:
-                    if (cell == null)
-                    {
-                        return (T)Convert.ChangeType(-1, typeof(T));
-                    }
-                    else if (cell.CellType == cellType)
-                    {
-                        return (T)Convert.ChangeType(cell.NumericCellValue, typeof(T));
-                    }
-                    else if (cell.CellType == CellType.Blank)
-                    {
-                        return default(T);
-                    }
-                    else
-                    {
-                        return (T)Convert.ChangeType(999, typeof(T));
-                    }
-                case CellType.String:
-                    if (cell == null)
-                    {
-                        return (T)Convert.ChangeType("null", typeof(T));
-                    }
-                    else if (cell.CellType == cellType)
-                    {
-                        return (T)Convert.ChangeType(cell.StringCellValue, typeof(T)); ;
-                    }
-                    else if (cell.CellType == CellType.Blank)
-                    {
-                        return default(T);
-                    }
-                    else if (cell.CellType == CellType.Numeric)
-                    {
-                        return (T)Convert.ChangeType(cell.NumericCellValue.ToString(), typeof(T));
-                    }
-                    else
-                    {
-                        return (T)Convert.ChangeType("Unknown", typeof(T));
-                    }
-                case CellType.Formula:
-                    return default(T);
-                case CellType.Blank:
-                    return default(T);
-                case CellType.Boolean:
-                    return default(T);
-                case CellType.Error:
-                    return default(T);
-                default:
-                    return default(T);
-            }
-        }
+
 
         private void ComboBoxTextileKeyUpExecute()
         {
@@ -180,16 +129,11 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             List<string> textileList = new List<string>();
             if (!_workbookDictionary.TryGetValue(FileName, out IWorkbook dictionaryWorkbook))
             {
-                string fileName = string.Concat(AppSettingConfig.InventoryHistoryRecordFilePath(), "/", FileName);
-                FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                IWorkbook Workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-                for (int sheetCount = 1; sheetCount < Workbook.NumberOfSheets; sheetCount++)
-                {
-                    ISheet sheet = Workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
-                    textileList.Add(sheet.SheetName);
-                }
-                GetShippingDate(Workbook.GetSheetAt(1));
-                _workbookDictionary.Add(FileName, Workbook);
+                string fileNamePath = string.Concat(AppSettingConfig.InventoryHistoryRecordFilePath(), "/", FileName);
+                Tuple<List<string>, IWorkbook> tuple = ExcelModule.GetExcelWorkbook(fileNamePath);
+                TextileList = tuple.Item1;
+                GetShippingDate(tuple.Item2.GetSheetAt(1));
+                _workbookDictionary.Add(FileName, tuple.Item2);
             }
             else
             {
@@ -198,27 +142,16 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     ISheet sheet = dictionaryWorkbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                     textileList.Add(sheet.SheetName);
                 }
+                TextileList = textileList;
                 GetShippingDate(dictionaryWorkbook.GetSheetAt(1));
             }
-            TextileList = textileList;
             RaisePropertyChanged("TextileList");
         }
         public TextileInventoryHeader TextileInventoryHeader { get; set; }
         public string SelectedTextile { get; set; }
         public void GetShippingDate(ISheet sheet)
         {
-            TextileInventoryHeader = new TextileInventoryHeader
-            {
-                ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
-                ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
-                ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
-                ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
-                ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
-                ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
-                ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
-                ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
-                ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
-            };
+            TextileInventoryHeader = ExcelModule.GetShippingDate(sheet);
             RaisePropertyChanged("TextileInventoryHeader");
         }
     }

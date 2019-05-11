@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -12,15 +16,20 @@ using System.Windows.Media;
 using WpfApp1.DataClass.Entity;
 using WpfApp1.DataClass.Entity.ProcessOrderFile;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.ProcessOrder;
 using WpfApp1.Modules.CustomerModule;
 using WpfApp1.Modules.CustomerModule.Implement;
+using WpfApp1.Modules.ExcelModule;
+using WpfApp1.Modules.ExcelModule.Implement;
 using WpfApp1.Modules.FactoryModule;
 using WpfApp1.Modules.FactoryModule.Implement;
 using WpfApp1.Modules.Process;
 using WpfApp1.Modules.Process.Implement;
 using WpfApp1.Utility;
 using WpfApp1.Windows;
+using WpfApp1.Windows.InventoryWindows;
 using WpfApp1.Windows.ProcessWindows;
 
 namespace WpfApp1.Pages.ProcessOrderPages
@@ -136,6 +145,58 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
             DataGridFactoryShipping.ItemsSource = null;
             DataGridProcessOrderFlowDateDetail.ItemsSource = null;
+
+            if (CheckboxDisplayInventory.IsChecked ?? false)
+            {
+                var textileNameMapping = TextileNameMappings.ToList().Find(f => f.ProcessOrder.Contains(processOrder.Fabric));
+
+                List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
+
+                foreach (var item in textileNameMapping.Inventory)
+                {
+                    ISheet sheet = Workbook.GetSheet(item);  //獲取工作表
+                    if (sheet == null) continue;
+                    IRow row;
+
+                    for (int i = 1; i <= sheet.LastRowNum; i++)
+                    {
+                        row = sheet.GetRow(i);
+                        if (row == null)
+                        {
+                            break;
+                        }
+                        var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
+                        var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false)
+                            ? ""
+                            : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString();
+
+                        double inventory = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
+                        selectedTextiles.Add(new TextileColorInventory
+                        {
+                            Index = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
+                            ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                            StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                            Inventory = inventory,
+                            DifferentCylinder = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder)),
+                            ShippingDate1 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                            ShippingDate2 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                            ShippingDate3 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                            ShippingDate4 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                            ShippingDate5 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                            ShippingDate6 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                            ShippingDate7 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                            ShippingDate8 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                            ShippingDate9 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9)),
+                            CountInventory = cellValue,
+                            IsChecked = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.IsChecked)),
+                            CheckDate = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate)),
+                            ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
+                            Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
+                        });
+                    }
+                }
+                InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), null, selectedTextiles);
+            }
         }
 
         private void ButtonDeleteOrder_Click(object sender, RoutedEventArgs e)
@@ -657,7 +718,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void DataGridOrderColorFactoryShippingDetail_LoadingRow(object sender, DataGridRowEventArgs e)
         {
             DataGridRow row = e.Row;
-            ProcessOrderColorFactoryShippingDetail item =(ProcessOrderColorFactoryShippingDetail)row.Item;
+            ProcessOrderColorFactoryShippingDetail item = (ProcessOrderColorFactoryShippingDetail)row.Item;
             if (item.Status == ProcessOrderColorStatus.已出完)
             {
                 row.Background = Brushes.Gray;
@@ -665,6 +726,44 @@ namespace WpfApp1.Pages.ProcessOrderPages
             else if (item.Status == ProcessOrderColorStatus.已完成)
             {
                 row.Background = Brushes.Pink;
+            }
+        }
+
+        protected IExcelModule ExcelModule { get; } = new ExcelModule();
+
+        private IWorkbook Workbook;
+        private InventoryListDialog InventoryListDialog;
+        private IEnumerable<TextileNameMapping> TextileNameMappings { get; set; }
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            if (checkBox.IsChecked ?? false)
+            {
+                string fileNamePath = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+                Tuple<List<string>, IWorkbook> tuple = ExcelModule.GetExcelWorkbook(fileNamePath);
+                TextileInventoryHeader textileInventoryHeader = ExcelModule.GetShippingDate(tuple.Item2.GetSheetAt(1));
+                Workbook = tuple.Item2;
+                Window parentWindow = Window.GetWindow(this);
+                InventoryListDialog = new InventoryListDialog(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, null)
+                {
+                    Owner = Window.GetWindow(this),
+                    Top = parentWindow.Top+parentWindow.Height,
+                    Left = parentWindow.Left
+                };
+                InventoryListDialog.Show();
+
+                var textileNameMappingFilePath = string.Concat(AppSettingConfig.TextileNameMappingFilePath());
+                //this code segment read data from the file.
+                FileStream fs2 = new FileStream(textileNameMappingFilePath, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(fs2);
+                var cacheJson = reader.ReadToEnd();
+                TextileNameMappings = JsonConvert.DeserializeObject<IEnumerable<TextileNameMapping>>(cacheJson);
+                reader.Close();
+            }
+            else
+            {
+                Workbook = null;
+                InventoryListDialog.Close();
             }
         }
     }

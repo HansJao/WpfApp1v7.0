@@ -21,15 +21,24 @@ namespace WpfApp1.Windows.InventoryWindows
     /// </summary>
     public partial class InventoryListDialog : Window
     {
+        public InventoryListViewModel InventoryListViewModel;
         public InventoryListDialog(string fileName, TextileInventoryHeader textileInventoryHeader, IEnumerable<TextileColorInventory> textileColorInventoryList)
         {
             InitializeComponent();
-            this.DataContext = new InventoryListViewModel()
-            {
-                FileName = fileName,
-                TextileColorList = textileColorInventoryList,
-                TextileInventoryHeader = textileInventoryHeader
-            };
+            InventoryListViewModel = new InventoryListViewModel()
+             {
+                 FileName = fileName,
+                 TextileColorList = textileColorInventoryList,
+                 TextileInventoryHeader = textileInventoryHeader
+             };
+            this.DataContext = InventoryListViewModel;
+        }
+
+        public void ChangeDataContext(string fileName, TextileInventoryHeader textileInventoryHeader, IEnumerable<TextileColorInventory> textileColorInventoryList)
+        {
+            InventoryListViewModel inventoryListViewModel =  this.DataContext as InventoryListViewModel;
+            inventoryListViewModel.TextileColorList = textileColorInventoryList;
+            inventoryListViewModel.Change();
         }
     }
 }

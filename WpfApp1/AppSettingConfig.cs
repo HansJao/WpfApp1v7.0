@@ -73,6 +73,10 @@ namespace WpfApp1
         {
             return getAppSettings("InventoryHistoryRecordFilePath");
         }
+        public static string TextileNameMappingFilePath()
+        {
+            return getAppSettings("TextileNameMappingFilePath");
+        }
 
         #region Helper
         /// <summary>

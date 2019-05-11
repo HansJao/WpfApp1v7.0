@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.Utility;
 
@@ -45,7 +46,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
                         break;
                     }
                 }
-             
+
                 var colorList = new List<StoreData>();
                 for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
@@ -96,6 +97,95 @@ namespace WpfApp1.Modules.ExcelModule.Implement
                 }
             }
             return list;
+        }
+
+        public TextileInventoryHeader GetShippingDate(ISheet sheet)
+        {
+            TextileInventoryHeader TextileInventoryHeader = new TextileInventoryHeader
+            {
+                ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
+            };
+            return TextileInventoryHeader;
+        }
+
+        public T CheckExcelCellType<T>(CellType cellType, ICell cell)
+        {
+            switch (cellType)
+            {
+                case CellType.Unknown:
+                    return default(T);
+                case CellType.Numeric:
+                    if (cell == null)
+                    {
+                        return (T)Convert.ChangeType(-1, typeof(T));
+                    }
+                    else if (cell.CellType == cellType)
+                    {
+                        return (T)Convert.ChangeType(cell.NumericCellValue, typeof(T));
+                    }
+                    else if (cell.CellType == CellType.Blank)
+                    {
+                        return default(T);
+                    }
+                    else
+                    {
+                        return (T)Convert.ChangeType(999, typeof(T));
+                    }
+                case CellType.String:
+                    if (cell == null)
+                    {
+                        return (T)Convert.ChangeType("null", typeof(T));
+                    }
+                    else if (cell.CellType == cellType)
+                    {
+                        return (T)Convert.ChangeType(cell.StringCellValue, typeof(T)); ;
+                    }
+                    else if (cell.CellType == CellType.Blank)
+                    {
+                        return default(T);
+                    }
+                    else if (cell.CellType == CellType.Numeric)
+                    {
+                        return (T)Convert.ChangeType(cell.NumericCellValue.ToString(), typeof(T));
+                    }
+                    else
+                    {
+                        return (T)Convert.ChangeType("Unknown", typeof(T));
+                    }
+                case CellType.Formula:
+                    return default(T);
+                case CellType.Blank:
+                    return default(T);
+                case CellType.Boolean:
+                    return default(T);
+                case CellType.Error:
+                    return default(T);
+                default:
+                    return default(T);
+            }
+        }
+
+        public Tuple<List<string>, IWorkbook> GetExcelWorkbook(string fileNamePath)
+        {
+            //string fileNamePath = string.Concat(AppSettingConfig.InventoryHistoryRecordFilePath(), "/", fileName);
+            FileStream fileStream = new FileStream(fileNamePath, FileMode.Open, FileAccess.Read);
+            IWorkbook Workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            List<string> textileList = new List<string>();
+            for (int sheetCount = 1; sheetCount < Workbook.NumberOfSheets; sheetCount++)
+            {
+                ISheet sheet = Workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
+                textileList.Add(sheet.SheetName);
+            }
+            GetShippingDate(Workbook.GetSheetAt(1));
+            return Tuple.Create(textileList, Workbook);
         }
     }
 }

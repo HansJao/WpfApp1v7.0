@@ -27,36 +27,7 @@ namespace WpfApp1.Utility
 
                 return _jsonSerializer;
             }
-        }
-
-        ///// <summary>
-        ///// 將Json物件序列化為字串且對私密成員做遮碼
-        ///// </summary>
-        ///// <param name="source">Json物件</param>
-        ///// <param name="privateMembers">私密成員</param>
-        ///// <returns>Json 字串</returns>
-        //public string SerializeAndMaskPrivateMember(JObject source, IEnumerable<string> privateMembers)
-        //{
-        //    if (privateMembers == null) throw new ArgumentNullException("privateMembers");
-
-        //    string result = string.Empty;
-
-        //    if (source.HasValues)
-        //    {
-        //        foreach (string path in privateMembers)
-        //        {
-        //            JToken jToken = source.SelectToken(path);
-        //            if (jToken == null) continue;
-
-        //            string orgValue = jToken.ToString();
-        //            jToken.Replace(new JValue(orgValue.Maskstring(orgValue.Length / 3, 0, '*')));
-        //        }
-
-        //        result = source.ToString();
-        //    }
-
-        //    return result;
-        //}
+        }        
 
         /// <summary>
         /// 將物件轉換為Json字串
