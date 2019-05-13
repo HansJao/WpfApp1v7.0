@@ -20,6 +20,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
         public void Change()
         {
             RaisePropertyChanged("TextileColorList");
+            RaisePropertyChanged("TextileInventoryHeader");
         }
     }
 }

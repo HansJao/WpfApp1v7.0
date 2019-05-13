@@ -38,6 +38,7 @@ namespace WpfApp1.Windows.InventoryWindows
         {
             InventoryListViewModel inventoryListViewModel =  this.DataContext as InventoryListViewModel;
             inventoryListViewModel.TextileColorList = textileColorInventoryList;
+            inventoryListViewModel.TextileInventoryHeader = textileInventoryHeader;
             inventoryListViewModel.Change();
         }
     }

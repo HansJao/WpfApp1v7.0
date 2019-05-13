@@ -172,9 +172,8 @@
             </DockPanel>
             <StackPanel  DockPanel.Dock="Bottom" Orientation="Horizontal" Height="24" VerticalAlignment="Top">
                 <CheckBox x:Name="CheckboxDisplayInventory" Content="顯示庫存查詢" Width="95" VerticalAlignment="Center" Click="CheckBox_Click"/>
-                <Button Content="庫存資料更新" Width="95" VerticalAlignment="Center"/>
                 <Label Content="庫存資料更新時間:" Width="110" VerticalAlignment="Center"/>
-                <Label Content="" Width="95" VerticalAlignment="Center"/>
+                <Label x:Name="InventoryUpdateTime" Content="" Width="110" VerticalAlignment="Center"/>
             </StackPanel>
         </DockPanel>
     </Grid>

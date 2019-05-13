@@ -42,8 +42,8 @@ namespace WpfApp1
         public MainWindow()
         {
             InitializeComponent();
-            this.Left = 100;
-            this.Top = 100;
+            this.Left = 0;
+            this.Top = 0;
         }
 
         private void ButtonStoreSearchFunction_Click(object sender, RoutedEventArgs e)

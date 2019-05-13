@@ -149,7 +149,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
             if (CheckboxDisplayInventory.IsChecked ?? false)
             {
                 var textileNameMapping = TextileNameMappings.ToList().Find(f => f.ProcessOrder.Contains(processOrder.Fabric));
-
+                if (textileNameMapping == null)
+                {
+                    InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), null, null);
+                    return;
+                }
                 List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
 
                 foreach (var item in textileNameMapping.Inventory)
@@ -195,7 +199,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
                         });
                     }
                 }
-                InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), null, selectedTextiles);
+                TextileInventoryHeader textileInventoryHeader = ExcelModule.GetShippingDate(Workbook.GetSheetAt(1));
+                textileInventoryHeader.Textile = processOrder.Fabric;
+                InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, selectedTextiles);
             }
         }
 
@@ -747,8 +753,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 InventoryListDialog = new InventoryListDialog(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, null)
                 {
                     Owner = Window.GetWindow(this),
-                    Top = parentWindow.Top+parentWindow.Height,
-                    Left = parentWindow.Left
+                    Top = parentWindow.Top + parentWindow.Height,
+                    Left = parentWindow.Left,
+                    Height = 300
                 };
                 InventoryListDialog.Show();
 
@@ -759,11 +766,13 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 var cacheJson = reader.ReadToEnd();
                 TextileNameMappings = JsonConvert.DeserializeObject<IEnumerable<TextileNameMapping>>(cacheJson);
                 reader.Close();
+                InventoryUpdateTime.Content = DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
             }
             else
             {
                 Workbook = null;
                 InventoryListDialog.Close();
+                InventoryUpdateTime.Content = string.Empty;
             }
         }
     }
