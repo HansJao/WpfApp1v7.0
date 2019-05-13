@@ -1,0 +1,290 @@
+﻿[
+  {
+    "ProcessOrder": [
+      "20C竹節布"
+    ],
+    "Inventory": [
+      "20C竹節",
+      "20C竹節采毓",
+      "20C竹節佳隆"
+    ],
+    "Account": [
+      "20C竹節*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "仿韓國棉+OP","秀品韓國棉+OP"
+    ],
+    "Inventory": [
+      "仿韓國棉"
+    ],
+    "Account": [
+      "仿韓國棉*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "24CVC單面布"
+    ],
+    "Inventory": [
+      "24CVC單面"
+    ],
+    "Account": [
+      "24CVC單面布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR4*2+OP"
+    ],
+    "Inventory": [
+      "30TR4X2+OP"
+    ],
+    "Account": [
+      "30TR4X2+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC細絨布"
+    ],
+    "Inventory": [
+      "30CVC細絨布"
+    ],
+    "Account": [
+      "30CVC細絨布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20CVC單面布"
+    ],
+    "Inventory": [
+      "20CVC單面"
+    ],
+    "Account": [
+      "20CVC單面*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面OP22+8條","秀品單OP22+8條"
+    ],
+    "Inventory": [
+      "228條"
+    ],
+    "Account": [
+      "228條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP大小條"
+    ],
+    "Inventory": [
+      "4812條"
+    ],
+    "Account": [
+      "4812條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20CVC單面大小條"
+    ],
+    "Inventory": [
+      "20CVC單面大小條"
+    ],
+    "Account": [
+      "20CVC單面大小條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP10CM條"
+    ],
+    "Inventory": [
+      "單面OP10CM條"
+    ],
+    "Account": [
+      "單面OP10CM條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "T/R細絨條+OP"
+    ],
+    "Inventory": [
+      "TR細絨條+OP"
+    ],
+    "Account": [
+      "細絨條+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP寬對半條"
+    ],
+    "Inventory": [
+      "單面+OP寬對半條"
+    ],
+    "Account": [
+      "單面+OP寬對半條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20C單面布"
+    ],
+    "Inventory": [
+      "20C單面"
+    ],
+    "Account": [
+      "20C單面*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC單面布"
+    ],
+    "Inventory": [
+      "30CVC單面"
+    ],
+    "Account": [
+      "30CVC單面*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC竹節布"
+    ],
+    "Inventory": [
+      "30CVC竹節布"
+    ],
+    "Account": [
+      "30CVC竹節布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30C竹節布"
+    ],
+    "Inventory": [
+      "30C竹節"
+    ],
+    "Account": [
+      "30C竹節*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "細絨布+OP"
+    ],
+    "Inventory": [
+      "TR細絨布+OP"
+    ],
+    "Account": [
+      "TR細絨布+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "C細絨布"
+    ],
+    "Inventory": [
+      "30C細絨布"
+    ],
+    "Account": [
+      "30C細絨布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC1*1+OP磨毛"
+    ],
+    "Inventory": [
+      "CVC1X1+OP磨毛"
+    ],
+    "Account": [
+      "CVC1X1+OP磨毛*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "TR1*1+OP25+9磨毛"
+    ],
+    "Inventory": [
+      "1X1+OP259磨"
+    ],
+    "Account": [
+      "1X1+OP259磨*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "TR1*1+OP磨毛"
+    ],
+    "Inventory": [
+      "TR1X1+OP磨毛"
+    ],
+    "Account": [
+      "TR1X1+OP磨毛*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC121配色條"
+    ],
+    "Inventory": [
+      "30CVC121配色條"
+    ],
+    "Account": [
+      "30CVC121配色條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "細絨三色條"
+    ],
+    "Inventory": [
+      "細絨三色條"
+    ],
+    "Account": [
+      "細絨三色條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "粗細條+OP"
+    ],
+    "Inventory": [
+      "粗細條"
+    ],
+    "Account": [
+      "粗細條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC竹節立體布"
+    ],
+    "Inventory": [
+      "30CVC竹節立體布"
+    ],
+    "Account": [
+      "CVC竹節立體*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "T/R細絨條+OP"
+    ],
+    "Inventory": [
+      "TR細絨條+OP"
+    ],
+    "Account": [
+      "CVC竹節立體*"
+    ]
+  }
+]
