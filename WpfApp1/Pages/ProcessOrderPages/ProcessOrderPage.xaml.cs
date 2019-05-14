@@ -293,7 +293,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
             var processOrderColorDetail = (ProcessOrderColorDetail)dataGrid.SelectedItem;
             if (processOrderColorDetail == null)
                 return;
-
+            if (InventoryListDialog != null)
+            {
+                InventoryListDialog.InventoryListViewModel.FilterColorName(processOrderColorDetail.Color);
+            }
             var factoryShippingList = ProcessModule.GetFactoryShipping(processOrderColorDetail.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
@@ -758,6 +761,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     Height = 300
                 };
                 InventoryListDialog.Show();
+                InventoryListDialog.Closed += InventoryListDialog_Closed;
 
                 var textileNameMappingFilePath = string.Concat(AppSettingConfig.TextileNameMappingFilePath());
                 //this code segment read data from the file.
@@ -770,10 +774,16 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
             else
             {
-                Workbook = null;
                 InventoryListDialog.Close();
-                InventoryUpdateTime.Content = string.Empty;
             }
+        }
+
+        private void InventoryListDialog_Closed(object sender, EventArgs e)
+        {
+            CheckboxDisplayInventory.IsChecked = false;
+            Workbook = null;
+            InventoryUpdateTime.Content = string.Empty;
+            InventoryListDialog = null;
         }
     }
 }
