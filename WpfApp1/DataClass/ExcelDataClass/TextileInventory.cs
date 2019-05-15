@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace WpfApp1.DataClass.ExcelDataClass
 {
@@ -22,11 +23,16 @@ namespace WpfApp1.DataClass.ExcelDataClass
         public double ShippingDate7 { get; set; }
         public double ShippingDate8 { get; set; }
         public double ShippingDate9 { get; set; }
-        public string TextileFactory { get; set; }
-        public string ClearFactory { get; set; }
+        public ExcelCell TextileFactory { get; set; }
+        public ExcelCell ClearFactory { get; set; }
         public string CountInventory { get; set; }
         public string IsChecked { get; set; }
         public string CheckDate { get; set; }
         public string Memo { get; set; }
+    }
+    public class ExcelCell
+    {
+        public string CellValue { get; set; }
+        public SolidColorBrush FontColor { get; set; }
     }
 }

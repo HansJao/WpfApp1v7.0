@@ -44,8 +44,20 @@
                 <DataGridTextColumn Header="{Binding Data.TextileInventoryHeader.ShippingDate7, Source={StaticResource proxy}}" Width="43" Binding="{Binding ShippingDate7,Converter={StaticResource ZeroToEmptyConverter}}"/>
                 <DataGridTextColumn Header="{Binding Data.TextileInventoryHeader.ShippingDate8, Source={StaticResource proxy}}" Width="43" Binding="{Binding ShippingDate8,Converter={StaticResource ZeroToEmptyConverter}}"/>
                 <DataGridTextColumn Header="{Binding Data.TextileInventoryHeader.ShippingDate9, Source={StaticResource proxy}}" Width="43" Binding="{Binding ShippingDate9,Converter={StaticResource ZeroToEmptyConverter}}"/>
-                <DataGridTextColumn Header="織廠" Binding="{Binding TextileFactory}"/>
-                <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory}"/>
+                <DataGridTextColumn Header="織廠" Binding="{Binding TextileFactory.CellValue}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Foreground" Value="{Binding TextileFactory.FontColor}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory.CellValue}">
+                    <DataGridTextColumn.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Foreground" Value="{Binding ClearFactory.FontColor}" />
+                        </Style>
+                    </DataGridTextColumn.CellStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="計算庫存量" Binding="{Binding CountInventory}" Width="50"/>
                 <DataGridTextColumn Header="是否清點完成" Binding="{Binding IsChecked}" Width="50"/>
                 <DataGridTextColumn Header="清點時間" Binding="{Binding CheckDate}"/>

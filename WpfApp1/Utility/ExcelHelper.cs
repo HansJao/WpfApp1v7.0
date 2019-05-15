@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using Microsoft.Office.Interop.Excel;
+using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOI.XSSF.UserModel;
 using System;
@@ -7,14 +8,19 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.StoreSearch;
+using WpfApp1.Modules.ExcelModule;
+using WpfApp1.Modules.ExcelModule.Implement;
 
 namespace WpfApp1.Utility
 {
     public class ExcelHelper
     {
+        protected IExcelModule ExcelModule { get; } = new ExcelModule();
         public static void CreateCell(XSSFRow row, int cellIndex, string cellValue, ICellStyle style)
         {
             var cell = row.CreateCell(cellIndex);
@@ -326,6 +332,79 @@ namespace WpfApp1.Utility
             row.GetCell(cellNum).SetCellType(CellType.String);
             string result = row.GetCell(cellNum).StringCellValue;
             return result;
+        }
+
+        public List<TextileColorInventory> GetInventoryData(IWorkbook workbook, string sheetName)
+        {
+            List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
+
+            ISheet sheet = workbook.GetSheet(sheetName);  //獲取工作表
+            if (sheet == null) return null;
+            IRow row;
+
+            for (int i = 1; i <= sheet.LastRowNum; i++)
+            {
+                row = sheet.GetRow(i);
+                if (row == null)
+                {
+                    break;
+                }
+                var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
+                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false)
+                    ? ""
+                    : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString();
+
+                double inventory = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
+                selectedTextiles.Add(new TextileColorInventory
+                {
+                    Index = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
+                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
+                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                    Inventory = inventory,
+                    DifferentCylinder = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder)),
+                    ShippingDate1 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                    ShippingDate2 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                    ShippingDate3 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                    ShippingDate4 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                    ShippingDate5 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                    ShippingDate6 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                    ShippingDate7 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                    ShippingDate8 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                    ShippingDate9 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9)),
+                    CountInventory = cellValue,
+                    IsChecked = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.IsChecked)),
+                    CheckDate = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate)),
+                    TextileFactory = new ExcelCell
+                    {
+                        CellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory).ToString(),
+                        FontColor = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory) == null ? Brushes.Black : ExcelHelper.GetFontColor(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory).CellStyle.FontIndex),
+                    },
+                    ClearFactory = new ExcelCell
+                    {
+                        CellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
+                        FontColor = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? Brushes.Black : ExcelHelper.GetFontColor(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).CellStyle.FontIndex),
+                    },
+                    Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
+                });
+            }
+            return selectedTextiles;
+        }
+
+
+        public static SolidColorBrush GetFontColor(short fontIndex)
+        {
+            switch (fontIndex)
+            {
+                case 2:
+                case 32:
+                    return Brushes.Red;
+                case 3:
+                case 35:
+                case 36:
+                    return Brushes.Blue;
+                default:
+                    return Brushes.Black;
+            }
         }
     }
 }
