@@ -28,18 +28,28 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
 
         public void FilterColorName(string selectedColorName)
         {
-            if (TextileColorList == null) return;
-            Regex regex = new Regex("[" + selectedColorName + "]");
+            if (TextileColorList == null) return;//([芥黃])|([白])
+            Regex regex = new Regex("([" + selectedColorName.Replace("/", "]+)|([") + "]+)");
             ICollectionView cv = CollectionViewSource.GetDefaultView(TextileColorList);
             if (!string.IsNullOrEmpty(selectedColorName))
             {
+                bool isContainTrue = false;
                 cv.Filter = o =>
                 {
                     /* change to get data row value */
                     TextileColorInventory p = o as TextileColorInventory;
-                    return (regex.IsMatch(p.ColorName));
+                    var check = regex.Matches(p.ColorName).Count == selectedColorName.Split('/').Count();
+                    if (check == true) isContainTrue = true;
+                    return (check);
                     /* end change to get data row value */
                 };
+                if(!isContainTrue)
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                }
             }
             else
             {
