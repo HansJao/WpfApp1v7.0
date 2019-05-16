@@ -399,6 +399,7 @@ namespace WpfApp1.Utility
                 case 32:
                     return Brushes.Red;
                 case 3:
+                case 8:
                 case 35:
                 case 36:
                     return Brushes.Blue;
