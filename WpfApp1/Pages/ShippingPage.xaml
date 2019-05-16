@@ -59,7 +59,7 @@
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory}"/>
+                        <DataGridTextColumn Header="定型廠" Binding="{Binding ClearFactory.CellValue}"/>
                         <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>
                     </DataGrid.Columns>
                 </DataGrid>

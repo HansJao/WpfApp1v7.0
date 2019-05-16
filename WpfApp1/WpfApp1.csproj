@@ -154,6 +154,7 @@
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\TextileColorInventoryShipping.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileInventory.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileInventoryHeader.cs" />
     <Compile Include="DataClass\Fabric\FabricIngredientProportion.cs" />

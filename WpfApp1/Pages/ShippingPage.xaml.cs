@@ -16,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Shipping;
 using WpfApp1.Modules.CustomerModule;
 using WpfApp1.Modules.CustomerModule.Implement;
@@ -62,17 +63,17 @@ namespace WpfApp1.Pages
 
         private void SelectedTextile_Click(object sender, RoutedEventArgs e)
         {
-            if (((ObservableCollection<SelectedTextile>)DataGridSelectedTextile.ItemsSource).Select(s => s.ShippingNumber).Sum() <= 0)
+            if (((ObservableCollection<TextileColorInventoryShipping>)DataGridSelectedTextile.ItemsSource).Select(s => s.ShippingNumber).Sum() <= 0)
             {
                 MessageBox.Show("未輸入出布數量!!");
                 return;
             }
 
-            IEnumerable<SelectedTextile> selectedTextiles = DataGridSelectedTextile.Items.Cast<SelectedTextile>().Where(w => w.ShippingNumber > 0);
+            IEnumerable<TextileColorInventoryShipping> selectedTextiles = DataGridSelectedTextile.Items.Cast<TextileColorInventoryShipping>().Where(w => w.ShippingNumber > 0);
             AddCustomerShippingFabric(selectedTextiles);
         }
 
-        private void AddCustomerShippingFabric(IEnumerable<SelectedTextile> selectedTextiles)
+        private void AddCustomerShippingFabric(IEnumerable<TextileColorInventoryShipping> selectedTextiles)
         {
             var customerName = TextBoxCustomerName.Text.ToString();
             var textileName = DataGridTextileList.SelectedItem.ToString();
@@ -84,7 +85,7 @@ namespace WpfApp1.Pages
                 {
                     //將新的布種顏色資料加入原有的布種資料
                     var currentTextileShippingData = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Where(w => w.TextileName == textileName).First();
-                    foreach (SelectedTextile item in selectedTextiles)
+                    foreach (TextileColorInventoryShipping item in selectedTextiles)
                     {
                         if (currentTextileShippingData.ShippingSheetDatas.Where(w => w.ColorName == item.ColorName).Count() > 0)
                         {
@@ -106,7 +107,7 @@ namespace WpfApp1.Pages
                     //新增新的布種與顏色
                     var currentTextileShippingDatas = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas;
                     var shippingSheetDatas = new List<ShippingSheetData>();
-                    foreach (SelectedTextile item in selectedTextiles)
+                    foreach (TextileColorInventoryShipping item in selectedTextiles)
                     {
                         shippingSheetDatas.Add(new ShippingSheetData
                         {
@@ -128,7 +129,7 @@ namespace WpfApp1.Pages
             {
                 //新增新的客戶和布種與顏色
                 var shippingSheetDatas = new List<ShippingSheetData>();
-                foreach (SelectedTextile item in selectedTextiles)
+                foreach (TextileColorInventoryShipping item in selectedTextiles)
                 {
                     shippingSheetDatas.Add(new ShippingSheetData
                     {
@@ -542,30 +543,19 @@ namespace WpfApp1.Pages
             if (selectedItem == null)
                 return;
             string textileName = selectedItem.ToString();
-
-            ISheet sheet = _workbook.GetSheet(textileName);  //獲取工作表
-            IList selectedTextiles = new ObservableCollection<SelectedTextile>();
-
-            DataGridSelectedTextile.ItemsSource = selectedTextiles;
-            IRow row;
-            for (int i = 1; i <= sheet.LastRowNum; i++)
+            ExcelHelper excelHelper = new ExcelHelper();
+            IEnumerable<TextileColorInventoryShipping> textileColorInventoryShippings = excelHelper.GetInventoryData(_workbook, textileName).Select(s => new TextileColorInventoryShipping
             {
-                row = sheet.GetRow(i);
-                if (row == null)
-                {
-                    break;
-                }
-                var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
-                var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false) ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString(); //獲取i行j列數據
-                selectedTextiles.Add(new SelectedTextile
-                {
-                    ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                    StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
-                    CountInventory = cellValue,
-                    ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
-                    Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
-                });
-            }
+                ColorName = s.ColorName,
+                StorageSpaces = s.StorageSpaces,
+                CountInventory = s.CountInventory,
+                ClearFactory = s.ClearFactory,
+                Memo = s.Memo,
+                ShippingNumber = 0
+            });
+
+            IList selectedTextiles = new ObservableCollection<TextileColorInventoryShipping>(textileColorInventoryShippings);
+            DataGridSelectedTextile.ItemsSource = selectedTextiles;
         }
 
         private void TextBoxColor_TextChanged(object sender, TextChangedEventArgs e)
@@ -578,7 +568,7 @@ namespace WpfApp1.Pages
                 cv.Filter = o =>
                 {
                     /* change to get data row value */
-                    SelectedTextile p = o as SelectedTextile;
+                    TextileColorInventory p = o as TextileColorInventory;
                     return (p.ColorName.ToUpper().Contains(filterText.ToUpper()));
                     /* end change to get data row value */
                 };
@@ -594,7 +584,7 @@ namespace WpfApp1.Pages
 
         private void ButtonAddQuantity_Click(object sender, RoutedEventArgs e)
         {
-            SelectedTextile selectedTextile = DataGridSelectedTextile.SelectedItem as SelectedTextile;
+            TextileColorInventoryShipping selectedTextile = DataGridSelectedTextile.SelectedItem as TextileColorInventoryShipping;
             string customerName = TextBoxCustomerName.Text;
             string textileName = DataGridTextileList.SelectedItem.ToString();
             selectedTextile.ShippingNumber = 1;
@@ -617,7 +607,7 @@ namespace WpfApp1.Pages
                     }
                 }
             }
-            List<SelectedTextile> selectedTextiles = new List<SelectedTextile>
+            List<TextileColorInventoryShipping> selectedTextiles = new List<TextileColorInventoryShipping>
             {
                 selectedTextile
             };
