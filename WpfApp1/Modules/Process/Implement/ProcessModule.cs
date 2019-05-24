@@ -57,7 +57,7 @@ namespace WpfApp1.Modules.Process.Implement
 
         public IEnumerable<ProcessOrderColorFactoryShippingDetail> GetProcessOrderColorFactoryShippingDetail(int orderNo)
         {
-            var result = ProcessOrderAdapter.GetProcessOrderColorFactoryShippingDetail(orderNo).OrderByDescending(o=>o.Status);
+            var result = ProcessOrderAdapter.GetProcessOrderColorFactoryShippingDetail(orderNo).OrderByDescending(o => o.Status);
             return result;
         }
 
@@ -385,7 +385,7 @@ namespace WpfApp1.Modules.Process.Implement
         /// <returns></returns>
         public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color)
         {
-            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color);
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color).OrderByDescending(o => o.OrderNo);
             return result;
         }
         /// <summary>

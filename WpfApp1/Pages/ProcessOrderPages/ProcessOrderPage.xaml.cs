@@ -34,19 +34,11 @@ using WpfApp1.Windows.ProcessWindows;
 
 namespace WpfApp1.Pages.ProcessOrderPages
 {
-    public class TestDataGrid : DataGrid
-    {
-        protected override void OnSelectionChanged(SelectionChangedEventArgs e)
-        {
-            base.OnSelectionChanged(e);
-        }
-    }
     /// <summary>
     /// ProcessOrderPage.xaml 的互動邏輯
     /// </summary>
     public partial class ProcessOrderPage : Page
     {
-
         protected IProcessModule ProcessModule { get; } = new ProcessModule();
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
