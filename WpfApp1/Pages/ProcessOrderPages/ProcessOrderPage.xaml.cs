@@ -540,6 +540,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
             int processOrderNo = (DataGridProcessOrder.SelectedItem as ProcessOrder).OrderNo;
             bool success = ProcessModule.UpdateProcessOrderRemark(processOrderNo, remark.Text);
+            if (success)
+                DataGridProcessOrderCollection.Where(w => w.OrderNo == processOrderNo).ToList().ForEach(f => f.Remark = remark.Text);
         }
 
         private void ButtonAddFactory_Click(object sender, RoutedEventArgs e)
