@@ -141,8 +141,9 @@ namespace WpfApp1.Modules.Process
         /// <param name="factoryList"></param>
         /// <param name="statusList"></param>
         /// <param name="containFinish"></param>
+        /// <param name="color"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish);
+        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish,string color);
 
 
 
@@ -229,12 +230,12 @@ namespace WpfApp1.Modules.Process
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderByFactoryUpdateDate(string dateTime);
 
-        /// <summary>
-        /// 依據顏色取得加工訂單
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
+        ///// <summary>
+        ///// 依據顏色取得加工訂單
+        ///// </summary>
+        ///// <param name="color"></param>
+        ///// <returns></returns>
+        //IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
 
         /// <summary>
         /// 新增客戶訂單關連

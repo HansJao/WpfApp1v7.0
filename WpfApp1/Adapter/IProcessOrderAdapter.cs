@@ -202,7 +202,7 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderByColor(string color);
+        IEnumerable<ProcessOrder> GetProcessOrderByColor(string color,bool containFinish);
         /// <summary>
         /// 新增客戶訂單關連
         /// </summary>

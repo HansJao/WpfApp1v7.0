@@ -581,16 +581,17 @@ namespace WpfApp1.Adapter.MSSQL
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color)
+        public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color, bool containFinish)
         {
             var sqlCmd = @"SELECT DISTINCT PO.* FROM ProcessOrderColorDetail POCD
                            INNER JOIN ProcessOrder PO ON POCD.OrderNo = PO.OrderNo
-                           WHERE POCD.Color LIKE @Color
+                           WHERE POCD.Color LIKE @Color AND POCD.Status != @Status
                            ORDER BY PO.OrderNo";
             SqlParameter[] parameter = new SqlParameter[]
-                {
-                        new SqlParameter("@Color", SqlDbType.NVarChar) { Value = "%" + color + "%" },
-                };
+            {
+                new SqlParameter("@Color", SqlDbType.NVarChar) { Value = "%" + color + "%" },
+                new SqlParameter("@Status", SqlDbType.Int) { Value = containFinish ? 0 : 1 }
+            };
             var result = DapperHelper.QueryCollection<ProcessOrder>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }

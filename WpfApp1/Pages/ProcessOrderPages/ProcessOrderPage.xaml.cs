@@ -236,7 +236,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 TextBox textBox = (TextBox)sender;
                 string color = textBox.Text;
-                DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderByColor(color));
+                DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(ProcessModule.GetProcessOrderFilter(null, null, CheckBoxContainFinish.IsChecked ?? false, color));
                 DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
             }
         }
@@ -363,7 +363,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             if (selectedItems.Count != 0 && selectedItems != null)
                 factoryList.AddRange(selectedItems.Cast<Factory>());
 
-            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList, CheckBoxContainFinish.IsChecked ?? false);
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList, CheckBoxContainFinish.IsChecked ?? false, string.Empty);
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(processOrderList);
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }
@@ -576,7 +576,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
                         ProcessOrderColorStatus.緊急
                     };
             List<Factory> factoryList = new List<Factory>();
-            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList, CheckBoxContainFinish.IsChecked ?? false);
+            IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList, CheckBoxContainFinish.IsChecked ?? false, string.Empty);
             DataGridProcessOrderCollection = new ObservableCollection<ProcessOrder>(processOrderList);
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }

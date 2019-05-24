@@ -208,15 +208,23 @@ namespace WpfApp1.Modules.Process.Implement
         /// <param name="statusList"></param>
         /// <param name="containFinish"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish)
+        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish, string color)
         {
-            IEnumerable<int> factoryIDList = factoryList.Select(s => s.FactoryID);
-            if (statusList.Count == 1 && statusList.Where(w => w == ProcessOrderColorStatus.已出完).Count() == 1)
+            IEnumerable<ProcessOrder> result;
+            if (color == string.Empty)
             {
-                containFinish = true;
+                IEnumerable<int> factoryIDList = factoryList.Select(s => s.FactoryID);
+                if (statusList.Count == 1 && statusList.Where(w => w == ProcessOrderColorStatus.已出完).Count() == 1)
+                {
+                    containFinish = true;
+                }
+                result = ProcessOrderAdapter.GetProcessOrderFilter(factoryIDList, statusList, containFinish);
             }
-            var result = ProcessOrderAdapter.GetProcessOrderFilter(factoryIDList, statusList, containFinish).OrderByDescending(o => o.OrderNo);
-            return result;
+            else
+            {
+                result = GetProcessOrderByColor(color, containFinish);
+            }
+            return result.OrderByDescending(o => o.OrderNo);
         }
         /// <summary>
         /// 取得加工訂單顏色明細
@@ -383,9 +391,9 @@ namespace WpfApp1.Modules.Process.Implement
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderByColor(string color)
+        private IEnumerable<ProcessOrder> GetProcessOrderByColor(string color, bool containFinish)
         {
-            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color).OrderByDescending(o => o.OrderNo);
+            IEnumerable<ProcessOrder> result = ProcessOrderAdapter.GetProcessOrderByColor(color, containFinish).OrderByDescending(o => o.OrderNo);
             return result;
         }
         /// <summary>
