@@ -103,74 +103,17 @@ namespace WpfApp1.Modules.ExcelModule.Implement
         {
             TextileInventoryHeader TextileInventoryHeader = new TextileInventoryHeader
             {
-                ShippingDate1 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
-                ShippingDate2 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
-                ShippingDate3 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
-                ShippingDate4 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
-                ShippingDate5 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
-                ShippingDate6 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
-                ShippingDate7 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
-                ShippingDate8 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
-                ShippingDate9 = CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
+                ShippingDate1 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
+                ShippingDate2 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
+                ShippingDate3 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
+                ShippingDate4 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
+                ShippingDate5 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
+                ShippingDate6 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
+                ShippingDate7 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
+                ShippingDate8 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
+                ShippingDate9 = ExcelHelper.CheckExcelCellType<string>(CellType.String, sheet.GetRow(0).GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9))
             };
             return TextileInventoryHeader;
-        }
-
-        public T CheckExcelCellType<T>(CellType cellType, ICell cell)
-        {
-            switch (cellType)
-            {
-                case CellType.Unknown:
-                    return default(T);
-                case CellType.Numeric:
-                    if (cell == null)
-                    {
-                        return (T)Convert.ChangeType(-1, typeof(T));
-                    }
-                    else if (cell.CellType == cellType)
-                    {
-                        return (T)Convert.ChangeType(cell.NumericCellValue, typeof(T));
-                    }
-                    else if (cell.CellType == CellType.Blank)
-                    {
-                        return default(T);
-                    }
-                    else
-                    {
-                        return (T)Convert.ChangeType(999, typeof(T));
-                    }
-                case CellType.String:
-                    if (cell == null)
-                    {
-                        return (T)Convert.ChangeType("null", typeof(T));
-                    }
-                    else if (cell.CellType == cellType)
-                    {
-                        return (T)Convert.ChangeType(cell.StringCellValue, typeof(T)); ;
-                    }
-                    else if (cell.CellType == CellType.Blank)
-                    {
-                        return default(T);
-                    }
-                    else if (cell.CellType == CellType.Numeric)
-                    {
-                        return (T)Convert.ChangeType(cell.NumericCellValue.ToString(), typeof(T));
-                    }
-                    else
-                    {
-                        return (T)Convert.ChangeType("Unknown", typeof(T));
-                    }
-                case CellType.Formula:
-                    return default(T);
-                case CellType.Blank:
-                    return default(T);
-                case CellType.Boolean:
-                    return default(T);
-                case CellType.Error:
-                    return default(T);
-                default:
-                    return default(T);
-            }
         }
 
         public Tuple<List<string>, IWorkbook> GetExcelWorkbook(string fileNamePath)

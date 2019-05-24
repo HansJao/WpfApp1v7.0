@@ -23,11 +23,6 @@ namespace WpfApp1.Modules.ExcelModule
         /// <returns></returns>
         TextileInventoryHeader GetShippingDate(ISheet sheet);
         /// <summary>
-        /// 檢查Excel cell type
-        /// </summary>
-        /// <returns></returns>
-        T CheckExcelCellType<T>(CellType cellType, ICell cell);
-        /// <summary>
         /// 取得Excel Workbook
         /// </summary>
         /// <returns></returns>
