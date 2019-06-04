@@ -34,5 +34,7 @@ namespace WpfApp1.Modules.TrashModule
         /// <param name="trashItem"></param>
         /// <returns></returns>
         IEnumerable<TrashCustomerShipped> GetCustomerShippedListByFeature(TrashItem trashItem);
+
+       
     }
 }

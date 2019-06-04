@@ -149,5 +149,17 @@ namespace WpfApp1
             this.Title = "庫存歷史紀錄";
             this.MainFrame.NavigationService.Navigate(new InventoryRecordComparePage());
         }
+        private void ButtonShippingHistoryChartFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "出貨紀錄圖表";
+            this.MainFrame.NavigationService.Navigate(new ShippingHistoryChartPage());
+            
+        }
+        private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "出貨排行圖表";
+            this.MainFrame.NavigationService.Navigate(new ShippingRankChartPage());
+            
+        }
     }
 }

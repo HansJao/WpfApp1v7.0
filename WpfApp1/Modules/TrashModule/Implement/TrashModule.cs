@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.DBF;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.TrashSystem;
+using WpfApp1.Utility;
 
 namespace WpfApp1.Modules.TrashModule.Implement
 {
@@ -75,6 +77,6 @@ namespace WpfApp1.Modules.TrashModule.Implement
             IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashAdapter.GetCustomerShippedListByFeature(trashItem);
             return trashCustomerShippeds;
         }
-
+     
     }
 }

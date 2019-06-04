@@ -120,7 +120,6 @@ namespace WpfApp1.Adapter.DBF
             };
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
-        }
-
+        }      
     }
 }

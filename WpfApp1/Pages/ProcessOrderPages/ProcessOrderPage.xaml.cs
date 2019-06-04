@@ -720,13 +720,9 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 InventoryListDialog.Show();
                 InventoryListDialog.Closed += InventoryListDialog_Closed;
 
-                var textileNameMappingFilePath = string.Concat(AppSettingConfig.TextileNameMappingFilePath());
-                //this code segment read data from the file.
-                FileStream fs2 = new FileStream(textileNameMappingFilePath, FileMode.Open, FileAccess.Read);
-                StreamReader reader = new StreamReader(fs2);
-                var cacheJson = reader.ReadToEnd();
-                TextileNameMappings = JsonConvert.DeserializeObject<IEnumerable<TextileNameMapping>>(cacheJson);
-                reader.Close();
+                ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+                TextileNameMappings = externalDataHelper.GetTextileNameMappings();
+                
                 InventoryUpdateTime.Content = DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
             }
             else

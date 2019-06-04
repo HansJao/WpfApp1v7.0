@@ -43,6 +43,8 @@
                     <MenuItem Header="報表" Click="ButtonReportsFunction_Click" />
                     <MenuItem Header="帳務系統表參考" Click="ButtonReportsByCustomerFunction_Click"/>
                     <MenuItem Header="特徵搜尋" Click="ButtonFeatureSearchFunction_Click"/>
+                    <MenuItem Header="出貨紀錄圖表" Click="ButtonShippingHistoryChartFunction_Click"/>
+                    <MenuItem Header="出貨排行圖表" Click="ButtonShippingRankChartFunction_Click"/>
                 </MenuItem>
             </Menu>
             <Menu>
