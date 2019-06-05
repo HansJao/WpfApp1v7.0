@@ -13,6 +13,7 @@ using System.Windows.Input;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.TrashModule;
 using WpfApp1.Modules.TrashModule.Implement;
+using WpfApp1.Utility;
 
 namespace WpfApp1.Pages.TrashSystemPages
 {
@@ -56,27 +57,42 @@ namespace WpfApp1.Pages.TrashSystemPages
         {
             IEnumerable<TrashShipped> shippingRankCharts = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
             var dateArray = shippingRankCharts.Select(s => s.IN_DATE).Distinct().ToArray();
+
+            List<ShippingRecord> shippingRecordList = new List<ShippingRecord>();
             foreach (var item in shippingRankCharts.Select(s => s.I_03).Distinct())
             {
-                Series seCPU = new Series(item, 10)
+                ShippingRecord shippingRecord = new ShippingRecord
+                {
+                    TextileName = item,
+                    ShippingRecordDetails = new List<ShippingRecordDetail>()
+                };
+                double priviousValue = 0;
+                foreach (var eachDate in dateArray)
+                {
+                    double currentValue = shippingRankCharts.Where(w => w.I_03 == item && w.IN_DATE == eachDate).Select(s => s.Quantity).FirstOrDefault() + priviousValue;
+                    shippingRecord.ShippingRecordDetails.Add(new ShippingRecordDetail { ShippedDate = eachDate, Quantity = currentValue });
+                    priviousValue = currentValue;
+                }
+                shippingRecord.MaxQuantity = priviousValue;
+                shippingRecordList.Add(shippingRecord);
+            }
+
+            foreach (var item in shippingRecordList.OrderByDescending(o => o.MaxQuantity)
+                                .Where(w => w.TextileName.Contains(TextBoxTextileName.Text))
+                                .Skip(RankValueStart.Text.ToInt())
+                                .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt()))
+            {
+                Series seCPU = new Series(item.TextileName, 10)
                 {
                     ChartArea = "ChartArea1",
                     ChartType = SeriesChartType.Line,
                     IsVisibleInLegend = true,
                     Legend = "Legend1",
-                    LegendText = item,
+                    LegendText = item.TextileName,
                     YValueMembers = "Processor"
                 };
                 this.mainChart.Series.Add(seCPU);
-                List<double> quantityList = new List<double>();
-                double priviousValue = 0;
-                foreach (var eachDate in dateArray)
-                {
-                    double currentValue = shippingRankCharts.Where(w => w.I_03 == item && w.IN_DATE == eachDate).Select(s => s.Quantity).FirstOrDefault() + priviousValue;
-                    quantityList.Add(currentValue);
-                    priviousValue = currentValue;
-                }
-                mainChart.Series[item].Points.DataBindXY(dateArray, quantityList);
+                mainChart.Series[item.TextileName].Points.DataBindXY(item.ShippingRecordDetails.Select(s => s.ShippedDate).ToArray(), item.ShippingRecordDetails.Select(s => s.Quantity).ToArray());
             }
         }
 

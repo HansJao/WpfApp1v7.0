@@ -196,6 +196,7 @@
     <Compile Include="DataClass\StoreSearch\StoreData.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchColorDetail.cs" />
     <Compile Include="DataClass\StoreSearch\StoreSearchData.cs" />
+    <Compile Include="DataClass\TrashSystem\ShippingRecord.cs" />
     <Compile Include="DataClass\TrashSystem\TrashCustomerShipped.cs" />
     <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
     <Compile Include="DataClass\TrashSystem\TrashShipped.cs" />

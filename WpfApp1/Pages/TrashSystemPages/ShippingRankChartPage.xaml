@@ -17,9 +17,15 @@
                 <Button x:Name="ButtonTimeIntervalTextileShippingChart" Content="所有布種出貨紀錄" Height="24" Width="110" HorizontalAlignment="Left" Click="ButtonTimeIntervalTextileShippingChart_Click"/>
                 <DatePicker x:Name="DatePickerStartDate" Width="90" HorizontalAlignment="Left"/>
                 <DatePicker x:Name="DatePickerEndDate" Width="90" HorizontalAlignment="Left"/>
+                <Label Content="排名數(起)："/>
+                <TextBox x:Name="RankValueStart" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                <Label Content="排名數(末)："/>
+                <TextBox x:Name="RankValueEnd" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                <Label Content="布種名稱："/>
+                <TextBox x:Name="TextBoxTextileName" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
             </DockPanel>
             <wfi:WindowsFormsHost x:Name="mainFGrid" >
-                <CHR:Chart x:Name="mainChart" Width="800" Height="1000">
+                <CHR:Chart x:Name="mainChart" Width="2000" Height="1500">
 
                 </CHR:Chart>
             </wfi:WindowsFormsHost>
