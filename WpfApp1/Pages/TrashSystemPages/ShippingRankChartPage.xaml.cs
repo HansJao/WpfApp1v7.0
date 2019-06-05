@@ -27,6 +27,7 @@ namespace WpfApp1.Pages.TrashSystemPages
         {
             InitializeComponent();
             TimeIntervalTextileShippingChart();
+            DatePickerStartDate.SelectedDate = DateTime.Now.AddMonths(-1);
         }
 
         private void ButtonTimeIntervalTextileShippingChart_Click(object sender, RoutedEventArgs e)
@@ -46,7 +47,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             Legend lgCPU = new Legend("Legend1")
             {
                 IsTextAutoFit = true,
-                Docking = Docking.Right
+                Docking = Docking.Right,
             };
             this.mainChart.Legends.Add(lgCPU);
             mainChart.MouseMove += new System.Windows.Forms.MouseEventHandler(MainChart_MouseMove);
@@ -82,16 +83,19 @@ namespace WpfApp1.Pages.TrashSystemPages
                                 .Skip(RankValueStart.Text.ToInt())
                                 .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt()))
             {
-                Series seCPU = new Series(item.TextileName, 10)
+                Series series = new Series(item.TextileName, 10)
                 {
                     ChartArea = "ChartArea1",
-                    ChartType = SeriesChartType.Line,
+                    ChartType = SeriesChartType.FastLine,
                     IsVisibleInLegend = true,
                     Legend = "Legend1",
                     LegendText = item.TextileName,
-                    YValueMembers = "Processor"
+                    ToolTip = item.TextileName,
+                    LegendToolTip = "test",
+                    LabelToolTip = "test123",
+
                 };
-                this.mainChart.Series.Add(seCPU);
+                this.mainChart.Series.Add(series);
                 mainChart.Series[item.TextileName].Points.DataBindXY(item.ShippingRecordDetails.Select(s => s.ShippedDate).ToArray(), item.ShippingRecordDetails.Select(s => s.Quantity).ToArray());
             }
         }
@@ -102,13 +106,14 @@ namespace WpfApp1.Pages.TrashSystemPages
             HitTestResult result = mainChart.HitTest(e.X, e.Y);
 
             // Reset Data Point Attributes
-            foreach (var point in mainChart.Series)
+            foreach (var series in mainChart.Series)
             {
                 //point.BackSecondaryColor = Color.Black;
-                point.BackHatchStyle = ChartHatchStyle.None;
-                point.BorderWidth = 1;
-                point.ShadowColor = Color.Empty;
-                point.ShadowOffset = 0;
+                series.BackHatchStyle = ChartHatchStyle.None;
+                series.BorderWidth = 1;
+                series.ShadowColor = Color.Empty;
+                series.ShadowOffset = 0;
+                series.IsValueShownAsLabel = false;
             }
 
             // If a Data Point or a Legend item is selected.
@@ -128,6 +133,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                 series.BorderWidth = 5;
                 series.ShadowColor = Color.LightGray;
                 series.ShadowOffset = 4;
+                series.IsValueShownAsLabel = true;
             }
             else
             {

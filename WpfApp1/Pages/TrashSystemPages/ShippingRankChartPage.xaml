@@ -7,6 +7,7 @@
       xmlns:wfi="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
       xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
       xmlns:CHR="clr-namespace:System.Windows.Forms.DataVisualization.Charting;assembly=System.Windows.Forms.DataVisualization"
+      xmlns:sys="clr-namespace:System;assembly=mscorlib"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ShippingRankChart">
@@ -16,11 +17,11 @@
             <DockPanel DockPanel.Dock="Top">
                 <Button x:Name="ButtonTimeIntervalTextileShippingChart" Content="所有布種出貨紀錄" Height="24" Width="110" HorizontalAlignment="Left" Click="ButtonTimeIntervalTextileShippingChart_Click"/>
                 <DatePicker x:Name="DatePickerStartDate" Width="90" HorizontalAlignment="Left"/>
-                <DatePicker x:Name="DatePickerEndDate" Width="90" HorizontalAlignment="Left"/>
+                <DatePicker x:Name="DatePickerEndDate"  SelectedDate="{x:Static sys:DateTime.Now}" Width="90" HorizontalAlignment="Left"/>
                 <Label Content="排名數(起)："/>
-                <TextBox x:Name="RankValueStart" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                <TextBox x:Name="RankValueStart" Text="0" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                 <Label Content="排名數(末)："/>
-                <TextBox x:Name="RankValueEnd" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
+                <TextBox x:Name="RankValueEnd" Text="20" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                 <Label Content="布種名稱："/>
                 <TextBox x:Name="TextBoxTextileName" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
             </DockPanel>
