@@ -25,18 +25,36 @@ namespace WpfApp1.Pages.TrashSystemPages
         public ShippingRankChartPage()
         {
             InitializeComponent();
-            IEnumerable<TrashShipped> shippingRankCharts = TrashModule.GetTrashShippedList(DateTime.Now.AddDays(-20), DateTime.Now);
+            TimeIntervalTextileShippingChart();
+        }
 
+        private void ButtonTimeIntervalTextileShippingChart_Click(object sender, RoutedEventArgs e)
+        {
+            while (this.mainChart.Series.Count > 0)
+            {
+                this.mainChart.Series.RemoveAt(0);
+            };
+            CreateChartData();
+        }
+        //以時間區間顯示所有布種顏色出貨紀錄圖表
+        private void TimeIntervalTextileShippingChart()
+        {
             ChartArea ca = new ChartArea("ChartArea1");
             ca.Area3DStyle.Enable3D = false;//開啟3D
             this.mainChart.ChartAreas.Add(ca);
             Legend lgCPU = new Legend("Legend1")
             {
                 IsTextAutoFit = true,
-                Docking = Docking.Bottom
+                Docking = Docking.Right
             };
             this.mainChart.Legends.Add(lgCPU);
+            mainChart.MouseMove += new System.Windows.Forms.MouseEventHandler(MainChart_MouseMove);
+            mainChart.MouseDown += new System.Windows.Forms.MouseEventHandler(MainChart_MouseDown);
+        }
 
+        private void CreateChartData()
+        {
+            IEnumerable<TrashShipped> shippingRankCharts = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
             var dateArray = shippingRankCharts.Select(s => s.IN_DATE).Distinct().ToArray();
             foreach (var item in shippingRankCharts.Select(s => s.I_03).Distinct())
             {
@@ -51,15 +69,18 @@ namespace WpfApp1.Pages.TrashSystemPages
                 };
                 this.mainChart.Series.Add(seCPU);
                 List<double> quantityList = new List<double>();
+                double priviousValue = 0;
                 foreach (var eachDate in dateArray)
                 {
-                    quantityList.Add(shippingRankCharts.Where(w => w.I_03 == item && w.IN_DATE == eachDate).Select(s => s.Quantity).FirstOrDefault());
+                    double currentValue = shippingRankCharts.Where(w => w.I_03 == item && w.IN_DATE == eachDate).Select(s => s.Quantity).FirstOrDefault() + priviousValue;
+                    quantityList.Add(currentValue);
+                    priviousValue = currentValue;
                 }
                 mainChart.Series[item].Points.DataBindXY(dateArray, quantityList);
             }
         }
 
-        private void mainChart_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        private void MainChart_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             // Call Hit Test Method
             HitTestResult result = mainChart.HitTest(e.X, e.Y);
@@ -97,6 +118,41 @@ namespace WpfApp1.Pages.TrashSystemPages
                 // Set default cursor
                 this.Cursor = Cursors.Arrow;
             }
+        }
+
+        private void MainChart_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            HitTestResult result = mainChart.HitTest(e.X, e.Y);
+            if (result != null && result.Object != null)
+            {
+                // When user hits the LegendItem
+                if (result.Object is LegendItem)
+                {
+                    // Legend item result
+                    LegendItem legendItem = (LegendItem)result.Object;
+
+                    // series item selected
+                    Series selectedSeries = mainChart.Series[legendItem.SeriesName];
+
+                    if (selectedSeries != null)
+                    {
+
+
+                        if (selectedSeries.Enabled)
+                        {
+                            selectedSeries.Enabled = false;
+                            legendItem.Cells[0].ImageTransparentColor = Color.Red;
+                        }
+
+                        else
+                        {
+                            selectedSeries.Enabled = true;
+                            legendItem.Cells[0].ImageTransparentColor = Color.Red;
+                        }
+                    }
+                }
+            }
+
         }
     }
 }
