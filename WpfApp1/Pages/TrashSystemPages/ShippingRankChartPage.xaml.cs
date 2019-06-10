@@ -60,43 +60,60 @@ namespace WpfApp1.Pages.TrashSystemPages
             var dateArray = shippingRankCharts.Select(s => s.IN_DATE).Distinct().ToArray();
 
             List<ShippingRecord> shippingRecordList = new List<ShippingRecord>();
-            foreach (var item in shippingRankCharts.Select(s => s.I_03).Distinct())
+            var test = shippingRankCharts.GroupBy(g => g.I_03).Select(s => new ShippingRecord
+            {
+                TextileName = s.Key,
+                MaxQuantity = s.Select(ss => ss.Quantity).Sum(),
+                ShippingRecordDetails = s.Select(ss => new ShippingRecordDetail { Quantity = ss.Quantity, ShippedDate = ss.IN_DATE }).ToList()
+            })
+            .OrderByDescending(o => o.MaxQuantity)
+            .Where(w => w.TextileName.Contains(TextBoxTextileName.Text))
+            .Skip(RankValueStart.Text.ToInt())
+            .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt())
+            .Select(s => new ShippingRecord
+            {
+                TextileName = s.TextileName,
+                MaxQuantity = s.MaxQuantity,
+                ShippingRecordDetails = dateArray.Select(ss => new ShippingRecordDetail
+                {
+                    ShippedDate = ss.Date,
+                    Quantity = s.ShippingRecordDetails.Where(w => w.ShippedDate == ss.Date).Select(sss => sss.Quantity).FirstOrDefault()
+                }).ToList()
+            });
+            foreach (var item in test)
             {
                 ShippingRecord shippingRecord = new ShippingRecord
                 {
-                    TextileName = item,
+                    TextileName = item.TextileName,
                     ShippingRecordDetails = new List<ShippingRecordDetail>()
                 };
                 double priviousValue = 0;
-                foreach (var eachDate in dateArray)
+                foreach (var eachDate in item.ShippingRecordDetails.OrderBy(o => o.ShippedDate))
                 {
-                    double currentValue = shippingRankCharts.Where(w => w.I_03 == item && w.IN_DATE == eachDate).Select(s => s.Quantity).FirstOrDefault() + priviousValue;
-                    shippingRecord.ShippingRecordDetails.Add(new ShippingRecordDetail { ShippedDate = eachDate, Quantity = currentValue });
+                    double currentValue = eachDate.Quantity + priviousValue;
+                    shippingRecord.ShippingRecordDetails.Add(new ShippingRecordDetail { ShippedDate = eachDate.ShippedDate, Quantity = currentValue });
                     priviousValue = currentValue;
                 }
                 shippingRecord.MaxQuantity = priviousValue;
                 shippingRecordList.Add(shippingRecord);
             }
 
-            foreach (var item in shippingRecordList.OrderByDescending(o => o.MaxQuantity)
-                                .Where(w => w.TextileName.Contains(TextBoxTextileName.Text))
-                                .Skip(RankValueStart.Text.ToInt())
-                                .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt()))
+            foreach (var item in shippingRecordList)
             {
                 Series series = new Series(item.TextileName, 10)
                 {
                     ChartArea = "ChartArea1",
-                    ChartType = SeriesChartType.FastLine,
+                    ChartType = SeriesChartType.Line,
                     IsVisibleInLegend = true,
                     Legend = "Legend1",
                     LegendText = item.TextileName,
                     ToolTip = item.TextileName,
                     LegendToolTip = "test",
                     LabelToolTip = "test123",
-
+                    XValueType = ChartValueType.Date
                 };
                 this.mainChart.Series.Add(series);
-                mainChart.Series[item.TextileName].Points.DataBindXY(item.ShippingRecordDetails.Select(s => s.ShippedDate).ToArray(), item.ShippingRecordDetails.Select(s => s.Quantity).ToArray());
+                mainChart.Series[item.TextileName].Points.DataBindXY(item.ShippingRecordDetails.Select(s => s.ShippedDate.ToOADate()).ToArray(), item.ShippingRecordDetails.Select(s => s.Quantity).ToArray());
             }
         }
 

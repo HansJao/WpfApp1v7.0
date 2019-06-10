@@ -479,5 +479,61 @@
     "Account": [
       "SP1X1*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "T/R水波紋"
+    ],
+    "Inventory": [
+      "水波紋"
+    ],
+    "Account": [
+      "水波紋*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "24CVC壓紋布"
+    ],
+    "Inventory": [
+      "24CVC壓紋布"
+    ],
+    "Account": [
+      "24CVC壓紋布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "螞蟻布"
+    ],
+    "Inventory": [
+      "螞蟻布"
+    ],
+    "Account": [
+      "螞蟻布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "羅毛布"
+    ],
+    "Inventory": [
+      "羅毛布"
+    ],
+    "Account": [
+      "羅毛布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "玫瑰花+OP"
+    ],
+    "Inventory": [
+      "玫瑰花+OP"
+    ],
+    "Account": [
+      "玫瑰花+OP*"
+    ]
   }
+  
 ]
