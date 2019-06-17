@@ -42,7 +42,13 @@ namespace WpfApp1.Pages.TrashSystemPages
         private void TimeIntervalTextileShippingChart()
         {
             ChartArea ca = new ChartArea("ChartArea1");
-            ca.Area3DStyle.Enable3D = false;//開啟3D
+            ca.CursorX.IsUserEnabled = true;
+            ca.CursorX.IsUserSelectionEnabled = true;
+            ca.AxisX.ScaleView.Zoomable = true;
+            ca.CursorY.IsUserEnabled = true;
+            ca.CursorY.IsUserSelectionEnabled = true;
+            ca.AxisY.ScaleView.Zoomable = true;
+
             this.mainChart.ChartAreas.Add(ca);
             Legend lgCPU = new Legend("Legend1")
             {
