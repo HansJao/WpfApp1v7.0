@@ -38,13 +38,11 @@
                     <ComboBox x:Name="ComboBoxCustomerNameSearch" DisplayMemberPath="Name" HorizontalAlignment="Left" Height="24" Width="115" IsEditable="True" IsTextSearchEnabled="False" KeyUp="ComboBoxCustomerNameSearch_KeyUp" SelectionChanged="ComboBoxCustomerNameSearch_SelectionChanged"/>
                     <!--<Button x:Name="ButtonUpdateDateOrder" HorizontalAlignment="Left" Content="工廠更新時間排序" Margin="5,0,0,0" Width="110" Height="25" Click="ButtonUpdateDateOrder_Click"/>-->
                 </DockPanel>
-                <StackPanel DockPanel.Dock="Left">
-                    <DataGrid x:Name="DataGridFactoryList" AlternatingRowBackground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
+                    <DataGrid DockPanel.Dock="Left" x:Name="DataGridFactoryList" AlternatingRowBackground="LightGray" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False"  SelectionChanged="DataGridFactoryList_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="工廠名稱" Binding="{Binding Name}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                </StackPanel>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
                     <StackPanel Orientation="Vertical">
                         <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" x:Name="DataGridOrderColorFactoryShippingDetail" Height="200" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridProcessOrderColorDetail_SelectionChanged" CellEditEnding="DataGridFactoryShippingDetail_CellEditEnding" LoadingRow="DataGridOrderColorFactoryShippingDetail_LoadingRow"  >

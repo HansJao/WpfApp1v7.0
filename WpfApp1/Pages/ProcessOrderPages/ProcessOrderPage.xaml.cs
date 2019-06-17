@@ -693,6 +693,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 row.Background = Brushes.Pink;
             }
+            else
+            {
+                row.Background = Brushes.White;
+            }
         }
 
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
