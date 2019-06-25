@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Windows.Input;
+using WpfApp1.DataClass.Chart;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.TrashModule;
 using WpfApp1.Modules.TrashModule.Implement;
@@ -36,7 +37,9 @@ namespace WpfApp1.Pages.TrashSystemPages
             {
                 this.mainChart.Series.RemoveAt(0);
             };
-            CreateChartData();
+            IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+            IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+            CreateChartData(chartTables);
         }
         //以時間區間顯示所有布種顏色出貨紀錄圖表
         private void TimeIntervalTextileShippingChart()
@@ -50,6 +53,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             ca.AxisY.ScaleView.Zoomable = true;
 
             this.mainChart.ChartAreas.Add(ca);
+            this.mainChart.Name = "LineChart";
             Legend lgCPU = new Legend("Legend1")
             {
                 IsTextAutoFit = true,
@@ -60,66 +64,65 @@ namespace WpfApp1.Pages.TrashSystemPages
             mainChart.MouseDown += new System.Windows.Forms.MouseEventHandler(MainChart_MouseDown);
         }
 
-        private void CreateChartData()
+        private void CreateChartData(IEnumerable<ChartTable> chartTables)
         {
-            IEnumerable<TrashShipped> shippingRankCharts = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
-            var dateArray = shippingRankCharts.Select(s => s.IN_DATE).Distinct().ToArray();
+            var dateArray = chartTables.Select(s => s.AxisXValue).Distinct().ToArray();
 
-            List<ShippingRecord> shippingRecordList = new List<ShippingRecord>();
-            var test = shippingRankCharts.GroupBy(g => g.I_03).Select(s => new ShippingRecord
+            List<ChartData> chartDataList = new List<ChartData>();
+            var filterShippingRecord = chartTables.GroupBy(g => g.AxisYName).Select(s => new ChartData
             {
-                TextileName = s.Key,
-                MaxQuantity = s.Select(ss => ss.Quantity).Sum(),
-                ShippingRecordDetails = s.Select(ss => new ShippingRecordDetail { Quantity = ss.Quantity, ShippedDate = ss.IN_DATE }).ToList()
+                LegendText = s.Key,
+                MaxQuantity = s.Select(ss => ss.AxisYValue).Sum(),
+                ChartDetail = s.Select(ss => new ChartDetail { Quantity = ss.AxisYValue, ShippedDate = ss.AxisXValue }).ToList()
             })
             .OrderByDescending(o => o.MaxQuantity)
-            .Where(w => w.TextileName.Contains(TextBoxTextileName.Text))
+            .Where(w => w.LegendText.Contains(TextBoxTextileName.Text))
             .Skip(RankValueStart.Text.ToInt())
             .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt())
-            .Select(s => new ShippingRecord
+            .Select(s => new ChartData
             {
-                TextileName = s.TextileName,
+                LegendText = s.LegendText,
                 MaxQuantity = s.MaxQuantity,
-                ShippingRecordDetails = dateArray.Select(ss => new ShippingRecordDetail
+                ChartDetail = dateArray.Select(ss => new ChartDetail
                 {
-                    ShippedDate = ss.Date,
-                    Quantity = s.ShippingRecordDetails.Where(w => w.ShippedDate == ss.Date).Select(sss => sss.Quantity).FirstOrDefault()
+                    ShippedDate = ss,
+                    Quantity = s.ChartDetail.Where(w => w.ShippedDate == ss).Select(sss => sss.Quantity).Sum()
                 }).ToList()
             });
-            foreach (var item in test)
+            foreach (var item in filterShippingRecord)
             {
-                ShippingRecord shippingRecord = new ShippingRecord
+                ChartData chartData = new ChartData
                 {
-                    TextileName = item.TextileName,
-                    ShippingRecordDetails = new List<ShippingRecordDetail>()
+                    LegendText = item.LegendText,
+                    ChartDetail = new List<ChartDetail>()
                 };
                 double priviousValue = 0;
-                foreach (var eachDate in item.ShippingRecordDetails.OrderBy(o => o.ShippedDate))
+                foreach (var eachDate in item.ChartDetail.OrderBy(o => o.ShippedDate))
                 {
                     double currentValue = eachDate.Quantity + priviousValue;
-                    shippingRecord.ShippingRecordDetails.Add(new ShippingRecordDetail { ShippedDate = eachDate.ShippedDate, Quantity = currentValue });
+                    chartData.ChartDetail.Add(new ChartDetail { ShippedDate = eachDate.ShippedDate, Quantity = currentValue });
                     priviousValue = currentValue;
                 }
-                shippingRecord.MaxQuantity = priviousValue;
-                shippingRecordList.Add(shippingRecord);
+                chartData.MaxQuantity = priviousValue;
+                chartDataList.Add(chartData);
             }
 
-            foreach (var item in shippingRecordList)
+            foreach (var item in chartDataList)
             {
-                Series series = new Series(item.TextileName, 10)
+                Series series = new Series(item.LegendText, 10)
                 {
                     ChartArea = "ChartArea1",
                     ChartType = SeriesChartType.Line,
                     IsVisibleInLegend = true,
                     Legend = "Legend1",
-                    LegendText = item.TextileName,
-                    ToolTip = item.TextileName,
+                    LegendText = item.LegendText,
+                    ToolTip = item.LegendText,
                     LegendToolTip = "test",
                     LabelToolTip = "test123",
                     XValueType = ChartValueType.Date
                 };
                 this.mainChart.Series.Add(series);
-                mainChart.Series[item.TextileName].Points.DataBindXY(item.ShippingRecordDetails.Select(s => s.ShippedDate.ToOADate()).ToArray(), item.ShippingRecordDetails.Select(s => s.Quantity).ToArray());
+                mainChart.Series[item.LegendText].Points.DataBindXY(item.ChartDetail.Select(s => s.ShippedDate).ToArray(), item.ChartDetail.Select(s => s.Quantity).ToArray());
             }
         }
 
@@ -168,36 +171,62 @@ namespace WpfApp1.Pages.TrashSystemPages
         private void MainChart_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
             HitTestResult result = mainChart.HitTest(e.X, e.Y);
-            if (result != null && result.Object != null)
+            #region 點擊右側legendItem 可讓該線條消失
+            //if (result != null && result.Object != null)
+            //{
+            //    // When user hits the LegendItem
+            //    if (result.Object is LegendItem)
+            //    {
+            //        // Legend item result
+            //        LegendItem legendItem = (LegendItem)result.Object;
+
+            //        // series item selected
+            //        Series selectedSeries = mainChart.Series[legendItem.SeriesName];
+
+            //        if (selectedSeries != null)
+            //        {
+            //            if (selectedSeries.Enabled)
+            //            {
+            //                selectedSeries.Enabled = false;
+            //                legendItem.Cells[0].ImageTransparentColor = Color.Red;
+            //            }
+            //            else
+            //            {
+            //                selectedSeries.Enabled = true;
+            //                legendItem.Cells[0].ImageTransparentColor = Color.Red;
+            //            }
+            //        }
+            //    }
+            //}
+            #endregion
+
+            if (result.ChartElementType != ChartElementType.DataPoint || result.ChartElementType != ChartElementType.LegendItem)
+                return;
+
+            mainChart.Series.Clear();
+
+
+            // If Pie chart is selected
+            if (mainChart.Name == "PieChart")
             {
-                // When user hits the LegendItem
-                if (result.Object is LegendItem)
-                {
-                    // Legend item result
-                    LegendItem legendItem = (LegendItem)result.Object;
-
-                    // series item selected
-                    Series selectedSeries = mainChart.Series[legendItem.SeriesName];
-
-                    if (selectedSeries != null)
-                    {
-
-
-                        if (selectedSeries.Enabled)
-                        {
-                            selectedSeries.Enabled = false;
-                            legendItem.Cells[0].ImageTransparentColor = Color.Red;
-                        }
-
-                        else
-                        {
-                            selectedSeries.Enabled = true;
-                            legendItem.Cells[0].ImageTransparentColor = Color.Red;
-                        }
-                    }
-                }
+                IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+                CreateChartData(chartTables);
+                mainChart.ChartAreas[0].RecalculateAxesScale();
+                mainChart.Invalidate();
+                this.mainChart.Name = "LineChart";
+                return;
             }
+            else if (mainChart.Name == "LineChart")
+            {
+                IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(result.Series.Name, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.C_Name, AxisYValue = s.Quantity, });
+                CreateChartData(chartTables);
+                this.mainChart.Name = "PieChart";
 
+                mainChart.ChartAreas[0].RecalculateAxesScale();
+                mainChart.Invalidate();
+            }
         }
     }
 }

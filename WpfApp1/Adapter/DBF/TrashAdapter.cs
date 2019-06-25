@@ -120,6 +120,25 @@ namespace WpfApp1.Adapter.DBF
             };
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
-        }      
+        }
+
+        /// <summary>
+        /// 以布種名稱取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="textileName"></param>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd)
+        {
+            var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,CU.C_Name,INSub.Price FROM (INVOSUB.dbf AS INSub
+                           INNER JOIN CUST.dbf AS CU ON CU.CARD_NO = INSub.C_01)
+                           INNER JOIN ITEM.dbf AS I ON I.F_01 = INSub.F_01 AND I.I_01 = INSub.I_01
+                           WHERE I.I_03 = @I_03 AND INSub.IN_DATE Between cDate('" + datePickerBegin.ToString() + "') and cDate('" + datePickerEnd.ToString() + "')";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@I_03", SqlDbType.NVarChar) { Value = textileName }
+            };
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
     }
 }

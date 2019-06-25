@@ -27,5 +27,11 @@ namespace WpfApp1.Adapter
         /// <param name="trashItem"></param>
         /// <returns></returns>
         IEnumerable<TrashCustomerShipped> GetCustomerShippedListByFeature(TrashItem trashItem);
+        /// <summary>
+        /// 以布種名稱取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="textileName"></param>
+        /// <returns></returns>
+        IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd);
     }
 }

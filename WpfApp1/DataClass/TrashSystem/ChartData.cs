@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.DataClass.TrashSystem
 {
-    public class ShippingRecord
+    public class ChartData
     {
-        public string TextileName { get; set; }
-        public List<ShippingRecordDetail> ShippingRecordDetails { get; set; }
+        public string LegendText { get; set; }
+        public List<ChartDetail> ChartDetail { get; set; }
         public double MaxQuantity { get; set; }
     }
-    public class ShippingRecordDetail
+    public class ChartDetail
     {
-        public DateTime ShippedDate { get; set; }
+        public double ShippedDate { get; set; }
         public double Quantity { get; set; }
     }
 }

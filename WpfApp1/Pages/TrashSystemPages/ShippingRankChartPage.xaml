@@ -16,8 +16,8 @@
         <DockPanel>
             <DockPanel DockPanel.Dock="Top">
                 <Button x:Name="ButtonTimeIntervalTextileShippingChart" Content="所有布種出貨紀錄" Height="24" Width="110" HorizontalAlignment="Left" Click="ButtonTimeIntervalTextileShippingChart_Click"/>
-                <DatePicker x:Name="DatePickerStartDate" Width="90" HorizontalAlignment="Left"/>
-                <DatePicker x:Name="DatePickerEndDate"  SelectedDate="{x:Static sys:DateTime.Now}" Width="90" HorizontalAlignment="Left"/>
+                <DatePicker x:Name="DatePickerStartDate" Width="100" HorizontalAlignment="Left"/>
+                <DatePicker x:Name="DatePickerEndDate"  SelectedDate="{x:Static sys:DateTime.Now}" Width="100" HorizontalAlignment="Left"/>
                 <Label Content="排名數(起)："/>
                 <TextBox x:Name="RankValueStart" Text="0" Height="23" TextWrapping="Wrap" Width="120" HorizontalAlignment="Left"/>
                 <Label Content="排名數(末)："/>

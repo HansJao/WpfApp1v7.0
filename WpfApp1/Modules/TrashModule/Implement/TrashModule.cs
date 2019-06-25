@@ -77,6 +77,15 @@ namespace WpfApp1.Modules.TrashModule.Implement
             IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashAdapter.GetCustomerShippedListByFeature(trashItem);
             return trashCustomerShippeds;
         }
-     
+        /// <summary>
+        /// 以布種名稱取得客戶出貨紀錄
+        /// </summary>
+        /// <param name="textileName"></param>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd)
+        {
+            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashAdapter.GetCustomerShippedListByTextileName(textileName, datePickerBegin, datePickerEnd);
+            return trashCustomerShippeds;
+        }
     }
 }
