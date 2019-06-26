@@ -200,7 +200,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             //}
             #endregion
 
-            if (result.ChartElementType != ChartElementType.DataPoint || result.ChartElementType != ChartElementType.LegendItem)
+            if (result.ChartElementType != ChartElementType.DataPoint && result.ChartElementType != ChartElementType.LegendItem)
                 return;
 
             mainChart.Series.Clear();
