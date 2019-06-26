@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfApp1.Command;
@@ -25,7 +26,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public ICommand InventoryNumberRangeClick { get { return new RelayCommand(InventoryNumberRangeSearchExecute, CanExecute); } }
         public ICommand ExportToExcelClick { get { return new RelayCommand(ExportToExcel, CanExecute); } }
         public ICommand ExportCheckDateToExcelClick { get { return new RelayCommand(ExportCheckDateToExcel, CanExecute); } }
-
         public ICommand TestInteractivity { get { return new RelayCommand(TestInteractivityExecute, CanExecute); } }
 
         private void TestInteractivityExecute()
@@ -37,8 +37,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
         public StoreSearchViewModel()
         {
-            _storeDataList = new ObservableCollection<StoreData>();
-            _shippingHistoryStoreDataList = new ObservableCollection<StoreData>();
+            StoreDataList = new ObservableCollection<StoreData>();
+            ShippingHistoryStoreDataList = new ObservableCollection<StoreData>();
             MaxNumber = 3;
             MinNumber = 0;
             DateRange = 10;
@@ -46,61 +46,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
         public StoreData StoreData { get; set; }
 
-        private ObservableCollection<StoreData> _storeDataList { get; set; }
-        private int _maxNumber { get; set; }
-        private int _minNumber { get; set; }
-        private int _dateRange { get; set; }
+        public ObservableCollection<StoreData> StoreDataList { get; set; }
 
-        public ObservableCollection<StoreData> StoreDataList
-        {
-            get { return _storeDataList; }
-            set { _storeDataList = value; }
-        }
+        public int DateRange { get; set; }
 
-
-        public int DateRange
-        {
-            get { return _dateRange; }
-            set
-            {
-                if (_dateRange != value)
-                {
-                    _dateRange = value;
-                    RaisePropertyChanged("DateRange");
-                }
-            }
-        }
-
-        public int MaxNumber
-        {
-            get { return _maxNumber; }
-            set
-            {
-                if (_maxNumber != value)
-                {
-                    _maxNumber = value;
-                    RaisePropertyChanged("MaxNumber");
-                }
-            }
-        }
-        public int MinNumber
-        {
-            get { return _minNumber; }
-            set
-            {
-                if (_minNumber != value)
-                {
-                    _minNumber = value;
-                    RaisePropertyChanged("MinNumber");
-                }
-            }
-        }
-        private ObservableCollection<StoreData> _shippingHistoryStoreDataList { get; set; }
-        public ObservableCollection<StoreData> ShippingHistoryStoreDataList
-        {
-            get { return _shippingHistoryStoreDataList; }
-            set { _shippingHistoryStoreDataList = value; }
-        }
+        public int MaxNumber { get; set; }
+        public int MinNumber { get; set; }
+        public ObservableCollection<StoreData> ShippingHistoryStoreDataList { get; set; }
 
         private DateTime _shippingHistoryDate { get; set; } = DateTime.Now;
         public DateTime ShippingHistoryDate
@@ -111,12 +63,11 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 if (_shippingHistoryDate != value)
                 {
                     _shippingHistoryDate = value;
-                    _shippingHistoryStoreDataList.Clear();
+                    ShippingHistoryStoreDataList.Clear();
                     CreateStoreSearchListByShipped();
                     RaisePropertyChanged("ShippingHistoryDate");
                 }
             }
-
         }
 
         public List<StoreSearchData<StoreSearchColorDetail>> CreateStoreSearchListByShipped()
@@ -148,7 +99,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     });
                 }
             }
-
             return list;
         }
 
@@ -202,7 +152,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             wb.Write(file);
             file.Close();
         }
-
+        public string StoreArea { get; set; } = "1A,1B,1C,1D,1E,1F,1G,1H,1I,1J,1K,1L,1M,1N,1O,1P,1Q,1R,1S,1T,2A,2B,2C,2D";
         void InventoryNumberRangeSearchExecute()
         {
             StoreDataList.Clear();
@@ -210,22 +160,17 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+            var checkStoreAreaPattern = new Regex(string.Concat("(", StoreArea.Replace(",", ")+|("), ")+"));
 
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 IRow row;// = sheet.GetRow(0);            //新建當前工作表行數據  
 
-                StoreDataList.Add(new StoreData
-                {
-                    TextileName = sheet.SheetName,
-                    ColorName = "",
-                    CountInventory = ""
-                });
                 var colorList = new List<StoreData>();
                 for (int rowNumber = 1; rowNumber < sheet.LastRowNum; rowNumber++)  //對工作表每一行  
                 {
-                    if (rowNumber > 50)
+                    if (rowNumber > 70)
                         break;
                     row = sheet.GetRow(rowNumber);   //row讀入第i行數據  
 
@@ -235,18 +180,19 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         {
                             break;
                         }
-                        var countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
+                        ICell countInventory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory);
                         if (countInventory == null || string.IsNullOrEmpty(countInventory.ToString()) || (countInventory.CellType == CellType.Formula && countInventory.CachedFormulaResultType == CellType.Error))
                         {
                             continue;
                         }
-                        var cellValue = countInventory.NumericCellValue; //獲取i行j列數據
-                        if (cellValue <= MaxNumber && cellValue >= MinNumber)
+                        double cellValue = countInventory.NumericCellValue; //獲取i行j列數據
+                        string storeArea = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString();
+                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea))
                         {
                             colorList.Add(new StoreData
                             {
                                 ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-                                StoreArea = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
+                                StoreArea = storeArea,
                                 FabricFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.FabricFactory).ToString(),
                                 ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
                                 CountInventory = cellValue.ToString(),
@@ -265,6 +211,15 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 }
                 DateTime result;
                 var soretColorList = colorList.OrderBy(o => o.FabricFactory).ThenBy(o => o.ClearFactory).ThenBy(o => Convert.ToDouble(o.CountInventory)).ThenByDescending(O => DateTime.TryParse(O.CheckDate, out result) == true ? result : DateTime.Now.AddDays(-360));
+                if (soretColorList.Count() > 0)
+                {
+                    StoreDataList.Add(new StoreData
+                    {
+                        TextileName = sheet.SheetName,
+                        ColorName = "",
+                        CountInventory = ""
+                    });
+                }
                 foreach (var item in soretColorList)
                 {
                     StoreDataList.Add(item);
@@ -273,12 +228,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             fileStream.Close();
             workbook.Close();
         }
-
-        //bool CanExecute()
-        //{
-        //    return true;
-        //}
-
 
         /// <summary>
         /// 依據是否出貨過濾資料
@@ -299,7 +248,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     {
                         continue;
                     }
-
                     //如果沒有這個布種名稱則新增
                     if (list.Where(w => w.TextileName == sheetName).Count() == 0)
                     {
@@ -320,10 +268,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     break;
                 }
             }
-
             return list;
         }
-
         /// <summary>
         /// 建立已出貨的庫存盤點Excel清單
         /// </summary>
@@ -347,7 +293,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowColor, 1, item.StorageSpaces, ExcelHelper.GetColorByStorageSpaces(wb, item.StorageSpaces));
                 ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
             }
-
             rowIndex++;
         }
 
@@ -480,7 +425,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowColor, 2, item.CountInventory, positionStyle);
                 ExcelHelper.CreateCell(rowColor, 3, item.CheckDate?.ToString("MM/dd"), positionStyle);
             }
-
             rowIndex++;
         }
 

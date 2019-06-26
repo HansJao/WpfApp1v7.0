@@ -13,8 +13,24 @@
     </Page.DataContext>
     <Grid>
         <DockPanel>
-            <Grid DockPanel.Dock="Left" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top">
-                <DataGrid x:Name="DataGrid1" ItemsSource="{Binding StoreDataList}" AutoGenerateColumns="False" HorizontalAlignment="Left" Margin="0,60,0,10" CanUserAddRows="false">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="最少:" HorizontalAlignment="Left" VerticalAlignment="Top" Height="25"/>
+                                <TextBox  Text="{Binding MinNumber}" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="45"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="最多:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                <TextBox  Text="{Binding MaxNumber}" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="45"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <TextBox Text="{Binding StoreArea}" TextWrapping="Wrap" Width="160"/>
+                    </StackPanel>
+                    <Button Content="查詢" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Command="{Binding InventoryNumberRangeClick}" />
+                </StackPanel>
+                <DataGrid x:Name="DataGrid1" ItemsSource="{Binding StoreDataList}" AutoGenerateColumns="False" HorizontalAlignment="Left" CanUserAddRows="false">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"></DataGridTextColumn>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"></DataGridTextColumn>
@@ -25,15 +41,14 @@
                         <DataGridTextColumn Header="時間" Binding="{Binding CheckDate}"/>
                     </DataGrid.Columns>
                 </DataGrid>
-                <Button Content="查詢" HorizontalAlignment="Left" Margin="223,31,0,0" VerticalAlignment="Top" Width="75" Command="{Binding InventoryNumberRangeClick}" />
-                <TextBox  Text="{Binding MinNumber}" HorizontalAlignment="Left" Height="23" Margin="84,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-                <TextBox  Text="{Binding MaxNumber}" HorizontalAlignment="Left" Height="23" Margin="84,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-                <Label Content="最少:" HorizontalAlignment="Left" Margin="42,-2,0,0" VerticalAlignment="Top" Height="25"/>
-                <Label Content="最多:" HorizontalAlignment="Left" Margin="42,29,0,0" VerticalAlignment="Top"/>
-                <TextBox HorizontalAlignment="Left" Height="23" Margin="368,10,0,0" TextWrapping="Wrap" Text="{Binding DateRange}" VerticalAlignment="Top" Width="75"/>
-                <Button Content="清點時間清單匯出" HorizontalAlignment="Left" Margin="343,38,0,0" VerticalAlignment="Top" Width="100" Command="{Binding ExportCheckDateToExcelClick}"/>
-                <Label Content="時間範圍:" HorizontalAlignment="Left" Margin="310,10,0,0" VerticalAlignment="Top"/>
-            </Grid>
+            </DockPanel>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="時間範圍:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding DateRange}" VerticalAlignment="Top" Width="75"/>
+                </StackPanel>
+                <Button Content="清點時間清單匯出" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Command="{Binding ExportCheckDateToExcelClick}"/>
+            </StackPanel>
             <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Margin="40,10,0,0">
                 <DataGrid x:Name="DataGridStoreSearchListByShipped" AutoGenerateColumns="False" ItemsSource="{Binding ShippingHistoryStoreDataList}" SelectedItem="{Binding StoreData}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,60,0,10" CanUserAddRows="False">
                     <i:Interaction.Triggers>
