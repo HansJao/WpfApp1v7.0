@@ -56,5 +56,18 @@ namespace WpfApp1.Utility
                 }
             }
         }
+
+        public static IEnumerable<TSource> CheckSkip<TSource>(this IEnumerable<TSource> source, bool checkSkip, int start, int end)
+        {
+            if (checkSkip)
+            {
+                return source.Skip(start)
+                 .Take(end);
+            }
+            else
+            {
+                return source;
+            }
+        }
     }
 }

@@ -39,7 +39,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             };
             IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
             IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
-            CreateChartData(chartTables);
+            CreateChartData(chartTables, true);
         }
         //以時間區間顯示所有布種顏色出貨紀錄圖表
         private void TimeIntervalTextileShippingChart()
@@ -64,7 +64,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             mainChart.MouseDown += new System.Windows.Forms.MouseEventHandler(MainChart_MouseDown);
         }
 
-        private void CreateChartData(IEnumerable<ChartTable> chartTables)
+        private void CreateChartData(IEnumerable<ChartTable> chartTables, bool skipCheck)
         {
             var dateArray = chartTables.Select(s => s.AxisXValue).Distinct().ToArray();
 
@@ -77,8 +77,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             })
             .OrderByDescending(o => o.MaxQuantity)
             .Where(w => w.LegendText.Contains(TextBoxTextileName.Text))
-            .Skip(RankValueStart.Text.ToInt())
-            .Take(RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt())
+            .CheckSkip(skipCheck, RankValueStart.Text.ToInt(), RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt())
             .Select(s => new ChartData
             {
                 LegendText = s.LegendText,
@@ -211,7 +210,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             {
                 IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
                 IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
-                CreateChartData(chartTables);
+                CreateChartData(chartTables, true);
                 mainChart.ChartAreas[0].RecalculateAxesScale();
                 mainChart.Invalidate();
                 this.mainChart.Name = "LineChart";
@@ -221,7 +220,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             {
                 IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(result.Series.Name, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
                 IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.C_Name, AxisYValue = s.Quantity, });
-                CreateChartData(chartTables);
+                CreateChartData(chartTables, false);
                 this.mainChart.Name = "PieChart";
 
                 mainChart.ChartAreas[0].RecalculateAxesScale();
