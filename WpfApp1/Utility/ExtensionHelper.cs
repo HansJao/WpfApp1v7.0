@@ -57,16 +57,27 @@ namespace WpfApp1.Utility
             }
         }
 
-        public static IEnumerable<TSource> CheckSkip<TSource>(this IEnumerable<TSource> source, bool checkSkip, int start, int end)
+        public static IEnumerable<TSource> CheckFilter<TSource>(this IEnumerable<TSource> source, bool checkSkip, int start, int end, Func<TSource, bool> predicate)
         {
             if (checkSkip)
             {
-                return source.Skip(start)
+                return source.ExecuteWhere(predicate).Skip(start)
                  .Take(end);
             }
             else
             {
                 return source;
+            }
+        }
+
+        public static IEnumerable<TSource> ExecuteWhere<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            foreach (var item in source)
+            {
+                if (predicate(item))
+                {
+                    yield return item;
+                }
             }
         }
     }

@@ -76,8 +76,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                 ChartDetail = s.Select(ss => new ChartDetail { Quantity = ss.AxisYValue, ShippedDate = ss.AxisXValue }).ToList()
             })
             .OrderByDescending(o => o.MaxQuantity)
-            .Where(w => w.LegendText.Contains(TextBoxTextileName.Text))
-            .CheckSkip(skipCheck, RankValueStart.Text.ToInt(), RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt())
+            .CheckFilter(skipCheck, RankValueStart.Text.ToInt(), RankValueEnd.Text.ToInt() - RankValueStart.Text.ToInt(), w => w.LegendText.Contains(TextBoxTextileName.Text))
             .Select(s => new ChartData
             {
                 LegendText = s.LegendText,
@@ -99,6 +98,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                 foreach (var eachDate in item.ChartDetail.OrderBy(o => o.ShippedDate))
                 {
                     double currentValue = eachDate.Quantity + priviousValue;
+                    if (currentValue == priviousValue) continue;
                     chartData.ChartDetail.Add(new ChartDetail { ShippedDate = eachDate.ShippedDate, Quantity = currentValue });
                     priviousValue = currentValue;
                 }
