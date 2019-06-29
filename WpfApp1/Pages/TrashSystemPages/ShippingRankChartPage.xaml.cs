@@ -27,7 +27,8 @@ namespace WpfApp1.Pages.TrashSystemPages
         public ShippingRankChartPage()
         {
             InitializeComponent();
-            TimeIntervalTextileShippingChart();
+
+            InitializeTextileShippingChart();
             DatePickerStartDate.SelectedDate = DateTime.Now.AddMonths(-1);
         }
 
@@ -41,8 +42,8 @@ namespace WpfApp1.Pages.TrashSystemPages
             IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
             CreateChartData(chartTables, true);
         }
-        //以時間區間顯示所有布種顏色出貨紀錄圖表
-        private void TimeIntervalTextileShippingChart()
+
+        private void InitializeTextileShippingChart()
         {
             ChartArea ca = new ChartArea("ChartArea1");
             ca.CursorX.IsUserEnabled = true;
@@ -54,12 +55,52 @@ namespace WpfApp1.Pages.TrashSystemPages
 
             this.mainChart.ChartAreas.Add(ca);
             this.mainChart.Name = "LineChart";
-            Legend lgCPU = new Legend("Legend1")
+            Legend legend = new Legend("Legend1")
             {
                 IsTextAutoFit = true,
+                BackColor = Color.Transparent,
                 Docking = Docking.Right,
+                TitleFont = new Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold)
             };
-            this.mainChart.Legends.Add(lgCPU);
+            this.mainChart.Legends.Add(legend);
+
+            Legend legend2 = new Legend("Legend2")
+            {
+                IsTextAutoFit = true,
+                BackColor = Color.Transparent,
+                Docking = Docking.Right,
+                TitleFont = new Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold)
+            };
+            this.mainChart.Legends.Add(legend2);
+
+            // Add first cell column
+            LegendCellColumn firstColumn = new LegendCellColumn
+            {
+                ColumnType = LegendCellColumnType.SeriesSymbol,
+                HeaderText = "顏色",
+                HeaderBackColor = Color.WhiteSmoke
+            };
+            this.mainChart.Legends["Legend2"].CellColumns.Add(firstColumn);
+
+            // Add second cell column
+            LegendCellColumn secondColumn = new LegendCellColumn
+            {
+                ColumnType = LegendCellColumnType.Text,
+                HeaderText = "布種名稱",
+                Text = "#LEGENDTEXT",
+                HeaderBackColor = Color.WhiteSmoke
+            };
+            this.mainChart.Legends["Legend2"].CellColumns.Add(secondColumn);
+
+            LegendCellColumn avgColumn = new LegendCellColumn
+            {
+                Text = "#LEGENDTEXT",
+                HeaderText = "Avg",
+                Name = "AvgColumn",
+                HeaderBackColor = Color.WhiteSmoke
+            };
+            this.mainChart.Legends["Legend1"].CellColumns.Add(avgColumn);
+
             mainChart.MouseMove += new System.Windows.Forms.MouseEventHandler(MainChart_MouseMove);
             mainChart.MouseDown += new System.Windows.Forms.MouseEventHandler(MainChart_MouseDown);
         }
@@ -105,7 +146,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                 chartData.MaxQuantity = priviousValue;
                 chartDataList.Add(chartData);
             }
-
+            mainChart.Legends["Legend1"].CustomItems.Clear();
             foreach (var item in chartDataList)
             {
                 Series series = new Series(item.LegendText, 10)
@@ -113,13 +154,22 @@ namespace WpfApp1.Pages.TrashSystemPages
                     ChartArea = "ChartArea1",
                     ChartType = SeriesChartType.Line,
                     IsVisibleInLegend = true,
-                    Legend = "Legend1",
+                    Legend = "Legend2",
                     LegendText = item.LegendText,
                     ToolTip = item.LegendText,
                     LegendToolTip = "test",
                     LabelToolTip = "test123",
                     XValueType = ChartValueType.Date
                 };
+                // Add custom legend item with line style
+                LegendItem legendItem = new LegendItem
+                {                    
+                    SeriesName = item.LegendText,
+                    Name = (Math.Round(item.MaxQuantity / ((DatePickerEndDate.SelectedDate ?? DateTime.Now).ToOADate() - (DatePickerStartDate.SelectedDate ?? DateTime.Now).ToOADate()), 2)).ToString(),
+                    MarkerStyle = MarkerStyle.None,
+                    ImageStyle = LegendImageStyle.Line
+                };
+                mainChart.Legends["Legend1"].CustomItems.Add(legendItem);
                 this.mainChart.Series.Add(series);
                 mainChart.Series[item.LegendText].Points.DataBindXY(item.ChartDetail.Select(s => s.ShippedDate).ToArray(), item.ChartDetail.Select(s => s.Quantity).ToArray());
             }
