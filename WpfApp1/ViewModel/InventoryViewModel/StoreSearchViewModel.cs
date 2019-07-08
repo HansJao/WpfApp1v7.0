@@ -153,6 +153,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             file.Close();
         }
         public string StoreArea { get; set; } = "1A,1B,1C,1D,1E,1F,1G,1H,1I,1J,1K,1L,1M,1N,1O,1P,1Q,1R,1S,1T,2A,2B,2C,2D";
+        public string TextileName { get; set; } = "";
         void InventoryNumberRangeSearchExecute()
         {
             StoreDataList.Clear();
@@ -160,13 +161,18 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            var checkStoreAreaPattern = new Regex(string.Concat("(", StoreArea.Replace(",", ")+|("), ")+"));
+            Regex checkStoreAreaPattern = new Regex(string.Concat("(", StoreArea.Replace(",", ")+|("), ")+"));
+            Regex checkTextileNamePattern = new Regex(string.Concat("(", TextileName.Replace(",", ")+|("), ")+"));
 
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 IRow row;// = sheet.GetRow(0);            //新建當前工作表行數據  
 
+                if (!checkTextileNamePattern.IsMatch(sheet.SheetName))
+                {
+                    continue;
+                }
                 var colorList = new List<StoreData>();
                 for (int rowNumber = 1; rowNumber < sheet.LastRowNum; rowNumber++)  //對工作表每一行  
                 {

@@ -26,8 +26,9 @@
                                 <TextBox  Text="{Binding MaxNumber}" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="45"/>
                             </StackPanel>
                         </StackPanel>
-                        <TextBox Text="{Binding StoreArea}" TextWrapping="Wrap" Width="160"/>
+                        <TextBox Text="{Binding StoreArea}" TextWrapping="Wrap" Height="50" MaxWidth="250"/>
                     </StackPanel>
+                    <TextBox Text="{Binding TextileName}" TextWrapping="Wrap" Height="80"/>
                     <Button Content="查詢" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Command="{Binding InventoryNumberRangeClick}" />
                 </StackPanel>
                 <DataGrid x:Name="DataGrid1" ItemsSource="{Binding StoreDataList}" AutoGenerateColumns="False" HorizontalAlignment="Left" CanUserAddRows="false">
