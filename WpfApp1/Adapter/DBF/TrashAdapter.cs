@@ -94,13 +94,22 @@ namespace WpfApp1.Adapter.DBF
                 sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
                             INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
                             INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 
-                            WHERE cust.C_Name = " + customerName + " AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";
+                            WHERE cust.C_NAME = '" + customerName + "' AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";
             }
             //SqlParameter[] parameters = new SqlParameter[]
             //{
             //    new SqlParameter("@CustomerName", SqlDbType.NVarChar) { Value = customerName },
             //};
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
+        /// <summary>
+        /// 取得客戶清單
+        /// </summary>
+        public IEnumerable<TrashCustomer> GetCustomerList()
+        {
+            var sqlCmd = @"SELECT CARD_NO,C_NAME FROM CUST.dbf";           
+            var result = DapperHelper.QueryDbfCollection<TrashCustomer>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
         /// <summary>

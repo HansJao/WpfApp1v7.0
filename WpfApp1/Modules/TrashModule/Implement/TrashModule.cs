@@ -66,7 +66,14 @@ namespace WpfApp1.Modules.TrashModule.Implement
             //var test = trashCustomerShipped.Where(w => w.I_03.Contains("仿韓國棉黑")).OrderBy(o => o.I_03);
             return trashCustomerShipped;
         }
-
+        /// <summary>
+        /// 取得客戶清單
+        /// </summary>
+        public IEnumerable<TrashCustomer> GetCustomerList()
+        {
+            IEnumerable<TrashCustomer> trashCustomers = TrashAdapter.GetCustomerList();
+            return trashCustomers;
+        }
         /// <summary>
         /// 以布種取得客戶出貨紀錄
         /// </summary>

@@ -29,6 +29,8 @@ namespace WpfApp1.Pages.TrashSystemPages
             InitializeComponent();
 
             InitializeTextileShippingChart();
+            IEnumerable<TrashCustomer> trashCustomers = TrashModule.GetCustomerList();
+            ComboBoxCustomer.ItemsSource = trashCustomers;
             DatePickerStartDate.SelectedDate = DateTime.Now.AddMonths(-1);
         }
 
@@ -38,6 +40,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             {
                 this.mainChart.Series.RemoveAt(0);
             };
+            this.mainChart.Name = "Textile";
             IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
             IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
             CreateChartData(chartTables, true);
@@ -54,7 +57,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             ca.AxisY.ScaleView.Zoomable = true;
 
             this.mainChart.ChartAreas.Add(ca);
-            this.mainChart.Name = "LineChart";
+            this.mainChart.Name = "Textile";
             Legend legend = new Legend("Legend1")
             {
                 IsTextAutoFit = true,
@@ -91,6 +94,15 @@ namespace WpfApp1.Pages.TrashSystemPages
                 HeaderBackColor = Color.WhiteSmoke
             };
             this.mainChart.Legends["Legend2"].CellColumns.Add(secondColumn);
+            //// Add second cell column
+            //LegendCellColumn totalColumn = new LegendCellColumn
+            //{
+            //    ColumnType = LegendCellColumnType.Text,
+            //    HeaderText = "Sum",
+            //    Text = "#LEGENDTEXT",
+            //    HeaderBackColor = Color.WhiteSmoke
+            //};
+            //this.mainChart.Legends["Legend1"].CellColumns.Add(totalColumn);
 
             LegendCellColumn avgColumn = new LegendCellColumn
             {
@@ -161,9 +173,8 @@ namespace WpfApp1.Pages.TrashSystemPages
                     LabelToolTip = "test123",
                     XValueType = ChartValueType.Date
                 };
-                // Add custom legend item with line style
                 LegendItem legendItem = new LegendItem
-                {                    
+                {
                     SeriesName = item.LegendText,
                     Name = (Math.Round(item.MaxQuantity / ((DatePickerEndDate.SelectedDate ?? DateTime.Now).ToOADate() - (DatePickerStartDate.SelectedDate ?? DateTime.Now).ToOADate()), 2)).ToString(),
                     MarkerStyle = MarkerStyle.None,
@@ -251,31 +262,42 @@ namespace WpfApp1.Pages.TrashSystemPages
 
             if (result.ChartElementType != ChartElementType.DataPoint && result.ChartElementType != ChartElementType.LegendItem)
                 return;
-
-            mainChart.Series.Clear();
-
-
+            if (mainChart.Name != "CustomerShipped")
+                mainChart.Series.Clear();
             // If Pie chart is selected
-            if (mainChart.Name == "PieChart")
+            switch (mainChart.Name)
             {
-                IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
-                IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
-                CreateChartData(chartTables, true);
-                mainChart.ChartAreas[0].RecalculateAxesScale();
-                mainChart.Invalidate();
-                this.mainChart.Name = "LineChart";
-                return;
+                case "Textile":
+                    IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(result.Series.Name, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                    IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.C_Name, AxisYValue = s.Quantity, });
+                    CreateChartData(chartTables, false);
+                    this.mainChart.Name = "TextileCustomerDetail";
+                    mainChart.ChartAreas[0].RecalculateAxesScale();
+                    mainChart.Invalidate();
+                    break;
+                case "TextileCustomerDetail":
+                    IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                    IEnumerable<ChartTable> trashShippedsTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+                    CreateChartData(trashShippedsTables, true);
+                    mainChart.ChartAreas[0].RecalculateAxesScale();
+                    mainChart.Invalidate();
+                    this.mainChart.Name = "Textile";
+                    break;
+                default:
+                    break;
             }
-            else if (mainChart.Name == "LineChart")
-            {
-                IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(result.Series.Name, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
-                IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.C_Name, AxisYValue = s.Quantity, });
-                CreateChartData(chartTables, false);
-                this.mainChart.Name = "PieChart";
+        }
 
-                mainChart.ChartAreas[0].RecalculateAxesScale();
-                mainChart.Invalidate();
-            }
+        private void ComboBoxCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            TrashCustomer trashCustomer = ((ComboBox)sender).SelectedItem as TrashCustomer;
+            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedList(trashCustomer.C_NAME, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+            IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+            mainChart.Series.Clear();
+            CreateChartData(chartTables, true);
+            mainChart.ChartAreas[0].RecalculateAxesScale();
+            mainChart.Invalidate();
+            this.mainChart.Name = "CustomerShipped";
         }
     }
 }

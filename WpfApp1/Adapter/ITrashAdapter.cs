@@ -22,6 +22,10 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         IEnumerable<TrashCustomerShipped> GetCustomerShippedList(string customerName, DateTime customerDatePickerBegin, DateTime customerDatePickerEnd);
         /// <summary>
+        /// 取得客戶清單
+        /// </summary>
+        IEnumerable<TrashCustomer> GetCustomerList();
+        /// <summary>
         /// 以布種取得客戶出貨紀錄
         /// </summary>
         /// <param name="trashItem"></param>
