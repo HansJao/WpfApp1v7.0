@@ -94,19 +94,17 @@ namespace WpfApp1.Pages.TrashSystemPages
                 HeaderBackColor = Color.WhiteSmoke
             };
             this.mainChart.Legends["Legend2"].CellColumns.Add(secondColumn);
-            //// Add second cell column
-            //LegendCellColumn totalColumn = new LegendCellColumn
-            //{
-            //    ColumnType = LegendCellColumnType.Text,
-            //    HeaderText = "Sum",
-            //    Text = "#LEGENDTEXT",
-            //    HeaderBackColor = Color.WhiteSmoke
-            //};
-            //this.mainChart.Legends["Legend1"].CellColumns.Add(totalColumn);
+            // Add second cell column
+            LegendCellColumn totalColumn = new LegendCellColumn
+            {
+                ColumnType = LegendCellColumnType.Text,
+                HeaderText = "Sum",
+                HeaderBackColor = Color.WhiteSmoke
+            };
+            this.mainChart.Legends["Legend1"].CellColumns.Add(totalColumn);
 
             LegendCellColumn avgColumn = new LegendCellColumn
             {
-                Text = "#LEGENDTEXT",
                 HeaderText = "Avg",
                 Name = "AvgColumn",
                 HeaderBackColor = Color.WhiteSmoke
@@ -176,11 +174,13 @@ namespace WpfApp1.Pages.TrashSystemPages
                 LegendItem legendItem = new LegendItem
                 {
                     SeriesName = item.LegendText,
-                    Name = (Math.Round(item.MaxQuantity / ((DatePickerEndDate.SelectedDate ?? DateTime.Now).ToOADate() - (DatePickerStartDate.SelectedDate ?? DateTime.Now).ToOADate()), 2)).ToString(),
+                    Name = "Avg",//(Math.Round(item.MaxQuantity / ((DatePickerEndDate.SelectedDate ?? DateTime.Now).ToOADate() - (DatePickerStartDate.SelectedDate ?? DateTime.Now).ToOADate()), 2)).ToString(),
                     MarkerStyle = MarkerStyle.None,
                     ImageStyle = LegendImageStyle.Line
                 };
                 mainChart.Legends["Legend1"].CustomItems.Add(legendItem);
+                mainChart.Legends["Legend1"].CustomItems[chartDataList.IndexOf(item)].Cells.Add(LegendCellType.Text, item.MaxQuantity.ToString(), ContentAlignment.MiddleLeft);
+                mainChart.Legends["Legend1"].CustomItems[chartDataList.IndexOf(item)].Cells.Add(LegendCellType.Text, (Math.Round(item.MaxQuantity / ((DatePickerEndDate.SelectedDate ?? DateTime.Now).ToOADate() - (DatePickerStartDate.SelectedDate ?? DateTime.Now).ToOADate()), 2)).ToString(), ContentAlignment.MiddleLeft);
                 this.mainChart.Series.Add(series);
                 mainChart.Series[item.LegendText].Points.DataBindXY(item.ChartDetail.Select(s => s.ShippedDate).ToArray(), item.ChartDetail.Select(s => s.Quantity).ToArray());
             }
