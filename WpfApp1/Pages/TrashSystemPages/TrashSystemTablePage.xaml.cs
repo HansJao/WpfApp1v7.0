@@ -33,7 +33,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             DataGridInvo.ItemsSource = invoDt.DefaultView;
 
             string invosub = "INVOSUB.dbf";
-            string invosubSql = "SELECT TOP 100 * FROM " + invosub;//+ " where IN_DATE Between cDate('" + DateTime.Now.AddDays(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "') ";
+            string invosubSql = "SELECT TOP 100 * FROM " + invosub + " ORDER BY MONTH DESC";//+ " where IN_DATE Between cDate('" + DateTime.Now.AddDays(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "') ";
             DataTable invosubDt = GetOleDbDbfDataTable(databaseDirectory, invosubSql);
             DataGridInvoSub.ItemsSource = invosubDt.DefaultView;
 
