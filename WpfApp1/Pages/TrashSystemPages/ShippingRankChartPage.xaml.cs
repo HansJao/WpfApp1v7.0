@@ -36,14 +36,24 @@ namespace WpfApp1.Pages.TrashSystemPages
 
         private void ButtonTimeIntervalTextileShippingChart_Click(object sender, RoutedEventArgs e)
         {
-            while (this.mainChart.Series.Count > 0)
+            if (!(((ComboBox)ComboBoxCustomer).SelectedItem is TrashCustomer trashCustomer))
             {
-                this.mainChart.Series.RemoveAt(0);
-            };
-            this.mainChart.Name = "Textile";
-            IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
-            IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
-            CreateChartData(chartTables, true);
+                mainChart.Series.Clear();
+                this.mainChart.Name = "Textile";
+                IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+                CreateChartData(chartTables, true);
+            }
+            else
+            {
+                IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedList(trashCustomer.C_NAME, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
+                mainChart.Series.Clear();
+                CreateChartData(chartTables, true);
+                mainChart.ChartAreas[0].RecalculateAxesScale();
+                mainChart.Invalidate();
+                this.mainChart.Name = "CustomerShipped";
+            }
         }
 
         private void InitializeTextileShippingChart()
@@ -290,14 +300,27 @@ namespace WpfApp1.Pages.TrashSystemPages
 
         private void ComboBoxCustomer_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            TrashCustomer trashCustomer = ((ComboBox)sender).SelectedItem as TrashCustomer;
-            IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashModule.GetCustomerShippedList(trashCustomer.C_NAME, DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
-            IEnumerable<ChartTable> chartTables = trashCustomerShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
-            mainChart.Series.Clear();
-            CreateChartData(chartTables, true);
-            mainChart.ChartAreas[0].RecalculateAxesScale();
-            mainChart.Invalidate();
-            this.mainChart.Name = "CustomerShipped";
+
+        }
+
+
+        private void ComboBoxCustomer_KeyUp(object sender, KeyEventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(cmb.ItemsSource);
+
+            itemsViewOriginal.Filter = ((o) =>
+            {
+                if (string.IsNullOrEmpty(cmb.Text)) return false;
+                else
+                {
+                    if (((TrashCustomer)o).C_NAME.Contains(cmb.Text)) return true;
+                    else return false;
+                }
+            });
+
+            cmb.IsDropDownOpen = true;
+            itemsViewOriginal.Refresh();
         }
     }
 }
