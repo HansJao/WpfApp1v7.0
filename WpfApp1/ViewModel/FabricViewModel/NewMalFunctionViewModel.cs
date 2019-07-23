@@ -65,17 +65,17 @@ namespace WpfApp1.ViewModel.FabricViewModel
         public ICommand DataGridSelectionChangeCommand { get { return new RelayCommand(DataSelectionChangeExecute, CanExecute); } }
         private void DataSelectionChangeExecute()
         {
-            RepairOrderString = ProcessOrder.OrderString;
-            RaisePropertyChanged("RepairOrderString");
+            ErrorOrderString = ProcessOrder.OrderString;
+            RaisePropertyChanged("ErrorOrderString");
         }
 
-        private string _repairOrderString { get; set; }
-        public string RepairOrderString
+        private string _errorOrderString { get; set; }
+        public string ErrorOrderString
         {
-            get { return _repairOrderString; }
+            get { return _errorOrderString; }
             set
             {
-                _repairOrderString = value;
+                _errorOrderString = value;
                 RaisePropertyChanged("ProcessOrderVisbility");
                 string filterText = value;
                 ICollectionView cv = CollectionViewSource.GetDefaultView(ProcessOrderList);

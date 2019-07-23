@@ -86,8 +86,8 @@
                         <ComboBox x:Name="FabricColorList" Width="100" ItemsSource="{Binding FabricColorList}" DisplayMemberPath="Color" SelectedItem="{Binding FabricColor}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Label Width="60"  Content="重修訂單:"/>
-                        <TextBox Text="{Binding Path=RepairOrderString, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
+                        <Label Width="60"  Content="問題訂單:"/>
+                        <TextBox Text="{Binding Path=ErrorOrderString, UpdateSourceTrigger=PropertyChanged}" Width="100"/>
                     </StackPanel>
                     <StackPanel  Orientation="Horizontal">
                         <Label Width="60"  Content="數   量:"/>
