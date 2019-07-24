@@ -1,11 +1,11 @@
-﻿<Window x:Class="WpfApp1.Windows.FabricWindows.EditProportionGroupDialog"
+﻿<Window x:Class="WpfApp1.Windows.FabricWindows.AddProportionGroupDialog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Windows.FabricWindows"
         mc:Ignorable="d"
-        Title="修改布種比例群組" Height="300" Width="400">
+        Title="新增成份群組" Height="450" Width="800">
     <Window.CommandBindings>
         <CommandBinding Command="Close" Executed="OnCloseExecuted" />
     </Window.CommandBindings>
@@ -16,8 +16,10 @@
         <Label Content="布種名稱:" HorizontalAlignment="Left" Margin="10,16,0,0" VerticalAlignment="Top"/>
         <Label x:Name="LabelFabricName" Content="Label" HorizontalAlignment="Left" Margin="70,16,0,0" VerticalAlignment="Top"/>
         <Label Content="布種顏色:" HorizontalAlignment="Left" Margin="10,42,0,0" VerticalAlignment="Top"/>
-        <Label Content="群組:"  HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="50"/>
-        <ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="76,73,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>
+        <!--<Label x:Name="LabelColorName" Content="Label" HorizontalAlignment="Left" Height="23" Margin="70,42,0,0" VerticalAlignment="Top" Width="120" />-->
+        <!--<Label Content="群組:"  HorizontalAlignment="Left" Margin="10,70,0,0" VerticalAlignment="Top" Width="50"/>-->
+        <!--<ComboBox x:Name="ComboBoxGroup" SelectedIndex="0" HorizontalAlignment="Left" Margin="76,73,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxGroup_SelectionChanged"/>-->
+
         <DataGrid x:Name="DataGridFabricIngredientProportion" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0" AutoGenerateColumns="False" CanUserAddRows="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="紗商" Binding="{Binding Name}"/>
@@ -28,9 +30,8 @@
                 <DataGridTextColumn Header="比例" Binding="{Binding Proportion,StringFormat={}{0}%}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="ButtonChangeYarn" Content="選取成分" HorizontalAlignment="Left" Margin="320,81,0,0" VerticalAlignment="Top" Width="60" Click="ButtonChangeYarn_Click"/>
-        <Button x:Name="ButtonEditFabricColor" Content="修改比例" HorizontalAlignment="Left" Margin="153,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonEditFabricColor_Click"/>
-        <Button x:Name="ButtonDeleteFabricIngredientProportions" Content="刪除群組" HorizontalAlignment="Left" Margin="282,238,0,0" VerticalAlignment="Top" Width="75" Click="ButtonDeleteFabricIngredientProportions_Click"/>
+        <Button x:Name="ButtonChangeYarn" Content="選取成分" HorizontalAlignment="Left" Margin="320,81,0,0" VerticalAlignment="Top" Width="60" Click="ButtonChangeYarn_Click"/>        
+        <Button x:Name="ButtonAddIngredientGroup" Content="新增確認" HorizontalAlignment="Left" Margin="158,246,0,0" VerticalAlignment="Top" Width="70" Click="ButtonAddIngredientGroup_Click"/>
         <ComboBox x:Name="ComboBoxFabricColor" HorizontalAlignment="Left" DisplayMemberPath="Color" Margin="76,42,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxFabricColor_SelectionChanged"/>
     </Grid>
 </Window>

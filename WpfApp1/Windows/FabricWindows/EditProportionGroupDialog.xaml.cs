@@ -52,17 +52,6 @@ namespace WpfApp1.Windows.FabricWindows
             ComboBoxFabricColor.SelectedIndex = selectedIndex;
         }
 
-        private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
-        {
-            FabricColor selectedFabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
-            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, selectedFabricColor.ColorNo);
-            List<FabricIngredientProportion> fabricIngredientProportion = GetFabricIngredientProportions();
-            fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
-            bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
-
-            success.CheckSuccessMessageBox("新增成功!!", "好像有錯誤喔!!");
-        }
-
         private YarnSelectDialog _yarnSelectDialog { get; set; }
 
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
@@ -85,25 +74,7 @@ namespace WpfApp1.Windows.FabricWindows
             //否則會將選擇到的比例
             if (selectedIndex == -1)
             {
-                TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
-                {
-                    Left = this.Left + 100,
-                    Top = this.Top + 130
-                };
-                decimal proportion = 0;
-                if (textBoxMessageDialog.ShowDialog() == true)
-                {
-                    proportion = decimal.Parse(textBoxMessageDialog.TextBoxProportion.Text);
-                }
-                else
-                {
-                    return;
-                }
-                //當新增一個比例時,不能用修改
-                DisableChangeButtonEditFabricColor();
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(0, proportion, specificationYarnPrice);
-
-                _dictionaryFabricIngredientProportion[groupNo].Add(fabricIngredientProportion);
+                MessageBox.Show("請選擇一筆要修改的資料！");
             }
             else
             {
@@ -175,7 +146,6 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ComboBoxFabricColor_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             ComboBoxGroup.SelectedIndex = -1;
             ComboBox comboBox = (ComboBox)sender;
             FabricColor fabricColor = comboBox.SelectedItem as FabricColor;

@@ -44,8 +44,6 @@ namespace WpfApp1.Windows.FabricWindows
             _groupNo = groupNo;
             IEnumerable<YarnSpecification> specificationYarnPrices = FabricModule.GetYarnSpecificationList();
             DataGridYarnSpecification.ItemsSource = specificationYarnPrices;
-
-
         }
 
         public void ChangeGroupNo(int groupNo)

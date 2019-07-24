@@ -310,6 +310,9 @@
     <Compile Include="Windows\FabricWindows\AddFabricColorDialog.xaml.cs">
       <DependentUpon>AddFabricColorDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\FabricWindows\AddProportionGroupDialog.xaml.cs">
+      <DependentUpon>AddProportionGroupDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\FabricWindows\EditProportionGroupDialog.xaml.cs">
       <DependentUpon>EditProportionGroupDialog.xaml</DependentUpon>
     </Compile>
@@ -442,6 +445,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\FabricWindows\AddFabricColorDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\FabricWindows\AddProportionGroupDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

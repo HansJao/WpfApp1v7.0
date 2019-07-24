@@ -24,6 +24,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
     {
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
+        public ICommand AddProportionGroupClick { get { return new RelayCommand(AddProportionGroupExecute, CanExecute); } }
         public ICommand EditProportionGroupClick { get { return new RelayCommand(EditProportionGroupExecute, CanExecute); } }
         public ICommand AddProcessSequenceClick { get { return new RelayCommand(AddProcessSequenceExecute, CanExecute); } }
         public ICommand AddFabricColorClick { get { return new RelayCommand(AddFabricColorExecute, CanExecute); } }
@@ -54,7 +55,25 @@ namespace WpfApp1.ViewModel.FabricViewModel
             AddProcessSequenceDialog addProcessSequenceDialog = new AddProcessSequenceDialog(Fabric, FabricColor, ProcessSequenceListGroup);
             addProcessSequenceDialog.Show();
         }
-
+        private void AddProportionGroupExecute()
+        {
+            if (Fabric == null)
+            {
+                MessageBox.Show("未選取布種!!");
+                return;
+            }
+            if (FabricColor == null)
+            {
+                MessageBox.Show("未選取顏色!!");
+                return;
+            }
+            AddProportionGroupDialog editProportionGroupDialog = new AddProportionGroupDialog(Fabric, FabricColor, FabricColorList)
+            {
+                Left = 500,
+                Top = 550
+            };
+            editProportionGroupDialog.Show();
+        }
         private void EditProportionGroupExecute()
         {
             if (Fabric == null)
@@ -182,7 +201,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                     };
                     countIndex++;
                     decimal fabricIngredientProportionYarnCost = CreateFabricIngredientProportion(fabricIngredientPropertionItem);
-                    
+
                     groupStackPanel.Children.Add(new Label() { Content = string.Concat("紗價成本:", fabricIngredientProportionYarnCost) });
 
                     foreach (var processSequenceList in ProcessSequenceListGroup)
