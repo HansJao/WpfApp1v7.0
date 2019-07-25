@@ -19,19 +19,19 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="紗    商:"/>
-                <ComboBox x:Name="ComboBoxYarnMerchant" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBoxYarnMerchant_SelectionChanged"/>
+                <ComboBox x:Name="ComboBoxYarnMerchant" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="紗支數:"/>
-                <TextBox x:Name="TextBoxYarnCount"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxYarnCount_TextChanged"/>
+                <TextBox x:Name="TextBoxYarnCount"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="成    分:"/>
-                <TextBox x:Name="TextBoxIngredient"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxIngredient_TextChanged"/>
+                <TextBox x:Name="TextBoxIngredient"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="顏    色:"/>
-                <TextBox x:Name="TextBoxColor"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" TextChanged="TextBoxColor_TextChanged"/>
+                <TextBox x:Name="TextBoxColor"  HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" />
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <DataGrid x:Name="DataGridYarnSpecification" AutoGenerateColumns="False" CanUserAddRows="False" SelectionChanged="DataGridYarnSpecification_SelectionChanged">

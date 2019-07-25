@@ -33,15 +33,10 @@ namespace WpfApp1.Windows.FabricWindows
         }
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
-        private Fabric _fabric;
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
-        private int _fabricColorNo;
         public EditProportionGroupDialog(Fabric fabric, FabricColor FabricColor, ObservableCollection<FabricColor> fabricColorList)
         {
             InitializeComponent();
-
-            _fabric = fabric;
-            _fabricColorNo = FabricColor.ColorNo;
             LabelFabricName.Content = fabric.FabricName;
             ComboBoxFabricColor.ItemsSource = fabricColorList;
 
@@ -64,9 +59,10 @@ namespace WpfApp1.Windows.FabricWindows
             _yarnSelectDialog.ChangeYarnExecute += new YarnSelectDialog.ChangeYarnAction(ChangeYarn);
             _yarnSelectDialog.Show();
         }
-        private void ChangeYarn(SpecificationYarnPrice specificationYarnPrice, int groupNo)
+        private void ChangeYarn(SpecificationYarnPrice specificationYarnPrice)
         {
             int selectedIndex = DataGridFabricIngredientProportion.SelectedIndex;
+            int groupNo = Convert.ToInt32(ComboBoxGroup.SelectedItem);
             //如果紗成分比例沒有選擇一個色的話則會新增一個比例
             //否則會將選擇到的比例
             if (selectedIndex == -1)
@@ -98,7 +94,6 @@ namespace WpfApp1.Windows.FabricWindows
                 return;
             }
             int groupNo = Convert.ToInt16(comboBox.SelectedItem);
-            if (_yarnSelectDialog != null) _yarnSelectDialog.ChangeGroupNo(groupNo);
             DataGridFabricIngredientProportion.ItemsSource = _dictionaryFabricIngredientProportion[groupNo];
         }
 

@@ -33,13 +33,11 @@ namespace WpfApp1.Windows.FabricWindows
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
 
-        private Fabric _fabric;
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
         public AddProportionGroupDialog(Fabric fabric, FabricColor FabricColor, ObservableCollection<FabricColor> fabricColorList)
         {
             InitializeComponent();
 
-            _fabric = fabric;
             LabelFabricName.Content = fabric.FabricName;
             ComboBoxFabricColor.ItemsSource = fabricColorList;
             int selectedIndex = fabricColorList.Select(s => s.ColorNo).ToList().IndexOf(FabricColor.ColorNo);
@@ -49,7 +47,7 @@ namespace WpfApp1.Windows.FabricWindows
         private void ButtonAddIngredientGroup_Click(object sender, RoutedEventArgs e)
         {
             FabricColor selectedFabricColor = ComboBoxFabricColor.SelectedItem as FabricColor;
-            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(_fabric.FabricID, selectedFabricColor.ColorNo);
+            IngredientGroupInfo ingredientGroupInfo = FabricModule.GetIngredientGroupInfo(selectedFabricColor.FabricID, selectedFabricColor.ColorNo);
             List<FabricIngredientProportion> fabricIngredientProportion = (DataGridFabricIngredientProportion.ItemsSource as IEnumerable<FabricIngredientProportion>).ToList();
             fabricIngredientProportion.ForEach(f => f.Group = ingredientGroupInfo.Group + 1);
             bool success = FabricModule.InsertFabricIngredientProportions(ingredientGroupInfo.ColorNo, fabricIngredientProportion);
@@ -59,8 +57,7 @@ namespace WpfApp1.Windows.FabricWindows
 
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
-            int groupNo = 1;
-            YarnSelectDialog yarnSelectDialog = new YarnSelectDialog(groupNo)
+            YarnSelectDialog yarnSelectDialog = new YarnSelectDialog(1)
             {
                 Owner = this,
                 Left = this.Left + this.Width,
@@ -71,12 +68,11 @@ namespace WpfApp1.Windows.FabricWindows
             yarnSelectDialog.Show();
         }
 
-        private void ChangeYarn(SpecificationYarnPrice specificationYarnPrice, int groupNo)
+        private void ChangeYarn(SpecificationYarnPrice specificationYarnPrice)
         {
             int selectedIndex = DataGridFabricIngredientProportion.SelectedIndex;
             //如果紗成分比例沒有選擇一個色的話則會新增一個比例
             //否則會將選擇到的比例
-
             TextBoxMessageDialog textBoxMessageDialog = new TextBoxMessageDialog
             {
                 Left = this.Left + 100,
@@ -93,7 +89,7 @@ namespace WpfApp1.Windows.FabricWindows
             }
             FabricIngredientProportion fabricIngredientProportion = FabricModule.GetFabricIngredientProportion(0, proportion, specificationYarnPrice);
 
-            _dictionaryFabricIngredientProportion[groupNo].Add(fabricIngredientProportion);
+            _dictionaryFabricIngredientProportion[1].Add(fabricIngredientProportion);
         }
 
         private void ComboBoxFabricColor_SelectionChanged(object sender, SelectionChangedEventArgs e)

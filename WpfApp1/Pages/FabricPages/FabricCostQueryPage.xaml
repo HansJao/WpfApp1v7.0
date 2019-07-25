@@ -45,8 +45,8 @@
             </DockPanel>
             <StackPanel Margin="2,0,0,0" DockPanel.Dock="Left">
                 <StackPanel Orientation="Horizontal">
-                    <Button Content="新增比例群組" Height="24" Width="83" HorizontalAlignment="Right" Command="{Binding AddProportionGroupClick}"/>
-                    <Button Content="修改比例群組" Height="24" Width="83" HorizontalAlignment="Right" Command="{Binding EditProportionGroupClick}"/>
+                    <Button Content="新增成份比例" Height="24" Width="83" HorizontalAlignment="Right" Command="{Binding AddProportionGroupClick}"/>
+                    <Button Content="修改成份比例" Height="24" Width="83" Margin="10,0" HorizontalAlignment="Right" Command="{Binding EditProportionGroupClick}"/>
                 </StackPanel>
                 <StackPanel x:Name="StackPanelArea" Margin="2,0,0,0">
                 </StackPanel>

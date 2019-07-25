@@ -33,23 +33,17 @@ namespace WpfApp1.Windows.FabricWindows
         }
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
-        private int _groupNo { get; set; }
 
-        public delegate void ChangeYarnAction(SpecificationYarnPrice specificationYarnPrice, int groupNo);
+        public delegate void ChangeYarnAction(SpecificationYarnPrice specificationYarnPrice);
         public event ChangeYarnAction ChangeYarnExecute;
 
         public YarnSelectDialog(int groupNo)
         {
             InitializeComponent();
-            _groupNo = groupNo;
             IEnumerable<YarnSpecification> specificationYarnPrices = FabricModule.GetYarnSpecificationList();
             DataGridYarnSpecification.ItemsSource = specificationYarnPrices;
         }
 
-        public void ChangeGroupNo(int groupNo)
-        {
-            _groupNo = groupNo;
-        }
         private void ButtonChangeYarn_Click(object sender, RoutedEventArgs e)
         {
             YarnSpecification yarnSpecification = DataGridYarnSpecification.SelectedItem as YarnSpecification;
@@ -64,59 +58,7 @@ namespace WpfApp1.Windows.FabricWindows
                 YarnMerchant = merchantYarnPrice.YarnMerchant,
                 Price = merchantYarnPrice.Price
             };
-            ChangeYarnExecute(specificationYarnPrice, _groupNo);
-        }
-
-        private ICollectionView cv;
-        private void ComboBoxYarnMerchant_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //CheckDataGridFilterCondition();
-        }
-
-        private void TextBoxIngredient_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //CheckDataGridFilterCondition();
-        }
-
-        //private void CheckDataGridFilterCondition()
-        //{
-        //    string ingredient = TextBoxIngredient.Text.ToUpper();
-        //    string color = TextBoxColor.Text.ToUpper();
-        //    string yarnCount = TextBoxYarnCount.Text.ToUpper();
-        //    int yarnMerchant = ComboBoxYarnMerchant.SelectedIndex == -1 ? 0 : ((MerchantYarnPrice)ComboBoxYarnMerchant.SelectedItem).YarnMerchant;
-        //    bool checkNoneFilterCondition = string.IsNullOrEmpty(ingredient) && yarnMerchant == 0 && string.IsNullOrEmpty(color) && string.IsNullOrEmpty(yarnCount);
-
-        //    if (!checkNoneFilterCondition)
-        //    {
-        //        cv.Filter = o =>
-        //        {
-        //            /* change to get data row value */
-        //            MerchantYarnPrice p = o as MerchantYarnPrice;
-        //            bool checkYarnMerchant = yarnMerchant == 0 ? true : yarnMerchant == p.YarnMerchant;
-        //            bool checkColor = string.IsNullOrEmpty(color) ? true : p.Color.ToUpper().Contains(color);
-        //            bool checkIngredient = string.IsNullOrEmpty(ingredient) ? true : p.Ingredient.ToUpper().Contains(ingredient);
-        //            bool checkYarnCount = string.IsNullOrEmpty(yarnCount) ? true : p.YarnCount.ToUpper().Contains(yarnCount);
-        //            return (checkYarnMerchant && checkColor && checkIngredient && checkYarnCount);
-        //            /* end change to get data row value */
-        //        };
-        //    }
-        //    else
-        //    {
-        //        cv.Filter = o =>
-        //        {
-        //            return (true);
-        //        };
-        //    }
-        //}
-
-        private void TextBoxColor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //CheckDataGridFilterCondition();
-        }
-
-        private void TextBoxYarnCount_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //CheckDataGridFilterCondition();
+            ChangeYarnExecute(specificationYarnPrice);
         }
 
         private void DataGridYarnSpecification_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -125,12 +67,6 @@ namespace WpfApp1.Windows.FabricWindows
             YarnSpecification yarnSpecification = dataGrid.SelectedItem as YarnSpecification;
             IEnumerable<MerchantYarnPrice> merchantYarnPrices = FabricModule.GetYarnPriceByYarnSpecificationNo(yarnSpecification.YarnSpecificationNo);
             DataGridMerchantYarnPrice.ItemsSource = merchantYarnPrices;
-
-
-            //var comboBoxItems = merchantYarnPrices.Select(s => new MerchantYarnPrice { Name = s.Name }).ToList();
-            //comboBoxItems.Insert(0, new MerchantYarnPrice { Name = "全部" });
-            //ComboBoxYarnMerchant.ItemsSource = comboBoxItems;
-            //cv = CollectionViewSource.GetDefaultView(DataGridMerchantYarnPrice.ItemsSource);
         }
     }
 }
