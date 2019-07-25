@@ -33,7 +33,6 @@ namespace WpfApp1.Windows.FabricWindows
         }
 
         protected IFabricModule FabricModule { get; } = new FabricModule();
-
         private Fabric _fabric;
         private Dictionary<int, ObservableCollection<FabricIngredientProportion>> _dictionaryFabricIngredientProportion;
         private int _fabricColorNo;
@@ -43,9 +42,7 @@ namespace WpfApp1.Windows.FabricWindows
 
             _fabric = fabric;
             _fabricColorNo = FabricColor.ColorNo;
-
             LabelFabricName.Content = fabric.FabricName;
-
             ComboBoxFabricColor.ItemsSource = fabricColorList;
 
             int selectedIndex = fabricColorList.Select(s => s.ColorNo).ToList().IndexOf(FabricColor.ColorNo);
@@ -79,56 +76,17 @@ namespace WpfApp1.Windows.FabricWindows
             else
             {
                 var selectedItem = DataGridFabricIngredientProportion.SelectedItem as FabricIngredientProportion;
-                FabricIngredientProportion fabricIngredientProportion = GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, specificationYarnPrice);
+                FabricIngredientProportion fabricIngredientProportion = FabricModule.GetFabricIngredientProportion(selectedItem.ProportionNo, selectedItem.Proportion, specificationYarnPrice);
                 _dictionaryFabricIngredientProportion[groupNo].RemoveAt(selectedIndex);
                 _dictionaryFabricIngredientProportion[groupNo].Insert(selectedIndex, fabricIngredientProportion);
                 DataGridFabricIngredientProportion.SelectedIndex = selectedIndex += 1;
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
-        /// <param name="proportion">成分比例,同一布種比例應相同</param>
-        /// <param name="specificationYarnPrice"></param>
-        /// <returns></returns>
-        private FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, SpecificationYarnPrice specificationYarnPrice)
-        {
-            FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
-            {
-                ProportionNo = proportionNo,
-                YarnPriceNo = specificationYarnPrice.YarnPriceNo,
-                Name = specificationYarnPrice.Name,
-                Color = specificationYarnPrice.Color,
-                Ingredient = specificationYarnPrice.Ingredient,
-                Price = specificationYarnPrice.Price,
-                Proportion = proportion,
-                YarnCount = specificationYarnPrice.YarnCount
-            };
-            return fabricIngredientProportion;
-        }
-
-        private void DisableChangeButtonEditFabricColor()
-        {
-            ButtonEditFabricColor.IsEnabled = false;
-        }
-
         private void ButtonEditFabricColor_Click(object sender, RoutedEventArgs e)
         {
-            bool success = FabricModule.UpdateFabricProportion(GetFabricIngredientProportions());
-
+            bool success = FabricModule.UpdateFabricProportion((DataGridFabricIngredientProportion.ItemsSource as IEnumerable<FabricIngredientProportion>).ToList());
             success.CheckSuccessMessageBox("更新成功!!", "好像有錯誤喔!!");
-        }
-
-        private List<FabricIngredientProportion> GetFabricIngredientProportions()
-        {
-            List<FabricIngredientProportion> fabricIngredientProportions = new List<FabricIngredientProportion>();
-            foreach (FabricIngredientProportion item in DataGridFabricIngredientProportion.ItemsSource)
-            {
-                fabricIngredientProportions.Add(item);
-            }
-            return fabricIngredientProportions;
         }
 
         private void ComboBoxGroup_SelectionChanged(object sender, SelectionChangedEventArgs e)

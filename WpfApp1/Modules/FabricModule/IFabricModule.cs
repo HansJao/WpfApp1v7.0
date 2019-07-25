@@ -191,5 +191,15 @@ namespace WpfApp1.Modules.FabricModule
         /// </summary>
         /// <returns></returns>
         IEnumerable<YarnSpecification> GetYarnSpecificationList();
+
+        /// <summary>
+        /// 取得布種成份比例資料
+        /// </summary>
+        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
+        /// <param name="proportion">成分比例,同一布種比例應相同</param>
+        /// <param name="specificationYarnPrice"></param>
+        /// <returns></returns>
+        FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, SpecificationYarnPrice specificationYarnPrice);
+
     }
 }

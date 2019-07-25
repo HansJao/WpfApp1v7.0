@@ -339,6 +339,27 @@ namespace WpfApp1.Modules.FabricModule.Implement
             IEnumerable<YarnSpecification> yarnSpecificationList = FabricAdapter.GetYarnSpecificationList();
             return yarnSpecificationList;
         }
-
+        /// <summary>
+        /// 取得布種成份比例資料
+        /// </summary>
+        /// <param name="proportionNo">布種比例編號,如修改布種成分時Update使用</param>
+        /// <param name="proportion">成分比例,同一布種比例應相同</param>
+        /// <param name="specificationYarnPrice"></param>
+        /// <returns></returns>
+        public FabricIngredientProportion GetFabricIngredientProportion(int proportionNo, decimal proportion, SpecificationYarnPrice specificationYarnPrice)
+        {
+            FabricIngredientProportion fabricIngredientProportion = new FabricIngredientProportion
+            {
+                ProportionNo = proportionNo,
+                YarnPriceNo = specificationYarnPrice.YarnPriceNo,
+                Name = specificationYarnPrice.Name,
+                Color = specificationYarnPrice.Color,
+                Ingredient = specificationYarnPrice.Ingredient,
+                Price = specificationYarnPrice.Price,
+                Proportion = proportion,
+                YarnCount = specificationYarnPrice.YarnCount
+            };
+            return fabricIngredientProportion;
+        }
     }
 }
