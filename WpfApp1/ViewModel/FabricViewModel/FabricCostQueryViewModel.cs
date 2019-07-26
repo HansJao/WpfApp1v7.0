@@ -211,7 +211,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         foreach (var item in processSequenceList.Value)
                         {
                             processSequenceCost = (processSequenceCost + item.WorkPay) * (1 + item.Loss / 100);
-                            item.Cost = processSequenceCost;
+                            item.Cost = Math.Round(processSequenceCost, 2);
                             dataGridProcessSequenceList.Add(new ProcessSequenceDetail
                             {
                                 ColorNo = item.ColorNo,
@@ -265,7 +265,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         Label splitLine = new Label { Content = "" };
                         Label recommendPrice = new Label
                         {
-                            Content = string.Concat("一成售價:", price)
+                            Content = string.Concat("一成售價:", Math.Round(price, 2))
                         };
                         groupStackPanel.Children.Add(recommendPrice);
                         groupStackPanel.Children.Add(splitLine);
@@ -283,8 +283,9 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 VerticalAlignment = VerticalAlignment.Top,
                 AutoGenerateColumns = false,
                 CanUserAddRows = false,
-                Name = string.Concat("Group", fabricIngredientPropertionItem.Key)
+                Name = string.Concat("Group", fabricIngredientPropertionItem.Key),
             };
+            dataGrid.SelectionChanged += DataGrid_SelectionChanged;
             CreateDataGridTextColumn(dataGrid, "紗商", "Name", null);
             CreateDataGridTextColumn(dataGrid, "成分", "Ingredient", null);
             CreateDataGridTextColumn(dataGrid, "顏色", "Color", null);
@@ -311,6 +312,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
 
             return fabricIngredientPropertionItemYarnCost;
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private static void CreateDataGridTextColumn(DataGrid dataGrid, string Header, string BindingName, string stringFormat)

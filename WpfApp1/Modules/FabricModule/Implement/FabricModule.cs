@@ -191,7 +191,7 @@ namespace WpfApp1.Modules.FabricModule.Implement
         public bool UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions)
         {
             int count = FabricAdapter.UpdateFabricProportion(fabricIngredientProportions);
-            return count == fabricIngredientProportions.Count;
+            return count > 0 && count == fabricIngredientProportions.Count;
         }
         /// <summary>
         /// 新增布種顏色

@@ -53,10 +53,8 @@
             </StackPanel>
             <StackPanel Orientation="Vertical" Margin="2,0,0,0" DockPanel.Dock="Left">
                 <Button Command="{Binding AddProcessSequenceClick}" Content="新增/修改加工項目" Width="120" Height="24" HorizontalAlignment="Right" />
-                <ScrollViewer MaxHeight="600">
-                    <StackPanel x:Name="StackPanelProcessSequence">
-                    </StackPanel>
-                </ScrollViewer>
+                <StackPanel x:Name="StackPanelProcessSequence" Orientation="Horizontal">
+                </StackPanel>
             </StackPanel>
         </DockPanel>
     </Grid>
