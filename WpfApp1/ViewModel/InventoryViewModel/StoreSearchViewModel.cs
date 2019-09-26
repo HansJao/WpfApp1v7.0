@@ -174,7 +174,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     continue;
                 }
                 var colorList = new List<StoreData>();
-                for (int rowNumber = 1; rowNumber < sheet.LastRowNum; rowNumber++)  //對工作表每一行  
+                for (int rowNumber = 1; rowNumber <= sheet.LastRowNum; rowNumber++)  //對工作表每一行  
                 {
                     if (rowNumber > 70)
                         break;

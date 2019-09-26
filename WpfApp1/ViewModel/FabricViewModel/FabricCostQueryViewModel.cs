@@ -316,7 +316,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         private static void CreateDataGridTextColumn(DataGrid dataGrid, string Header, string BindingName, string stringFormat)
