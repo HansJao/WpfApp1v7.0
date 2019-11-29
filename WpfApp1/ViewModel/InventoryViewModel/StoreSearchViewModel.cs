@@ -161,7 +161,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            Regex checkStoreAreaPattern = new Regex(string.Concat("(", StoreArea.Replace(",", ")+|("), ")+"));
+            Regex checkStoreAreaPattern = new Regex(string.Concat("(^", StoreArea.Replace(",", ")+|(^"), ")+"));
             Regex checkTextileNamePattern = new Regex(string.Concat("(", TextileName.Replace(",", ")+|("), ")+"));
 
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
