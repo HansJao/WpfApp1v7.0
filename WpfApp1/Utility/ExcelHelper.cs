@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using WpfApp1.DataClass.Enumeration;
@@ -30,210 +31,163 @@ namespace WpfApp1.Utility
 
         public static ICellStyle GetColorByStorageSpaces(IWorkbook wb, string storageSpaces)
         {
-            switch (GetStoregeSpacesWord(storageSpaces))
+            //NPOI.SS.UserModel.IFont font = wb.CreateFont();
+            //font.Color = IndexedColors.White.Index;
+
+            switch (storageSpaces)
             {
-                case "1A":
+                case var someVal when new Regex("(^1A)+").IsMatch(someVal):
                     ICellStyle style = wb.CreateCellStyle();
-                    style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Tan.Index;
-                    style.FillPattern = FillPattern.LessDots;
+                    style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Orange.Index;
+                    style.FillPattern = FillPattern.SolidForeground;
                     return style;
-                case "1B":
+                case var someVal when new Regex("(^1B)+|(B小)").IsMatch(someVal):
                     ICellStyle bstyle = wb.CreateCellStyle();
-                    bstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+                    bstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.DarkYellow.Index;
                     bstyle.FillPattern = FillPattern.SolidForeground;
                     return bstyle;
-                case "1C":
+                case var someVal when new Regex("(^1C)+").IsMatch(someVal):
                     ICellStyle cstyle = wb.CreateCellStyle();
-                    cstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Pink.Index;
-                    cstyle.FillPattern = FillPattern.LeastDots;
+                    cstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Green.Index;
+                    cstyle.FillPattern = FillPattern.SolidForeground;
                     return cstyle;
-                case "1D":
+                case var someVal when new Regex("(^1D)+").IsMatch(someVal):
                     ICellStyle dstyle = wb.CreateCellStyle();
-                    dstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Gold.Index;
+                    dstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Teal.Index;
                     dstyle.FillPattern = FillPattern.SolidForeground;
                     return dstyle;
-                case "E":
+                case var someVal when new Regex("(^1E)+").IsMatch(someVal):
                     ICellStyle estyle = wb.CreateCellStyle();
-                    estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+                    estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BlueGrey.Index;
                     estyle.FillPattern = FillPattern.SolidForeground;
                     return estyle;
-                case "F":
+                case var someVal when new Regex("(^1F)+").IsMatch(someVal):
                     ICellStyle fstyle = wb.CreateCellStyle();
-                    fstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BrightGreen.Index;
-                    fstyle.FillPattern = FillPattern.ThinForwardDiagonals;
+                    fstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey50Percent.Index;
+                    fstyle.FillPattern = FillPattern.SolidForeground;
                     return fstyle;
-                case "G":
+                case var someVal when new Regex("(^1G)+|(G小)").IsMatch(someVal):
                     ICellStyle gstyle = wb.CreateCellStyle();
-                    gstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Turquoise.Index;
-                    gstyle.FillPattern = FillPattern.ThinBackwardDiagonals;
+                    gstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+                    gstyle.FillPattern = FillPattern.SolidForeground;
                     return gstyle;
-                case "H":
+                case var someVal when new Regex("(^1H)+|(H小)").IsMatch(someVal):
                     ICellStyle hstyle = wb.CreateCellStyle();
-                    hstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SkyBlue.Index;
-                    hstyle.FillPattern = FillPattern.LessDots;
+                    hstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightOrange.Index;
+                    hstyle.FillPattern = FillPattern.SolidForeground;
                     return hstyle;
-                case "I":
+                case var someVal when new Regex("(^1I)+").IsMatch(someVal):
                     ICellStyle istyle = wb.CreateCellStyle();
-                    istyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Rose.Index;
+                    istyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Lime.Index;
                     istyle.FillPattern = FillPattern.SolidForeground;
                     return istyle;
-                case "J":
+                case var someVal when new Regex("(^1J)+").IsMatch(someVal):
                     ICellStyle jstyle = wb.CreateCellStyle();
-                    jstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Tan.Index;
+                    jstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SeaGreen.Index;
                     jstyle.FillPattern = FillPattern.SolidForeground;
                     return jstyle;
-                case "K":
+                case var someVal when new Regex("(^1K)+").IsMatch(someVal):
                     ICellStyle kstyle = wb.CreateCellStyle();
-                    kstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightYellow.Index;
+                    kstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Aqua.Index;
                     kstyle.FillPattern = FillPattern.SolidForeground;
                     return kstyle;
-                case "L":
+                case var someVal when new Regex("(^L)+").IsMatch(someVal):
                     ICellStyle lstyle = wb.CreateCellStyle();
-                    lstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+                    lstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightBlue.Index;
                     lstyle.FillPattern = FillPattern.SolidForeground;
                     return lstyle;
-                case "M":
+                case var someVal when new Regex("(^1M)+|(M小)").IsMatch(someVal):
                     ICellStyle mstyle = wb.CreateCellStyle();
-                    mstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
+                    mstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Pink.Index;
                     mstyle.FillPattern = FillPattern.SolidForeground;
                     return mstyle;
-                case "N":
+                case var someVal when new Regex("(^1N)+|(N小)").IsMatch(someVal):
                     ICellStyle nstyle = wb.CreateCellStyle();
-                    nstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.PaleBlue.Index;
+                    nstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Gold.Index;
                     nstyle.FillPattern = FillPattern.SolidForeground;
                     return nstyle;
-                case "O":
+                case var someVal when new Regex("(^1O)+").IsMatch(someVal):
                     ICellStyle ostyle = wb.CreateCellStyle();
                     ostyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Lavender.Index;
                     ostyle.FillPattern = FillPattern.SolidForeground;
                     return ostyle;
-                case "P":
+                case var someVal when new Regex("(^1P)+").IsMatch(someVal):
                     ICellStyle pstyle = wb.CreateCellStyle();
-                    pstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.CornflowerBlue.Index;
+                    pstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
                     pstyle.FillPattern = FillPattern.SolidForeground;
                     return pstyle;
-                case "Q":
+                case var someVal when new Regex("(^1Q)+|(Q小)").IsMatch(someVal):
                     ICellStyle qstyle = wb.CreateCellStyle();
-                    qstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LemonChiffon.Index;
+                    qstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightYellow.Index;
                     qstyle.FillPattern = FillPattern.SolidForeground;
                     return qstyle;
-                case "2A":
+                case var someVal when new Regex("(^1R)+").IsMatch(someVal):
+                    ICellStyle rstyle = wb.CreateCellStyle();
+                    rstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Turquoise.Index;
+                    rstyle.FillPattern = FillPattern.SolidForeground;
+                    return rstyle;
+                case var someVal when new Regex("(^1S)+").IsMatch(someVal):
+                    ICellStyle sstyle = wb.CreateCellStyle();
+                    sstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+                    sstyle.FillPattern = FillPattern.SolidForeground;
+                    return sstyle;
+                case var someVal when new Regex("(^1T)+").IsMatch(someVal):
+                    ICellStyle tstyle = wb.CreateCellStyle();
+                    tstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Rose.Index;
+                    tstyle.FillPattern = FillPattern.SolidForeground;
+                    return tstyle;
+                case var someVal when new Regex("(^2A)+").IsMatch(someVal):
                     ICellStyle a2style = wb.CreateCellStyle();
-                    a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+                    a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Tan.Index;
                     a2style.FillPattern = FillPattern.SolidForeground;
                     return a2style;
-                case "2B":
+                case var someVal when new Regex("(^2B)+").IsMatch(someVal):
                     ICellStyle b2style = wb.CreateCellStyle();
-                    b2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightCornflowerBlue.Index;
+                    b2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
                     b2style.FillPattern = FillPattern.SolidForeground;
                     return b2style;
-                case "2C":
+                case var someVal when new Regex("(^2C)+").IsMatch(someVal):
                     ICellStyle c2style = wb.CreateCellStyle();
-                    c2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SeaGreen.Index;
-                    c2style.FillPattern = FillPattern.ThinBackwardDiagonals;
+                    c2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
+                    c2style.FillPattern = FillPattern.SolidForeground;
                     return c2style;
-                case "2D":
+                case var someVal when new Regex("(^2D)+").IsMatch(someVal):
                     ICellStyle d2style = wb.CreateCellStyle();
-                    d2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightOrange.Index;
+                    d2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.PaleBlue.Index;
                     d2style.FillPattern = FillPattern.SolidForeground;
                     return d2style;
+                case var someVal when new Regex("(^A)+").IsMatch(someVal):
+                    ICellStyle oastyle = wb.CreateCellStyle();
+                    oastyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Lavender.Index;
+                    oastyle.FillPattern = FillPattern.SolidForeground;
+                    oastyle.BorderTop = BorderStyle.MediumDashDot;
+                    oastyle.BorderRight = BorderStyle.MediumDashDot;
+                    oastyle.BorderLeft = BorderStyle.MediumDashDot;
+                    oastyle.BorderBottom = BorderStyle.MediumDashDot;
+                    return oastyle;
+                case var someVal when new Regex("(^B)+").IsMatch(someVal):
+                    ICellStyle obstyle = wb.CreateCellStyle();
+                    obstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.CornflowerBlue.Index;
+                    obstyle.FillPattern = FillPattern.SolidForeground;
+                    obstyle.BorderTop = BorderStyle.MediumDashDot;
+                    obstyle.BorderRight = BorderStyle.MediumDashDot;
+                    obstyle.BorderLeft = BorderStyle.MediumDashDot;
+                    obstyle.BorderBottom = BorderStyle.MediumDashDot;
+                    return obstyle;
+                case var someVal when new Regex("(^菜)+").IsMatch(someVal):
+                    ICellStyle vestyle = wb.CreateCellStyle();
+                    vestyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LemonChiffon.Index;
+                    vestyle.FillPattern = FillPattern.SolidForeground;
+                    vestyle.BorderTop = BorderStyle.MediumDashDot;
+                    vestyle.BorderRight = BorderStyle.MediumDashDot;
+                    vestyle.BorderLeft = BorderStyle.MediumDashDot;
+                    vestyle.BorderBottom = BorderStyle.MediumDashDot;
+                    return vestyle;
                 default:
                     ICellStyle defaultstyle = wb.CreateCellStyle();
                     return defaultstyle;
             }
         }
-
-        public static string GetStoregeSpacesWord(string storageSpaces)
-        {
-            storageSpaces = storageSpaces ?? "";
-            if (storageSpaces.ToUpper().Contains("1A"))
-            {
-                return "1A";
-            }
-            else if (storageSpaces.ToUpper().Contains("1B"))
-            {
-                return "1B";
-            }
-            else if (storageSpaces.ToUpper().Contains("1C"))
-            {
-                return "1C";
-            }
-            else if (storageSpaces.ToUpper().Contains("1D"))
-            {
-                return "1D";
-            }
-            else if (storageSpaces.ToUpper().Contains("E"))
-            {
-                return "E";
-            }
-            else if (storageSpaces.ToUpper().Contains("F"))
-            {
-                return "F";
-            }
-            else if (storageSpaces.ToUpper().Contains("G"))
-            {
-                return "G";
-            }
-            else if (storageSpaces.ToUpper().Contains("H"))
-            {
-                return "H";
-            }
-            else if (storageSpaces.ToUpper().Contains("I"))
-            {
-                return "I";
-            }
-            else if (storageSpaces.ToUpper().Contains("J"))
-            {
-                return "J";
-            }
-            else if (storageSpaces.ToUpper().Contains("K"))
-            {
-                return "K";
-            }
-            else if (storageSpaces.ToUpper().Contains("L"))
-            {
-                return "L";
-            }
-            else if (storageSpaces.ToUpper().Contains("M"))
-            {
-                return "M";
-            }
-            else if (storageSpaces.ToUpper().Contains("N"))
-            {
-                return "N";
-            }
-            else if (storageSpaces.ToUpper().Contains("O"))
-            {
-                return "O";
-            }
-            else if (storageSpaces.ToUpper().Contains("P"))
-            {
-                return "P";
-            }
-            else if (storageSpaces.ToUpper().Contains("Q"))
-            {
-                return "Q";
-            }
-            else if (storageSpaces.ToUpper().Contains("2A"))
-            {
-                return "2A";
-            }
-            else if (storageSpaces.ToUpper().Contains("2B"))
-            {
-                return "2B";
-            }
-            else if (storageSpaces.ToUpper().Contains("2C"))
-            {
-                return "2C";
-            }
-            else if (storageSpaces.ToUpper().Contains("2D"))
-            {
-                return "2D";
-            }
-
-            return "";
-        }
-
         public static T CheckExcelCellType<T>(CellType cellType, ICell cell)
         {
             switch (cellType)
