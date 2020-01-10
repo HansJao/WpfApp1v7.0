@@ -49,6 +49,11 @@ namespace WpfApp1.Modules.FabricModule
         /// <param name="fabricColorNoList"></param>
         /// <returns></returns>
         IEnumerable<FabricProportion> GetFabricProportionByColorNo(List<int> fabricColorNoList);
+        /// <summary>
+        /// 以紗商取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<YarnSpecification> GetYarnSpecificationListByYarnMerchant(int factoryID);
 
         /// <summary>
         /// 以布種顏色編號取得布種顏色比例

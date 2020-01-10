@@ -234,8 +234,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             Name = string.Concat("Group", processSequenceList.Key),
                             Margin = new Thickness(5, 5, 5, 5)
                         };
-                        CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);
-
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "工廠名稱", "Name", null);
                         DataGridTextColumn processItem = new DataGridTextColumn
                         {
                             Header = "加工項目",
@@ -246,11 +245,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
                         };
                         dataGrid.Columns.Add(processItem);
 
-                        CreateDataGridTextColumn(dataGrid, "損耗", "Loss", "{0}%");
-                        CreateDataGridTextColumn(dataGrid, "順序", "Order", null);
-                        CreateDataGridTextColumn(dataGrid, "工繳", "WorkPay", "{0:C}");
-                        CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
-                        CreateDataGridTextColumn(dataGrid, "成本", "Cost", null);
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "損耗", "Loss", "{0}%");
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "順序", "Order", null);
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "工繳", "WorkPay", "{0:C}");
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
+                        ControllerHelper.CreateDataGridTextColumn(dataGrid, "成本", "Cost", null);
                         dataGrid.ItemsSource = dataGridProcessSequenceList;
                         Grid grid = new Grid();
                         if (dataGridProcessSequenceList.Where(w => w.ColorNo > 0).Count() > 0)
@@ -286,13 +285,13 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Name = string.Concat("Group", fabricIngredientPropertionItem.Key),
             };
             dataGrid.SelectionChanged += DataGrid_SelectionChanged;
-            CreateDataGridTextColumn(dataGrid, "紗商", "Name", null);
-            CreateDataGridTextColumn(dataGrid, "成分", "Ingredient", null);
-            CreateDataGridTextColumn(dataGrid, "顏色", "Color", null);
-            CreateDataGridTextColumn(dataGrid, "紗支數", "YarnCount", null);
-            CreateDataGridTextColumn(dataGrid, "單價", "Price", "{0:C}");
-            CreateDataGridTextColumn(dataGrid, "比例", "Proportion", "{0}%");
-            CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "紗商", "Name", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "成分", "Ingredient", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "顏色", "Color", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "紗支數", "YarnCount", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "單價", "Price", "{0:C}");
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "比例", "Proportion", "{0}%");
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "群組", "Group", null);
 
             dataGrid.ItemsSource = fabricIngredientPropertionItem.Value;
 
@@ -319,18 +318,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
         }
 
-        private static void CreateDataGridTextColumn(DataGrid dataGrid, string Header, string BindingName, string stringFormat)
-        {
-            DataGridTextColumn yarnMerchant = new DataGridTextColumn
-            {
-                Header = Header,
-                Binding = new Binding(BindingName)
-                {
-                    StringFormat = stringFormat
-                }
-            };
-            dataGrid.Columns.Add(yarnMerchant);
-        }
+        
 
         public Dictionary<int, ObservableCollection<FabricIngredientProportion>> FabricIngredientProportionGroup { get; set; } = new Dictionary<int, ObservableCollection<FabricIngredientProportion>>();
         public Dictionary<int, ObservableCollection<ProcessSequenceDetail>> ProcessSequenceListGroup { get; set; }

@@ -180,7 +180,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<MerchantYarnPrice> GetYarnPriceByYarnSpecificationNo(int yarnSpecificationNo)
         {
-            string sqlCmd = @"SELECT F.Name,YP.YarnPriceNo,YP.YarnSpecificationNo,YP.Price,YP.PiecePrice,YP.CreateDate 
+            string sqlCmd = @"SELECT F.Name,YP.YarnMerchant,YP.YarnPriceNo,YP.YarnSpecificationNo,YP.Price,YP.PiecePrice,YP.CreateDate 
                               FROM YarnPrice YP
 							  INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID
                               WHERE YarnSpecificationNo = @YarnSpecificationNo";
@@ -261,6 +261,7 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, fabricIngredientProportions);
             return result;
         }
+
         /// <summary>
         /// 新增布種顏色
         /// </summary>
@@ -525,6 +526,22 @@ namespace WpfApp1.Adapter.MSSQL
                               ,[CreateDate] 
                               FROM [YarnSpecification]";
             var result = DapperHelper.QueryCollection<YarnSpecification>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd);
+            return result;
+        }
+        /// <summary>
+        /// 以紗商取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<YarnSpecification> GetYarnSpecificationListByYarnMerchant(int yarnMerchant)
+        {
+            string sqlCmd = @"SELECT YS.* FROM [hungyidb].[dbo].[YarnPrice] YP
+                              INNER JOIN YarnSpecification YS ON YP.YarnSpecificationNo = YS.YarnSpecificationNo
+                              WHERE YarnMerchant = @YarnMerchant";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                new SqlParameter("@YarnMerchant", SqlDbType.Int) { Value = yarnMerchant }
+            };
+            var result = DapperHelper.QueryCollection<YarnSpecification>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameters);
             return result;
         }
     }

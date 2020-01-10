@@ -24,7 +24,7 @@ namespace WpfApp1.Pages.FabricPages
         public YarnPricePage()
         {
             InitializeComponent();
-            this.DataContext = new YarnPriceViewModel();
+            this.DataContext = new YarnPriceViewModel(StackPanelArea);
         }
     }
 }

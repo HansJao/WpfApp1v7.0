@@ -101,6 +101,11 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         int UpdateFabricProportion(List<FabricIngredientProportion> fabricIngredientProportions);
         /// <summary>
+        /// 以紗商取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<YarnSpecification> GetYarnSpecificationListByYarnMerchant(int factoryID);
+        /// <summary>
         /// 新增布種顏色
         /// </summary>
         /// <param name="fabricID"></param>

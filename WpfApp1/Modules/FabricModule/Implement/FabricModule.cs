@@ -98,6 +98,15 @@ namespace WpfApp1.Modules.FabricModule.Implement
             return fabricProportions;
         }
         /// <summary>
+        /// 以紗商取得紗規格清單
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<YarnSpecification> GetYarnSpecificationListByYarnMerchant(int factoryID)
+        {
+            IEnumerable<YarnSpecification> yarnSpecifications = FabricAdapter.GetYarnSpecificationListByYarnMerchant(factoryID);
+            return yarnSpecifications;
+        }
+        /// <summary>
         /// 以布種顏色編號取得布種顏色比例
         /// </summary>
         /// <param name="fabricColorNoList"></param>

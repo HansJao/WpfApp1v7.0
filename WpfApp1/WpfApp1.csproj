@@ -273,6 +273,7 @@
     </Compile>
     <Compile Include="Utility\ControllerBehavior\DataGridBehavior.cs" />
     <Compile Include="Utility\ControllerBehavior\TextBoxBehavior.cs" />
+    <Compile Include="Utility\ControllerHelper.cs" />
     <Compile Include="Utility\CustomController\CustomerDataGrid.cs" />
     <Compile Include="Utility\CustomController\InventoryDataGrid.xaml.cs">
       <DependentUpon>InventoryDataGrid.xaml</DependentUpon>
