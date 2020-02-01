@@ -31,6 +31,46 @@ namespace WpfApp1.ViewModel.FabricViewModel
         public ICommand AddYarnSpecificationClick { get { return new RelayCommand(AddYarnSpecificationExecute, CanExecute); } }
         public ICommand OnSelectionChangedCommand { get { return new RelayCommand(OnSelectionChangedExecute, CanExecute); } }
         public ICommand ComboBoxSelectionChanged { get { return new RelayCommand(ComboBoxSelectionChangedExecute, CanExecute); } }
+        public ICommand SearchIngredientChanged { get { return new RelayCommand(SearchIngredientChangedExecute, CanExecute); } }
+
+
+        public string SearchIngredient { get; set; }
+        private void SearchIngredientChangedExecute()
+        {
+            string filterText = SearchIngredient;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(YarnSpecificationList);
+            if (!string.IsNullOrEmpty(filterText))
+            {
+                var splitText = filterText.Split(' ');
+                cv.Filter = o =>
+                {
+                    /* change to get data row value */
+                    YarnSpecification p = o as YarnSpecification;
+                    string spec = p.Ingredient ?? "";
+
+                    bool isContains = true;
+                    foreach (var item in splitText)
+                    {
+                        if (!spec.ToUpper().Contains(item.ToUpper()))
+                        {
+                            isContains = false;
+                            break;
+                        }
+                    }
+                    //isContains = p.I_03.ToUpper().Contains(filterText.ToUpper());
+                    return isContains;
+                    /* end change to get data row value */
+                };
+            }
+            else
+            {
+                cv.Filter = o =>
+                {
+                    return (true);
+                };
+            };
+        }
+
         public Factory SearchFactory { get; set; }
         private void ComboBoxSelectionChangedExecute()
         {
@@ -39,7 +79,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
             RaisePropertyChanged("YarnSpecificationList");
         }
 
-        public ObservableCollection<YarnPrice> MerchantYarnPrices { get; set; }
+        //public ObservableCollection<YarnPrice> MerchantYarnPrices { get; set; }
         public YarnSpecification SelectedYarnSpecification { get; set; }
         private void OnSelectionChangedExecute()
         {
@@ -47,10 +87,10 @@ namespace WpfApp1.ViewModel.FabricViewModel
 
             if (SelectedYarnSpecification == null) return;
             IEnumerable<MerchantYarnPrice> yarnPrices = FabricModule.GetYarnPriceByYarnSpecificationNo(SelectedYarnSpecification.YarnSpecificationNo);
-            MerchantYarnPrices = new ObservableCollection<YarnPrice>(yarnPrices);
+            //MerchantYarnPrices = new ObservableCollection<YarnPrice>(yarnPrices);
             MerchantYarnPrice merchantYarnPriceMax = yarnPrices.OrderByDescending(o => o.PiecePrice).First();
             MerchantYarnPrice merchantYarnPriceMin = yarnPrices.OrderBy(o => o.PiecePrice).First();
-            MerchantYarnPrice merchantYarnPriceTime = yarnPrices.OrderBy(o => o.CreateDate).First();
+            MerchantYarnPrice merchantYarnPriceTime = yarnPrices.OrderByDescending(o => o.CreateDate).First();
             var merchantYarnPriceGroup = yarnPrices.GroupBy(g => g.YarnMerchant).ToDictionary(g => g.Key, g => g.ToList());
             CreateDataGrid(0, merchantYarnPriceMax, merchantYarnPriceMin, merchantYarnPriceTime, yarnPrices);
             foreach (var item in merchantYarnPriceGroup)
@@ -58,7 +98,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 IEnumerable<MerchantYarnPrice> merchants = item.Value;
                 CreateDataGrid(item.Key, merchants.OrderByDescending(o => o.PiecePrice).First(), merchants.OrderBy(o => o.PiecePrice).First(), merchants.OrderBy(o => o.CreateDate).First(), merchants);
             }
-            RaisePropertyChanged("MerchantYarnPrices");
+            //RaisePropertyChanged("MerchantYarnPrices");
         }
 
         private void CreateDataGrid(int yarnMerchentKey, MerchantYarnPrice max, MerchantYarnPrice min, MerchantYarnPrice late, IEnumerable<MerchantYarnPrice> merchantYarnPrices)
@@ -73,6 +113,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Margin = new Thickness(5, 5, 5, 5)
             };
             ControllerHelper.CreateDataGridTextColumn(dataGrid, "紗商", "Name", null);
+            ControllerHelper.CreateDataGridTextColumn(dataGrid, "廠牌", "BrandName", null);
             ControllerHelper.CreateDataGridTextColumn(dataGrid, "單價", "Price", null);
             ControllerHelper.CreateDataGridTextColumn(dataGrid, "紗價", "PiecePrice", null);
             ControllerHelper.CreateDataGridTextColumn(dataGrid, "建立時間", "CreateDate", "{0:yy.MM.dd}");
@@ -95,6 +136,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Content = string.Concat("紗商:", max.Name)
             };
             stackPanelMax.Children.Add(labelMaxName);
+            Label labelMaxBrandName = new Label
+            {
+                Content = string.Concat("廠牌:", max.BrandName)
+            };
+            stackPanelMax.Children.Add(labelMaxBrandName);
             Label labelMaxPrice = new Label
             {
                 Content = string.Concat("價格:", max.Price)
@@ -124,6 +170,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Content = string.Concat("紗商:", min.Name)
             };
             stackPanelMin.Children.Add(labelMinName);
+            Label labelMinBrandName = new Label
+            {
+                Content = string.Concat("廠牌:", min.BrandName)
+            };
+            stackPanelMin.Children.Add(labelMinBrandName);
             Label labelMinPrice = new Label
             {
                 Content = string.Concat("價格:", min.Price)
@@ -154,6 +205,11 @@ namespace WpfApp1.ViewModel.FabricViewModel
                 Content = string.Concat("紗商:", late.Name)
             };
             stackPanelLate.Children.Add(labellateName);
+            Label labellateBrandName = new Label
+            {
+                Content = string.Concat("廠牌:", late.BrandName)
+            };
+            stackPanelLate.Children.Add(labellateBrandName);
             Label labellatePrice = new Label
             {
                 Content = string.Concat("價格:", late.Price)

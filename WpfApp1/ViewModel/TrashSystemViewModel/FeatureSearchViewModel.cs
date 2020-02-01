@@ -70,7 +70,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                         return (true);
                     };
                 };
-                _feature = value; ;
+                _feature = value;
             }
         }
         private string _productNumber { get; set; }

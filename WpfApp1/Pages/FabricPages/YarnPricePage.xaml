@@ -34,6 +34,10 @@
                         <ComboBox ItemsSource="{Binding FactoryList}" SelectedValue="{Binding Path=YarnPrice.YarnMerchant}" SelectedValuePath="FactoryID" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
+                        <Label Content="廠   牌:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
+                        <ComboBox ItemsSource="{Binding FactoryList}" SelectedValue="{Binding Path=YarnPrice.Brand}" SelectedValuePath="FactoryID" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Label Content="單   價:" HorizontalAlignment="Left" VerticalAlignment="Top" Width="50"/>
                         <TextBox HorizontalAlignment="Left" Text="{Binding Path=YarnPrice.Price}" VerticalAlignment="Top" Width="120"/>
                     </StackPanel>
@@ -63,7 +67,13 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="成  份:" Width="50"/>
-                        <TextBox Width="120" Text="{Binding SearchIngredient,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Width="120" Text="{Binding SearchIngredient,UpdateSourceTrigger=PropertyChanged}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="TextChanged">
+                                    <i:InvokeCommandAction Command="{Binding SearchIngredientChanged}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="顏  色:" Width="50"/>
@@ -85,14 +95,15 @@
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid ItemsSource="{Binding MerchantYarnPrices}" SelectedItem="{Binding MerchantYarnPrice}" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray">
+            <!--<DataGrid ItemsSource="{Binding MerchantYarnPrices}" SelectedItem="{Binding MerchantYarnPrice}" HorizontalAlignment="Left" CanUserAddRows="False" AutoGenerateColumns="False" AlternatingRowBackground="LightGray">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="紗商" Binding="{Binding Name}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="廠牌" Binding="{Binding BrandName}"></DataGridTextColumn>
                     <DataGridTextColumn Header="單價" Binding="{Binding Price}"></DataGridTextColumn>
                     <DataGridTextColumn Header="紗價" Binding="{Binding PiecePrice}"></DataGridTextColumn>
                     <DataGridTextColumn Header="建立時間" Binding="{Binding CreateDate, StringFormat=\{0:yy.MM.dd\}}"></DataGridTextColumn>
                 </DataGrid.Columns>
-            </DataGrid>
+            </DataGrid>-->
             <StackPanel x:Name="StackPanelArea" Orientation="Horizontal">
 
             </StackPanel>

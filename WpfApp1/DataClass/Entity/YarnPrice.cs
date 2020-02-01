@@ -11,6 +11,7 @@ namespace WpfApp1.DataClass.Entity
         public int YarnPriceNo { get; set; }     
         public int YarnSpecificationNo { get; set; }
         public int YarnMerchant { get; set; }
+        public int Brand { get; set; }
         public int Price { get; set; }
         public int PiecePrice { get; set; }
         public DateTime CreateDate { get; set; }

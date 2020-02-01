@@ -180,9 +180,10 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<MerchantYarnPrice> GetYarnPriceByYarnSpecificationNo(int yarnSpecificationNo)
         {
-            string sqlCmd = @"SELECT F.Name,YP.YarnMerchant,YP.YarnPriceNo,YP.YarnSpecificationNo,YP.Price,YP.PiecePrice,YP.CreateDate 
+            string sqlCmd = @"SELECT F.Name,FB.Name AS BrandName,YP.YarnMerchant,YP.YarnPriceNo,YP.YarnSpecificationNo,YP.Price,YP.PiecePrice,YP.CreateDate 
                               FROM YarnPrice YP
 							  INNER JOIN Factory F ON YP.YarnMerchant = F.FactoryID
+							  INNER JOIN Factory FB ON YP.Brand = FB.FactoryID
                               WHERE YarnSpecificationNo = @YarnSpecificationNo";
             SqlParameter[] parameters = new SqlParameter[]
           {
@@ -201,11 +202,13 @@ namespace WpfApp1.Adapter.MSSQL
             string sqlCmd = @"INSERT INTO [dbo].[YarnPrice]
                               ([YarnSpecificationNo]
                               ,[YarnMerchant]
+                              ,[Brand]
                               ,[Price]
                               ,[PiecePrice])
                               VALUES
                               (@YarnSpecificationNo
                               ,@YarnMerchant
+                              ,@Brand
                               ,@Price
                               ,@PiecePrice)";
             int count = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, yarnPrice);
@@ -534,7 +537,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// <returns></returns>
         public IEnumerable<YarnSpecification> GetYarnSpecificationListByYarnMerchant(int yarnMerchant)
         {
-            string sqlCmd = @"SELECT YS.* FROM [hungyidb].[dbo].[YarnPrice] YP
+            string sqlCmd = @"SELECT DISTINCT YS.* FROM [hungyidb].[dbo].[YarnPrice] YP
                               INNER JOIN YarnSpecification YS ON YP.YarnSpecificationNo = YS.YarnSpecificationNo
                               WHERE YarnMerchant = @YarnMerchant";
             SqlParameter[] parameters = new SqlParameter[]
