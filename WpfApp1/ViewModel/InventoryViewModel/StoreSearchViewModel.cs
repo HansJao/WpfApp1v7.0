@@ -315,42 +315,42 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 {
                     new ColumnFormat
                     {
-                        CoiumnWidth = 3000,
+                        CoiumnWidth = 4580,
                         ColumnTitle = "顏色",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 2800,
+                        CoiumnWidth = 2810,
                         ColumnTitle = "儲位",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 2600,
+                        CoiumnWidth = 1540,
                         ColumnTitle = "數量",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 3000,
+                        CoiumnWidth = 2380,
                         ColumnTitle = "清點資訊",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 3000,
+                        CoiumnWidth = 4580,
                         ColumnTitle = "顏色",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 2800,
+                        CoiumnWidth = 2810,
                         ColumnTitle = "儲位",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 2600,
+                        CoiumnWidth = 1540,
                         ColumnTitle = "數量",
                     },
                     new ColumnFormat
                     {
-                        CoiumnWidth = 3000,
+                        CoiumnWidth = 2380,
                         ColumnTitle = "清點資訊",
                     }
                 }

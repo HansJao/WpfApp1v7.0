@@ -88,9 +88,9 @@ namespace WpfApp1.ViewModel.FabricViewModel
             if (SelectedYarnSpecification == null) return;
             IEnumerable<MerchantYarnPrice> yarnPrices = FabricModule.GetYarnPriceByYarnSpecificationNo(SelectedYarnSpecification.YarnSpecificationNo);
             //MerchantYarnPrices = new ObservableCollection<YarnPrice>(yarnPrices);
-            MerchantYarnPrice merchantYarnPriceMax = yarnPrices.OrderByDescending(o => o.PiecePrice).First();
-            MerchantYarnPrice merchantYarnPriceMin = yarnPrices.OrderBy(o => o.PiecePrice).First();
-            MerchantYarnPrice merchantYarnPriceTime = yarnPrices.OrderByDescending(o => o.CreateDate).First();
+            MerchantYarnPrice merchantYarnPriceMax = yarnPrices.OrderByDescending(o => o.PiecePrice).FirstOrDefault();
+            MerchantYarnPrice merchantYarnPriceMin = yarnPrices.OrderBy(o => o.PiecePrice).FirstOrDefault();
+            MerchantYarnPrice merchantYarnPriceTime = yarnPrices.OrderByDescending(o => o.CreateDate).FirstOrDefault();
             var merchantYarnPriceGroup = yarnPrices.GroupBy(g => g.YarnMerchant).ToDictionary(g => g.Key, g => g.ToList());
             CreateDataGrid(0, merchantYarnPriceMax, merchantYarnPriceMin, merchantYarnPriceTime, yarnPrices);
             foreach (var item in merchantYarnPriceGroup)
