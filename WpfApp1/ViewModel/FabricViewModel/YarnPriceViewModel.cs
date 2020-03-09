@@ -92,11 +92,14 @@ namespace WpfApp1.ViewModel.FabricViewModel
             MerchantYarnPrice merchantYarnPriceMin = yarnPrices.OrderBy(o => o.PiecePrice).FirstOrDefault();
             MerchantYarnPrice merchantYarnPriceTime = yarnPrices.OrderByDescending(o => o.CreateDate).FirstOrDefault();
             var merchantYarnPriceGroup = yarnPrices.GroupBy(g => g.YarnMerchant).ToDictionary(g => g.Key, g => g.ToList());
-            CreateDataGrid(0, merchantYarnPriceMax, merchantYarnPriceMin, merchantYarnPriceTime, yarnPrices);
-            foreach (var item in merchantYarnPriceGroup)
+            if (merchantYarnPriceMax != null || merchantYarnPriceMin != null || merchantYarnPriceTime != null)
             {
-                IEnumerable<MerchantYarnPrice> merchants = item.Value;
-                CreateDataGrid(item.Key, merchants.OrderByDescending(o => o.PiecePrice).First(), merchants.OrderBy(o => o.PiecePrice).First(), merchants.OrderBy(o => o.CreateDate).First(), merchants);
+                CreateDataGrid(0, merchantYarnPriceMax, merchantYarnPriceMin, merchantYarnPriceTime, yarnPrices);
+                foreach (var item in merchantYarnPriceGroup)
+                {
+                    IEnumerable<MerchantYarnPrice> merchants = item.Value;
+                    CreateDataGrid(item.Key, merchants.OrderByDescending(o => o.PiecePrice).First(), merchants.OrderBy(o => o.PiecePrice).First(), merchants.OrderBy(o => o.CreateDate).First(), merchants);
+                }
             }
             //RaisePropertyChanged("MerchantYarnPrices");
         }
