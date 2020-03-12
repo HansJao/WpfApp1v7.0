@@ -70,6 +70,12 @@ namespace WpfApp1.Adapter
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrderByStatus(List<ProcessOrderColorStatus> status);
         /// <summary>
+        /// 取得加工訂單狀態
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ProcessOrderStatus> GetProcessOrderStatus();
+
+        /// <summary>
         /// 更新加工訂單顏色狀態
         /// </summary>
         /// <param name="orderColorDetailNo"></param>

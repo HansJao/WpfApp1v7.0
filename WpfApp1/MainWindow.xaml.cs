@@ -61,7 +61,7 @@ namespace WpfApp1
 
         private void ButtonReportsFunction_Click(object sender, RoutedEventArgs e)
         {
-            this.Title = "報表"; 
+            this.Title = "報表";
             this.MainFrame.NavigationService.Navigate(new ReportsPage());
         }
 
@@ -81,6 +81,12 @@ namespace WpfApp1
         {
             this.Title = "新增訂單";
             this.MainFrame.NavigationService.Navigate(new NewProcessOrderPage());
+        }
+
+        private void ButtonProcessOrderStatusdFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "訂單狀態表";
+            this.MainFrame.NavigationService.Navigate(new ProcessOrderStatusPage());
         }
 
         private void ButtonExportProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
@@ -153,13 +159,13 @@ namespace WpfApp1
         {
             this.Title = "出貨紀錄圖表";
             this.MainFrame.NavigationService.Navigate(new ShippingHistoryChartPage());
-            
+
         }
         private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨排行圖表";
             this.MainFrame.NavigationService.Navigate(new ShippingRankChartPage());
-            
+
         }
     }
 }

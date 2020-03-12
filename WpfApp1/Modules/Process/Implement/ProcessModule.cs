@@ -66,6 +66,15 @@ namespace WpfApp1.Modules.Process.Implement
             var result = ProcessOrderAdapter.GetProcessOrder().OrderByDescending(o => o.OrderNo);
             return result;
         }
+        /// <summary>
+        /// 取得加工訂單狀態
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrderStatus> GetProcessOrderStatus()
+        {
+            IEnumerable<ProcessOrderStatus> result = ProcessOrderAdapter.GetProcessOrderStatus();
+            return result;
+        }
 
         public IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status)
         {

@@ -209,6 +209,19 @@ namespace WpfApp1.Adapter.MSSQL
             return result;
         }
 
+        /// <summary>
+        /// 取得加工訂單狀態
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<ProcessOrderStatus> GetProcessOrderStatus()
+        {
+            string sql = @"SELECT PO.OrderString,PO.Fabric,POCD.Color,POCD.Quantity,POCD.Status,POCD.UpdateDate FROM ProcessOrderColorDetail POCD
+                           INNER JOIN ProcessOrder PO ON PO.OrderNo = POCD.OrderNo
+                           WHERE POCD.Status = 6 OR Status = 7 OR Status = 8 OR Status = 9";
+
+            return DapperHelper.QueryCollection<ProcessOrderStatus>(AppSettingConfig.ConnectionString(), CommandType.Text, sql);
+        }
+
         public int UpdateProcessOrderFlowDate(int orderColorDetailNo, ProcessOrderColorStatus status)
         {
             var sqlCmd = @"UPDATE ProcessOrderColorDetail
@@ -648,6 +661,7 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<ProcessOrderCustomerRelate>(AppSettingConfig.ConnectionString(), CommandType.Text, sqlCmd, parameter);
             return result;
         }
+
         /// <summary>
         /// 刪除客戶訂單關連
         /// </summary>

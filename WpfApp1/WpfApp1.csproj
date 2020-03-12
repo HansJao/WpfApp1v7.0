@@ -156,6 +156,7 @@
     <Compile Include="DataClass\Entity\ProcessOrderFlow.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFlowDate.cs" />
     <Compile Include="DataClass\Entity\ProcessOrderFile\CustomerOrderRelate.cs" />
+    <Compile Include="DataClass\Entity\ProcessOrderStatus.cs" />
     <Compile Include="DataClass\Entity\ProcessSequence.cs" />
     <Compile Include="DataClass\Entity\ProcessSequenceColorMapping.cs" />
     <Compile Include="DataClass\Entity\YarnPrice.cs" />
@@ -250,6 +251,9 @@
     <Compile Include="Pages\ProcessOrderPages\ProcessOrderPage.xaml.cs">
       <DependentUpon>ProcessOrderPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\ProcessOrderPages\ProcessOrderStatusPage.xaml.cs">
+      <DependentUpon>ProcessOrderStatusPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TrashSystemPages\ShippingHistoryChartPage.xaml.cs">
       <DependentUpon>ShippingHistoryChartPage.xaml</DependentUpon>
     </Compile>
@@ -298,6 +302,7 @@
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProcessOrderViewModel\ExportProcessOrderRecordViewModel.cs" />
+    <Compile Include="ViewModel\ProcessOrderViewModel\ProcessOrderStatusViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
@@ -402,6 +407,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcessOrderPages\ProcessOrderPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ProcessOrderPages\ProcessOrderStatusPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

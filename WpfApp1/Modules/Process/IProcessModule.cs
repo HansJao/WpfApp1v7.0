@@ -18,6 +18,11 @@ namespace WpfApp1.Modules.Process
         /// </summary>
         /// <returns></returns>
         IEnumerable<ProcessOrder> GetProcessOrder();
+        /// <summary>
+        /// 取得加工訂單狀態
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<ProcessOrderStatus> GetProcessOrderStatus();
 
         /// <summary>
         /// 取得加工訂單明細
