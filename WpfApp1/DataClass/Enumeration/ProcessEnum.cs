@@ -22,6 +22,14 @@ namespace WpfApp1.DataClass.Enumeration
         [Description("修訂")]
         修訂 = 4,
         [Description("已完成")]
-        已完成 = 5
+        已完成 = 5,
+        [Description("已排染")]
+        已排染 = 6,
+        [Description("在染缸")]
+        在染缸 = 7,
+        [Description("待定型")]
+        待定型 = 8,
+        [Description("定型中")]
+        定型中 = 9
     }
 }
