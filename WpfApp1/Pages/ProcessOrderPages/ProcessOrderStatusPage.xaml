@@ -4,60 +4,101 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProcessOrderStatus">
+      d:DesignHeight="590" d:DesignWidth="1300"
+      Title="ProcessOrderStatus"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
     <Grid>
         <StackPanel>
-            <Button Content="重新整理" Width="60" HorizontalAlignment="Left" Command="{Binding RefreshClick}"/>
             <StackPanel Orientation="Horizontal">
-                <StackPanel Margin="3,3">
-                    <Label Content="已排染"/>
-                    <DataGrid MaxHeight="500" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding ReadyDye}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="更新時間" Binding="{Binding UpdateDate}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <Button Content="重新整理" Width="60" HorizontalAlignment="Left" Command="{Binding RefreshClick}"/>
+                <Label Content="布種名稱搜尋："/>
+                <TextBox Text="{Binding Fabric,UpdateSourceTrigger=PropertyChanged}" Width="100">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="TextChanged">
+                            <i:InvokeCommandAction Command="{Binding FabricChanged}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <StackPanel Background="LightBlue">
+                        <Label Content="已排染" FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="200" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding ReadyDye}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd hh:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Background="LightGray">
+                        <Label Content="在染缸" FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="200" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Dying}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Margin="3,3">
-                    <Label Content="在染缸"/>
-                    <DataGrid MaxHeight="500" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Dying}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="更新時間" Binding="{Binding UpdateDate}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <StackPanel>
+                    <StackPanel Background="LightSteelBlue">
+                        <Label Content="待定型" FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="200" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding ReadyClear}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Background="LightSalmon">
+                        <Label Content="定型中" FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="200" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Clearing}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Margin="3,3">
-                    <Label Content="待定型"/>
-                    <DataGrid MaxHeight="500" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding ReadyClear}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="更新時間" Binding="{Binding UpdateDate}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-                <StackPanel Margin="3,3">
-                    <Label Content="定型中"/>
-                    <DataGrid MaxHeight="500" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Clearing}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
-                        <DataGrid.Columns >
-                            <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="更新時間" Binding="{Binding UpdateDate}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Background="LightPink">
+                        <Label Content="三天內已完成"  FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="441" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding Finish3Day}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
+                    <StackPanel Background="LightGreen">
+                        <Label Content="四天後已完成"  FontSize="17" FontWeight="Bold"/>
+                        <DataGrid Height="441" Margin="8,0,8,8" HorizontalAlignment="Left" VerticalAlignment="Top" ItemsSource="{Binding FinishAfter4Day}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                            <DataGrid.Columns >
+                                <DataGridTextColumn Header="訂單編號" Binding="{Binding OrderString}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
         </StackPanel>

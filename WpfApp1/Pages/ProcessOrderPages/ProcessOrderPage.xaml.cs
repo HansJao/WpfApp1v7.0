@@ -310,7 +310,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
             FactoryShippingName factoryShipping = (FactoryShippingName)(DataGridFactoryShipping).SelectedItem;
             int count = ProcessModule.DeleteFactoryShipping(factoryShipping.ShippingNo);
 
-
             IEnumerable<FactoryShippingName> factoryShippingList = ProcessModule.GetFactoryShipping(factoryShipping.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
@@ -354,7 +353,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
                         ProcessOrderColorStatus.已出完,
                         ProcessOrderColorStatus.已完成,
                         ProcessOrderColorStatus.未完成,
-                        ProcessOrderColorStatus.緊急
+                        ProcessOrderColorStatus.緊急,
+                        ProcessOrderColorStatus.在染缸,
+                        ProcessOrderColorStatus.定型中,
+                        ProcessOrderColorStatus.已排染,
+                        ProcessOrderColorStatus.待定型
                     }
                 : new List<ProcessOrderColorStatus> { status };
             List<Factory> factoryList = new List<Factory>();
@@ -573,7 +576,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
                         ProcessOrderColorStatus.已出完,
                         ProcessOrderColorStatus.已完成,
                         ProcessOrderColorStatus.未完成,
-                        ProcessOrderColorStatus.緊急
+                        ProcessOrderColorStatus.緊急,
+                        ProcessOrderColorStatus.在染缸,
+                        ProcessOrderColorStatus.定型中,
+                        ProcessOrderColorStatus.已排染,
+                        ProcessOrderColorStatus.待定型
                     };
             List<Factory> factoryList = new List<Factory>();
             IEnumerable<ProcessOrder> processOrderList = ProcessModule.GetProcessOrderFilter(factoryList, statusList, CheckBoxContainFinish.IsChecked ?? false, string.Empty);

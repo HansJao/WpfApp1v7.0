@@ -217,7 +217,7 @@ namespace WpfApp1.Adapter.MSSQL
         {
             string sql = @"SELECT PO.OrderString,PO.Fabric,POCD.Color,POCD.Quantity,POCD.Status,POCD.UpdateDate FROM ProcessOrderColorDetail POCD
                            INNER JOIN ProcessOrder PO ON PO.OrderNo = POCD.OrderNo
-                           WHERE POCD.Status = 6 OR Status = 7 OR Status = 8 OR Status = 9";
+                           WHERE POCD.Status = 5 OR POCD.Status = 6 OR Status = 7 OR Status = 8 OR Status = 9";
 
             return DapperHelper.QueryCollection<ProcessOrderStatus>(AppSettingConfig.ConnectionString(), CommandType.Text, sql);
         }
