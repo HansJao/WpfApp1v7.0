@@ -8,7 +8,7 @@
       Title="ProcessOrderStatus"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
 
-    <Grid>
+    <ScrollViewer HorizontalScrollBarVisibility="Visible">
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Button Content="重新整理" Width="60" HorizontalAlignment="Left" Command="{Binding RefreshClick}"/>
@@ -31,6 +31,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd hh:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -43,6 +44,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -57,6 +59,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -69,6 +72,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -83,6 +87,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -95,6 +100,7 @@
                                 <DataGridTextColumn Header="布種" Binding="{Binding Fabric}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="顏色" Binding="{Binding Color}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="加工流程" Binding="{Binding FactoryName}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="更新時間" Width="110" Binding="{Binding UpdateDate,StringFormat=yyyy/MM/dd HH:mm:ss}"></DataGridTextColumn>
                             </DataGrid.Columns>
                         </DataGrid>
@@ -102,5 +108,5 @@
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Page>

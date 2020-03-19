@@ -73,7 +73,29 @@ namespace WpfApp1.Modules.Process.Implement
         public IEnumerable<ProcessOrderStatus> GetProcessOrderStatus()
         {
             IEnumerable<ProcessOrderStatus> result = ProcessOrderAdapter.GetProcessOrderStatus();
-            return result;
+
+            var resultGroup = result.GroupBy(g => new { g.Color, g.OrderNo });
+            List<ProcessOrderStatus> processOrderStatuses = new List<ProcessOrderStatus>();
+            foreach (var itemGroup in resultGroup)
+            {
+                string factoryNameCombine = string.Empty;
+                foreach (var item in itemGroup)
+                {
+                    factoryNameCombine = factoryNameCombine != string.Empty ? factoryNameCombine + ">" + item.FactoryName : item.FactoryName;
+                }
+                ProcessOrderStatus firstProcessOrderStatus = itemGroup.First();
+                processOrderStatuses.Add(new ProcessOrderStatus
+                {
+                    OrderString = firstProcessOrderStatus.OrderString,
+                    Fabric = firstProcessOrderStatus.Fabric,
+                    Color = firstProcessOrderStatus.Color,
+                    Status = firstProcessOrderStatus.Status,
+                    Quantity = firstProcessOrderStatus.Quantity,
+                    UpdateDate = firstProcessOrderStatus.UpdateDate,
+                    FactoryName = factoryNameCombine
+                });
+            }
+            return processOrderStatuses;
         }
 
         public IEnumerable<ProcessOrder> GetProcessOrderByStatus(ProcessOrderColorStatus status)
