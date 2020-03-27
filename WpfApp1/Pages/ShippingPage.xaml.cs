@@ -71,6 +71,15 @@ namespace WpfApp1.Pages
 
             IEnumerable<TextileColorInventoryShipping> selectedTextiles = DataGridSelectedTextile.Items.Cast<TextileColorInventoryShipping>().Where(w => w.ShippingNumber > 0);
             AddCustomerShippingFabric(selectedTextiles);
+            ObservableCollection<TextileColorInventoryShipping> textileColorInventoryShipping = new ObservableCollection<TextileColorInventoryShipping>();
+            foreach (var item in DataGridSelectedTextile.ItemsSource.Cast<TextileColorInventoryShipping>())
+            {
+                item.ShippingNumber = 0;
+                textileColorInventoryShipping.Add(item);
+            }
+            DataGridSelectedTextile.ItemsSource = textileColorInventoryShipping;
+
+
         }
 
         private void AddCustomerShippingFabric(IEnumerable<TextileColorInventoryShipping> selectedTextiles)
@@ -612,6 +621,7 @@ namespace WpfApp1.Pages
                 selectedTextile
             };
             AddCustomerShippingFabric(selectedTextiles);
+            selectedTextile.ShippingNumber = 0;
         }
     }
 }
