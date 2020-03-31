@@ -1,0 +1,35 @@
+﻿<Page x:Class="WpfApp1.Pages.TrashSystemPages.CheckBillPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:WpfApp1.Pages.TrashSystemPages"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="CheckBillPage">
+
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="對帳日期："/>
+                <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedDateChanged">
+                            <i:InvokeCommandAction Command="{Binding CheckBillDateSelect}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </DatePicker>
+            </StackPanel>
+            <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding InvoSubList}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid.Columns >
+                    <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_Name}"/>
+                    <DataGridTextColumn Header="布種顏色" Binding="{Binding I_03}" />
+                    <DataGridTextColumn Header="數量" Binding="{Binding Quantity}" />
+                    <DataGridTextColumn Header="單價" Binding="{Binding Price}" />
+                    <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Page>

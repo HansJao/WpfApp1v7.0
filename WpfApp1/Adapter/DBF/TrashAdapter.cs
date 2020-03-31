@@ -108,7 +108,7 @@ namespace WpfApp1.Adapter.DBF
         /// </summary>
         public IEnumerable<TrashCustomer> GetCustomerList()
         {
-            var sqlCmd = @"SELECT CARD_NO,C_NAME FROM CUST.dbf";           
+            var sqlCmd = @"SELECT CARD_NO,C_NAME FROM CUST.dbf";
             var result = DapperHelper.QueryDbfCollection<TrashCustomer>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
@@ -147,6 +147,21 @@ namespace WpfApp1.Adapter.DBF
                 new SqlParameter("@I_03", SqlDbType.NVarChar) { Value = textileName }
             };
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd, parameters);
+            return result;
+        }
+        /// <summary>
+        /// 取得客戶出貨紀錄
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetInvoSub()
+        {
+
+            var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,INSub.C_01,INSub.I_01,INSub.IN_NO,I.I_03,CU.C_Name,INSub.Price FROM (INVOSUB.dbf AS INSub
+                           INNER JOIN CUST.dbf AS CU ON CU.CARD_NO = INSub.C_01)
+                           INNER JOIN ITEM.dbf AS I ON I.F_01 = INSub.F_01 AND I.I_01 = INSub.I_01
+                           WHERE INSub.IN_DATE Between cDate('" + DateTime.Now.AddYears(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "')";
+
+            var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
         }
     }

@@ -37,5 +37,10 @@ namespace WpfApp1.Adapter
         /// <param name="textileName"></param>
         /// <returns></returns>
         IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd);
+        /// <summary>
+        /// 取得客戶出貨紀錄
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<TrashCustomerShipped> GetInvoSub();
     }
 }

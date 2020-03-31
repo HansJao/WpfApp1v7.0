@@ -28,7 +28,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             string databaseDirectory = AppSettingConfig.DbfFilePath();
 
             string invo = "INVO.dbf";
-            string invoSql = "SELECT TOP 100 * FROM " + invo;
+            string invoSql = "SELECT TOP 100 * FROM " + invo + " ORDER BY MONTH DESC";
             DataTable invoDt = GetOleDbDbfDataTable(databaseDirectory, invoSql);
             DataGridInvo.ItemsSource = invoDt.DefaultView;
 
@@ -48,12 +48,12 @@ namespace WpfApp1.Pages.TrashSystemPages
             DataGridCust.ItemsSource = custDt.DefaultView;
 
             string purc = "PURC.dbf";
-            string purcSql = "SELECT TOP 100 * FROM " + purc;
+            string purcSql = "SELECT TOP 100 * FROM " + purc + " ORDER BY MONTH DESC";
             DataTable purcDt = GetOleDbDbfDataTable(databaseDirectory, purcSql);
             DataGridPurc.ItemsSource = purcDt.DefaultView;
 
             string purcSub = "PURCSUB.dbf";
-            string purcSubSql = "SELECT TOP 100 * FROM " + purcSub;
+            string purcSubSql = "SELECT TOP 100 * FROM " + purcSub + " ORDER BY MONTH DESC";
             DataTable purcSubDt = GetOleDbDbfDataTable(databaseDirectory, purcSubSql);
             DataGridPurcsub.ItemsSource = purcSubDt.DefaultView;
 

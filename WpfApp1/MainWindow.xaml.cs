@@ -167,5 +167,11 @@ namespace WpfApp1
             this.MainFrame.NavigationService.Navigate(new ShippingRankChartPage());
 
         }
+        private void ButtonCheckBillFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "對帳表";
+            this.MainFrame.NavigationService.Navigate(new CheckBillPage());
+
+        }
     }
 }

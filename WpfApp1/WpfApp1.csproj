@@ -254,6 +254,9 @@
     <Compile Include="Pages\ProcessOrderPages\ProcessOrderStatusPage.xaml.cs">
       <DependentUpon>ProcessOrderStatusPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TrashSystemPages\CheckBillPage.xaml.cs">
+      <DependentUpon>CheckBillPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TrashSystemPages\ShippingHistoryChartPage.xaml.cs">
       <DependentUpon>ShippingHistoryChartPage.xaml</DependentUpon>
     </Compile>
@@ -303,6 +306,7 @@
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ProcessOrderViewModel\ExportProcessOrderRecordViewModel.cs" />
     <Compile Include="ViewModel\ProcessOrderViewModel\ProcessOrderStatusViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\CheckBillViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
@@ -411,6 +415,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\ProcessOrderPages\ProcessOrderStatusPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TrashSystemPages\CheckBillPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

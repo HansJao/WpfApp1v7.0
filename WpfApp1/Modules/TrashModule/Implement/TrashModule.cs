@@ -48,6 +48,16 @@ namespace WpfApp1.Modules.TrashModule.Implement
             return trashList;
         }
 
+        /// <summary>
+        /// 取得客戶出貨紀錄
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<TrashCustomerShipped> GetInvoSub()
+        {
+            IEnumerable<TrashCustomerShipped> invoSub = TrashAdapter.GetInvoSub();
+            return invoSub;
+        }
+
         public void UpdateProductName(string v)
         {
             TrashAdapter.UpdateProductName(v);

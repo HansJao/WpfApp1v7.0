@@ -17,6 +17,10 @@ namespace WpfApp1.DataClass.TrashSystem
         public DateTime IN_DATE { get; set; }
         [Description("貨號")]
         public int I_01 { get; set; }
+        [Description("客戶編號")]
+        public string C_01 { get; set; }
+        [Description("日期單號")]
+        public int IN_NO { get; set; }
         /// <summary>
         /// 布種顏色
         /// </summary>
@@ -25,6 +29,6 @@ namespace WpfApp1.DataClass.TrashSystem
         [Description("數量")]
         public double Quantity { get; set; }
         [Description("單價")]
-        public double Price { get; set; }        
+        public double Price { get; set; }
     }
 }
