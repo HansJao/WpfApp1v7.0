@@ -173,5 +173,12 @@ namespace WpfApp1
             this.MainFrame.NavigationService.Navigate(new CheckBillPage());
 
         }
+        private void ButtonDefaultPriceFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "預設單價設定";
+            this.MainFrame.NavigationService.Navigate(new DefaultPricePage());
+
+        }
+        
     }
 }

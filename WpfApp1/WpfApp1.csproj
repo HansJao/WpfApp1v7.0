@@ -131,16 +131,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Adapter\DBF\TrashAdapter.cs" />
+    <Compile Include="Adapter\IAccountSystemAdapter.cs" />
     <Compile Include="Adapter\IFabricAdapter.cs" />
     <Compile Include="Adapter\IFacroryAdapter.cs" />
     <Compile Include="Adapter\IProcessOrderAdapter.cs" />
     <Compile Include="Adapter\ITrashAdapter.cs" />
+    <Compile Include="Adapter\MSSQL\AccountSystemAdapter.cs" />
     <Compile Include="Adapter\MSSQL\CustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\FabricAdapter.cs" />
     <Compile Include="Adapter\MSSQL\FactoryAdapter.cs" />
     <Compile Include="Adapter\ICustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\ProcessOrderAdapter.cs" />
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="DataClass\AccountSystem\AccountTextile.cs" />
     <Compile Include="DataClass\Chart\ChartTable.cs" />
     <Compile Include="DataClass\Customer\CustomerName.cs" />
     <Compile Include="DataClass\Entity\Customer.cs" />
@@ -203,6 +206,8 @@
     <Compile Include="DataClass\TrashSystem\TrashCustomerShipped.cs" />
     <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
     <Compile Include="DataClass\TrashSystem\TrashShipped.cs" />
+    <Compile Include="Modules\AccountSystemModule\IAccountSystemModule.cs" />
+    <Compile Include="Modules\AccountSystemModule\Implement\AccountSystemModule.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />
     <Compile Include="Modules\CustomerModule\Implement\CustomerModule.cs" />
     <Compile Include="Modules\ExcelModule\IExcelModule.cs" />
@@ -257,6 +262,9 @@
     <Compile Include="Pages\TrashSystemPages\CheckBillPage.xaml.cs">
       <DependentUpon>CheckBillPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\TrashSystemPages\DefaultPricePage.xaml.cs">
+      <DependentUpon>DefaultPricePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\TrashSystemPages\ShippingHistoryChartPage.xaml.cs">
       <DependentUpon>ShippingHistoryChartPage.xaml</DependentUpon>
     </Compile>
@@ -307,6 +315,7 @@
     <Compile Include="ViewModel\ProcessOrderViewModel\ExportProcessOrderRecordViewModel.cs" />
     <Compile Include="ViewModel\ProcessOrderViewModel\ProcessOrderStatusViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\CheckBillViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\DefaultPriceViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
@@ -419,6 +428,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\TrashSystemPages\CheckBillPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\TrashSystemPages\DefaultPricePage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -47,6 +47,7 @@
                     <MenuItem Header="出貨紀錄圖表" Click="ButtonShippingHistoryChartFunction_Click"/>
                     <MenuItem Header="出貨排行圖表" Click="ButtonShippingRankChartFunction_Click"/>
                     <MenuItem Header="對帳表" Click="ButtonCheckBillFunction_Click"/>
+                    <MenuItem Header="預設單價設定" Click="ButtonDefaultPriceFunction_Click"/>
                 </MenuItem>
             </Menu>
             <Menu>

@@ -23,10 +23,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void CheckBillDateSelectExecute()
         {
-            InvoSubList = new ObservableCollection<TrashCustomerShipped>(TrashModule.GetInvoSub()
+             InvoSubList = new ObservableCollection<TrashCustomerShipped>(TrashModule.GetInvoSub()
               .Where(w => w.C_Name == "億隆" && w.IN_DATE.ToString("yyyy/MM") == DateTime.Now.ToString("yyyy/MM"))
               .OrderBy(o => o.IN_NO));
-            OnPropertyChanged("InvoSubList")
+            OnPropertyChanged("InvoSubList");
         }
 
         public ObservableCollection<TrashCustomerShipped> InvoSubList { get; set; }
