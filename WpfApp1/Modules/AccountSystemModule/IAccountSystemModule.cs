@@ -17,5 +17,10 @@ namespace WpfApp1.Modules.AccountSystemModule
         /// <param name="trashItemPriceSetList"></param>
         /// <returns></returns>
         bool InsertDefaultPrice(IEnumerable<AccountTextile> trashItemPriceSetList);
+        /// <summary>
+        /// 取得所有布種預設單價
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<AccountTextile> GetDefaultPrice();
     }
 }

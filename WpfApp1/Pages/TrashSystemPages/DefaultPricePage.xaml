@@ -9,7 +9,7 @@
       Title="DefaultPricePage">
     <Grid>
         <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding ItemName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
         <StackPanel Orientation="Horizontal">
             <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding SelectedTrashItem}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False">
                 <DataGrid.Style>
@@ -30,16 +30,17 @@
                     <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding DefaultPrice,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
                 </StackPanel>
                 <Button Content="更新" Width="36" HorizontalAlignment="Right" Command="{Binding ButtonUpdateDefaultPriceClick}"/>
-                <DataGrid x:Name="DataGridTrashItemPriceSet" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemPriceSetList}" AutoGenerateColumns="False" Margin="0,0,0,0" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False">
+                <DataGrid x:Name="DataGridTrashItemPriceSet" HorizontalAlignment="Left" ItemsSource="{Binding AccountTextileList}" AutoGenerateColumns="False" Margin="0,0,0,0" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False">
                     <DataGrid.Style>
                         <Style TargetType="DataGrid">
                             <Setter Property="AlternatingRowBackground" Value="LightCoral"/>
                         </Style>
                     </DataGrid.Style>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}" FontSize="14"/>
-                        <DataGridTextColumn Header="貨號" Binding="{Binding I_01}" FontSize="14"/>
-                        <DataGridTextColumn Header="特徵" Binding="{Binding I_03}" FontSize="14"/>
+                        <DataGridTextColumn Header="工廠代號" Binding="{Binding FactoryID}" FontSize="14"/>
+                        <DataGridTextColumn Header="貨號" Binding="{Binding ItemID}" FontSize="14"/>
+                        <DataGridTextColumn Header="特徵" Binding="{Binding ItemName}" FontSize="14"/>
+                        <DataGridTextColumn Header="預設單價" Binding="{Binding DefaultPrice}" FontSize="14"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>

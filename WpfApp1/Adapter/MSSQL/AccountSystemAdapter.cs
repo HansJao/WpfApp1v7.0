@@ -25,5 +25,15 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, accountTextileList);
             return result;
         }
+        /// <summary>
+        /// 取得所有布種預設單價
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<AccountTextile> GetDefaultPrice()
+        {
+            string sql = @"SELECT * FROM AccountTextile;";
+            var result = DapperHelper.QueryCollection<AccountTextile>(AppSettingConfig.ConnectionString(), CommandType.Text, sql);
+            return result;
+        }
     }
 }

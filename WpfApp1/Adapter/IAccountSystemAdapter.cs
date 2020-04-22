@@ -16,5 +16,11 @@ namespace WpfApp1.Adapter
         /// <param name="trashItemPriceSetList"></param>
         /// <returns></returns>
         int InsertDefaultPrice(IEnumerable<AccountTextile> accountTextileList);
+
+        /// <summary>
+        /// 取得所有布種預設單價
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<AccountTextile> GetDefaultPrice();
     }
 }

@@ -40,5 +40,15 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
             int count = AccountSystemAdapter.InsertDefaultPrice(accountTextileList);
             return accountTextileList.Count() == count;
         }
+
+        /// <summary>
+        /// 取得所有布種預設單價
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<AccountTextile> GetDefaultPrice()
+        {
+            IEnumerable<AccountTextile> accountTextiles = AccountSystemAdapter.GetDefaultPrice();
+            return accountTextiles;
+        }
     }
 }

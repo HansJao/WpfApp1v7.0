@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.AccountSystem;
@@ -13,6 +15,7 @@ using WpfApp1.Modules.AccountSystemModule;
 using WpfApp1.Modules.AccountSystemModule.Implement;
 using WpfApp1.Modules.TrashModule;
 using WpfApp1.Modules.TrashModule.Implement;
+using WpfApp1.Utility.EqualityComparer;
 
 namespace WpfApp1.ViewModel.TrashSystemViewModel
 {
@@ -27,28 +30,98 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void ButtonUpdateDefaultPriceClickExecute()
         {
-            bool success = AccountSystemModule.InsertDefaultPrice(AccountTextileList);
-        }
-        public List<AccountTextile> AccountTextileList { get; set; } = new List<AccountTextile>();
-        private void ButtonTrashItemInsertClickExecute()
-        {
-            if (AccountTextileList.Where(w => w.FactoryID == SelectedTrashItem.F_01 && w.ItemID == SelectedTrashItem.I_01).Count() > 0)
+            IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetDefaultPrice();
+            List<AccountTextile> checkAccountTextiles = new List<AccountTextile>();
+            foreach (var item in AccountTextileList)
             {
-                MessageBox.Show("此布種已加入清單！");
+                checkAccountTextiles.AddRange(accountTextiles.Where(w => w.FactoryID == item.FactoryID && w.ItemID == item.ItemID));
 
             }
+            if (checkAccountTextiles.Count() > 0)
+            {
+                MessageBox.Show(string.Concat("以下皆已存在於資料庫：", string.Join(",", checkAccountTextiles.Select(s => s.ItemName))));
+            }
+
+            bool success = AccountSystemModule.InsertDefaultPrice(AccountTextileList.Except(checkAccountTextiles, new AccountTextileComparer()));
+            if (success)
+                MessageBox.Show("新增成功！");
             else
-                AccountTextileList.Add(new AccountTextile
+                MessageBox.Show("新增失敗！");
+
+        }
+        public ObservableCollection<AccountTextile> AccountTextileList { get; set; } = new ObservableCollection<AccountTextile>();
+
+        private string _itemName { get; set; }
+        public string ItemName
+        {
+            get
+            {
+                return _itemName;
+            }
+            set
+            {
+                string filterText = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(TrashItemList);
+                if (!string.IsNullOrEmpty(filterText))
                 {
-                    FactoryID = SelectedTrashItem.F_01,
-                    ItemID = SelectedTrashItem.I_01,
-                    ItemName = SelectedTrashItem.I_03,
-                    DefaultPrice = DefaultPrice
-                });
+                    var splitText = filterText.Split(' ');
+                    cv.Filter = o =>
+                    {
+                        /* change to get data row value */
+                        TrashItem p = o as TrashItem;
+                        string spec = p.I_03 ?? "";
+
+                        bool isContains = true;
+                        foreach (var item in splitText)
+                        {
+                            if (!spec.ToUpper().Contains(item.ToUpper()))
+                            {
+                                isContains = false;
+                                break;
+                            }
+                        }
+                        //isContains = p.I_03.ToUpper().Contains(filterText.ToUpper());
+                        return isContains;
+                        /* end change to get data row value */
+                    };
+                }
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                };
+                _itemName = value;
+            }
+        }
+        private void ButtonTrashItemInsertClickExecute()
+        {
+            if (DefaultPrice <= 0)
+            {
+                MessageBox.Show("未輸入預設單價！");
+            }
+            else
+            {
+                if (AccountTextileList.Where(w => w.FactoryID == SelectedTrashItem.F_01 && w.ItemID == SelectedTrashItem.I_01).Count() > 0)
+                {
+                    MessageBox.Show("此布種已加入清單！");
+
+                }
+                else
+                    AccountTextileList.Add(new AccountTextile
+                    {
+                        FactoryID = SelectedTrashItem.F_01,
+                        ItemID = SelectedTrashItem.I_01,
+                        ItemName = SelectedTrashItem.I_03,
+                        DefaultPrice = DefaultPrice
+                    });
+
+                OnPropertyChanged("AccountTextileList");
+            }
         }
         public int DefaultPrice { get; set; }
         public ObservableCollection<TrashItem> TrashItemList { get; set; }
-        public ObservableCollection<TrashItem> TrashItemPriceSetList { get; set; } = new ObservableCollection<TrashItem>();
 
         public TrashItem SelectedTrashItem { get; set; }
         public DefaultPriceViewModel()

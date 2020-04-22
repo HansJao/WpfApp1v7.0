@@ -294,6 +294,7 @@
       <DependentUpon>InventoryDataGrid.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utility\DapperHelper.cs" />
+    <Compile Include="Utility\EqualityComparer\AccountTextileComparer.cs" />
     <Compile Include="Utility\ExcelHelper.cs" />
     <Compile Include="Utility\ExtensionHelper.cs" />
     <Compile Include="Utility\ExternalDataHelper.cs" />
