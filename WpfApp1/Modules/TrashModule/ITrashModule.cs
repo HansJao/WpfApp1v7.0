@@ -20,8 +20,9 @@ namespace WpfApp1.Modules.TrashModule
         /// <summary>
         /// 取得客戶出貨紀錄
         /// </summary>
+        /// <param name="CheckBillDate"></param>
         /// <returns></returns>
-        IEnumerable<TrashCustomerShipped> GetInvoSub();
+        IEnumerable<TrashCustomerShipped> GetInvoSub(DateTime CheckBillDate);
         void UpdateProductName(string v);
 
         /// <summary>

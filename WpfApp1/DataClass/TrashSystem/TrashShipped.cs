@@ -15,8 +15,10 @@ namespace WpfApp1.DataClass.TrashSystem
     {
         [Description("出貨時間")]
         public DateTime IN_DATE { get; set; }
+        [Description("工廠號")]
+        public string F_01 { get; set; }
         [Description("貨號")]
-        public int I_01 { get; set; }
+        public string I_01 { get; set; }
         [Description("客戶編號")]
         public string C_01 { get; set; }
         [Description("日期單號")]

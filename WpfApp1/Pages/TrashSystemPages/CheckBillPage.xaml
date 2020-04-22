@@ -11,14 +11,27 @@
 
     <Grid>
         <StackPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content=" 客  戶  清  單 :"/>
+                <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="KeyUp">
+                            <i:InvokeCommandAction Command="{Binding ComboBoxCustomerKeyUp}"/>
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding ComboBoxCustomerSelectionChanged}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ComboBox>
+            </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <Label Content="對帳日期："/>
                 <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                    <i:Interaction.Triggers>
+                    <!--<i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectedDateChanged">
                             <i:InvokeCommandAction Command="{Binding CheckBillDateSelect}"/>
                         </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    </i:Interaction.Triggers>-->
                 </DatePicker>
             </StackPanel>
             <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding InvoSubList}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
@@ -27,6 +40,8 @@
                     <DataGridTextColumn Header="布種顏色" Binding="{Binding I_03}" />
                     <DataGridTextColumn Header="數量" Binding="{Binding Quantity}" />
                     <DataGridTextColumn Header="單價" Binding="{Binding Price}" />
+                    <DataGridTextColumn Header="預設單價" Binding="{Binding DefaultPrice}"/>
+                    <DataGridTextColumn Header="客戶單價" Binding="{Binding CustomerPrice}"/>
                     <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}" />
                 </DataGrid.Columns>
             </DataGrid>

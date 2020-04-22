@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,10 +30,25 @@ namespace WpfApp1.Adapter.MSSQL
         /// 取得所有布種預設單價
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<AccountTextile> GetDefaultPrice()
+        public IEnumerable<AccountTextile> GetAccountTextile()
         {
             string sql = @"SELECT * FROM AccountTextile;";
             var result = DapperHelper.QueryCollection<AccountTextile>(AppSettingConfig.ConnectionString(), CommandType.Text, sql);
+            return result;
+        }
+        /// <summary>
+        /// 取得客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<CustomerTextilePrice> GetCustomerTextilePrice(string accountCustomerID)
+        {
+            string sql = @"SELECT * FROM CustomerTextilePrice
+                            WHERE AccountCustomerID = @AccountCustomerID";
+            SqlParameter[] parameters = new SqlParameter[]
+          {
+                new SqlParameter("@AccountCustomerID", SqlDbType.NChar) { Value = accountCustomerID }
+          };
+            var result = DapperHelper.QueryCollection<CustomerTextilePrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return result;
         }
     }

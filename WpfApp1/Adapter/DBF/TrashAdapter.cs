@@ -152,14 +152,15 @@ namespace WpfApp1.Adapter.DBF
         /// <summary>
         /// 取得客戶出貨紀錄
         /// </summary>
+        /// <param name="CheckBillDate"></param>
         /// <returns></returns>
-        public IEnumerable<TrashCustomerShipped> GetInvoSub()
+        public IEnumerable<TrashCustomerShipped> GetInvoSub(DateTime CheckBillDate)
         {
 
-            var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,INSub.C_01,INSub.I_01,INSub.IN_NO,I.I_03,CU.C_Name,INSub.Price FROM (INVOSUB.dbf AS INSub
+            var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,INSub.C_01,INSub.F_01,INSub.I_01,INSub.IN_NO,I.I_03,CU.C_Name,INSub.Price FROM (INVOSUB.dbf AS INSub
                            INNER JOIN CUST.dbf AS CU ON CU.CARD_NO = INSub.C_01)
                            INNER JOIN ITEM.dbf AS I ON I.F_01 = INSub.F_01 AND I.I_01 = INSub.I_01
-                           WHERE INSub.IN_DATE Between cDate('" + DateTime.Now.AddYears(-1).ToString() + "') and cDate('" + DateTime.Now.ToString() + "')";
+                           WHERE Year(INSub.IN_DATE) = " + CheckBillDate.Year + " AND Month(INSub.IN_DATE) = " + CheckBillDate.Month ;
 
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;

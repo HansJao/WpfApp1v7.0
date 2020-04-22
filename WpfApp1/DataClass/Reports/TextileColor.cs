@@ -8,7 +8,7 @@ namespace WpfApp1.DataClass.Reports
 {
     public class TextileColor
     {
-        public int TextileNo { get; set; }
+        public string TextileNo { get; set; }
         public string TextileColorName { get; set; }
         public double Weight { get; set; }
     }

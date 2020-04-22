@@ -154,7 +154,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             var textileNameNumber = 1;
             ExcelHelper.CreateCell(row, 0, "時間", null);
-            var priviousWeightList = new Dictionary<int, double>();
+            var priviousWeightList = new Dictionary<string, double>();
             foreach (var item in everyTextileNo)
             {
                 ExcelHelper.CreateCell(row, textileNameNumber, originalSources.Where(w => w.TextileNo == item).First().TextileColorName, null);

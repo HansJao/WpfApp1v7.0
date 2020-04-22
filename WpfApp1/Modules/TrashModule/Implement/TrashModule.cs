@@ -51,10 +51,11 @@ namespace WpfApp1.Modules.TrashModule.Implement
         /// <summary>
         /// 取得客戶出貨紀錄
         /// </summary>
-        /// <returns></returns>
-        public IEnumerable<TrashCustomerShipped> GetInvoSub()
+        /// <param name="CheckBillDate"></param>
+        /// <returns></returns>        
+        public IEnumerable<TrashCustomerShipped> GetInvoSub(DateTime CheckBillDate)
         {
-            IEnumerable<TrashCustomerShipped> invoSub = TrashAdapter.GetInvoSub();
+            IEnumerable<TrashCustomerShipped> invoSub = TrashAdapter.GetInvoSub(CheckBillDate);
             return invoSub;
         }
 

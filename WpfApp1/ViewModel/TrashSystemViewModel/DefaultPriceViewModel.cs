@@ -21,7 +21,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 {
     public class DefaultPriceViewModel : ViewModelBase
     {
-
         protected IAccountSystemModule AccountSystemModule { get; } = new AccountSystemModule();
         protected ITrashModule TrashModule { get; } = new TrashModule();
 
@@ -30,7 +29,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void ButtonUpdateDefaultPriceClickExecute()
         {
-            IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetDefaultPrice();
+            IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetAccountTextile();
             List<AccountTextile> checkAccountTextiles = new List<AccountTextile>();
             foreach (var item in AccountTextileList)
             {

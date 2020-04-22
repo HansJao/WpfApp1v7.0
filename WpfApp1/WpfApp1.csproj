@@ -143,7 +143,10 @@
     <Compile Include="Adapter\ICustomerAdapter.cs" />
     <Compile Include="Adapter\MSSQL\ProcessOrderAdapter.cs" />
     <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="DataClass\AccountSystem\AccountCustomer.cs" />
     <Compile Include="DataClass\AccountSystem\AccountTextile.cs" />
+    <Compile Include="DataClass\AccountSystem\CustomerCheckBillSheet.cs" />
+    <Compile Include="DataClass\AccountSystem\CustomerTextilePrice.cs" />
     <Compile Include="DataClass\Chart\ChartTable.cs" />
     <Compile Include="DataClass\Customer\CustomerName.cs" />
     <Compile Include="DataClass\Entity\Customer.cs" />

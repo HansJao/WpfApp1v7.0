@@ -21,6 +21,16 @@ namespace WpfApp1.Modules.AccountSystemModule
         /// 取得所有布種預設單價
         /// </summary>
         /// <returns></returns>
-        IEnumerable<AccountTextile> GetDefaultPrice();
+        IEnumerable<AccountTextile> GetAccountTextile();
+        /// <summary>
+        /// 取得客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<CustomerTextilePrice> GetCustomerTextilePrice(string accountCustomerID);
+        /// <summary>
+        /// 合併帳務清單
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<CustomerCheckBillSheet> GetCheckBillSheet(IEnumerable<AccountTextile> accountTextiles, IEnumerable<CustomerTextilePrice> customerTextilePrices, List<TrashCustomerShipped> invoSubList);
     }
 }

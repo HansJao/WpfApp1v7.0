@@ -39,8 +39,9 @@ namespace WpfApp1.Adapter
         IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd);
         /// <summary>
         /// 取得客戶出貨紀錄
-        /// </summary>
+        /// </summary>  
+        /// <param name="CheckBillDate"></param>
         /// <returns></returns>
-        IEnumerable<TrashCustomerShipped> GetInvoSub();
+        IEnumerable<TrashCustomerShipped> GetInvoSub(DateTime CheckBillDate);
     }
 }
