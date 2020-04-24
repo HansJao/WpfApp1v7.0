@@ -5,9 +5,13 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1.Pages.TrashSystemPages"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:convert="clr-namespace:WpfApp1.Utility"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CheckBillPage">
+    <Page.Resources>
+        <convert:ColorMultiConverter x:Key="ColorMultiConverter" />
+    </Page.Resources>
     <Grid>
         <StackPanel Orientation="Horizontal">
             <StackPanel>
@@ -34,7 +38,22 @@
                     </i:Interaction.Triggers>-->
                     </DatePicker>
                 </StackPanel>
-                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">                 
+                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" AutoGenerateColumns="False" CanUserAddRows="False">
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Setters>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <MultiBinding Converter="{StaticResource ColorMultiConverter}">
+                                            <Binding Path="Price"/>
+                                            <Binding Path="DefaultPrice"/>
+                                            <Binding Path="CustomerPrice"/>
+                                        </MultiBinding>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style.Setters>
+                        </Style>
+                    </DataGrid.RowStyle>
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_Name}"/>
                         <DataGridTextColumn Header="布種顏色" Binding="{Binding I_03}" />

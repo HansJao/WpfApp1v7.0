@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace WpfApp1.Utility
 {
@@ -107,6 +108,57 @@ namespace WpfApp1.Utility
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return value;
+        }
+    }
+
+    public class ColorMultiConverter : IMultiValueConverter
+    {
+
+        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (values != null)
+            {
+                int price = Int32.Parse(values[0].ToString());
+                int defaultPrice = Int32.Parse(values[1].ToString());
+                var customerPrice = Int32.Parse(values[2].ToString());
+                if (price == 0)
+                    return new SolidColorBrush(Colors.Red);
+                if (customerPrice != 0)
+                    if (price < customerPrice)
+                    {
+                        return new SolidColorBrush(Colors.Pink);
+                    }
+                    else if (price > customerPrice)
+                    {
+                        return new SolidColorBrush(Colors.LightGreen);
+                    }
+                    else
+                    {
+                        return new SolidColorBrush(Colors.LightBlue);
+                    }
+                else
+                {
+                    if (price < defaultPrice)
+                    {
+                        return new SolidColorBrush(Colors.Pink);
+                    }
+                    else if (price > defaultPrice)
+                    {
+                        return new SolidColorBrush(Colors.LightGreen);
+                    }
+                    else
+                    {
+                        return new SolidColorBrush(Colors.LightBlue);
+                    }
+                }
+
+            }
+            return new SolidColorBrush(Colors.White);
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
 }
