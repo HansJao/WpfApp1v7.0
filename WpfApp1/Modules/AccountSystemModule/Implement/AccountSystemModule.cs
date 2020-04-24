@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.MSSQL;
 using WpfApp1.DataClass.AccountSystem;
 using WpfApp1.DataClass.TrashSystem;
+using WpfApp1.Utility.EqualityComparer;
 
 namespace WpfApp1.Modules.AccountSystemModule.Implement
 {
@@ -37,8 +39,22 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
         /// <returns></returns>
         public bool InsertDefaultPrice(IEnumerable<AccountTextile> accountTextileList)
         {
-            int count = AccountSystemAdapter.InsertDefaultPrice(accountTextileList);
-            return accountTextileList.Count() == count;
+
+            IEnumerable<AccountTextile> accountTextiles = GetAccountTextile();
+            List<AccountTextile> isExistAccountTextiles = new List<AccountTextile>();
+            //找出已存在於資料庫的資料
+            foreach (var item in accountTextileList)
+            {
+                isExistAccountTextiles.AddRange(accountTextiles.Where(w => w.FactoryID == item.FactoryID && w.ItemID == item.ItemID));
+            }
+            if (isExistAccountTextiles.Count() > 0)
+            {
+                MessageBox.Show(string.Concat("以下皆已存在於資料庫：", string.Join(",", isExistAccountTextiles.Select(s => s.ItemName))));
+            }
+
+            IEnumerable<AccountTextile> newAccountTextiles = accountTextileList.Except(isExistAccountTextiles, new AccountTextileComparer());
+            int count = AccountSystemAdapter.InsertDefaultPrice(newAccountTextiles);
+            return newAccountTextiles.Count() == count;
         }
 
         /// <summary>
@@ -67,14 +83,6 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
         {
             List<CustomerCheckBillSheet> customerCheckBillSheets = new List<CustomerCheckBillSheet>();
 
-            //var result = from c in T_Classes
-            //             join
-            //s in T_Students on c.ClassID equals s.ClassID
-            //             where c.ClassName == "一年級"
-            //             orderby c.ClassID descending
-            //             select new { c.ClassName, s.StudentName };
-            //result.Dump();
-
             IEnumerable<CustomerCheckBillSheet> result = from invoSub in invoSubList
                                                          join accountTextile in accountTextiles on new { x1 = invoSub.F_01, x2 = invoSub.I_01 } equals new { x1 = accountTextile.FactoryID, x2 = accountTextile.ItemID } into leftjoin
                                                          from invoSubListLeft in leftjoin.DefaultIfEmpty()
@@ -95,6 +103,16 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
                                                              DefaultPrice = invoSubListLeft == null ? 0 : invoSubListLeft.DefaultPrice
                                                          };
             return result;
+        }
+
+        /// <summary>
+        /// 新增客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        public bool InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice)
+        {
+            int count = AccountSystemAdapter.InsertCustomerTextilePrice(customerTextilePrice);
+            return count == 1;
         }
     }
 }

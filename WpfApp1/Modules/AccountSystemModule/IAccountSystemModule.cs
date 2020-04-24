@@ -32,5 +32,10 @@ namespace WpfApp1.Modules.AccountSystemModule
         /// </summary>
         /// <returns></returns>
         IEnumerable<CustomerCheckBillSheet> GetCheckBillSheet(IEnumerable<AccountTextile> accountTextiles, IEnumerable<CustomerTextilePrice> customerTextilePrices, List<TrashCustomerShipped> invoSubList);
+        /// <summary>
+        /// 新增客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        bool InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice);
     }
 }

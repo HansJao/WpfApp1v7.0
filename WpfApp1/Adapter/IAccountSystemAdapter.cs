@@ -27,5 +27,10 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <returns></returns>
         IEnumerable<CustomerTextilePrice> GetCustomerTextilePrice(string accountCustomerID);
+        /// <summary>
+        /// 新增客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        int InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice);
     }
 }

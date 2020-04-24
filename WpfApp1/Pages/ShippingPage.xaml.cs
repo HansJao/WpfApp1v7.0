@@ -40,7 +40,7 @@ namespace WpfApp1.Pages
         {
             InitializeComponent();
             //IWorkbook _workbook = null;  //新建IWorkbook對象  
-            string fileName = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+            string fileName = string.Concat(AppSettingConfig.FilePath(), "\\", AppSettingConfig.StoreManageFileName());
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             _workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
             List<string> textileList = new List<string>();

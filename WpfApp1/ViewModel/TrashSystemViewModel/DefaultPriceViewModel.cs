@@ -29,19 +29,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void ButtonUpdateDefaultPriceClickExecute()
         {
-            IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetAccountTextile();
-            List<AccountTextile> checkAccountTextiles = new List<AccountTextile>();
-            foreach (var item in AccountTextileList)
-            {
-                checkAccountTextiles.AddRange(accountTextiles.Where(w => w.FactoryID == item.FactoryID && w.ItemID == item.ItemID));
-
-            }
-            if (checkAccountTextiles.Count() > 0)
-            {
-                MessageBox.Show(string.Concat("以下皆已存在於資料庫：", string.Join(",", checkAccountTextiles.Select(s => s.ItemName))));
-            }
-
-            bool success = AccountSystemModule.InsertDefaultPrice(AccountTextileList.Except(checkAccountTextiles, new AccountTextileComparer()));
+            bool success = AccountSystemModule.InsertDefaultPrice(AccountTextileList);
             if (success)
                 MessageBox.Show("新增成功！");
             else

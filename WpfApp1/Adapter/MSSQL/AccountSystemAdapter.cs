@@ -51,5 +51,17 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.QueryCollection<CustomerTextilePrice>(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return result;
         }
+        /// <summary>
+        /// 新增客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        public int InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice)
+        {
+            string sql = @"INSERT INTO CustomerTextilePrice
+                           VALUES 
+                           (@AccountCustomerID,@AccountTextileID,@Price);";
+            var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, customerTextilePrice);
+            return result;
+        }
     }
 }
