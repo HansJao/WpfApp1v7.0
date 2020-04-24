@@ -61,7 +61,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     MessageBox.Show("新增客戶單價成功！");
                 }
                 else
-                    MessageBox.Show("新增失敗！！");
+                    MessageBox.Show("新增失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else
             {

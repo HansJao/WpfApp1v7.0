@@ -61,7 +61,7 @@
                         <DataGridTextColumn Header="單價" Binding="{Binding Price}" />
                         <DataGridTextColumn Header="預設單價" Binding="{Binding DefaultPrice}"/>
                         <DataGridTextColumn Header="客戶單價" Binding="{Binding CustomerPrice}"/>
-                        <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE}" />
+                        <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE, StringFormat=\{0:yy.MM.dd\}}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>

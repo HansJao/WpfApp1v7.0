@@ -29,11 +29,16 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void ButtonUpdateDefaultPriceClickExecute()
         {
+            if (AccountTextileList.Count() == 0)
+            {
+                MessageBox.Show("未選取要新增的布種！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             bool success = AccountSystemModule.InsertDefaultPrice(AccountTextileList);
             if (success)
                 MessageBox.Show("新增成功！");
             else
-                MessageBox.Show("新增失敗！");
+                MessageBox.Show("新增失敗！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
 
         }
         public ObservableCollection<AccountTextile> AccountTextileList { get; set; } = new ObservableCollection<AccountTextile>();
