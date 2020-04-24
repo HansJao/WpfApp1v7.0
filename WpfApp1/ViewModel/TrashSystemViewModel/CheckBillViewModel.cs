@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using WpfApp1.Command;
@@ -50,9 +51,22 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 AccountCustomerID = SelectedTrashCustomer.CARD_NO,
                 Price = CustomerPrice
             };
-            bool success = AccountSystemModule.InsertCustomerTextilePrice(customerTextilePrice);
-            CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
-            CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).CustomerPrice = Convert.ToInt32(CustomerPrice);
+            if (!AccountSystemModule.GetCustomerTextilePrice(SelectedCustomerCheckBillSheet.C_01).Any(a => a.AccountTextileID == SelectedCustomerCheckBillSheet.AccountTextileID))
+            {
+                bool success = AccountSystemModule.InsertCustomerTextilePrice(customerTextilePrice);
+                if (success)
+                {
+                    CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
+                    CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).CustomerPrice = Convert.ToInt32(CustomerPrice);
+                    MessageBox.Show("新增客戶單價成功！");
+                }
+                else
+                    MessageBox.Show("新增失敗！！");
+            }
+            else
+            {
+                MessageBox.Show("已設定過該客戶的布種單價，請使用更新單價功能！！");
+            }
         }
 
         public int InvoSubSelected { get; set; }

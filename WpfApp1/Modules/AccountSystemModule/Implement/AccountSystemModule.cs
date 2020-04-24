@@ -99,6 +99,7 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
                                                              I_03 = invoSub.I_03,
                                                              Quantity = invoSub.Quantity,
                                                              Price = invoSub.Price,
+                                                             AccountTextileID = invoSubListLeft == null ? 0 : invoSubListLeft.AccountTextileID,
                                                              CustomerPrice = CTPLeft == null ? 0 : CTPLeft.Price,
                                                              DefaultPrice = invoSubListLeft == null ? 0 : invoSubListLeft.DefaultPrice
                                                          };

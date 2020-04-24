@@ -34,7 +34,7 @@
                     </i:Interaction.Triggers>-->
                     </DatePicker>
                 </StackPanel>
-                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" AlternatingRowBackground="LightGray" AutoGenerateColumns="False" CanUserAddRows="False">                 
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_Name}"/>
                         <DataGridTextColumn Header="布種顏色" Binding="{Binding I_03}" />
