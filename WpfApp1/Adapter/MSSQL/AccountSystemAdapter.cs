@@ -63,5 +63,23 @@ namespace WpfApp1.Adapter.MSSQL
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, customerTextilePrice);
             return result;
         }
+        /// <summary>
+        /// 更新客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        public int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet)
+        {
+            string sql = @"UPDATE dbo.CustomerTextilePrice
+                           SET Price = @Price
+                           WHERE AccountCustomerID = @AccountCustomerID AND AccountTextileID = @AccountTextileID";
+            SqlParameter[] parameters = new SqlParameter[]
+                   {
+                      new SqlParameter("@AccountCustomerID", SqlDbType.NChar) { Value = selectedCustomerCheckBillSheet.C_01 },
+                      new SqlParameter("@AccountTextileID", SqlDbType.Int) { Value = selectedCustomerCheckBillSheet.AccountTextileID },
+                      new SqlParameter("@Price", SqlDbType.Int) { Value = selectedCustomerCheckBillSheet.CustomerPrice }
+                   };
+            var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
+            return result;
+        }
     }
 }

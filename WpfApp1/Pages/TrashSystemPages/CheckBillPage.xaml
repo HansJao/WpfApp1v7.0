@@ -14,7 +14,7 @@
     </Page.Resources>
     <Grid>
         <StackPanel Orientation="Horizontal">
-            <StackPanel>
+            <DockPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                     <Label Content=" 客  戶  清  單 :"/>
                     <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
@@ -28,17 +28,11 @@
                         </i:Interaction.Triggers>
                     </ComboBox>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Label Content="對帳日期："/>
-                    <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <!--<i:Interaction.Triggers>
-                        <i:EventTrigger EventName="SelectedDateChanged">
-                            <i:InvokeCommandAction Command="{Binding CheckBillDateSelect}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>-->
-                    </DatePicker>
+                    <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 </StackPanel>
-                <DataGrid HorizontalAlignment="Left"  VerticalAlignment="Top" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left"  ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <Style.Setters>
@@ -64,13 +58,18 @@
                         <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE, StringFormat=\{0:yy.MM.dd\}}" />
                     </DataGrid.Columns>
                 </DataGrid>
-            </StackPanel>
+            </DockPanel>
             <StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="客戶單價："/>
-                    <TextBox Width="100" Text="{Binding CustomerPrice}" Height="20" VerticalAlignment="Top"/>
+                    <Label Content="客戶單價新增："/>
+                    <TextBox Width="100" Text="{Binding NewCustomerPrice}" Height="20" VerticalAlignment="Top"/>
                 </StackPanel>
                 <Button Content="新增客戶單價" Command="{Binding InsertCustomerPriceClick}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <Label Content="客戶單價更新："/>
+                    <TextBox Width="100" Text="{Binding UpdateCustomerPrice}" Height="20" VerticalAlignment="Top"/>
+                </StackPanel>
+                <Button Content="修改客戶單價" Command="{Binding UpdateCustomerPriceClick}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
             </StackPanel>
         </StackPanel>
     </Grid>

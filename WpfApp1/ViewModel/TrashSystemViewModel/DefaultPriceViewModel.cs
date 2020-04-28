@@ -39,6 +39,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 MessageBox.Show("新增成功！");
             else
                 MessageBox.Show("新增失敗！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
+            AccountTextileList.Clear();
 
         }
         public ObservableCollection<AccountTextile> AccountTextileList { get; set; } = new ObservableCollection<AccountTextile>();

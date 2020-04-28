@@ -32,5 +32,10 @@ namespace WpfApp1.Adapter
         /// </summary>
         /// <returns></returns>
         int InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice);
+        /// <summary>
+        /// 更新客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet);
     }
 }

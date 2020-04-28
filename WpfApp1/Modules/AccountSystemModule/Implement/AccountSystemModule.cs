@@ -53,6 +53,11 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
             }
 
             IEnumerable<AccountTextile> newAccountTextiles = accountTextileList.Except(isExistAccountTextiles, new AccountTextileComparer());
+            //要新增的全部都已存在於資料庫
+            if (isExistAccountTextiles.Count() == accountTextileList.Count())
+            {
+                return false;
+            }
             int count = AccountSystemAdapter.InsertDefaultPrice(newAccountTextiles);
             return newAccountTextiles.Count() == count;
         }
@@ -113,6 +118,15 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
         public bool InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice)
         {
             int count = AccountSystemAdapter.InsertCustomerTextilePrice(customerTextilePrice);
+            return count == 1;
+        }
+        /// <summary>
+        /// 更新客戶布種單價
+        /// </summary>
+        /// <returns></returns>
+        public bool UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet)
+        {
+            int count = AccountSystemAdapter.UpdateCustomerTextilePrice(selectedCustomerCheckBillSheet);
             return count == 1;
         }
     }

@@ -26,8 +26,28 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand ComboBoxCustomerKeyUp { get { return new RelayCommand(ComboBoxCustomerKeyUpExecute, CanExecute); } }
         public ICommand ComboBoxCustomerSelectionChanged { get { return new RelayCommand(ComboBoxCustomerSelectionChangedExecute, CanExecute); } }
         public ICommand InsertCustomerPriceClick { get { return new RelayCommand(InsertCustomerPriceClickExecute, CanExecute); } }
+        public ICommand UpdateCustomerPriceClick { get { return new RelayCommand(UpdateCustomerPriceClickExecute, CanExecute); } }
 
-        public int CustomerPrice { get; set; }
+        private void UpdateCustomerPriceClickExecute()
+        {
+            if (UpdateCustomerPrice <= 0)
+            {
+                MessageBox.Show("欲更新的單價設定錯誤！！");
+                return;
+            }
+
+            if (SelectedCustomerCheckBillSheet.CustomerPrice == 0)
+            {
+                MessageBox.Show("此客戶的布種尚未設定單價！！");
+                return;
+            }
+            SelectedCustomerCheckBillSheet.CustomerPrice = UpdateCustomerPrice;
+            bool success = AccountSystemModule.UpdateCustomerTextilePrice(SelectedCustomerCheckBillSheet);
+            if (success) MessageBox.Show("更新成功！");
+        }
+
+        public int NewCustomerPrice { get; set; }
+        public int UpdateCustomerPrice { get; set; }
         public CustomerCheckBillSheet SelectedCustomerCheckBillSheet { get; set; }
         private void InsertCustomerPriceClickExecute()
         {
@@ -49,15 +69,19 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 AccountTextileID = accountTextiles.Where(w => w.FactoryID == SelectedCustomerCheckBillSheet.F_01 && w.ItemID == SelectedCustomerCheckBillSheet.I_01).FirstOrDefault().AccountTextileID,
                 AccountCustomerID = SelectedTrashCustomer.CARD_NO,
-                Price = CustomerPrice
+                Price = NewCustomerPrice
             };
             if (!AccountSystemModule.GetCustomerTextilePrice(SelectedCustomerCheckBillSheet.C_01).Any(a => a.AccountTextileID == SelectedCustomerCheckBillSheet.AccountTextileID))
             {
                 bool success = AccountSystemModule.InsertCustomerTextilePrice(customerTextilePrice);
                 if (success)
                 {
-                    CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
-                    CustomerCheckBillSheets.ElementAt(CustomerCheckBillSheets.IndexOf(SelectedCustomerCheckBillSheet)).CustomerPrice = Convert.ToInt32(CustomerPrice);
+                    foreach (var item in CustomerCheckBillSheets.Where(w => w.F_01 == SelectedCustomerCheckBillSheet.F_01 && w.I_01 == SelectedCustomerCheckBillSheet.I_01))
+                    {
+                        if (SelectedCustomerCheckBillSheet.DefaultPrice == 0)
+                            item.DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
+                        item.CustomerPrice = Convert.ToInt32(NewCustomerPrice);
+                    }
                     MessageBox.Show("新增客戶單價成功！");
                 }
                 else
@@ -73,6 +97,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public TrashCustomer SelectedTrashCustomer { get; set; }
         private void ComboBoxCustomerSelectionChangedExecute()
         {
+            if (SelectedTrashCustomer == null) return;
             List<TrashCustomerShipped> invoSubList = new List<TrashCustomerShipped>(TrashModule.GetInvoSub(CheckBillDate)
           .Where(w => w.C_01 == SelectedTrashCustomer.CARD_NO));
 
