@@ -21,8 +21,15 @@ namespace WpfApp1.Adapter.MSSQL
         public int InsertDefaultPrice(IEnumerable<AccountTextile> accountTextileList)
         {
             string sql = @"INSERT INTO AccountTextile
+                            ([FactoryID]
+                            ,[ItemID]
+                            ,[ItemName]
+                            ,[DefaultPrice])
                            VALUES 
-                           (@FactoryID,@ItemID,@ItemName,@DefaultPrice);";
+                           (@FactoryID,
+                            @ItemID,
+                            @ItemName,
+                            @DefaultPrice);";
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, accountTextileList);
             return result;
         }
@@ -58,8 +65,13 @@ namespace WpfApp1.Adapter.MSSQL
         public int InsertCustomerTextilePrice(CustomerTextilePrice customerTextilePrice)
         {
             string sql = @"INSERT INTO CustomerTextilePrice
+                            ([AccountCustomerID]
+                            ,[AccountTextileID]
+                            ,[Price])
                            VALUES 
-                           (@AccountCustomerID,@AccountTextileID,@Price);";
+                           (@AccountCustomerID,
+                            @AccountTextileID,
+                            @Price);";
             var result = DapperHelper.Execute(AppSettingConfig.ConnectionString(), CommandType.Text, sql, customerTextilePrice);
             return result;
         }

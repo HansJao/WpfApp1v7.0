@@ -17,7 +17,7 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                     <Label Content=" 客  戶  清  單 :"/>
-                    <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" IsTextSearchEnabled="False">
+                    <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="KeyUp">
                                 <i:InvokeCommandAction Command="{Binding ComboBoxCustomerKeyUp}"/>
@@ -30,7 +30,13 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Label Content="對帳日期："/>
-                    <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <DatePicker SelectedDate="{Binding CheckBillDate}" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectedDateChanged">
+                                <i:InvokeCommandAction Command="{Binding DatePickerSelectedDateChanged}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </DatePicker>
                 </StackPanel>
                 <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left"  ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.RowStyle>

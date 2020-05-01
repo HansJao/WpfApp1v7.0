@@ -27,6 +27,15 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand ComboBoxCustomerSelectionChanged { get { return new RelayCommand(ComboBoxCustomerSelectionChangedExecute, CanExecute); } }
         public ICommand InsertCustomerPriceClick { get { return new RelayCommand(InsertCustomerPriceClickExecute, CanExecute); } }
         public ICommand UpdateCustomerPriceClick { get { return new RelayCommand(UpdateCustomerPriceClickExecute, CanExecute); } }
+        public ICommand DatePickerSelectedDateChanged { get { return new RelayCommand(DatePickerSelectedDateChangedExecute, CanExecute); } }
+
+        private void DatePickerSelectedDateChangedExecute()
+        {
+            if(SelectedTrashCustomer != null)
+            {
+                ComboBoxCustomerSelectionChangedExecute();
+            }
+        }
 
         private void UpdateCustomerPriceClickExecute()
         {
@@ -35,12 +44,16 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 MessageBox.Show("欲更新的單價設定錯誤！！");
                 return;
             }
-
+            if (SelectedCustomerCheckBillSheet == null)
+            {
+                MessageBox.Show("未選擇欲更新的布種！");
+            }
             if (SelectedCustomerCheckBillSheet.CustomerPrice == 0)
             {
                 MessageBox.Show("此客戶的布種尚未設定單價！！");
                 return;
             }
+
             SelectedCustomerCheckBillSheet.CustomerPrice = UpdateCustomerPrice;
             bool success = AccountSystemModule.UpdateCustomerTextilePrice(SelectedCustomerCheckBillSheet);
             if (success) MessageBox.Show("更新成功！");
@@ -121,31 +134,30 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ObservableCollection<CustomerCheckBillSheet> CustomerCheckBillSheets { get; set; }
         public IEnumerable<TrashCustomer> TrashCustomerList { get; set; }
         public string TrashCustomerText { get; set; }
-
+        CollectionView ItemsViewOriginal;
         public CheckBillViewModel()
         {
             TrashCustomerList = TrashModule.GetCustomerList();
+            ItemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(TrashCustomerList);
         }
 
 
         private void ComboBoxCustomerKeyUpExecute()
         {
-            CollectionView itemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(TrashCustomerList);
-
-            itemsViewOriginal.Filter = ((o) =>
+            if (string.IsNullOrEmpty(TrashCustomerText)) return;
+            ItemsViewOriginal.Filter = ((o) =>
             {
                 TrashCustomer trashCustomer = o as TrashCustomer;
                 if (string.IsNullOrEmpty(TrashCustomerText))
-                    return false;
+                    return true;
                 else
                 {
-                    if (trashCustomer.C_NAME.Contains(TrashCustomerText)) return true;
+                    if (trashCustomer.C_NAME.ToUpper().Contains(TrashCustomerText)) return true;
                     else return false;
                 }
             });
 
-            //cmb.IsDropDownOpen = true;
-            itemsViewOriginal.Refresh();
+            //ItemsViewOriginal.Refresh();
         }
     }
 }

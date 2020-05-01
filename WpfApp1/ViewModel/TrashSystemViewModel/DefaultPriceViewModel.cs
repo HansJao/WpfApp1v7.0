@@ -54,15 +54,15 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             set
             {
                 string filterText = value;
-                ICollectionView cv = CollectionViewSource.GetDefaultView(TrashItemList);
+                ICollectionView cv = CollectionViewSource.GetDefaultView(AccountTextiles);
                 if (!string.IsNullOrEmpty(filterText))
                 {
                     var splitText = filterText.Split(' ');
                     cv.Filter = o =>
                     {
                         /* change to get data row value */
-                        TrashItem p = o as TrashItem;
-                        string spec = p.I_03 ?? "";
+                        AccountTextile p = o as AccountTextile;
+                        string spec = p.ItemName ?? "";
 
                         bool isContains = true;
                         foreach (var item in splitText)
@@ -96,7 +96,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             }
             else
             {
-                if (AccountTextileList.Where(w => w.FactoryID == SelectedTrashItem.F_01 && w.ItemID == SelectedTrashItem.I_01).Count() > 0)
+                if (AccountTextileList.Where(w => w.FactoryID == SelectedAccountTextile.FactoryID && w.ItemID == SelectedAccountTextile.ItemID).Count() > 0)
                 {
                     MessageBox.Show("此布種已加入清單！");
 
@@ -104,9 +104,9 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 else
                     AccountTextileList.Add(new AccountTextile
                     {
-                        FactoryID = SelectedTrashItem.F_01,
-                        ItemID = SelectedTrashItem.I_01,
-                        ItemName = SelectedTrashItem.I_03,
+                        FactoryID = SelectedAccountTextile.FactoryID,
+                        ItemID = SelectedAccountTextile.ItemID,
+                        ItemName = SelectedAccountTextile.ItemName,
                         DefaultPrice = DefaultPrice
                     });
 
@@ -114,12 +114,24 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             }
         }
         public int DefaultPrice { get; set; }
-        public ObservableCollection<TrashItem> TrashItemList { get; set; }
+        public ObservableCollection<AccountTextile> AccountTextiles { get; set; }
 
-        public TrashItem SelectedTrashItem { get; set; }
+        public AccountTextile SelectedAccountTextile { get; set; }
         public DefaultPriceViewModel()
         {
-            TrashItemList = new ObservableCollection<TrashItem>(TrashModule.GetTrashItems().OrderBy(o => o.I_01));
+            IEnumerable<TrashItem> trashItemList = TrashModule.GetTrashItems();
+            IEnumerable<AccountTextile> accountTextileList = AccountSystemModule.GetAccountTextile();
+            IEnumerable<AccountTextile> accountTextiles = from trashItems in trashItemList
+                                                          join accountTextile in accountTextileList on new { x1 = trashItems.F_01, x2 = trashItems.I_01 } equals new { x1 = accountTextile.FactoryID, x2 = accountTextile.ItemID } into leftjoin
+                                                          from trashItemListLeft in leftjoin.DefaultIfEmpty()
+                                                          select new AccountTextile
+                                                          {
+                                                              ItemID = trashItems.I_01,
+                                                              FactoryID = trashItems.F_01,
+                                                              ItemName = trashItems.I_03,
+                                                              DefaultPrice = trashItemListLeft == null ? 0 : trashItemListLeft.DefaultPrice
+                                                          };
+            AccountTextiles = new ObservableCollection<AccountTextile>(accountTextiles);
         }
     }
 }
