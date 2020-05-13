@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Shipping;
@@ -110,6 +111,15 @@ namespace WpfApp1.Pages
                                 Memo = item.Memo
                             });
                     }
+                    //每新增一次則重建顯示資料表
+                    DataGridShippingDisplay();
+                    if (ShippingSheetStructure.Last().Customer == customerName)
+                    {
+                        if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
+                        {
+                            if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
+                        }
+                    }
                 }
                 else
                 {
@@ -132,6 +142,15 @@ namespace WpfApp1.Pages
                         TextileName = textileName,
                         ShippingSheetDatas = shippingSheetDatas
                     });
+                    //每新增一次則重建顯示資料表
+                    DataGridShippingDisplay();
+                    if (ShippingSheetStructure.Last().Customer == customerName)
+                    {
+                        if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
+                        {
+                            if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
+                        }
+                    }
                 }
             }
             else
@@ -161,9 +180,13 @@ namespace WpfApp1.Pages
                     Customer = customerName,
                     TextileShippingDatas = textileShippingDatas
                 });
+                //每新增一次則重建顯示資料表
+                DataGridShippingDisplay();
+                if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
+                {
+                    if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
+                }
             }
-            //每新增一次則重建顯示資料表
-            DataGridShippingDisplay();
         }
 
         private void Export_Click(object sender, RoutedEventArgs e)
@@ -448,6 +471,7 @@ namespace WpfApp1.Pages
                 });
                 array0Index++;
             }
+
         }
         private string[] GetFileNames(string path, string filter)
         {

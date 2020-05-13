@@ -38,7 +38,7 @@
                         </i:Interaction.Triggers>
                     </DatePicker>
                 </StackPanel>
-                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left"  ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <Style.Setters>
@@ -56,6 +56,7 @@
                     </DataGrid.RowStyle>
                     <DataGrid.Columns >
                         <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_Name}"/>
+                        <DataGridTextColumn Header="單號" Binding="{Binding IN_NO}"/>
                         <DataGridTextColumn Header="布種顏色" Binding="{Binding I_03}" />
                         <DataGridTextColumn Header="數量" Binding="{Binding Quantity}" />
                         <DataGridTextColumn Header="單價" Binding="{Binding Price}" />
