@@ -240,7 +240,7 @@ namespace WpfApp1.ViewModel.FabricViewModel
                             Header = "加工項目",
                             Binding = new Binding("ProcessItem")
                             {
-                                Converter = new Utility.EnumConverter()
+                                Converter = new Utility.XamlHelper.EnumConverter()
                             }
                         };
                         dataGrid.Columns.Add(processItem);

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:ProcessEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
-        xmlns:convert="clr-namespace:WpfApp1.Utility"
+        xmlns:convert="clr-namespace:WpfApp1.Utility.XamlHelper"
         Title="新增加工訂單顏色" Height="220" Width="200">
     <Window.Resources>
         <convert:EnumConverter x:Key="EnumConverter" />

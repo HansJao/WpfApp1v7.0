@@ -7,7 +7,7 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="1000"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
-      xmlns:convert="clr-namespace:WpfApp1.Utility"
+      xmlns:convert="clr-namespace:WpfApp1.Utility.XamlHelper"
       xmlns:ProcessEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
       Title="ProcessOrderPage">
     <Page.Resources>

@@ -7,7 +7,7 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="InventoryRecordCompare"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"      
-      xmlns:local="clr-namespace:WpfApp1.Utility"
+      xmlns:local="clr-namespace:WpfApp1.Utility.XamlHelper"
       xmlns:commonControl="clr-namespace:WpfApp1.Utility.CustomController">
     <Page.Resources>
         <local:ZeroToEmptyConverter x:Key="ZeroToEmptyConverter" />

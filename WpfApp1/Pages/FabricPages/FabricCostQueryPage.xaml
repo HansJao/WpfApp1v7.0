@@ -9,7 +9,7 @@
       xmlns:viewModel="clr-namespace:WpfApp1.ViewModel.FabricViewModel"
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:FactoryEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
-      xmlns:convert="clr-namespace:WpfApp1.Utility"
+      xmlns:convert="clr-namespace:WpfApp1.Utility.XamlHelper"
       Title="FabricCostPage">
     <Page.Resources>
         <convert:EnumConverter x:Key="EnumConverter" />

@@ -11,7 +11,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       xmlns:EnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration" 
       xmlns:Behavior="clr-namespace:WpfApp1.Utility.ControllerBehavior"
-      xmlns:convert="clr-namespace:WpfApp1.Utility"
+      xmlns:convert="clr-namespace:WpfApp1.Utility.XamlHelper"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
     <Page.Resources>
         <!--<Style TargetType="{x:Type ComboBox}">

@@ -10,9 +10,9 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace WpfApp1.Utility
+namespace WpfApp1.Utility.XamlHelper
 {
-    public class XamlHelper
+    public class XamlConverter
     {
 
     }

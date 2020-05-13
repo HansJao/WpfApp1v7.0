@@ -307,7 +307,8 @@
     <Compile Include="Utility\HttpClientService.cs" />
     <Compile Include="Utility\ISerializer.cs" />
     <Compile Include="Utility\JsonHelper.cs" />
-    <Compile Include="Utility\XamlHelper.cs" />
+    <Compile Include="Utility\XamlHelper\XamlCommand.cs" />
+    <Compile Include="Utility\XamlHelper\XamlConverter.cs" />
     <Compile Include="ViewModel\CustomerViewModel\AddCustomerViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\AddFabricColorViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\FabricCostQueryViewModel.cs" />

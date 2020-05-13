@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:FactoryEnumLocal="clr-namespace:WpfApp1.DataClass.Enumeration"
-        xmlns:convert="clr-namespace:WpfApp1.Utility"
+        xmlns:convert="clr-namespace:WpfApp1.Utility.XamlHelper"
         Title="AddProcessSequenceDialog" Height="450" Width="400">
     <Window.CommandBindings>
         <CommandBinding Command="Close" Executed="OnCloseExecuted" />
