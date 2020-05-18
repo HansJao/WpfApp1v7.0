@@ -33,7 +33,7 @@ namespace WpfApp1.Utility.XamlHelper
                 typeof(EnterKeyHelper),
                 new PropertyMetadata(null, OnEnterKeyCommandChanged));
 
-        static void OnEnterKeyCommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
+        public static void OnEnterKeyCommandChanged(DependencyObject target, DependencyPropertyChangedEventArgs e)
         {
             ICommand command = (ICommand)e.NewValue;
             FrameworkElement fe = (FrameworkElement)target;

@@ -18,7 +18,7 @@
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                     <Label Content=" 客  戶  清  單 :"/>
-                    <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" >
+                    <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" helper:EnterKeyHelper.EnterKeyCommand="{Binding SelectedCustomerEnter}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" >
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="KeyUp">
                                 <i:InvokeCommandAction Command="{Binding ComboBoxCustomerKeyUp}"/>
@@ -67,10 +67,10 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
-            <StackPanel>
+            <StackPanel Margin="5">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="客戶單價新增："/>
-                    <TextBox Width="100" Text="{Binding NewCustomerPrice}" Height="20" VerticalAlignment="Top"/>
+                    <TextBox Width="100" Text="{Binding NewCustomerPrice}" Height="20" VerticalAlignment="Top" helper:EnterKeyHelper.EnterKeyCommand="{Binding EnterKeyCommand}"/>
                 </StackPanel>
                 <Button Content="新增客戶單價" Command="{Binding InsertCustomerPriceClick}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
                 <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -78,6 +78,34 @@
                     <TextBox Width="100" Text="{Binding UpdateCustomerPrice}" Height="20" VerticalAlignment="Top"/>
                 </StackPanel>
                 <Button Content="修改客戶單價" Command="{Binding UpdateCustomerPriceClick}" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+                <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                    <Label Background="Pink" Width="50" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock Text="Super單價 &lt; " Height="30" Width="70" TextWrapping="Wrap" Margin="0,8,0,0" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="客戶單價"/>
+                        <TextBlock Text="預設單價"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Label Background="LightGreen" Width="50" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock Text="Super單價 &gt;" Height="30" Width="70" TextWrapping="Wrap" Margin="0,8,0,0" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="客戶單價"/>
+                        <TextBlock Text="預設單價"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Label Background="LightBlue" Width="50" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock Text="Super單價 =" Height="30" Width="70" TextWrapping="Wrap" Margin="0,8,0,0" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="客戶單價"/>
+                        <TextBlock Text="預設單價"/>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                    <Label Background="Red" Width="50" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    <TextBlock Text="未設定Super單價" Height="30" Width="100" Margin="0,8,0,0" />                 
+                </StackPanel>
             </StackPanel>
         </StackPanel>
     </Grid>
