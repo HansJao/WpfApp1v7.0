@@ -152,7 +152,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             wb.Write(file);
             file.Close();
         }
-        public string StoreArea { get; set; } = "1A,1B,1C,1D,1E,1F,1G,1H,1I,1J,1K,1L,1M,1N,1O,1P,1Q,1R,1S,1T,2A,2B,2C,2D";
+        public string StoreArea { get; set; } = "1A,1B,1C,1D,1E,1F,1G,1H,1I,1J,1K,1L,1M,1N,1O,1P,1Q,1R,1S,1T,1U,1V,柱1,柱2,2A,2B,2C,2D";
         public string TextileName { get; set; } = "";
         void InventoryNumberRangeSearchExecute()
         {

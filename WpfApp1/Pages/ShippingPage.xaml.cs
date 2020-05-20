@@ -267,6 +267,12 @@ namespace WpfApp1.Pages
             shippingNumberStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
             shippingNumberStyle.FillPattern = FillPattern.SolidForeground;
 
+            ICellStyle needCheckStyle = wb.CreateCellStyle();
+            needCheckStyle.WrapText = true;
+            needCheckStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            needCheckStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            needCheckStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+
             ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
             lightTurquoiseStyle.BorderRight = BorderStyle.Thin;
             lightTurquoiseStyle.BorderBottom = BorderStyle.Thin;
@@ -323,7 +329,7 @@ namespace WpfApp1.Pages
                         {
                             var font = wb.CreateFont();
                             font.FontName = "新細明體";
-                            font.Boldweight = (short)FontBoldWeight.Bold;
+                            font.IsBold = true;
                             colorByStorageSpaces.SetFont(font);
                         }
                         CreateCell(rowColorInfo, 3, shippingSheetData.StorageSpaces, colorByStorageSpaces);

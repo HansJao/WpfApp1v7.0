@@ -39,7 +39,7 @@
                         </i:Interaction.Triggers>
                     </DatePicker>
                 </StackPanel>
-                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" KeyboardNavigation.TabNavigation="None" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <Style.Setters>
