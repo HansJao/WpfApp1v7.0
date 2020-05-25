@@ -22,6 +22,14 @@ namespace WpfApp1.Utility
         {
             return Convert.ToInt32(s);
         }
+        public static int ToInt(this double s)
+        {
+            if (s == 0)
+            {
+                return 0;
+            }
+            return Convert.ToInt32(s);
+        }
 
         public static void AddRange<T>(this ObservableCollection<T> observableCollection, IEnumerable<T> rangeList)
         {

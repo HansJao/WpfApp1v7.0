@@ -25,7 +25,7 @@ namespace WpfApp1.DataClass.ExcelDataClass
         public double ShippingDate9 { get; set; }
         public ExcelCell TextileFactory { get; set; }
         public ExcelCell ClearFactory { get; set; }
-        public string CountInventory { get; set; }
+        public int CountInventory { get; set; }
         public string IsChecked { get; set; }
         public string CheckDate { get; set; }
         public string Memo { get; set; }

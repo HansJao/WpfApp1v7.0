@@ -74,7 +74,7 @@
                         <DataGridTextColumn  Header="客戶" Binding="{Binding Customer}" />
                         <DataGridTextColumn Header="布種" Binding="{Binding TextileName}"/>
                         <DataGridTextColumn Header="顏色" Binding="{Binding ColorName}"/>
-                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory}"/>
+                        <DataGridTextColumn Header="數量" Binding="{Binding CountInventory,Converter={StaticResource ZeroToEmptyConverter}}"/>
                         <DataGridTextColumn Header="儲位" Binding="{Binding StorageSpaces}"/>
                         <DataGridTextColumn Header="出貨數量" Binding="{Binding ShippingNumber,Converter={StaticResource ZeroToEmptyConverter}}"/>
                         <DataGridTextColumn Header="備註" Binding="{Binding Memo}"/>

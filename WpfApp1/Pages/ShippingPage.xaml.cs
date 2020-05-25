@@ -272,6 +272,7 @@ namespace WpfApp1.Pages
             needCheckStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             needCheckStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             needCheckStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+            needCheckStyle.FillPattern = FillPattern.SolidForeground;
 
             ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
             lightTurquoiseStyle.BorderRight = BorderStyle.Thin;
@@ -323,7 +324,7 @@ namespace WpfApp1.Pages
                         XSSFRow rowColorInfo = (XSSFRow)ws.CreateRow(rowIndex);
                         rowColorInfo.Height = 440;
                         CreateCell(rowColorInfo, 1, shippingSheetData.ColorName, positionStyle);
-                        CreateCell(rowColorInfo, 2, shippingSheetData.CountInventory, positionStyle);
+                        CreateCell(rowColorInfo, 2, shippingSheetData.CountInventory.ToString(), (shippingSheetData.CountInventory - shippingSheetData.ShippingNumber) <= 3 ? needCheckStyle : positionStyle);
                         var colorByStorageSpaces = ExcelHelper.GetColorByStorageSpaces(wb, shippingSheetData.StorageSpaces);
                         if (!string.IsNullOrEmpty(shippingSheetData.StorageSpaces))
                         {
