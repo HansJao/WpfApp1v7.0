@@ -65,7 +65,11 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             SelectedCustomerCheckBillSheet.CustomerPrice = UpdateCustomerPrice;
             bool success = AccountSystemModule.UpdateCustomerTextilePrice(SelectedCustomerCheckBillSheet);
-            if (success) MessageBox.Show("更新成功！");
+            if (success)
+            {
+                DisplayUpdate(success, UpdateCustomerPrice);
+                MessageBox.Show("更新成功！");
+            }
         }
 
         public int NewCustomerPrice { get; set; }
@@ -103,12 +107,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 bool success = AccountSystemModule.InsertCustomerTextilePrice(customerTextilePrice);
                 if (success)
                 {
-                    foreach (var item in CustomerCheckBillSheets.Where(w => w.F_01 == SelectedCustomerCheckBillSheet.F_01 && w.I_01 == SelectedCustomerCheckBillSheet.I_01))
-                    {
-                        if (newDefaultPriceSuccess)
-                            item.DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
-                        item.CustomerPrice = Convert.ToInt32(NewCustomerPrice);
-                    }
+                    DisplayUpdate(newDefaultPriceSuccess, NewCustomerPrice);
                     MessageBox.Show("新增客戶單價成功！");
                 }
                 else
@@ -120,6 +119,17 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             }
         }
 
+        private void DisplayUpdate(bool newDefaultPriceSuccess, int customPrice)
+        {
+            foreach (var item in CustomerCheckBillSheets.Where(w => w.F_01 == SelectedCustomerCheckBillSheet.F_01 && w.I_01 == SelectedCustomerCheckBillSheet.I_01))
+            {
+                if (newDefaultPriceSuccess)
+                    item.DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
+                item.CustomerPrice = Convert.ToInt32(customPrice);
+            }
+        }
+
+
         public int InvoSubSelected { get; set; }
         public TrashCustomer SelectedTrashCustomer { get; set; }
 
@@ -128,9 +138,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             ComboBoxCustomerSelectionChangedExecute();
         }
         private TrashCustomer priviousTrashCustomer = null;
+        private DateTime priviousCheckBillDate;
         private void ComboBoxCustomerSelectionChangedExecute()
         {
-            if (priviousTrashCustomer == SelectedTrashCustomer)
+            if (priviousTrashCustomer == SelectedTrashCustomer && priviousCheckBillDate.ToString("yyyy/MM") == CheckBillDate.ToString("yyyy/MM"))
                 return;
             if (SelectedTrashCustomer == null)
             {
@@ -144,6 +155,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     return;
             };
             priviousTrashCustomer = SelectedTrashCustomer;
+            priviousCheckBillDate = CheckBillDate;
             List<TrashCustomerShipped> invoSubList = new List<TrashCustomerShipped>(TrashModule.GetInvoSub(CheckBillDate)
           .Where(w => w.C_01 == SelectedTrashCustomer.CARD_NO));
 
