@@ -297,7 +297,7 @@ namespace WpfApp1.Pages
             foreach (var shippingSheetStructure in ShippingSheetStructure)
             {
                 XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-                rowTextile.Height = 440;
+                rowTextile.Height = 318;
                 CreateCell(rowTextile, 0, shippingSheetStructure.Customer, null);
                 int customerTotal = 0;
                 foreach (var textileShippingData in shippingSheetStructure.TextileShippingDatas)
@@ -311,7 +311,7 @@ namespace WpfApp1.Pages
                     {
                         rowIndex++;
                         XSSFRow rowTextileName = (XSSFRow)ws.CreateRow(rowIndex);
-                        rowTextileName.Height = 440;
+                        rowTextileName.Height = 318;
                         CreateCell(rowTextileName, 1, textileShippingData.TextileName, positionStyle);
                     }
                     //判斷是否為配件碼布
