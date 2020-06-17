@@ -29,7 +29,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
         public void FilterColorName(string selectedColorName)
         {
             if (TextileColorList == null) return;//([芥黃])|([白])
-            Regex regex = new Regex("([" + selectedColorName.Replace("/", "]+)|([") + "]+)");
+            Regex regex = new Regex("(" + selectedColorName.Replace("/", ")+|(") + ")+");
             ICollectionView cv = CollectionViewSource.GetDefaultView(TextileColorList);
             if (!string.IsNullOrEmpty(selectedColorName))
             {
@@ -38,7 +38,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
                 {
                     /* change to get data row value */
                     TextileColorInventory p = o as TextileColorInventory;
-                    var check = regex.Matches(p.ColorName).Count == selectedColorName.Split('/').Count();
+                    var check = regex.Matches(p.ColorName.Split('-')[0]).Count == selectedColorName.Split('/').Count();
                     if (check == true) isContainTrue = true;
                     return (check);
                     /* end change to get data row value */
