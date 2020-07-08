@@ -532,6 +532,72 @@
     "Account": [
       "玫瑰花+OP*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "30TC細絨"
+    ],
+    "Inventory": [
+      "TC細絨"
+    ],
+    "Account": [
+      "TC細絨*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單OP10CM條"
+    ],
+    "Inventory": [
+      "單面OP10CM條"
+    ],
+    "Account": [
+      "單面OP10CM條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC2*2+OP"
+    ],
+    "Inventory": [
+      "30CVC2X2+OP"
+    ],
+    "Account": [
+      "30CVC2X2+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "SP細絨布"
+    ],
+    "Inventory": [
+      "SP細絨布"
+    ],
+    "Account": [
+      "SP細絨布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC1*1+OP"
+    ],
+    "Inventory": [
+      "30CVC1X1+OP"
+    ],
+    "Account": [
+      "30CVC1X1+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "TC竹節細絨布"
+    ],
+    "Inventory": [
+      "TC竹節細絨布"
+    ],
+    "Account": [
+      "TC竹節細絨*"
+    ]
   }
-  
+
 ]
