@@ -161,7 +161,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetAccountTextile();
             IEnumerable<CustomerTextilePrice> customerTextilePrices = AccountSystemModule.GetCustomerTextilePrice(SelectedTrashCustomer.CARD_NO);
-            IEnumerable<CustomerCheckBillSheet> customerCheckBillSheets = AccountSystemModule.GetCheckBillSheet(accountTextiles, customerTextilePrices, invoSubList);
+            IEnumerable<CustomerCheckBillSheet> customerCheckBillSheets = AccountSystemModule.GetCheckBillSheet(accountTextiles, customerTextilePrices, invoSubList).OrderBy(o => o.IN_DATE).ThenBy(t => t.Time);
             CustomerCheckBillSheets = new ObservableCollection<CustomerCheckBillSheet>(customerCheckBillSheets);
             OnPropertyChanged("CustomerCheckBillSheets");
         }

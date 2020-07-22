@@ -19,7 +19,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel.WindowViewModel
         {
             TrashItem = trashItem;
             RaisePropertyChanged("TrashItem");
-            TrashCustomerShippeds = TrashModule.GetCustomerShippedListByFeature(trashItem);
+            TrashCustomerShippeds = TrashModule.GetCustomerShippedListByFeature(trashItem).OrderByDescending(o => o.IN_DATE);
         }
     }
 }

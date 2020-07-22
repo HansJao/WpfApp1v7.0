@@ -41,5 +41,7 @@ namespace WpfApp1.DataClass.TrashSystem
         public double Quantity { get; set; }
         [Description("單價")]
         public double Price { get; set; }
+        [Description("輸入時間")]
+        public DateTime Time { get; set; }
     }
 }
