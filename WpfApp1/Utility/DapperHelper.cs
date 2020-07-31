@@ -23,7 +23,17 @@ namespace WpfApp1.Utility
                 result = con.Query<T>(commandText, parameters, commandType: commandType, commandTimeout: 30);
             }
             return result;
-        } 
+        }
+        public static int ExecuteDbfParameter(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
+        {
+            int result;
+            using (var con = new OleDbConnection(connectionString))
+            {
+                DynamicParameters parameters = parseParameters(commandParameters);
+                result = con.Execute(commandText, parameters, commandType: commandType, commandTimeout: 30);
+            }
+            return result;
+        }
         #endregion
         public static int ExecuteParameter(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
         {
@@ -53,7 +63,7 @@ namespace WpfApp1.Utility
             return result;
         }
 
-        public static IEnumerable<T> QueryCollection<T,P>(string connectionString, CommandType commandType, string commandText, P parameter)
+        public static IEnumerable<T> QueryCollection<T, P>(string connectionString, CommandType commandType, string commandText, P parameter)
         {
             IEnumerable<T> result;
             using (var con = new SqlConnection(connectionString))
@@ -75,7 +85,7 @@ namespace WpfApp1.Utility
         }
 
         public static IEnumerable<T> QueryCollection<T>(string connectionString, CommandType commandType, string commandText, params SqlParameter[] commandParameters)
-        {           
+        {
             IEnumerable<T> result;
             using (var con = new SqlConnection(connectionString))
             {

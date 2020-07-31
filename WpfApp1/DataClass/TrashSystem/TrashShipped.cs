@@ -11,7 +11,7 @@ namespace WpfApp1.DataClass.TrashSystem
     /// <summary>
     /// 帳務系統出貨資料
     /// </summary>
-    public class TrashShipped
+    public class TrashShipped : INotifyPropertyChanged
     {
         [Description("出貨時間")]
         public DateTime IN_DATE { get; set; }
@@ -40,8 +40,26 @@ namespace WpfApp1.DataClass.TrashSystem
         [Description("數量")]
         public double Quantity { get; set; }
         [Description("單價")]
-        public double Price { get; set; }
+        //public double Price { get; set; }
+        private double _price { get; set; }
+        public double Price
+        {
+            get { return _price; }
+            set
+            {
+                _price = value;
+                PropertyChangedInvoke(this, new PropertyChangedEventArgs("Price"));
+            }
+        }
+
         [Description("輸入時間")]
         public DateTime Time { get; set; }
+
+        protected void PropertyChangedInvoke(object sender, PropertyChangedEventArgs e)
+        {
+            PropertyChanged?.Invoke(sender, e);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

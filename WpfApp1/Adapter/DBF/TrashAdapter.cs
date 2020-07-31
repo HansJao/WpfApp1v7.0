@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.DataClass.AccountSystem;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Utility;
 
@@ -160,10 +161,33 @@ namespace WpfApp1.Adapter.DBF
             var sqlCmd = @"SELECT INSub.IN_DATE,INSub.Quantity,INSub.Price,INSub.C_01,INSub.F_01,INSub.I_01,INSub.IN_NO,I.I_03,CU.C_Name,INSub.Price,INSub.Time FROM (INVOSUB.dbf AS INSub
                            INNER JOIN CUST.dbf AS CU ON CU.CARD_NO = INSub.C_01)
                            INNER JOIN ITEM.dbf AS I ON I.F_01 = INSub.F_01 AND I.I_01 = INSub.I_01
-                           WHERE Year(INSub.IN_DATE) = " + CheckBillDate.Year + " AND Month(INSub.IN_DATE) = " + CheckBillDate.Month ;
+                           WHERE Year(INSub.IN_DATE) = " + CheckBillDate.Year + " AND Month(INSub.IN_DATE) = " + CheckBillDate.Month;
 
             var result = DapperHelper.QueryDbfCollection<TrashCustomerShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;
+        }
+        /// <summary>
+        /// 更新帳務系統單價
+        /// </summary>
+        /// <param name="customerCheckBillSheet"></param>
+        /// <param name="newPrice"></param>
+        /// <param name="CheckBillDate"></param>
+        /// <returns></returns>
+        public int UpdateInvoSubPrice(CustomerCheckBillSheet customerCheckBillSheet, int newPrice, DateTime CheckBillDate)
+        {
+            string sqlCmd2 = @"UPDATE INVOSUB.dbf SET Price=@Price 
+                               WHERE C_01 = @C_01 AND I_01 = @I_01 AND F_01 = @F_01 AND Month(IN_DATE) = @IN_DATE1 AND Year(IN_DATE) = @IN_DATE2";
+            SqlParameter[] parameters = new SqlParameter[]
+            {
+                    new SqlParameter("@Price", SqlDbType.Int) { Value = newPrice },
+                    new SqlParameter("@C_01", SqlDbType.NVarChar) { Value = customerCheckBillSheet.C_01 },
+                    new SqlParameter("@I_01", SqlDbType.NVarChar) { Value = customerCheckBillSheet.I_01 },
+                    new SqlParameter("@F_01", SqlDbType.NVarChar) { Value = customerCheckBillSheet.F_01 },
+                    new SqlParameter("@IN_DATE1", SqlDbType.Int) { Value = CheckBillDate.Month },
+                    new SqlParameter("@IN_DATE2", SqlDbType.Int) { Value = CheckBillDate.Year },
+            };
+            var count = DapperHelper.ExecuteDbfParameter(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd2, parameters);
+            return count;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WpfApp1.Adapter;
 using WpfApp1.Adapter.DBF;
+using WpfApp1.DataClass.AccountSystem;
 using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Utility;
@@ -104,6 +105,18 @@ namespace WpfApp1.Modules.TrashModule.Implement
         {
             IEnumerable<TrashCustomerShipped> trashCustomerShippeds = TrashAdapter.GetCustomerShippedListByTextileName(textileName, datePickerBegin, datePickerEnd);
             return trashCustomerShippeds;
+        }
+        /// <summary>
+        /// 更新帳務系統單價
+        /// </summary>
+        /// <param name="customerCheckBillSheet"></param>
+        /// <param name="newPrice"></param>
+        /// <param name="CheckBillDate"></param>
+        /// <returns></returns>
+        public int UpdateInvoSubPrice(CustomerCheckBillSheet customerCheckBillSheet, int newPrice, DateTime CheckBillDate)
+        {
+            int updateCount = TrashAdapter.UpdateInvoSubPrice(customerCheckBillSheet, newPrice, CheckBillDate);
+            return updateCount;
         }
     }
 }

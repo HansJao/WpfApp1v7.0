@@ -67,9 +67,18 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             bool success = AccountSystemModule.UpdateCustomerTextilePrice(SelectedCustomerCheckBillSheet);
             if (success)
             {
-                DisplayUpdate(success, UpdateCustomerPrice);
-                MessageBox.Show("更新成功！");
+                bool updateTrashSystemsuccess = UpdateTrashSystemPrice(SelectedCustomerCheckBillSheet, UpdateCustomerPrice);
+                if (updateTrashSystemsuccess)
+                {
+                    DisplayUpdate(success, UpdateCustomerPrice);
+                    MessageBox.Show("更新客戶單價成功！");
+                }
+                else
+                    MessageBox.Show("帳務系統更新失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
+
             }
+            else
+                MessageBox.Show("更新失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public int NewCustomerPrice { get; set; }
@@ -107,8 +116,17 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 bool success = AccountSystemModule.InsertCustomerTextilePrice(customerTextilePrice);
                 if (success)
                 {
-                    DisplayUpdate(newDefaultPriceSuccess, NewCustomerPrice);
-                    MessageBox.Show("新增客戶單價成功！");
+                    bool updateTrashSystemsuccess = UpdateTrashSystemPrice(SelectedCustomerCheckBillSheet, NewCustomerPrice);
+                    if (updateTrashSystemsuccess)
+                    {
+                        DisplayUpdate(newDefaultPriceSuccess, NewCustomerPrice);
+                        MessageBox.Show("新增客戶單價成功！");
+                    }
+                    else
+                    {
+
+                        MessageBox.Show("帳務系統新增失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                     MessageBox.Show("新增失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -119,6 +137,13 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             }
         }
 
+        private bool UpdateTrashSystemPrice(CustomerCheckBillSheet customerCheckBillSheet, int newPrice)
+        {
+            int updateCount = TrashModule.UpdateInvoSubPrice(customerCheckBillSheet, newPrice, CheckBillDate);
+            bool updateTrashSystemsuccess = CustomerCheckBillSheets.Where(w => w.I_01 == SelectedCustomerCheckBillSheet.I_01 && w.F_01 == SelectedCustomerCheckBillSheet.F_01).Count() == updateCount;
+            return updateTrashSystemsuccess;
+        }
+
         private void DisplayUpdate(bool newDefaultPriceSuccess, int customPrice)
         {
             foreach (var item in CustomerCheckBillSheets.Where(w => w.F_01 == SelectedCustomerCheckBillSheet.F_01 && w.I_01 == SelectedCustomerCheckBillSheet.I_01))
@@ -126,6 +151,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 if (newDefaultPriceSuccess)
                     item.DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
                 item.CustomerPrice = Convert.ToInt32(customPrice);
+                item.Price = customPrice;
             }
         }
 

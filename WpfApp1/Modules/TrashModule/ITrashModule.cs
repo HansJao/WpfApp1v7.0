@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.DataClass.AccountSystem;
 using WpfApp1.DataClass.TrashSystem;
 
 namespace WpfApp1.Modules.TrashModule
@@ -49,7 +50,13 @@ namespace WpfApp1.Modules.TrashModule
         /// <param name="textileName"></param>
         /// <returns></returns>
         IEnumerable<TrashCustomerShipped> GetCustomerShippedListByTextileName(string textileName, DateTime datePickerBegin, DateTime datePickerEnd);
-
-
+        /// <summary>
+        /// 更新帳務系統單價
+        /// </summary>
+        /// <param name="customerCheckBillSheet"></param>
+        /// <param name="newPrice"></param>
+        /// <param name="CheckBillDate"></param>
+        /// <returns></returns>
+        int UpdateInvoSubPrice(CustomerCheckBillSheet customerCheckBillSheet, int newPrice, DateTime CheckBillDate);
     }
 }

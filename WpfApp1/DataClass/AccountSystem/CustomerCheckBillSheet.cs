@@ -8,7 +8,7 @@ using WpfApp1.DataClass.TrashSystem;
 
 namespace WpfApp1.DataClass.AccountSystem
 {
-    public class CustomerCheckBillSheet : TrashCustomerShipped, INotifyPropertyChanged
+    public class CustomerCheckBillSheet : TrashCustomerShipped
     {
         public int AccountTextileID { get; set; }
         private int _defaultPrice { get; set; }
@@ -18,7 +18,7 @@ namespace WpfApp1.DataClass.AccountSystem
             set
             {
                 _defaultPrice = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("DefaultPrice"));
+                PropertyChangedInvoke(this, new PropertyChangedEventArgs("DefaultPrice"));
             }
         }
         private int _customerPrice { get; set; }
@@ -28,10 +28,9 @@ namespace WpfApp1.DataClass.AccountSystem
             set
             {
                 _customerPrice = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("CustomerPrice"));
+                PropertyChangedInvoke(this, new PropertyChangedEventArgs("CustomerPrice"));
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
