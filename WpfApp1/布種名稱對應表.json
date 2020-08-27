@@ -535,10 +535,10 @@
   },
   {
     "ProcessOrder": [
-      "30TC細絨"
+      "30TC細絨布"
     ],
     "Inventory": [
-      "TC細絨"
+      "TC細絨布"
     ],
     "Account": [
       "TC細絨*"
@@ -598,6 +598,38 @@
     "Account": [
       "TC竹節細絨*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "蜂巢布"
+    ],
+    "Inventory": [
+      "蜂巢布"
+    ],
+    "Account": [
+      "蜂巢布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR6*3+OP"
+    ],
+    "Inventory": [
+      "30TR6X3+OP"
+    ],
+    "Account": [
+      "30TR6*3+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "條碼對半條+OP"
+    ],
+    "Inventory": [
+      "條碼對半條+OP"
+    ],
+    "Account": [
+      "OP條碼對半條*"
+    ]
   }
-
 ]
