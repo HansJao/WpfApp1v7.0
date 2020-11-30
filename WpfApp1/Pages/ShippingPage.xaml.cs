@@ -191,6 +191,7 @@ namespace WpfApp1.Pages
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
+            ExportToShip();
             ExportToExcel();
             if (ComboBoxShippingCacheName.SelectedIndex == -1)
             {
@@ -233,6 +234,82 @@ namespace WpfApp1.Pages
             }
             GetShippingCacheNameList();
             ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
+        }
+
+        private void ExportToShip()
+        {
+            IWorkbook wb = new XSSFWorkbook();
+            ICellStyle positionStyle = wb.CreateCellStyle();
+            positionStyle.WrapText = true;
+            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
+            foreach (var item in ShippingSheetStructure)
+            {
+                ISheet ws = wb.CreateSheet(item.Customer);
+                ws.SetMargin(MarginType.TopMargin, 0.2);
+                ws.SetMargin(MarginType.RightMargin, 0.4);
+                ws.SetMargin(MarginType.BottomMargin, 0.2);
+                ws.SetMargin(MarginType.LeftMargin, 0.4);
+                ws.HorizontallyCenter = true;
+                ws.SetColumnWidth(0, 3072);
+                ws.SetColumnWidth(1, 2628);
+                ws.SetColumnWidth(2, 2628);
+                ws.SetColumnWidth(3, 2372);
+                ws.SetColumnWidth(4, 2372);
+                ws.SetColumnWidth(5, 2628);
+                ws.SetColumnWidth(6, 2628);
+                ws.SetColumnWidth(7, 2628);
+                ws.SetColumnWidth(8, 2628);
+                ws.SetColumnWidth(9, 2628);
+
+                XSSFRow row0 = (XSSFRow)ws.CreateRow(0);
+                row0.Height = 525;
+                XSSFRow row1 = (XSSFRow)ws.CreateRow(1);
+                row1.Height = 260;
+                XSSFRow row2 = (XSSFRow)ws.CreateRow(2);
+                row2.Height = 260;
+                XSSFRow row3 = (XSSFRow)ws.CreateRow(3);
+                row3.Height = 260;
+
+                XSSFRow row4 = (XSSFRow)ws.CreateRow(4);
+                row4.Height = 422;
+                ws.AddMergedRegion(new CellRangeAddress(4, 4, 1, 2));
+                CreateCell(row4, 1, item.Customer, positionStyle);
+
+                CreateCell(row4, 7, DateTime.Now.AddYears(-1911).Year.ToString(), null);
+                CreateCell(row4, 8, DateTime.Now.Month.ToString(), null);
+                CreateCell(row4, 9, DateTime.Now.Day.ToString(), null);
+                XSSFRow row5 = (XSSFRow)ws.CreateRow(5);
+                row5.Height = 332;
+
+                int rowNumber = 6;
+                foreach (var textileShippingData in item.TextileShippingDatas)
+                {
+                    XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
+                    rowTextile.Height = 390;
+                    ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 0, 2));
+                    if (rowNumber == 6)
+                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 3, 4));
+                    CreateCell(rowTextile, 0, textileShippingData.TextileName, positionStyle);
+                    foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
+                    {
+                        string colorName = shippingSheetData.ColorName.Split('-')[0];
+                        CreateCell(rowTextile, 3, colorName, positionStyle);
+                        rowNumber++;
+                        if (shippingSheetData.ShippingNumber >= 6)
+                        {
+                            rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 5) - 1;
+                        }
+                        rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
+                        rowTextile.Height = 390;
+                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 3, 4));
+                    }
+                }
+            }
+            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), "/", "出貨單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
+            wb.Write(file);
+            file.Close();
         }
 
         private void ExportToExcel()
