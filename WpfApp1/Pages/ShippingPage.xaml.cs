@@ -244,30 +244,29 @@ namespace WpfApp1.Pages
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
-            int countEachNumber = 0;
 
             for (int i = 0; i < shippingSheetStructures.Count; i++)
             {
+                int totalRow = 0;
+
                 ShippingSheetStructure item = new ShippingSheetStructure()
                 {
                     Customer = shippingSheetStructures[i].Customer,
                     TextileShippingDatas = new List<TextileShippingData>(shippingSheetStructures[i].TextileShippingDatas)
                 };
                 /**/
-                countEachNumber = item.TextileShippingDatas.Sum(s => s.ShippingSheetDatas.Count());
+                totalRow = item.TextileShippingDatas.Sum(s => s.ShippingSheetDatas.Count());
                 foreach (var shippingSheetData in item.TextileShippingDatas)
                 {
-                    countEachNumber = countEachNumber + shippingSheetData.ShippingSheetDatas.Count() - 1;
                     foreach (ShippingSheetData color in shippingSheetData.ShippingSheetDatas)
                     {
-                        if (color.ShippingNumber >= 6)
-                            countEachNumber = countEachNumber + color.ShippingNumber / 5 - 1;
+                        if (color.ShippingNumber >= 8)
+                            totalRow = totalRow + color.ShippingNumber / 7;
                     }
                 }
 
-                if (countEachNumber >= 15)
+                if (totalRow >= 13)
                 {
-                    int whileCountNumber = countEachNumber;
                     List<TextileShippingData> cacheLastTextileShippingData = new List<TextileShippingData>();
                     int lastTextileShippingDataRow = item.TextileShippingDatas.Count() - 1;
                     do
@@ -277,13 +276,13 @@ namespace WpfApp1.Pages
                         cacheLastTextileShippingData.Add(lastTextileShippingData);
                         foreach (ShippingSheetData shippingSheetData in lastTextileShippingData.ShippingSheetDatas)
                         {
-                            whileCountNumber--;
-                            if (shippingSheetData.ShippingNumber >= 6)
-                                whileCountNumber = whileCountNumber - shippingSheetData.ShippingNumber / 5;
+                            totalRow--;
+                            if (shippingSheetData.ShippingNumber >= 8)
+                                totalRow = totalRow - shippingSheetData.ShippingNumber / 7;
                         }
 
                         lastTextileShippingDataRow--;
-                    } while (whileCountNumber >= 15);
+                    } while (totalRow >= 13);
                     cacheLastTextileShippingData.Reverse();
                     ShippingSheetStructure shippingSheetStructure = new ShippingSheetStructure()
                     {
@@ -344,9 +343,9 @@ namespace WpfApp1.Pages
                         string colorName = shippingSheetData.ColorName.Split('-')[0];
                         CreateCell(rowTextile, 3, colorName, positionStyle);
                         rowNumber++;
-                        if (shippingSheetData.ShippingNumber >= 6)
+                        if (shippingSheetData.ShippingNumber >= 8)
                         {
-                            rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 5);
+                            rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
                         }
                         rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
                         rowTextile.Height = 390;
