@@ -294,62 +294,64 @@ namespace WpfApp1.Pages
                 /**/
                 ISheet ws = wb.CreateSheet(item.Customer);
                 ws.SetMargin(MarginType.TopMargin, 0.2);
-                ws.SetMargin(MarginType.RightMargin, 0.4);
+                ws.SetMargin(MarginType.RightMargin, 0.2);
                 ws.SetMargin(MarginType.BottomMargin, 0.2);
-                ws.SetMargin(MarginType.LeftMargin, 0.4);
-                ws.HorizontallyCenter = true;
-                ws.SetColumnWidth(0, 3072);
-                ws.SetColumnWidth(1, 2628);
-                ws.SetColumnWidth(2, 2628);
-                ws.SetColumnWidth(3, 2372);
-                ws.SetColumnWidth(4, 2372);
-                ws.SetColumnWidth(5, 2628);
-                ws.SetColumnWidth(6, 2628);
-                ws.SetColumnWidth(7, 2628);
-                ws.SetColumnWidth(8, 2628);
-                ws.SetColumnWidth(9, 2628);
+                ws.SetMargin(MarginType.LeftMargin, 0.2);
+                ws.SetColumnWidth(0, 990);
+                ws.SetColumnWidth(1, 2650);
+                ws.SetColumnWidth(2, 2630);
+                ws.SetColumnWidth(3, 850);
+                ws.SetColumnWidth(4, 1730);
+                ws.SetColumnWidth(5, 1730);
+                ws.SetColumnWidth(6, 2418);
+                ws.SetColumnWidth(7, 2418);
+                ws.SetColumnWidth(8, 2418);
+                ws.SetColumnWidth(9, 2418);
+                ws.SetColumnWidth(10, 2418);
+                ws.SetColumnWidth(11, 2418);
+                ws.SetColumnWidth(12, 2418);
 
                 XSSFRow row0 = (XSSFRow)ws.CreateRow(0);
-                row0.Height = 525;
+                row0.Height = 510;
                 XSSFRow row1 = (XSSFRow)ws.CreateRow(1);
-                row1.Height = 260;
+                row1.Height = 255;
                 XSSFRow row2 = (XSSFRow)ws.CreateRow(2);
-                row2.Height = 260;
+                row2.Height = 225;
                 XSSFRow row3 = (XSSFRow)ws.CreateRow(3);
-                row3.Height = 260;
+                row3.Height = 225;
 
                 XSSFRow row4 = (XSSFRow)ws.CreateRow(4);
-                row4.Height = 422;
-                ws.AddMergedRegion(new CellRangeAddress(4, 4, 1, 2));
-                CreateCell(row4, 1, item.Customer, positionStyle);
+                row4.Height = 420;
+                ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 3));
+                CreateCell(row4, 2, item.Customer, positionStyle);
 
-                CreateCell(row4, 7, DateTime.Now.AddYears(-1911).Year.ToString(), null);
-                CreateCell(row4, 8, DateTime.Now.Month.ToString(), null);
-                CreateCell(row4, 9, DateTime.Now.Day.ToString(), null);
+                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), positionStyle);
+                CreateCell(row4, 11, DateTime.Now.Month.ToString(), positionStyle);
+                CreateCell(row4, 12, DateTime.Now.Day.ToString(), positionStyle);
                 XSSFRow row5 = (XSSFRow)ws.CreateRow(5);
-                row5.Height = 332;
+                row5.Height = 330;
 
                 int rowNumber = 6;
                 foreach (var textileShippingData in item.TextileShippingDatas)
                 {
                     XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
-                    rowTextile.Height = 390;
-                    ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 0, 2));
+                    rowTextile.Height = 405;
+                    ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 1, 3));
                     if (rowNumber == 6)
-                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 3, 4));
-                    CreateCell(rowTextile, 0, textileShippingData.TextileName, positionStyle);
+                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 4, 5));
+                    CreateCell(rowTextile, 1, textileShippingData.TextileName, positionStyle);
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         string colorName = shippingSheetData.ColorName.Split('-')[0];
-                        CreateCell(rowTextile, 3, colorName, positionStyle);
+                        CreateCell(rowTextile, 4, colorName, positionStyle);
                         rowNumber++;
                         if (shippingSheetData.ShippingNumber >= 8)
                         {
                             rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
                         }
                         rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
-                        rowTextile.Height = 390;
-                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 3, 4));
+                        rowTextile.Height = 405;
+                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 4, 5));
                     }
                 }
             }
