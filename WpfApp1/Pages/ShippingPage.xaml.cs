@@ -370,13 +370,15 @@ namespace WpfApp1.Pages
             //ws.SetColumnBreak(11);
             ws.SetMargin(MarginType.LeftMargin, 0.04);
             ws.SetMargin(MarginType.RightMargin, 0.04);
+            ws.SetMargin(MarginType.TopMargin, 0.1);
+            ws.SetMargin(MarginType.BottomMargin, 0.04);
             XSSFRow row = (XSSFRow)ws.CreateRow(0);
             row.Height = 440;
             ICellStyle cellCenter = wb.CreateCellStyle();
             cellCenter.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
             ws.SetColumnWidth(0, 3000);
-            ws.SetColumnWidth(1, 3150);
+            ws.SetColumnWidth(1, 5020);
             ws.SetColumnWidth(4, 1700);
             ws.SetColumnWidth(2, 1700);
 
@@ -462,10 +464,10 @@ namespace WpfApp1.Pages
                         CreateCell(rowColorInfo, 4, shippingSheetData.ShippingNumber.ToString(), shippingNumberStyle);
                         CreateCell(rowColorInfo, 5, shippingSheetData.Memo, null);
                         int weightCellNumber = (int)ExcelEnum.ShippingSheetEnum.WeightCellNumber;
-                        int startIndex = weightCellNumber + shippingSheetData.Memo.Count() / (int)ExcelEnum.ShippingSheetEnum.CellOfStringLength;
+                        int startIndex = (int)ExcelEnum.ShippingSheetEnum.WeightCellStartIndex + shippingSheetData.Memo.Count() / (int)ExcelEnum.ShippingSheetEnum.CellOfStringLength;
                         for (int shippingCount = startIndex; shippingCount < startIndex + shippingSheetData.ShippingNumber; shippingCount++)
                         {
-                            if (shippingCount % weightCellNumber == 0 && shippingCount > weightCellNumber)
+                            if ((shippingCount + 4) % weightCellNumber == 0 && shippingCount > weightCellNumber)
                             {
                                 rowIndex++;
                                 rowColorInfo = (XSSFRow)ws.CreateRow(rowIndex);
@@ -473,11 +475,11 @@ namespace WpfApp1.Pages
                             }
                             if (colorIndex % 2 == 0)
                             {
-                                CreateCell(rowColorInfo, shippingCount - (shippingCount / weightCellNumber - 1) * weightCellNumber, null, lightTurquoiseStyle);
+                                CreateCell(rowColorInfo, shippingCount - ((shippingCount - 1) / weightCellNumber - 1) * weightCellNumber, null, lightTurquoiseStyle);
                             }
                             else
                             {
-                                CreateCell(rowColorInfo, shippingCount - (shippingCount / weightCellNumber - 1) * weightCellNumber, null, coralStyle);
+                                CreateCell(rowColorInfo, shippingCount - ((shippingCount - 1) / weightCellNumber - 1) * weightCellNumber, null, coralStyle);
                             }
                             if (isAccessories)
                             {
@@ -519,7 +521,6 @@ namespace WpfApp1.Pages
             CreateCell(row, 8, "3", positionStyle);
             CreateCell(row, 9, "4", positionStyle);
             CreateCell(row, 10, "5", positionStyle);
-            CreateCell(row, 11, "6", positionStyle);
         }
 
         private void CreateCell(XSSFRow row, int cellIndex, string cellValue, ICellStyle style)

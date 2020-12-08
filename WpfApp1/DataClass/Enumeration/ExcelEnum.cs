@@ -10,8 +10,10 @@ namespace WpfApp1.DataClass.Enumeration
     {
         public enum ShippingSheetEnum
         {
-            WeightCellNumber = 6,
-            CellOfStringLength = 5
+            WeightCellNumber = 5,
+            CellOfStringLength = 5,
+            WeightCellStartIndex = 6
+
         }
 
         public enum ExcelInventoryColumnIndexEnum
