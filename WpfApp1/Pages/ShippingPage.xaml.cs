@@ -347,6 +347,12 @@ namespace WpfApp1.Pages
                         rowNumber++;
                         if (shippingSheetData.ShippingNumber >= 8)
                         {
+                            int skipRowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
+                            for (int skipRowCount = rowNumber; skipRowCount < skipRowNumber; skipRowCount++)
+                            {
+                                rowTextile = (XSSFRow)ws.CreateRow(skipRowCount);
+                                rowTextile.Height = 405;
+                            }
                             rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
                         }
                         rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
@@ -467,7 +473,7 @@ namespace WpfApp1.Pages
                         int startIndex = (int)ExcelEnum.ShippingSheetEnum.WeightCellStartIndex + shippingSheetData.Memo.Count() / (int)ExcelEnum.ShippingSheetEnum.CellOfStringLength;
                         for (int shippingCount = startIndex; shippingCount < startIndex + shippingSheetData.ShippingNumber; shippingCount++)
                         {
-                            if ((shippingCount + 4) % weightCellNumber == 0 && shippingCount > weightCellNumber)
+                            if ((shippingCount - 1) % weightCellNumber == 0 && shippingCount - 1 > weightCellNumber)
                             {
                                 rowIndex++;
                                 rowColorInfo = (XSSFRow)ws.CreateRow(rowIndex);
