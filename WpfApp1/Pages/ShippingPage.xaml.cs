@@ -286,10 +286,11 @@ namespace WpfApp1.Pages
                     cacheLastTextileShippingData.Reverse();
                     ShippingSheetStructure shippingSheetStructure = new ShippingSheetStructure()
                     {
-                        Customer = item.Customer + "1",
+                        Customer = item.Customer + "-1",
                         TextileShippingDatas = cacheLastTextileShippingData
                     };
-                    shippingSheetStructures.Add(shippingSheetStructure);
+                    int indexOfCurrentCustomer = shippingSheetStructures.IndexOf(shippingSheetStructures[i]) + 1;
+                    shippingSheetStructures.Insert(indexOfCurrentCustomer, shippingSheetStructure);
                 }
                 /**/
                 ISheet ws = wb.CreateSheet(item.Customer);
@@ -343,6 +344,7 @@ namespace WpfApp1.Pages
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         string colorName = shippingSheetData.ColorName.Split('-')[0];
+                        colorName = shippingSheetData.ShippingNumber == 1 ? colorName : colorName + "-" + shippingSheetData.ShippingNumber;
                         CreateCell(rowTextile, 4, colorName, positionStyle);
                         rowNumber++;
                         if (shippingSheetData.ShippingNumber >= 8)
