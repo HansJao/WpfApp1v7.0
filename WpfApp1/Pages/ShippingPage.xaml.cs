@@ -243,6 +243,14 @@ namespace WpfApp1.Pages
             positionStyle.WrapText = true;
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            ICellStyle customerStyle = wb.CreateCellStyle();
+            customerStyle.WrapText = true;
+            customerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            customerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            IFont font = wb.CreateFont();
+            font.FontName = "新細明體";
+            font.FontHeightInPoints = 19;
+            customerStyle.SetFont(font);
             List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
 
             for (int i = 0; i < shippingSheetStructures.Count; i++)
@@ -323,8 +331,8 @@ namespace WpfApp1.Pages
 
                 XSSFRow row4 = (XSSFRow)ws.CreateRow(4);
                 row4.Height = 420;
-                ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 3));
-                CreateCell(row4, 2, item.Customer, positionStyle);
+                ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 5));
+                CreateCell(row4, 2, item.Customer, customerStyle);
 
                 CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), positionStyle);
                 CreateCell(row4, 11, DateTime.Now.Month.ToString(), positionStyle);
