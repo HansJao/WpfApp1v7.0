@@ -152,7 +152,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             wb.Write(file);
             file.Close();
         }
-        public string StoreArea { get; set; } = "1A,1B,1C,1D,1E,1F,1G,1H,1I,1J,1K,1L,1M,1N,1O,1P,1Q,1R,1S,1T,1U,1V,柱1,柱2,2A,2B,2C,2D";
+        public string StoreArea { get; set; } = "1B,1C,2A,2B,2C";
+        public string ExceptArea { get; set; } = "小,大";
         public string TextileName { get; set; } = "";
         void InventoryNumberRangeSearchExecute()
         {
@@ -162,6 +163,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
             Regex checkStoreAreaPattern = new Regex(string.Concat("(^", StoreArea.Replace(",", ")+|(^"), ")+"));
+            Regex checkExceptAreaPattern = new Regex(string.Concat("(^", StoreArea.Replace(",", ")+|(^"), ")+"));
             Regex checkTextileNamePattern = new Regex(string.Concat("(", TextileName.Replace(",", ")+|("), ")+"));
 
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
@@ -174,7 +176,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     continue;
                 }
                 var colorList = new List<StoreData>();
-                for (int rowNumber = 1; rowNumber <= sheet.LastRowNum; rowNumber++)  //對工作表每一行  
+                for (int rowNumber = 1; rowNumber <= sheet.LastRowNum; rowNumber++)  //對工作表每一行
                 {
                     if (rowNumber > 70)
                         break;
@@ -193,7 +195,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         }
                         double cellValue = countInventory.NumericCellValue; //獲取i行j列數據
                         string storeArea = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString();
-                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea))
+                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea)  && checkStoreAreaPattern.IsMatch(ExceptArea))
                         {
                             colorList.Add(new StoreData
                             {

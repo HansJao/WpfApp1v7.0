@@ -247,10 +247,22 @@ namespace WpfApp1.Pages
             customerStyle.WrapText = true;
             customerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             customerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-            IFont font = wb.CreateFont();
-            font.FontName = "新細明體";
-            font.FontHeightInPoints = 19;
-            customerStyle.SetFont(font);
+         
+            IFont customerFont = wb.CreateFont();
+            customerFont.FontName = "新細明體";
+            customerFont.FontHeightInPoints = 19;
+            customerStyle.SetFont(customerFont);
+
+            ICellStyle weightStyle = wb.CreateCellStyle();
+            weightStyle.WrapText = true;
+            weightStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            weightStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            IFont weightFont = wb.CreateFont();
+            weightFont.FontName = "新細明體";
+            weightFont.IsBold = true;
+            weightFont.FontHeightInPoints = 15;
+            weightStyle.SetFont(weightFont);
+
             List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
 
             for (int i = 0; i < shippingSheetStructures.Count; i++)
@@ -354,6 +366,13 @@ namespace WpfApp1.Pages
                         string colorName = shippingSheetData.ColorName.Split('-')[0];
                         colorName = shippingSheetData.ShippingNumber == 1 ? colorName : colorName + "-" + shippingSheetData.ShippingNumber;
                         CreateCell(rowTextile, 4, colorName, positionStyle);
+                        CreateCell(rowTextile, 6, "", weightStyle);
+                        CreateCell(rowTextile, 7, "", weightStyle);
+                        CreateCell(rowTextile, 8, "", weightStyle);
+                        CreateCell(rowTextile, 9, "", weightStyle);
+                        CreateCell(rowTextile, 10, "", weightStyle);
+                        CreateCell(rowTextile, 11, "", weightStyle);
+                        CreateCell(rowTextile, 12, "", weightStyle);
                         rowNumber++;
                         if (shippingSheetData.ShippingNumber >= 8)
                         {
