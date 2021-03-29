@@ -247,7 +247,7 @@ namespace WpfApp1.Pages
             customerStyle.WrapText = true;
             customerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             customerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-         
+
             IFont customerFont = wb.CreateFont();
             customerFont.FontName = "新細明體";
             customerFont.FontHeightInPoints = 19;
@@ -269,14 +269,14 @@ namespace WpfApp1.Pages
             {
                 int totalRow = 0;
 
-                ShippingSheetStructure item = new ShippingSheetStructure()
+                ShippingSheetStructure shippingSheetStucture = new ShippingSheetStructure()
                 {
                     Customer = shippingSheetStructures[i].Customer,
-                    TextileShippingDatas = new List<TextileShippingData>(shippingSheetStructures[i].TextileShippingDatas)
+                    TextileShippingDatas = new List<TextileShippingData>(shippingSheetStructures[i].TextileShippingDatas.Select(s => new TextileShippingData { TextileName = s.TextileName, ShippingSheetDatas = new List<ShippingSheetData>(s.ShippingSheetDatas) }))
                 };
                 /**/
-                totalRow = item.TextileShippingDatas.Sum(s => s.ShippingSheetDatas.Count());
-                foreach (var shippingSheetData in item.TextileShippingDatas)
+                totalRow = shippingSheetStucture.TextileShippingDatas.Sum(s => s.ShippingSheetDatas.Count());
+                foreach (var shippingSheetData in shippingSheetStucture.TextileShippingDatas)
                 {
                     foreach (ShippingSheetData color in shippingSheetData.ShippingSheetDatas)
                     {
@@ -285,35 +285,79 @@ namespace WpfApp1.Pages
                     }
                 }
 
-                if (totalRow >= 13)
+                if (totalRow > 13)
                 {
                     List<TextileShippingData> cacheLastTextileShippingData = new List<TextileShippingData>();
-                    int lastTextileShippingDataRow = item.TextileShippingDatas.Count() - 1;
-                    do
-                    {
-                        var lastTextileShippingData = item.TextileShippingDatas[lastTextileShippingDataRow];
-                        item.TextileShippingDatas.RemoveAt(lastTextileShippingDataRow);
-                        cacheLastTextileShippingData.Add(lastTextileShippingData);
-                        foreach (ShippingSheetData shippingSheetData in lastTextileShippingData.ShippingSheetDatas)
-                        {
-                            totalRow--;
-                            if (shippingSheetData.ShippingNumber >= 8)
-                                totalRow = totalRow - shippingSheetData.ShippingNumber / 7;
-                        }
 
-                        lastTextileShippingDataRow--;
-                    } while (totalRow >= 13);
-                    cacheLastTextileShippingData.Reverse();
+                    //int lastTextileShippingDataRow = item.TextileShippingDatas.Count() - 1;
+                    //do
+                    //{
+                    //var lastTextileShippingData = item.TextileShippingDatas[lastTextileShippingDataRow];
+                    //item.TextileShippingDatas.RemoveAt(lastTextileShippingDataRow);
+                    //cacheLastTextileShippingData.Add(lastTextileShippingData);
+
+                    int skipRow = 0;
+
+                    for (int textileShippingDataIndex = 0; textileShippingDataIndex < shippingSheetStucture.TextileShippingDatas.Count(); textileShippingDataIndex++)
+                    {
+                        TextileShippingData textileShippingData = shippingSheetStucture.TextileShippingDatas[textileShippingDataIndex];
+
+                        for (int shippingSheetDataIndex = 0; shippingSheetDataIndex < textileShippingData.ShippingSheetDatas.Count(); shippingSheetDataIndex++)
+                        {
+                            ShippingSheetData shippingSheetData = textileShippingData.ShippingSheetDatas[shippingSheetDataIndex];
+                            skipRow++;
+                            if (shippingSheetData.ShippingNumber > 7)
+                            {
+                                skipRow = skipRow + shippingSheetData.ShippingNumber / 7;
+                            }
+                            if (skipRow > 13)
+                            {
+                                int indexOftextileShippingData = shippingSheetStucture.TextileShippingDatas.IndexOf(textileShippingData);
+                                shippingSheetStucture.TextileShippingDatas[indexOftextileShippingData].ShippingSheetDatas.Remove(shippingSheetData);
+                                if (shippingSheetStucture.TextileShippingDatas[indexOftextileShippingData].ShippingSheetDatas.Count == 0)
+                                {
+                                    shippingSheetStucture.TextileShippingDatas.Remove(textileShippingData);
+                                }
+                                if (cacheLastTextileShippingData.Count(c => c.TextileName == textileShippingData.TextileName) > 0)
+                                {
+                                    int indexCache = cacheLastTextileShippingData.FindIndex(f => f.TextileName == textileShippingData.TextileName);
+                                    cacheLastTextileShippingData[indexCache].ShippingSheetDatas.Add(shippingSheetData);
+                                }
+                                else
+                                {
+                                    cacheLastTextileShippingData.Add(
+                                        new TextileShippingData
+                                        {
+                                            TextileName = textileShippingData.TextileName,
+                                            ShippingSheetDatas = new List<ShippingSheetData> { shippingSheetData }
+                                        }
+                                    );
+                                }
+                            }
+                        }
+                    }
+
+
+                    //foreach (ShippingSheetData shippingSheetData in lastTextileShippingData.ShippingSheetDatas)
+                    //{
+                    //    totalRow--;
+                    //    if (shippingSheetData.ShippingNumber >= 8)
+                    //        totalRow = totalRow - shippingSheetData.ShippingNumber / 7;
+                    //}
+
+                    //lastTextileShippingDataRow--;
+                    //} while (totalRow > 13);
+                    //cacheLastTextileShippingData.Reverse();
                     ShippingSheetStructure shippingSheetStructure = new ShippingSheetStructure()
                     {
-                        Customer = item.Customer + "-1",
+                        Customer = shippingSheetStucture.Customer + "-1",
                         TextileShippingDatas = cacheLastTextileShippingData
                     };
                     int indexOfCurrentCustomer = shippingSheetStructures.IndexOf(shippingSheetStructures[i]) + 1;
                     shippingSheetStructures.Insert(indexOfCurrentCustomer, shippingSheetStructure);
                 }
                 /**/
-                ISheet ws = wb.CreateSheet(item.Customer);
+                ISheet ws = wb.CreateSheet(shippingSheetStucture.Customer);
                 ws.SetMargin(MarginType.TopMargin, 0.2);
                 ws.SetMargin(MarginType.RightMargin, 0.2);
                 ws.SetMargin(MarginType.BottomMargin, 0.2);
@@ -344,7 +388,7 @@ namespace WpfApp1.Pages
                 XSSFRow row4 = (XSSFRow)ws.CreateRow(4);
                 row4.Height = 420;
                 ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 5));
-                CreateCell(row4, 2, item.Customer, customerStyle);
+                CreateCell(row4, 2, shippingSheetStucture.Customer, customerStyle);
 
                 CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), positionStyle);
                 CreateCell(row4, 11, DateTime.Now.Month.ToString(), positionStyle);
@@ -353,7 +397,7 @@ namespace WpfApp1.Pages
                 row5.Height = 330;
 
                 int rowNumber = 6;
-                foreach (var textileShippingData in item.TextileShippingDatas)
+                foreach (var textileShippingData in shippingSheetStucture.TextileShippingDatas)
                 {
                     XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
                     rowTextile.Height = 405;
