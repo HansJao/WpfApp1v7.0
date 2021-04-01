@@ -466,6 +466,16 @@ namespace WpfApp1.Pages
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
+            ICellStyle textileNameStyle = wb.CreateCellStyle();
+            textileNameStyle.WrapText = true;
+            textileNameStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            textileNameStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            IFont textileNameFont = wb.CreateFont();
+            textileNameFont.IsBold = true;
+            textileNameFont.FontName = "新細明體";
+            textileNameFont.Color = NPOI.HSSF.Util.HSSFColor.Red.Index;
+            textileNameStyle.SetFont(textileNameFont);
+
             ICellStyle shippingNumberStyle = wb.CreateCellStyle();
             shippingNumberStyle.WrapText = true;
             shippingNumberStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -511,14 +521,14 @@ namespace WpfApp1.Pages
                     //判斷若為第0筆資料,則與客戶資料同一行,否則跳下一行
                     if (shippingSheetStructure.TextileShippingDatas.IndexOf(textileShippingData) == 0)
                     {
-                        CreateCell(rowTextile, 1, textileShippingData.TextileName, positionStyle);
+                        CreateCell(rowTextile, 1, textileShippingData.TextileName, textileNameStyle);
                     }
                     else
                     {
                         rowIndex++;
                         XSSFRow rowTextileName = (XSSFRow)ws.CreateRow(rowIndex);
                         rowTextileName.Height = 318;
-                        CreateCell(rowTextileName, 1, textileShippingData.TextileName, positionStyle);
+                        CreateCell(rowTextileName, 1, textileShippingData.TextileName, textileNameStyle);
                     }
                     //判斷是否為配件碼布
                     Regex reg = new Regex(@"碼布$");
