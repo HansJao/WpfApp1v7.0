@@ -163,7 +163,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
             Regex checkStoreAreaPattern = new Regex(string.Concat("(^", StoreArea.Replace(",", ")+|(^"), ")+"));
-            Regex checkExceptAreaPattern = new Regex(string.Concat("(^", StoreArea.Replace(",", ")+|(^"), ")+"));
+            Regex checkExceptAreaPattern = new Regex(string.Concat("(", ExceptArea.Replace(",", ")+|("), ")+"));
             Regex checkTextileNamePattern = new Regex(string.Concat("(", TextileName.Replace(",", ")+|("), ")+"));
 
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
@@ -195,7 +195,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         }
                         double cellValue = countInventory.NumericCellValue; //獲取i行j列數據
                         string storeArea = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString();
-                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea)  && checkStoreAreaPattern.IsMatch(ExceptArea))
+                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea)  && !checkExceptAreaPattern.IsMatch(storeArea))
                         {
                             colorList.Add(new StoreData
                             {
