@@ -390,9 +390,9 @@ namespace WpfApp1.Pages
                 ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 5));
                 CreateCell(row4, 2, shippingSheetStucture.Customer, customerStyle);
 
-                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), positionStyle);
-                CreateCell(row4, 11, DateTime.Now.Month.ToString(), positionStyle);
-                CreateCell(row4, 12, DateTime.Now.Day.ToString(), positionStyle);
+                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), weightStyle);
+                CreateCell(row4, 11, DateTime.Now.Month.ToString(), weightStyle);
+                CreateCell(row4, 12, DateTime.Now.Day.ToString(), weightStyle);
                 XSSFRow row5 = (XSSFRow)ws.CreateRow(5);
                 row5.Height = 330;
 
