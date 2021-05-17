@@ -16,18 +16,19 @@
     <Grid>
         <StackPanel Orientation="Horizontal">
             <DockPanel>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Content="客戶名稱："/>
+                        <TextBox Width="100" Text="{Binding TrashCustomerText, UpdateSourceTrigger=PropertyChanged}" Height="20" VerticalAlignment="Top"/>
+                    </StackPanel>
+                    <DataGrid DockPanel.Dock="Left" HorizontalAlignment="Left" ItemsSource="{Binding TrashCustomerList}" SelectedItem="{Binding SelectedTrashCustomer}"  Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
+                        <DataGrid.Columns >
+                            <DataGridTextColumn Header="客戶編號" Binding="{Binding CARD_NO}"/>
+                            <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_NAME}"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                    <Label Content=" 客  戶  清  單 :"/>
-                    <ComboBox ItemsSource="{Binding TrashCustomerList}" Text="{Binding TrashCustomerText}" SelectedItem="{Binding SelectedTrashCustomer}" helper:EnterKeyHelper.EnterKeyCommand="{Binding SelectedCustomerEnter}" DisplayMemberPath="C_NAME" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" IsEditable="True" >
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="KeyUp">
-                                <i:InvokeCommandAction Command="{Binding ComboBoxCustomerKeyUp}"/>
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding ComboBoxCustomerSelectionChanged}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </ComboBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
                     <Label Content="對帳日期："/>
@@ -104,7 +105,7 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <Label Background="Red" Width="50" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                    <TextBlock Text="未設定Super單價" Height="30" Width="100" Margin="0,8,0,0" />                 
+                    <TextBlock Text="未設定Super單價" Height="30" Width="100" Margin="0,8,0,0" />
                 </StackPanel>
             </StackPanel>
         </StackPanel>

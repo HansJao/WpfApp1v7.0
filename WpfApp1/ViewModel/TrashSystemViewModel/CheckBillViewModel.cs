@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,16 +23,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         protected ITrashModule TrashModule { get; } = new TrashModule();
         protected IAccountSystemModule AccountSystemModule { get; } = new AccountSystemModule();
 
-        //public ICommand CheckBillDateSelect { get { return new RelayCommand(CheckBillDateSelectExecute, CanExecute); } }
-        public ICommand ComboBoxCustomerKeyUp { get { return new RelayCommand(ComboBoxCustomerKeyUpExecute, CanExecute); } }
-        public ICommand ComboBoxCustomerSelectionChanged { get { return new RelayCommand(ComboBoxCustomerSelectionChangedExecute, CanExecute); } }
         public ICommand InsertCustomerPriceClick { get { return new RelayCommand(InsertCustomerPriceClickExecute, CanExecute); } }
         public ICommand UpdateCustomerPriceClick { get { return new RelayCommand(UpdateCustomerPriceClickExecute, CanExecute); } }
         public ICommand DatePickerSelectedDateChanged { get { return new RelayCommand(DatePickerSelectedDateChangedExecute, CanExecute); } }
         public ICommand EnterKeyCommand { get { return new RelayCommand(EnterKeyCommandExecute, CanExecute); } }
-        public ICommand SelectedCustomerEnter { get { return new RelayCommand(SelectedCustomerEnterExecute, CanExecute); } }
-
-
 
         private void EnterKeyCommandExecute()
         {
@@ -157,11 +152,18 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
 
         public int InvoSubSelected { get; set; }
-        public TrashCustomer SelectedTrashCustomer { get; set; }
-
-        private void SelectedCustomerEnterExecute()
+        private TrashCustomer _SelectedTrashCustomer { get; set; }
+        public TrashCustomer SelectedTrashCustomer
         {
-            ComboBoxCustomerSelectionChangedExecute();
+            get
+            {
+                return _SelectedTrashCustomer;
+            }
+            set
+            {
+                _SelectedTrashCustomer = value;
+                ComboBoxCustomerSelectionChangedExecute();
+            }
         }
         private TrashCustomer priviousTrashCustomer = null;
         private DateTime priviousCheckBillDate;
@@ -194,41 +196,41 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         public DateTime CheckBillDate { get; set; } = DateTime.Now;
 
-        //private void CheckBillDateSelectExecute()
-        //{
-        //    InvoSubList = new ObservableCollection<TrashCustomerShipped>(TrashModule.GetInvoSub()
-        //     .Where(w => w.C_01 == SelectedTrashCustomer.CARD_NO && w.IN_DATE.ToString("yyyy/MM") == DateTime.Now.ToString("yyyy/MM"))
-        //     .OrderBy(o => o.IN_NO));
-        //    OnPropertyChanged("InvoSubList");
-        //}
-
         public ObservableCollection<CustomerCheckBillSheet> CustomerCheckBillSheets { get; set; }
         public IEnumerable<TrashCustomer> TrashCustomerList { get; set; }
-        public string TrashCustomerText { get; set; }
+        private string _TrashCustomerText { get; set; }
+        public string TrashCustomerText
+        {
+            get { return _TrashCustomerText; }
+            set
+            {
+                _TrashCustomerText = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(TrashCustomerList);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    cv.Filter = o =>
+                    {
+                        /* change to get data row value */
+                        TrashCustomer p = o as TrashCustomer;
+                        return (p.C_NAME.Contains(value));
+                        /* end change to get data row value */
+                    };
+                }
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                };
+                //RaisePropertyChanged("TrashCustomerText");
+            }
+        }
         CollectionView ItemsViewOriginal;
         public CheckBillViewModel()
         {
             TrashCustomerList = TrashModule.GetCustomerList();
             ItemsViewOriginal = (CollectionView)CollectionViewSource.GetDefaultView(TrashCustomerList);
-        }
-
-
-        private void ComboBoxCustomerKeyUpExecute()
-        {
-            if (string.IsNullOrEmpty(TrashCustomerText)) return;
-            ItemsViewOriginal.Filter = ((o) =>
-            {
-                TrashCustomer trashCustomer = o as TrashCustomer;
-                if (string.IsNullOrEmpty(TrashCustomerText))
-                    return true;
-                else
-                {
-                    if (trashCustomer.C_NAME.ToUpper().Contains(TrashCustomerText)) return true;
-                    else return false;
-                }
-            });
-
-            //ItemsViewOriginal.Refresh();
         }
     }
 }
