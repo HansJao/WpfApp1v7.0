@@ -54,46 +54,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             TextileInventoryHeader.Textile = SelectedTextile;
             RaisePropertyChanged("TextileInventoryHeader");
             ExcelHelper excelHelper = new ExcelHelper();
-            //ISheet sheet = workbook.GetSheet(SelectedTextile);  //獲取工作表
             List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
             selectedTextiles = excelHelper.GetInventoryData(workbook, SelectedTextile);
-            //IRow row;
-            //for (int i = 1; i <= sheet.LastRowNum; i++)
-            //{
-            //    row = sheet.GetRow(i);
-            //    if (row == null)
-            //    {
-            //        break;
-            //    }
-            //    var differentCylinder = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder).CellType == CellType.Blank ? "" : "有不同缸應注意";
-            //    var cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false)
-            //        ? ""
-            //        : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToString();
 
-            //    double inventory = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Inventory));
-            //    selectedTextiles.Add(new TextileColorInventory
-            //    {
-            //        Index = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
-            //        ColorName = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName).ToString(),
-            //        StorageSpaces = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString(),
-            //        Inventory = inventory,
-            //        DifferentCylinder = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.DifferentCylinder)),
-            //        ShippingDate1 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate1)),
-            //        ShippingDate2 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate2)),
-            //        ShippingDate3 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate3)),
-            //        ShippingDate4 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate4)),
-            //        ShippingDate5 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate5)),
-            //        ShippingDate6 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate6)),
-            //        ShippingDate7 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate7)),
-            //        ShippingDate8 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate8)),
-            //        ShippingDate9 = ExcelModule.CheckExcelCellType<double>(CellType.Numeric, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ShippingDate9)),
-            //        CountInventory = cellValue,
-            //        IsChecked = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.IsChecked)),
-            //        CheckDate = ExcelModule.CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CheckDate)),
-            //        //ClearFactory = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.ClearFactory).ToString(),
-            //        Memo = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo) == null ? differentCylinder : string.Concat(row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Memo).ToString(), ",", differentCylinder)
-            //    });
-            //}
             TextileColorList = selectedTextiles;
             RaisePropertyChanged("TextileColorList");
         }
@@ -125,6 +88,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
         private void ComboBoxSelectionChangedExecute()
         {
+            string priviousTextile = SelectedTextile;
             TextileColorList = null;
             TextileList = null;
             RaisePropertyChanged("TextileColorList");
@@ -149,6 +113,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 GetShippingDate(dictionaryWorkbook.GetSheetAt(1));
             }
             RaisePropertyChanged("TextileList");
+            SelectedTextile = priviousTextile;
+            RaisePropertyChanged("SelectedTextile");
         }
         public TextileInventoryHeader TextileInventoryHeader { get; set; }
         public string SelectedTextile { get; set; }
