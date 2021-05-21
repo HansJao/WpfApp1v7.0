@@ -246,7 +246,7 @@ namespace WpfApp1.Pages
             ICellStyle customerStyle = wb.CreateCellStyle();
             customerStyle.WrapText = true;
             customerStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            customerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            customerStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Bottom;
 
             IFont customerFont = wb.CreateFont();
             customerFont.FontName = "新細明體";
@@ -262,6 +262,12 @@ namespace WpfApp1.Pages
             weightFont.IsBold = true;
             weightFont.FontHeightInPoints = 15;
             weightStyle.SetFont(weightFont);
+
+            ICellStyle LeftStyle = wb.CreateCellStyle();
+            LeftStyle.WrapText = true;
+            LeftStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Left;
+            LeftStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            LeftStyle.SetFont(weightFont);
 
             List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
 
@@ -288,13 +294,6 @@ namespace WpfApp1.Pages
                 if (totalRow > 13)
                 {
                     List<TextileShippingData> cacheLastTextileShippingData = new List<TextileShippingData>();
-
-                    //int lastTextileShippingDataRow = item.TextileShippingDatas.Count() - 1;
-                    //do
-                    //{
-                    //var lastTextileShippingData = item.TextileShippingDatas[lastTextileShippingDataRow];
-                    //item.TextileShippingDatas.RemoveAt(lastTextileShippingDataRow);
-                    //cacheLastTextileShippingData.Add(lastTextileShippingData);
 
                     int skipRow = 0;
 
@@ -336,18 +335,6 @@ namespace WpfApp1.Pages
                             }
                         }
                     }
-
-
-                    //foreach (ShippingSheetData shippingSheetData in lastTextileShippingData.ShippingSheetDatas)
-                    //{
-                    //    totalRow--;
-                    //    if (shippingSheetData.ShippingNumber >= 8)
-                    //        totalRow = totalRow - shippingSheetData.ShippingNumber / 7;
-                    //}
-
-                    //lastTextileShippingDataRow--;
-                    //} while (totalRow > 13);
-                    //cacheLastTextileShippingData.Reverse();
                     ShippingSheetStructure shippingSheetStructure = new ShippingSheetStructure()
                     {
                         Customer = shippingSheetStucture.Customer + "-1",
@@ -390,7 +377,7 @@ namespace WpfApp1.Pages
                 ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 5));
                 CreateCell(row4, 2, shippingSheetStucture.Customer, customerStyle);
 
-                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), weightStyle);
+                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), LeftStyle);
                 CreateCell(row4, 11, DateTime.Now.Month.ToString(), weightStyle);
                 CreateCell(row4, 12, DateTime.Now.Day.ToString(), weightStyle);
                 XSSFRow row5 = (XSSFRow)ws.CreateRow(5);
