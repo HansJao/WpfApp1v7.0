@@ -326,6 +326,7 @@
     <Compile Include="ViewModel\TrashSystemViewModel\DefaultPriceViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\ShipFeatureViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CommonWindows\TextBoxMessageDialog.xaml.cs">
