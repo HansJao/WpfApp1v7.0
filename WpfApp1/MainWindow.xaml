@@ -55,8 +55,8 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock x:Name="textBlock1" Text="出貨特徵" VerticalAlignment="Center"/>
-                                <TextBox x:Name="ShipFeatureDate" Width="50" Grid.Column="1"/>
+                                <TextBlock x:Name="textBlock1" Text="出貨單特徵" VerticalAlignment="Center"/>
+                                <TextBox x:Name="ShipFeatureDate" Width="130" Grid.Column="1" VerticalAlignment="Center"/>
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>

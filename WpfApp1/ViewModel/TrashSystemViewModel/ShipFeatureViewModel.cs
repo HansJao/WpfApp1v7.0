@@ -1,4 +1,5 @@
-﻿using NPOI.SS.UserModel;
+﻿using NPOI.HSSF.Util;
+using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ShipFeatureViewModel(string shipFeatureDate)
         {
             string defaultDate = DateTime.Now.ToString("yyyyMMdd");
-            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨單", defaultDate, shipFeatureDate, ".xlsx");
+
+            string[] dateNumber = shipFeatureDate.Split('-');
+
+            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨單", dateNumber[0].Length > 5 ? dateNumber[0] : defaultDate, "-", dateNumber[0].Length > 5 ? dateNumber[1] : dateNumber[0], ".xlsx");
             //IEnumerable<string> shipFileName = Directory.GetFiles(AppSettingConfig.FilePath(), fileNameDate).Select(System.IO.Path.GetFileName).OrderByDescending(o => o);
             IWorkbook workbook = null;  //新建IWorkbook對象  
             using (FileStream fs = new FileStream(fileNameDate, FileMode.Open, FileAccess.Read))
@@ -51,7 +55,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     }
 
                     ICell colorCell = row.GetCell(4);
-                    if (colorCell == null | colorCell.StringCellValue == null | colorCell.StringCellValue == "")
+                    if (colorCell == null || colorCell.StringCellValue == null || colorCell.StringCellValue == "")
                     {
                         break;
                     }
@@ -76,8 +80,15 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                         accountTextileID = trashItem.I_01;
                         accountTextileName = trashItem.I_03;
                     }
-
-                    colorCell.SetCellValue(colorCell.StringCellValue + "*" + accountFactoryID + "_" + accountTextileID + "-" + accountTextileName);
+                    string shipFeatureString = colorCell.StringCellValue + "*" + accountFactoryID + "_" + accountTextileID + "-" + accountTextileName;
+                    colorCell.SetCellValue(shipFeatureString);
+                    IFont font = workbook.CreateFont();
+                    font.Color = HSSFColor.Blue.Index2;
+                    font.FontName = "新細明體";
+                    font.IsBold = true;
+                    colorCell.RichStringCellValue.ApplyFont(
+                                shipFeatureString.Length - 1 - accountTextileID.Length - accountTextileName.Length
+                                , shipFeatureString.Length - accountTextileName.Length - 1, font);
                 }
 
 
