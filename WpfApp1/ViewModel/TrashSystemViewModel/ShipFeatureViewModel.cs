@@ -19,10 +19,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         protected ITrashModule TrashModule { get; } = new TrashModule();
         private IEnumerable<TextileNameMapping> TextileNameMappings { get; set; }
 
-        public ShipFeatureViewModel()
+        public ShipFeatureViewModel(string shipFeatureDate)
         {
-            string date = DateTime.Now.ToString("yyyyMMdd");
-            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨單", date, "-1.xlsx");
+            string defaultDate = DateTime.Now.ToString("yyyyMMdd");
+            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨單", defaultDate, shipFeatureDate, ".xlsx");
             //IEnumerable<string> shipFileName = Directory.GetFiles(AppSettingConfig.FilePath(), fileNameDate).Select(System.IO.Path.GetFileName).OrderByDescending(o => o);
             IWorkbook workbook = null;  //新建IWorkbook對象  
             using (FileStream fs = new FileStream(fileNameDate, FileMode.Open, FileAccess.Read))
@@ -39,6 +39,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 string textileName = null;
+                sheet.SetColumnWidth(4, 12200);
                 for (int rowCount = 6; rowCount <= 18; rowCount++)
                 {
 
@@ -50,14 +51,33 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     }
 
                     ICell colorCell = row.GetCell(4);
-                    if (colorCell == null |  colorCell.StringCellValue == null | colorCell.StringCellValue == "")
+                    if (colorCell == null | colorCell.StringCellValue == null | colorCell.StringCellValue == "")
                     {
                         break;
                     }
 
                     string textileColor = colorCell.StringCellValue.Split('-')[0];
-                    var textileNameMapping = TextileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName));
-                    TrashItem trashItem = trashItems.Where(w => w.I_03.Contains(textileName) && w.I_03.Contains(textileColor)).FirstOrDefault();
+                    TextileNameMapping textileNameMapping = TextileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) ?? new TextileNameMapping();
+                    string accountTextileNameMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault().Split('*')[0];
+
+                    TrashItem trashItem = new TrashItem();
+                    trashItem = trashItems.Where(w => w.I_03 == string.Concat(accountTextileNameMapping, textileColor)).FirstOrDefault();
+                    if (accountTextileNameMapping != string.Empty && (trashItem == null || trashItem.I_03 == null))
+                        trashItem = trashItems.Where(w => w.I_03.Contains(accountTextileNameMapping) && w.I_03.Contains(textileColor)).FirstOrDefault();
+                    string accountFactoryID = string.Empty;
+                    string accountTextileID = string.Empty;
+                    string accountTextileName = string.Empty;
+                    if (trashItem == null)
+                    {
+                    }
+                    else
+                    {
+                        accountFactoryID = trashItem.F_01;
+                        accountTextileID = trashItem.I_01;
+                        accountTextileName = trashItem.I_03;
+                    }
+
+                    colorCell.SetCellValue(colorCell.StringCellValue + "*" + accountFactoryID + "_" + accountTextileID + "-" + accountTextileName);
                 }
 
 

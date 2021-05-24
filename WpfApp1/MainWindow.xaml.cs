@@ -160,7 +160,8 @@ namespace WpfApp1
         }
         private void ButtonShipFeatureFunction_Click(object sender, RoutedEventArgs e)
         {
-            ShipFeatureViewModel shipFeatureViewModel = new ShipFeatureViewModel();
+            string shipFeatureDate = ShipFeatureDate.Text;
+            ShipFeatureViewModel shipFeatureViewModel = new ShipFeatureViewModel(shipFeatureDate);
         }
 
     }

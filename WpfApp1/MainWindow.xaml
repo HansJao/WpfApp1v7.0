@@ -48,7 +48,18 @@
                     <MenuItem Header="出貨排行圖表" Click="ButtonShippingRankChartFunction_Click"/>
                     <MenuItem Header="對帳表" Click="ButtonCheckBillFunction_Click"/>
                     <MenuItem Header="預設單價設定" Click="ButtonDefaultPriceFunction_Click"/>
-                    <MenuItem Header="出貨單特徵" Click="ButtonShipFeatureFunction_Click"/>
+                    <MenuItem Click="ButtonShipFeatureFunction_Click">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="textBlock1" Text="出貨特徵" VerticalAlignment="Center"/>
+                                <TextBox x:Name="ShipFeatureDate" Width="50" Grid.Column="1"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
             <Menu>
