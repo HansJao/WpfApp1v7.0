@@ -44,6 +44,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 string textileName = null;
                 sheet.SetColumnWidth(4, 12200);
+
+                ICell customerCell = sheet.GetRow(4).GetCell(2);
+                IEnumerable<TrashCustomer> trashCustomers = TrashModule.GetCustomerList().Where(w => customerCell.StringCellValue.Contains(w.C_NAME));
+                if (trashCustomers != null && trashCustomers.FirstOrDefault() != null)
+                    customerCell.SetCellValue(string.Concat(customerCell.StringCellValue, "-", trashCustomers.FirstOrDefault().CARD_NO, trashCustomers.FirstOrDefault().C_NAME));
+
                 for (int rowCount = 6; rowCount <= 18; rowCount++)
                 {
 
