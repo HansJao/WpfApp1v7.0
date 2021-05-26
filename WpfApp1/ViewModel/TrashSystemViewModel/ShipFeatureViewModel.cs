@@ -61,6 +61,11 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     }
 
                     string textileColor = colorCell.StringCellValue.Split('-')[0];
+                    int textileColorNumber = colorCell.StringCellValue.Split('-').Length >= 2 ? colorCell.StringCellValue.Split('-')[1].ToInt() : 0;
+                    if (textileColorNumber / 7 >= 1)
+                    {
+                        rowCount = rowCount + textileColorNumber / 7;
+                    }
                     TextileNameMapping textileNameMapping = TextileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) ?? new TextileNameMapping();
                     string accountTextileNameMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault().Split('*')[0];
 

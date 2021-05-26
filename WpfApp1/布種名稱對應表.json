@@ -642,5 +642,49 @@
     "Account": [
       "24CVC10812條*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR6*3+OP"
+    ],
+    "Inventory": [
+      "30TR6X3+OP"
+    ],
+    "Account": [
+      "30TR6X3+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "四面彈OP282條"
+    ],
+    "Inventory": [
+      "四面彈282條"
+    ],
+    "Account": [
+      "四面OP282條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC4*2+OP"
+    ],
+    "Inventory": [
+      "30CVC4X2+OP"
+    ],
+    "Account": [
+      "30CVC4X2+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "R2*2+OP"
+    ],
+    "Inventory": [
+      "R2X2+OP"
+    ],
+    "Account": [
+      "R2X2+OP*"
+    ]
   }
 ]
