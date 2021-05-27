@@ -38,9 +38,18 @@ namespace WpfApp1.Pages.TrashSystemPages
             DataGridInvoSub.ItemsSource = invosubDt.DefaultView;
 
             string item = "ITEM.dbf";
-            string itemSql = "SELECT TOP 100 * FROM " + item;
+            string itemSql = "SELECT * FROM " + item;
             DataTable itemDt = GetOleDbDbfDataTable(databaseDirectory, itemSql);
             DataGridItem.ItemsSource = itemDt.DefaultView;
+
+            //List<string> I_03 = new List<string>();
+            //foreach (DataRow itemRow in itemDt.Rows)
+            //{
+            //    I_03.Add(itemRow["I_03"].ToString());
+            //}
+
+            //var x = I_03.GroupBy(y => y).Where(w => w.Count() > 1).Select(s => s.Key);
+
 
             string cust = "CUST.dbf";
             string custoSql = "SELECT TOP 100 * FROM " + cust;

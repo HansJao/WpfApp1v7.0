@@ -686,5 +686,27 @@
     "Account": [
       "R2X2+OP*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "40TR+TOP羅馬布"
+    ],
+    "Inventory": [
+      "40TR+TOP羅馬布"
+    ],
+    "Account": [
+      "40TR羅馬+TOP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR+TOP羅馬布"
+    ],
+    "Inventory": [
+      "30TR+TOP羅馬布"
+    ],
+    "Account": [
+      "30TR+TOP羅馬布*"
+    ]
   }
 ]

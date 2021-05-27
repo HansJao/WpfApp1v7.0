@@ -173,13 +173,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 return;
             if (SelectedTrashCustomer == null)
             {
-                if (TrashCustomerText != string.Empty)
-                {
-                    SelectedTrashCustomer = TrashCustomerList.Where(w => w.C_NAME == TrashCustomerText).FirstOrDefault();
-                    if (SelectedTrashCustomer == null)
-                        return;
-                }
-                else
                     return;
             };
             priviousTrashCustomer = SelectedTrashCustomer;
