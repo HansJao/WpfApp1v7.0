@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApp1.Windows.ProcessWindows.DeliveryNumberCheckDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1.Windows.ProcessWindows"
+        mc:Ignorable="d"
+        Title="載貨數量" Height="350" Width="300">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
+                <TextBlock Text="數量：" Margin="0,20,0,5" FontSize="18" FontWeight="Bold" />
+
+                <StackPanel  Orientation="Horizontal" >
+                    <Button Content="-" Width="25" Height="25"/>
+                    <TextBox x:Name="TextBoxDeliveryNumber" Width="100" Height="25" />
+                    <Button Content="+" Width="25" Height="25"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+
+                <Button Margin="10" Content="確認" Width="85" Height="25" Click="ButtonCheck_Click"/>
+                <Button Margin="10" Content="取消" Width="85" Height="25"/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

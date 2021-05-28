@@ -188,6 +188,7 @@
     <Compile Include="DataClass\FactoryClass\FactoryIdentity.cs" />
     <Compile Include="DataClass\ProcessOrder\FactoryShippingName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderCustomerRelate.cs" />
+    <Compile Include="DataClass\ProcessOrder\ProcessOrderDelivery.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderDetailFactoryName.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessOrderColor.cs" />
     <Compile Include="DataClass\ProcessOrder\ProcessFactoryShippingDetail.cs" />
@@ -365,6 +366,12 @@
     <Compile Include="Windows\ProcessWindows\AddProcessOrderFlowFactoryDialog.xaml.cs">
       <DependentUpon>AddProcessOrderFlowFactoryDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ProcessWindows\DeliveryListDialog.xaml.cs">
+      <DependentUpon>DeliveryListDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProcessWindows\DeliveryNumberCheckDialog.xaml.cs">
+      <DependentUpon>DeliveryNumberCheckDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\ProcessWindows\EditProcessOrderFlowFactoryNameDialog.xaml.cs">
       <DependentUpon>EditProcessOrderFlowFactoryNameDialog.xaml</DependentUpon>
     </Compile>
@@ -521,6 +528,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\ProcessWindows\AddProcessOrderFlowFactoryDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProcessWindows\DeliveryListDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\ProcessWindows\DeliveryNumberCheckDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

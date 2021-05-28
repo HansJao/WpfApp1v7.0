@@ -504,6 +504,29 @@ namespace WpfApp1.Pages.ProcessOrderPages
             }
         }
 
+        private void ButtonDelivery_Click(object sender, RoutedEventArgs e)
+        {
+            ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)(DataGridOrderColorFactoryShippingDetail.SelectedItem);
+            ProcessOrder processOrder = (ProcessOrder)(DataGridProcessOrder.SelectedItem);
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail);
+            deliveryNumberCheckDialog.Show();
+            deliveryNumberCheckDialog.Closed += DeliveryListDialogExecute;
+        }
+        private DeliveryListDialog DeliveryListDialog;
+        private void DeliveryListDialogExecute(object sender, EventArgs e)
+        {
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = (DeliveryNumberCheckDialog)sender;
+            if (DeliveryListDialog == null)
+            {
+                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.processOrderDelivery);
+                DeliveryListDialog.Show();
+            }
+            else
+            {
+                DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.processOrderDelivery);
+            }
+        }
+
         private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataGridProcessOrderFlowDateDetail.SelectedIndex == -1)
@@ -733,7 +756,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
                 ExternalDataHelper externalDataHelper = new ExternalDataHelper();
                 TextileNameMappings = externalDataHelper.GetTextileNameMappings();
-                
+
                 InventoryUpdateTime.Content = DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
             }
             else

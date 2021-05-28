@@ -66,6 +66,13 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="載布單" >
+                                    <DataGridTemplateColumn.CellTemplate >
+                                        <DataTemplate>
+                                            <Button x:Name="ButtonDelivery" Content="出貨" Click="ButtonDelivery_Click"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                         <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
