@@ -708,5 +708,106 @@
     "Account": [
       "30TR+TOP羅馬布*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC1*1+OP磨毛"
+    ],
+    "Inventory": [
+      "CVC1X1+OP磨毛"
+    ],
+    "Account": [
+      "CVC1X1+OP磨毛*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "四面超彈力磨毛"
+    ],
+    "Inventory": [
+      "四面超彈力磨毛"
+    ],
+    "Account": [
+      "四面超彈力磨毛*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "菜瓜布磨毛"
+    ],
+    "Inventory": [
+      "菜瓜磨毛+OP"
+    ],
+    "Account": [
+      "菜瓜磨毛+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "TR菱形格"
+    ],
+    "Inventory": [
+      "TR菱形格"
+    ],
+    "Account": [
+      "TR菱形格*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "四面彈三色條"
+    ],
+    "Inventory": [
+      "四面三色條"
+    ],
+    "Account": [
+      "四面彈三色條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "桃皮單面布"
+    ],
+    "Inventory": [
+      "桃皮單面布"
+    ],
+    "Account": [
+      "桃皮單面*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CT羅馬布"
+    ],
+    "Inventory": [
+      "30C+T羅馬布"
+    ],
+    "Account": [
+      "30CT羅馬*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單OP2.5英吋條"
+    ],
+    "Inventory": [
+      "2.5英吋條+OP"
+    ],
+    "Account": [
+      "單OP2.5英吋*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "24CVC格紋布"
+    ],
+    "Inventory": [
+      "24CVC格紋布"
+    ],
+    "Account": [
+      "24CVC格紋布*"
+    ]
   }
 ]
+
+
