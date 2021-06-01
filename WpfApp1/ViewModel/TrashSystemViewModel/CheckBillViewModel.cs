@@ -191,13 +191,40 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         public ObservableCollection<CustomerCheckBillSheet> CustomerCheckBillSheets { get; set; }
         public IEnumerable<TrashCustomer> TrashCustomerList { get; set; }
-        private string _TrashCustomerText { get; set; }
-        public string TrashCustomerText
+        private string _TextBoxTrashCustomerID { get; set; }
+        public string TextBoxTrashCustomerID
         {
-            get { return _TrashCustomerText; }
+            get { return _TextBoxTrashCustomerID; }
             set
             {
-                _TrashCustomerText = value;
+                _TextBoxTrashCustomerID = value;
+                ICollectionView cv = CollectionViewSource.GetDefaultView(TrashCustomerList);
+                if (!string.IsNullOrEmpty(value))
+                {
+                    cv.Filter = o =>
+                    {
+                        /* change to get data row value */
+                        TrashCustomer p = o as TrashCustomer;
+                        return (p.CARD_NO.Contains(value));
+                        /* end change to get data row value */
+                    };
+                }
+                else
+                {
+                    cv.Filter = o =>
+                    {
+                        return (true);
+                    };
+                };
+            }
+        }
+        private string _TextBoxTrashCustomer { get; set; }
+        public string TextBoxTrashCustomer
+        {
+            get { return _TextBoxTrashCustomer; }
+            set
+            {
+                _TextBoxTrashCustomer = value;
                 ICollectionView cv = CollectionViewSource.GetDefaultView(TrashCustomerList);
                 if (!string.IsNullOrEmpty(value))
                 {
@@ -216,10 +243,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                         return (true);
                     };
                 };
-                //RaisePropertyChanged("TrashCustomerText");
             }
         }
-        CollectionView ItemsViewOriginal;
+
+        readonly CollectionView ItemsViewOriginal;
         public CheckBillViewModel()
         {
             TrashCustomerList = TrashModule.GetCustomerList();
