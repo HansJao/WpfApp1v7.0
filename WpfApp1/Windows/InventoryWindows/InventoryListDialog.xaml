@@ -9,12 +9,6 @@
         xmlns:commonControl="clr-namespace:WpfApp1.Utility.CustomController">
     <Grid>
         <DockPanel>
-            <!--<StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                <Label Content="資料來源:"/>
-                <Label Content="{Binding FileName}"/>
-                <Label Content="布種名稱:"/>
-                <Label Content="{Binding TextileInventoryHeader.Textile}"/>
-            </StackPanel>-->
             <commonControl:InventoryDataGrid>
             </commonControl:InventoryDataGrid>
         </DockPanel>

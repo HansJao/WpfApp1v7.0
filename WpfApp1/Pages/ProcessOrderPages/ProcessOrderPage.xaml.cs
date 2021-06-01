@@ -506,27 +506,33 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void ButtonDelivery_Click(object sender, RoutedEventArgs e)
         {
+            var textileColorInventory = InventoryListDialog?.InventoryListViewModel.TextileColor ?? null;
             ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)(DataGridOrderColorFactoryShippingDetail.SelectedItem);
             ProcessOrder processOrder = (ProcessOrder)(DataGridProcessOrder.SelectedItem);
-            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail);
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail, textileColorInventory);
             deliveryNumberCheckDialog.Show();
             deliveryNumberCheckDialog.Closed += DeliveryListDialogExecute;
         }
-        private DeliveryListDialog DeliveryListDialog;
+        public DeliveryListDialog DeliveryListDialog;
         private void DeliveryListDialogExecute(object sender, EventArgs e)
         {
             DeliveryNumberCheckDialog deliveryNumberCheckDialog = (DeliveryNumberCheckDialog)sender;
             if (DeliveryListDialog == null)
             {
-                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.processOrderDelivery);
+                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.IsCheck == true ? deliveryNumberCheckDialog.processOrderDelivery : null);
                 DeliveryListDialog.Show();
+                DeliveryListDialog.Closed += DeliveryListDialogClosed;
             }
             else
             {
-                DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.processOrderDelivery);
+                if (deliveryNumberCheckDialog.IsCheck == true)
+                    DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.processOrderDelivery);
             }
         }
-
+        private void DeliveryListDialogClosed(object sender, EventArgs e)
+        {
+            DeliveryListDialog = null;
+        }
         private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (DataGridProcessOrderFlowDateDetail.SelectedIndex == -1)
@@ -732,7 +738,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
 
         private IWorkbook Workbook;
-        private InventoryListDialog InventoryListDialog;
+        public InventoryListDialog InventoryListDialog;
         private IEnumerable<TextileNameMapping> TextileNameMappings { get; set; }
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {

@@ -9,16 +9,16 @@
     <Grid>
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Center">
-                <TextBlock Text="數量：" Margin="0,20,0,5" FontSize="18" FontWeight="Bold" />
-
+                <TextBlock x:Name="TextBlockFabric" Text="布種：" Margin="0,20,0,0" FontSize="18" FontWeight="Bold" />
+                <TextBlock x:Name="TextBlockColor" Text="顏色：" Margin="0,0,0,0" FontSize="18" FontWeight="Bold" />
                 <StackPanel  Orientation="Horizontal" >
-                    <Button Content="-" Width="25" Height="25"/>
+                    <TextBlock Text="數量：" Margin="0,0,0,5" FontSize="18" FontWeight="Bold" />
+                    <!--<Button Content="-" Width="25" Height="25"/>-->
                     <TextBox x:Name="TextBoxDeliveryNumber" Width="100" Height="25" />
-                    <Button Content="+" Width="25" Height="25"/>
+                    <!--<Button Content="+" Width="25" Height="25"/>-->
                 </StackPanel>
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
-
                 <Button Margin="10" Content="確認" Width="85" Height="25" Click="ButtonCheck_Click"/>
                 <Button Margin="10" Content="取消" Width="85" Height="25"/>
             </StackPanel>

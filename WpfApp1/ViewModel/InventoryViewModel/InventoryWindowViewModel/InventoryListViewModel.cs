@@ -15,6 +15,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
         public string FileName { get; set; }
         public IEnumerable<TextileColorInventory> TextileColorList { get; set; }
         public TextileInventoryHeader TextileInventoryHeader { get; set; }
+        public TextileColorInventory TextileColor { get; set; }
         public InventoryListViewModel()
         {
 

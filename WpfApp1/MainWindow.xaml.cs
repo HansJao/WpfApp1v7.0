@@ -50,11 +50,18 @@ namespace WpfApp1
             this.Title = "帳務系統表參考";
             this.MainFrame.NavigationService.Navigate(new TrashSystemTablePage());
         }
-
+        ProcessOrderPage processOrderPage;
         private void ButtonProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "訂單紀錄";
-            this.MainFrame.NavigationService.Navigate(new ProcessOrderPage());
+            if (processOrderPage != null && processOrderPage.InventoryListDialog != null)
+            {
+                processOrderPage.InventoryListDialog.Close();
+                processOrderPage.DeliveryListDialog.Close();
+            }
+            processOrderPage = new ProcessOrderPage();
+
+            this.MainFrame.NavigationService.Navigate(processOrderPage);
         }
 
         private void ButtonNewProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)

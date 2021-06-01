@@ -27,9 +27,12 @@ namespace WpfApp1.Windows.ProcessWindows
         {
             InitializeComponent();
             processOrderColorDetails = new ObservableCollection<ProcessOrderDelivery>();
-            processOrderColorDetails.Add(processOrderDelivery);
-            //processOrderColorDetails.Add(processOrderDelivery);
-            DataGridProcessOrderDelivery.ItemsSource =  processOrderColorDetails;
+            if (processOrderDelivery != null)
+            {
+                processOrderColorDetails.Add(processOrderDelivery);
+                //processOrderColorDetails.Add(processOrderDelivery);
+                DataGridProcessOrderDelivery.ItemsSource = processOrderColorDetails;
+            }
         }
 
         public void ProcessOrderColorDetailChanged(ProcessOrderDelivery processOrderDelivery)

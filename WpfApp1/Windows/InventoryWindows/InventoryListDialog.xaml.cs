@@ -33,7 +33,6 @@ namespace WpfApp1.Windows.InventoryWindows
              };
             this.DataContext = InventoryListViewModel;
         }
-
         public void ChangeDataContext(string fileName, TextileInventoryHeader textileInventoryHeader, IEnumerable<TextileColorInventory> textileColorInventoryList)
         {
             InventoryListViewModel inventoryListViewModel =  this.DataContext as InventoryListViewModel;
