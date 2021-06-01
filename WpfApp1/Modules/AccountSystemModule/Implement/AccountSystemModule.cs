@@ -124,9 +124,9 @@ namespace WpfApp1.Modules.AccountSystemModule.Implement
         /// 更新客戶布種單價
         /// </summary>
         /// <returns></returns>
-        public bool UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet)
+        public bool UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet, int updateCustomerPrice)
         {
-            int count = AccountSystemAdapter.UpdateCustomerTextilePrice(selectedCustomerCheckBillSheet);
+            int count = AccountSystemAdapter.UpdateCustomerTextilePrice(selectedCustomerCheckBillSheet, updateCustomerPrice);
             return count == 1;
         }
     }

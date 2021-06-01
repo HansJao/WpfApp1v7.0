@@ -43,7 +43,12 @@
                         </i:Interaction.Triggers>
                     </DatePicker>
                 </StackPanel>
-                <DataGrid DockPanel.Dock="Top" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" KeyboardNavigation.TabNavigation="None" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
+                <DataGrid x:Name="TestDatagrid" DockPanel.Dock="Top" HorizontalAlignment="Left" ItemsSource="{Binding CustomerCheckBillSheets}" SelectedItem="{Binding SelectedCustomerCheckBillSheet}" KeyboardNavigation.TabNavigation="None" Height="auto"  AutoGenerateColumns="False" CanUserAddRows="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding SelectedCustomerCheckBillSheetsCommand}" CommandParameter="{Binding SelectedItems,ElementName=TestDatagrid}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                     <DataGrid.RowStyle>
                         <Style TargetType="DataGridRow">
                             <Style.Setters>

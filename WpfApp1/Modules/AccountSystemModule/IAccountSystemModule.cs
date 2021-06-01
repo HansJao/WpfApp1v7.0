@@ -41,6 +41,6 @@ namespace WpfApp1.Modules.AccountSystemModule
         /// 更新客戶布種單價
         /// </summary>
         /// <returns></returns>
-        bool UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet);
+        bool UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet,int updateCustomerPrice);
     }
 }

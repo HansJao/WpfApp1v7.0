@@ -27,6 +27,18 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand UpdateCustomerPriceClick { get { return new RelayCommand(UpdateCustomerPriceClickExecute, CanExecute); } }
         public ICommand DatePickerSelectedDateChanged { get { return new RelayCommand(DatePickerSelectedDateChangedExecute, CanExecute); } }
         public ICommand EnterKeyCommand { get { return new RelayCommand(EnterKeyCommandExecute, CanExecute); } }
+        public ICommand SelectedCustomerCheckBillSheetsCommand
+        {
+            get
+            {
+                return new RelayCommand<object>(
+                    o =>
+                    {
+                        SelectedCustomerCheckBillSheets = (o as ObservableCollection<object>).Cast<CustomerCheckBillSheet>().ToList();
+                    },
+                    CanExecute);
+            }
+        }
 
         private void EnterKeyCommandExecute()
         {
@@ -48,24 +60,49 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 MessageBox.Show("欲更新的單價設定錯誤！！");
                 return;
             }
-            if (SelectedCustomerCheckBillSheet == null)
+            if (SelectedCustomerCheckBillSheets == null)
             {
                 MessageBox.Show("未選擇欲更新的布種！");
+                return;
             }
-            if (SelectedCustomerCheckBillSheet.CustomerPrice == 0)
+            if (SelectedCustomerCheckBillSheets.Where(w => w.CustomerPrice == 0).Count() > 0)
             {
                 MessageBox.Show("此客戶的布種尚未設定單價！！");
                 return;
             }
 
-            SelectedCustomerCheckBillSheet.CustomerPrice = UpdateCustomerPrice;
-            bool success = AccountSystemModule.UpdateCustomerTextilePrice(SelectedCustomerCheckBillSheet);
-            if (success)
+            int successUpdateCustomerTextilePriceCount = 0;
+
+            List<CustomerCheckBillSheet> UpdateCustomerTextilePriceError = new List<CustomerCheckBillSheet>();
+            List<CustomerCheckBillSheet> UpdateTrashSystemPriceError = new List<CustomerCheckBillSheet>();
+
+            foreach (CustomerCheckBillSheet item in SelectedCustomerCheckBillSheets)
             {
-                bool updateTrashSystemsuccess = UpdateTrashSystemPrice(SelectedCustomerCheckBillSheet, UpdateCustomerPrice);
-                if (updateTrashSystemsuccess)
+                bool success = AccountSystemModule.UpdateCustomerTextilePrice(item, UpdateCustomerPrice);
+                if (success)
                 {
-                    DisplayUpdate(success, UpdateCustomerPrice);
+                    successUpdateCustomerTextilePriceCount++;
+                    item.CustomerPrice = UpdateCustomerPrice;
+                }
+                else
+                    UpdateCustomerTextilePriceError.Add(item);
+            }
+
+            if (successUpdateCustomerTextilePriceCount == SelectedCustomerCheckBillSheets.Count())
+            {
+                int successUpdateTrashSystemPriceCount = 0;
+                foreach (var item in SelectedCustomerCheckBillSheets)
+                {
+                    bool updateTrashSystemsuccess = UpdateTrashSystemPrice(item, UpdateCustomerPrice);
+                    if (updateTrashSystemsuccess)
+                        successUpdateTrashSystemPriceCount++;
+                    else
+                        UpdateTrashSystemPriceError.Add(item);
+                }
+
+                if (successUpdateTrashSystemPriceCount == SelectedCustomerCheckBillSheets.Count())
+                {
+                    DisplayUpdate(successUpdateCustomerTextilePriceCount == SelectedCustomerCheckBillSheets.Count(), UpdateCustomerPrice);
                     MessageBox.Show("更新客戶單價成功！");
                 }
                 else
@@ -73,12 +110,13 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             }
             else
-                MessageBox.Show("更新失敗！！", "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("更新失敗！！\n" + string.Join("\n", UpdateCustomerTextilePriceError.Select(s => s.I_03)), "錯誤！", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         public int NewCustomerPrice { get; set; }
         public int UpdateCustomerPrice { get; set; }
         public CustomerCheckBillSheet SelectedCustomerCheckBillSheet { get; set; }
+        public List<CustomerCheckBillSheet> SelectedCustomerCheckBillSheets { get; set; }
         private void InsertCustomerPriceClickExecute()
         {
             if (NewCustomerPrice <= 0)
@@ -135,21 +173,23 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         private bool UpdateTrashSystemPrice(CustomerCheckBillSheet customerCheckBillSheet, int newPrice)
         {
             int updateCount = TrashModule.UpdateInvoSubPrice(customerCheckBillSheet, newPrice, CheckBillDate);
-            bool updateTrashSystemsuccess = CustomerCheckBillSheets.Where(w => w.I_01 == SelectedCustomerCheckBillSheet.I_01 && w.F_01 == SelectedCustomerCheckBillSheet.F_01).Count() == updateCount;
+            bool updateTrashSystemsuccess = CustomerCheckBillSheets.Where(w => w.I_01 == customerCheckBillSheet.I_01 && w.F_01 == customerCheckBillSheet.F_01).Count() == updateCount;
             return updateTrashSystemsuccess;
         }
 
         private void DisplayUpdate(bool newDefaultPriceSuccess, int customPrice)
         {
-            foreach (var item in CustomerCheckBillSheets.Where(w => w.F_01 == SelectedCustomerCheckBillSheet.F_01 && w.I_01 == SelectedCustomerCheckBillSheet.I_01))
+            foreach (var selectedCustomerCheckBillSheet in SelectedCustomerCheckBillSheets)
             {
-                if (newDefaultPriceSuccess)
-                    item.DefaultPrice = Convert.ToInt32(SelectedCustomerCheckBillSheet.Price);
-                item.CustomerPrice = Convert.ToInt32(customPrice);
-                item.Price = customPrice;
-            }
+                foreach (var customerCheckBillSheet in CustomerCheckBillSheets.Where(w => w.F_01 == selectedCustomerCheckBillSheet.F_01 && w.I_01 == selectedCustomerCheckBillSheet.I_01))
+                {
+                    if (newDefaultPriceSuccess)
+                        customerCheckBillSheet.DefaultPrice = customPrice;
+                    customerCheckBillSheet.CustomerPrice = customPrice;
+                    customerCheckBillSheet.Price = customPrice;
+                }
+            }           
         }
-
 
         public int InvoSubSelected { get; set; }
         private TrashCustomer _SelectedTrashCustomer { get; set; }
@@ -173,7 +213,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 return;
             if (SelectedTrashCustomer == null)
             {
-                    return;
+                return;
             };
             priviousTrashCustomer = SelectedTrashCustomer;
             priviousCheckBillDate = CheckBillDate;

@@ -36,6 +36,6 @@ namespace WpfApp1.Adapter
         /// 更新客戶布種單價
         /// </summary>
         /// <returns></returns>
-        int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet);
+        int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet,int updateCustomerPrice);
     }
 }

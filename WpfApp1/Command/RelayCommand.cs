@@ -8,6 +8,54 @@ using System.Windows.Input;
 
 namespace WpfApp1.Command
 {
+
+    public class RelayCommand<T> : ICommand
+    {
+
+        readonly Func<bool> _canExecute;
+        readonly Action<T> _execute;
+
+        public RelayCommand(Action<T> execute)
+            : this(execute, null)
+        {
+        }
+
+        public RelayCommand(Action<T> execute, Func<bool> canExecute)
+        {
+            if (execute == null)
+                throw new ArgumentNullException("execute");
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public event EventHandler CanExecuteChanged
+        {
+            add
+            {
+
+                if (_canExecute != null)
+                    CommandManager.RequerySuggested += value;
+            }
+            remove
+            {
+
+                if (_canExecute != null)
+                    CommandManager.RequerySuggested -= value;
+            }
+        }
+
+        [DebuggerStepThrough]
+        public Boolean CanExecute(object parameter)
+        {
+            return _canExecute == null ? true : _canExecute();
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute((T)parameter);
+        }
+    }
+
     public class RelayCommand : ICommand
     {
 

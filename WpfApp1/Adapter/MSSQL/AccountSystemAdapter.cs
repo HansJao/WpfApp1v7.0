@@ -79,7 +79,7 @@ namespace WpfApp1.Adapter.MSSQL
         /// 更新客戶布種單價
         /// </summary>
         /// <returns></returns>
-        public int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet)
+        public int UpdateCustomerTextilePrice(CustomerCheckBillSheet selectedCustomerCheckBillSheet, int updateCustomerPrice)
         {
             string sql = @"UPDATE dbo.CustomerTextilePrice
                            SET Price = @Price
@@ -88,7 +88,7 @@ namespace WpfApp1.Adapter.MSSQL
                    {
                       new SqlParameter("@AccountCustomerID", SqlDbType.NChar) { Value = selectedCustomerCheckBillSheet.C_01 },
                       new SqlParameter("@AccountTextileID", SqlDbType.Int) { Value = selectedCustomerCheckBillSheet.AccountTextileID },
-                      new SqlParameter("@Price", SqlDbType.Int) { Value = selectedCustomerCheckBillSheet.CustomerPrice }
+                      new SqlParameter("@Price", SqlDbType.Int) { Value = updateCustomerPrice }
                    };
             var result = DapperHelper.ExecuteParameter(AppSettingConfig.ConnectionString(), CommandType.Text, sql, parameters);
             return result;
