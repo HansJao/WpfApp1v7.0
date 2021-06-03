@@ -11,15 +11,16 @@ namespace WpfApp1.Windows.ProcessWindows
     /// </summary>
     public partial class DeliveryNumberCheckDialog : Window
     {
-        public ProcessOrderDelivery processOrderDelivery;
+        public ProcessOrderDelivery ProcessOrderDelivery;
         public bool IsCheck { get; set; } = false;
-        public DeliveryNumberCheckDialog(string orderString, string fabric, ProcessOrderColorDetail processOrderQuantity, TextileColorInventory textileColorInventory)
+        public TextileColorInventory InventoryListSelectedTextileColor;
+        public DeliveryNumberCheckDialog(string orderString, string fabric, ProcessOrderColorDetail processOrderQuantity)
         {
             InitializeComponent();
-            processOrderDelivery = new ProcessOrderDelivery
+            ProcessOrderDelivery = new ProcessOrderDelivery
             {
-                StorageNumber = textileColorInventory?.CountInventory ?? 0,
-                StorageSpace = textileColorInventory?.StorageSpaces ?? string.Empty,
+                //StorageNumber = textileColorInventory?.CountInventory ?? 0,
+                //StorageSpace = textileColorInventory?.StorageSpaces ?? string.Empty,
                 OrderString = orderString,
                 Fabric = fabric,
                 Color = processOrderQuantity.Color,
@@ -33,15 +34,19 @@ namespace WpfApp1.Windows.ProcessWindows
         public int DeliveryNumberReturn()
         {
             int deliveryNumber = TextBoxDeliveryNumber.Text.ToInt();
-            processOrderDelivery.Number = deliveryNumber;
+            ProcessOrderDelivery.Number = deliveryNumber;
             return deliveryNumber;
         }
 
         private void ButtonCheck_Click(object sender, RoutedEventArgs e)
         {
             int deliveryNumber = TextBoxDeliveryNumber.Text.ToInt();
-            processOrderDelivery.Number = deliveryNumber;
+            ProcessOrderDelivery.Number = deliveryNumber;
             IsCheck = true;
+            Close();
+        }
+        private void ButtonCancel_Click(object sender, RoutedEventArgs e)
+        {
             Close();
         }
     }

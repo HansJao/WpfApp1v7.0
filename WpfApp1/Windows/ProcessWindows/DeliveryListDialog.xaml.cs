@@ -35,8 +35,10 @@ namespace WpfApp1.Windows.ProcessWindows
             }
         }
 
-        public void ProcessOrderColorDetailChanged(ProcessOrderDelivery processOrderDelivery)
+        public void ProcessOrderColorDetailChanged(ProcessOrderDelivery processOrderDelivery,int storageNumber,string storageSpace)
         {
+            processOrderDelivery.StorageNumber = storageNumber;
+            processOrderDelivery.StorageSpace = storageSpace;
             processOrderColorDetails.Add(processOrderDelivery);
             //DataGridProcessOrderDelivery.ItemsSource = processOrderColorDetails;
 

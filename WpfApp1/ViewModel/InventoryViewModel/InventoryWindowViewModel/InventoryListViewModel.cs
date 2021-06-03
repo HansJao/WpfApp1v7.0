@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Input;
+using WpfApp1.Command;
 using WpfApp1.DataClass.ExcelDataClass;
 
 namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
@@ -16,6 +18,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel.InventoryWindowViewModel
         public IEnumerable<TextileColorInventory> TextileColorList { get; set; }
         public TextileInventoryHeader TextileInventoryHeader { get; set; }
         public TextileColorInventory TextileColor { get; set; }
+        public ICommand InventoryDataGridSelectionChanged { get { return new RelayCommand(InventoryDataGridSelectionChangedExecute, CanExecute); } }
+
+        private void InventoryDataGridSelectionChangedExecute()
+        {
+            //throw new NotImplementedException();
+        }
+
         public InventoryListViewModel()
         {
 

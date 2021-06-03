@@ -25,6 +25,9 @@
                 <i:EventTrigger EventName="MouseDoubleClick">
                     <i:InvokeCommandAction Command="{Binding InventoryDataGridDoubleClick}"/>
                 </i:EventTrigger>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding InventoryDataGridSelectionChanged}"/>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Resources>
                 <local:BindingProxy x:Key="proxy" Data="{Binding}" />

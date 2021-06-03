@@ -506,27 +506,39 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void ButtonDelivery_Click(object sender, RoutedEventArgs e)
         {
-            var textileColorInventory = InventoryListDialog?.InventoryListViewModel.TextileColor ?? null;
             ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)(DataGridOrderColorFactoryShippingDetail.SelectedItem);
             ProcessOrder processOrder = (ProcessOrder)(DataGridProcessOrder.SelectedItem);
-            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail, textileColorInventory);
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail);
             deliveryNumberCheckDialog.Show();
-            deliveryNumberCheckDialog.Closed += DeliveryListDialogExecute;
+            deliveryNumberCheckDialog.Closed += DeliveryNumberCheckDialogClosed;
         }
         public DeliveryListDialog DeliveryListDialog;
-        private void DeliveryListDialogExecute(object sender, EventArgs e)
+        private void DeliveryNumberCheckDialogClosed(object sender, EventArgs e)
         {
             DeliveryNumberCheckDialog deliveryNumberCheckDialog = (DeliveryNumberCheckDialog)sender;
-            if (DeliveryListDialog == null)
+            var textileColorInventory = InventoryListDialog?.InventoryListViewModel.TextileColor ?? null;
+            if (DeliveryListDialog == null && deliveryNumberCheckDialog.IsCheck == true)
             {
-                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.IsCheck == true ? deliveryNumberCheckDialog.processOrderDelivery : null);
+                deliveryNumberCheckDialog.ProcessOrderDelivery.StorageNumber = textileColorInventory?.CountInventory ?? 0;
+                deliveryNumberCheckDialog.ProcessOrderDelivery.StorageSpace = textileColorInventory?.StorageSpaces ?? string.Empty;
+                Window parentWindow = Window.GetWindow(this);
+                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.IsCheck == true ? deliveryNumberCheckDialog.ProcessOrderDelivery : null)
+                {
+                    Owner = Window.GetWindow(this),
+                    Top = parentWindow.Top,
+                    Left = parentWindow.Left + parentWindow.Width > SystemParameters.PrimaryScreenWidth - 40 ? 0 : parentWindow.Left + parentWindow.Width,
+                };
                 DeliveryListDialog.Show();
                 DeliveryListDialog.Closed += DeliveryListDialogClosed;
             }
             else
             {
                 if (deliveryNumberCheckDialog.IsCheck == true)
-                    DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.processOrderDelivery);
+                {
+                    DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.ProcessOrderDelivery,
+                        textileColorInventory?.CountInventory ?? 0,
+                        textileColorInventory?.StorageSpaces ?? string.Empty);
+                }
             }
         }
         private void DeliveryListDialogClosed(object sender, EventArgs e)
