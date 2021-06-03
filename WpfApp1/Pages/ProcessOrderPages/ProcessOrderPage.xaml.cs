@@ -47,7 +47,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         public ProcessOrder ProcessOrder { get; set; }
 
-
         public ProcessOrderPage()
         {
             InitializeComponent();
@@ -159,9 +158,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 InventoryListDialog.ChangeDataContext(textileInventoryHeader, selectedTextiles);
             }
         }
-
-
-
         private void ButtonDeleteOrder_Click(object sender, RoutedEventArgs e)
         {
             if (ProcessOrder == null)
@@ -756,6 +752,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
             CheckBox checkBox = (CheckBox)sender;
+            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+            TextileNameMappings = externalDataHelper.GetTextileNameMappings();
             if (checkBox.IsChecked ?? false)
             {
                 string fileNamePath = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
@@ -763,7 +761,20 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 TextileInventoryHeader textileInventoryHeader = ExcelModule.GetShippingDate(tuple.Item2.GetSheetAt(1));
                 Workbook = tuple.Item2;
                 Window parentWindow = Window.GetWindow(this);
-                InventoryListDialog = new InventoryListDialog(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, null)
+
+                var textileNameMapping = TextileNameMappings.ToList().Find(f => f.ProcessOrder.Contains(ProcessOrder == null ? string.Empty : ProcessOrder.Fabric));
+                List<TextileColorInventory> selectedTextiles = new List<TextileColorInventory>();
+                if (textileNameMapping != null)
+                {
+                    ExcelHelper excelHelper = new ExcelHelper();
+                    foreach (var item in textileNameMapping.Inventory)
+                    {
+                        selectedTextiles.AddRange(excelHelper.GetInventoryData(Workbook, item));
+                    }
+                    textileInventoryHeader.Textile = ProcessOrder.Fabric;
+                }
+
+                InventoryListDialog = new InventoryListDialog(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, selectedTextiles)
                 {
                     Owner = Window.GetWindow(this),
                     Top = parentWindow.Top + parentWindow.Height,
@@ -773,8 +784,6 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 InventoryListDialog.Show();
                 InventoryListDialog.Closed += InventoryListDialog_Closed;
 
-                ExternalDataHelper externalDataHelper = new ExternalDataHelper();
-                TextileNameMappings = externalDataHelper.GetTextileNameMappings();
 
                 InventoryUpdateTime.Content = DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss");
             }
