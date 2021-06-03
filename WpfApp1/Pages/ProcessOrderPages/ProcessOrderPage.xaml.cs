@@ -44,6 +44,10 @@ namespace WpfApp1.Pages.ProcessOrderPages
         protected IFactoryModule FactoryModule { get; } = new FactoryModule();
 
         public ObservableCollection<ProcessOrder> DataGridProcessOrderCollection { get; set; }
+
+        public ProcessOrder ProcessOrder { get; set; }
+
+
         public ProcessOrderPage()
         {
             InitializeComponent();
@@ -122,28 +126,26 @@ namespace WpfApp1.Pages.ProcessOrderPages
             {
                 return;
             }
-
-            ProcessOrder processOrder = dataGridProcessOrder.SelectedItem as ProcessOrder;
-
-            IEnumerable<ProcessOrderCustomerRelate> customerOrderRelate = ProcessModule.GetCustomerByOrderNo(processOrder.OrderNo);
+            ProcessOrder = dataGridProcessOrder.SelectedItem as ProcessOrder;
+            IEnumerable<ProcessOrderCustomerRelate> customerOrderRelate = ProcessModule.GetCustomerByOrderNo(ProcessOrder.OrderNo);
             DataGridCustomerOrder.ItemsSource = customerOrderRelate;
 
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd)
             {
-                Text = processOrder.Remark ?? ""
+                Text = ProcessOrder.Remark ?? ""
             };
 
-            UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
+            UpdateDataGridOrderColorFactoryShippingDetail(ProcessOrder.OrderNo);
 
             DataGridFactoryShipping.ItemsSource = null;
             DataGridProcessOrderFlowDateDetail.ItemsSource = null;
 
             if (CheckboxDisplayInventory.IsChecked ?? false)
             {
-                var textileNameMapping = TextileNameMappings.ToList().Find(f => f.ProcessOrder.Contains(processOrder.Fabric));
+                var textileNameMapping = TextileNameMappings.ToList().Find(f => f.ProcessOrder.Contains(ProcessOrder.Fabric));
                 if (textileNameMapping == null)
                 {
-                    InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), null, null);
+                    InventoryListDialog.ChangeDataContext(null, null);
                     return;
                 }
                 ExcelHelper excelHelper = new ExcelHelper();
@@ -153,8 +155,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
                     selectedTextiles.AddRange(excelHelper.GetInventoryData(Workbook, item));
                 }
                 TextileInventoryHeader textileInventoryHeader = ExcelModule.GetShippingDate(Workbook.GetSheetAt(1));
-                textileInventoryHeader.Textile = processOrder.Fabric;
-                InventoryListDialog.ChangeDataContext(AppSettingConfig.StoreManageFileName(), textileInventoryHeader, selectedTextiles);
+                textileInventoryHeader.Textile = ProcessOrder.Fabric;
+                InventoryListDialog.ChangeDataContext(textileInventoryHeader, selectedTextiles);
             }
         }
 
@@ -162,18 +164,17 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void ButtonDeleteOrder_Click(object sender, RoutedEventArgs e)
         {
-            ProcessOrder processOrder = (ProcessOrder)DataGridProcessOrder.SelectedItem;
-            if (processOrder == null)
+            if (ProcessOrder == null)
             {
                 MessageBox.Show("未選取訂單!!");
                 return;
             }
-            MessageBoxResult result = MessageBox.Show(string.Concat("請確認是否要刪除訂單編號:", processOrder.OrderString, ",布種:", processOrder.Fabric), "刪除", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show(string.Concat("請確認是否要刪除訂單編號:", this.ProcessOrder.OrderString, ",布種:", this.ProcessOrder.Fabric), "刪除", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                ProcessModule.DeleteProcessOrder(processOrder);
+                ProcessModule.DeleteProcessOrder(ProcessOrder);
                 int selectedIndex = DataGridProcessOrder.SelectedIndex - 1;
-                DataGridProcessOrderCollection.Remove(processOrder);
+                DataGridProcessOrderCollection.Remove(ProcessOrder);
                 DataGridProcessOrder.SelectedIndex = selectedIndex;
             }
         }
@@ -313,8 +314,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             IEnumerable<FactoryShippingName> factoryShippingList = ProcessModule.GetFactoryShipping(factoryShipping.OrderColorDetailNo);
             DataGridFactoryShipping.ItemsSource = factoryShippingList;
 
-            ProcessOrder processOrder = (ProcessOrder)DataGridProcessOrder.SelectedItem;
-            UpdateDataGridOrderColorFactoryShippingDetail(processOrder.OrderNo);
+            UpdateDataGridOrderColorFactoryShippingDetail(ProcessOrder.OrderNo);
         }
 
         public void UpdateDataGridOrderColorFactoryShippingDetail(int processOrderNo)
@@ -432,9 +432,11 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 return;
             }
             ProcessOrderColorFactoryShippingDetail processOrderColorFactoryShippingDetail = DataGridOrderColorFactoryShippingDetail.SelectedItem as ProcessOrderColorFactoryShippingDetail ?? new ProcessOrderColorFactoryShippingDetail();
-            ProcessOrder processOrder = DataGridProcessOrder.SelectedItem as ProcessOrder;
-            NewProcessOrderColorDetaiDialog dialog = new NewProcessOrderColorDetaiDialog(processOrder, processOrderColorFactoryShippingDetail);
-            dialog.DataContext = this;
+
+            NewProcessOrderColorDetaiDialog dialog = new NewProcessOrderColorDetaiDialog(ProcessOrder, processOrderColorFactoryShippingDetail)
+            {
+                DataContext = this
+            };
             dialog.Show();
         }
 
@@ -507,8 +509,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void ButtonDelivery_Click(object sender, RoutedEventArgs e)
         {
             ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)(DataGridOrderColorFactoryShippingDetail.SelectedItem);
-            ProcessOrder processOrder = (ProcessOrder)(DataGridProcessOrder.SelectedItem);
-            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrder.OrderString, processOrder.Fabric, processOrderColorDetail);
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(ProcessOrder.OrderString, ProcessOrder.Fabric, processOrderColorDetail);
             deliveryNumberCheckDialog.Show();
             deliveryNumberCheckDialog.Closed += DeliveryNumberCheckDialogClosed;
         }
@@ -574,7 +575,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void ButtonUpdateProcessOrderRemark_Click(object sender, RoutedEventArgs e)
         {
             TextRange remark = new TextRange(RichTextBoxProcessOrderRemark.Document.ContentStart, RichTextBoxProcessOrderRemark.Document.ContentEnd);
-            int processOrderNo = (DataGridProcessOrder.SelectedItem as ProcessOrder).OrderNo;
+            int processOrderNo = ProcessOrder.OrderNo;
             bool success = ProcessModule.UpdateProcessOrderRemark(processOrderNo, remark.Text);
             if (success)
                 DataGridProcessOrderCollection.Where(w => w.OrderNo == processOrderNo).ToList().ForEach(f => f.Remark = remark.Text);
@@ -638,7 +639,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void CustomerRelate_Click(object sender, RoutedEventArgs e)
         {
-            if (!(DataGridProcessOrder.SelectedItem is ProcessOrder processOrder))
+            if (ProcessOrder == null)
             {
                 MessageBox.Show("尚未選擇一筆訂單！！");
                 return;
@@ -648,21 +649,21 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 MessageBox.Show("尚未選擇客戶！！");
                 return;
             }
-            bool inCustomerOrderRelate = ProcessModule.CheckInCustomerOrderRelate(processOrder.OrderNo, customer.CustomerID);
+            bool inCustomerOrderRelate = ProcessModule.CheckInCustomerOrderRelate(ProcessOrder.OrderNo, customer.CustomerID);
             if (inCustomerOrderRelate)
             {
-                MessageBox.Show(string.Format("{0}已關連至{1},{2}！！", customer.Name, processOrder.OrderString, processOrder.Fabric));
+                MessageBox.Show(string.Format("{0}已關連至{1},{2}！！", customer.Name, ProcessOrder.OrderString, ProcessOrder.Fabric));
                 return;
             }
             CustomerOrderRelate customerOrderRelate = new CustomerOrderRelate
             {
                 CustomerID = customer.CustomerID,
-                ProcessOrderID = processOrder.OrderNo
+                ProcessOrderID = ProcessOrder.OrderNo
             };
             bool success = ProcessModule.InsertCustomerOrderRelate(customerOrderRelate);
 
             if (success)
-                MessageBox.Show(string.Format("成功將{0}關連至{1},{2}！！", customer.Name, processOrder.OrderString, processOrder.Fabric));
+                MessageBox.Show(string.Format("成功將{0}關連至{1},{2}！！", customer.Name, ProcessOrder.OrderString, ProcessOrder.Fabric));
             else
                 MessageBox.Show("新增錯誤！！");
         }
