@@ -46,6 +46,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
         public ObservableCollection<ProcessOrder> DataGridProcessOrderCollection { get; set; }
 
         public ProcessOrder ProcessOrder { get; set; }
+        public ProcessOrderFlowDateDetail ProcessOrderFlowDateDetail { get; set; }
 
         public ProcessOrderPage()
         {
@@ -365,10 +366,14 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridProcessOrder.ItemsSource = DataGridProcessOrderCollection;
         }
 
+        private void DataGridProcessOrderFlowDateDetail_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ProcessOrderFlowDateDetail = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
+        }
+
         private void DatePickerInputDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            ProcessOrderFlowDateDetail processOrderFlowDateDetail = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
-            if (processOrderFlowDateDetail == null)
+            if (ProcessOrderFlowDateDetail == null)
             {
                 return;
             }
@@ -376,7 +381,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             List<ProcessOrderColorFactoryShippingDetail> factoryShippingDetails = new List<ProcessOrderColorFactoryShippingDetail>();
             factoryShippingDetails.AddRange(dataGridFactoryShippingDetailItems.Cast<ProcessOrderColorFactoryShippingDetail>());
 
-            int orderFlowNo = processOrderFlowDateDetail.OrderFlowNo;
+            int orderFlowNo = ProcessOrderFlowDateDetail.OrderFlowNo;
             IEnumerable<int> orderColorDetailNoList = factoryShippingDetails.Select(s => s.OrderColorDetailNo);
 
             DatePicker datePicker = (DatePicker)sender;
@@ -386,8 +391,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
 
         private void DatePickerCompleteDate_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            ProcessOrderFlowDateDetail processOrderFlowDateDetail = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
-            if (processOrderFlowDateDetail == null)
+            if (ProcessOrderFlowDateDetail == null)
             {
                 return;
             }
@@ -399,7 +403,7 @@ namespace WpfApp1.Pages.ProcessOrderPages
             List<ProcessOrderColorFactoryShippingDetail> factoryShippingDetails = new List<ProcessOrderColorFactoryShippingDetail>();
             factoryShippingDetails.AddRange(dataGridFactoryShippingDetailItems.Cast<ProcessOrderColorFactoryShippingDetail>());
 
-            int orderFlowNo = processOrderFlowDateDetail.OrderFlowNo;
+            int orderFlowNo = ProcessOrderFlowDateDetail.OrderFlowNo;
             IEnumerable<int> orderColorDetailNoList = factoryShippingDetails.Select(s => s.OrderColorDetailNo);
 
             DatePicker datePicker = (DatePicker)sender;
@@ -503,34 +507,43 @@ namespace WpfApp1.Pages.ProcessOrderPages
         private void ButtonDelivery_Click(object sender, RoutedEventArgs e)
         {
             ProcessOrderColorDetail processOrderColorDetail = (ProcessOrderColorDetail)(DataGridOrderColorFactoryShippingDetail.SelectedItem);
-            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(ProcessOrder.OrderString, ProcessOrder.Fabric, processOrderColorDetail);
+            ProcessOrderFlowDateDetail LastProcessOrderFlowDateDetailItem = DataGridProcessOrderFlowDateDetail.Items.Cast<ProcessOrderFlowDateDetail>().Last();
+
+            ProcessOrderFlowDateDetail processOrderFlowDateDetail = ProcessOrderFlowDateDetail == null ? LastProcessOrderFlowDateDetailItem : ProcessOrderFlowDateDetail;
+
+            DeliveryNumberCheckDialog deliveryNumberCheckDialog = new DeliveryNumberCheckDialog(processOrderFlowDateDetail.Name, ProcessOrder.OrderString, ProcessOrder.Fabric, processOrderColorDetail);
             deliveryNumberCheckDialog.Show();
             deliveryNumberCheckDialog.Closed += DeliveryNumberCheckDialogClosed;
         }
-        public DeliveryListDialog DeliveryListDialog;
+        public IDictionary<string, DeliveryListDialog> DeliveryListDialog = new Dictionary<string, DeliveryListDialog>();
         private void DeliveryNumberCheckDialogClosed(object sender, EventArgs e)
         {
             DeliveryNumberCheckDialog deliveryNumberCheckDialog = (DeliveryNumberCheckDialog)sender;
             var textileColorInventory = InventoryListDialog?.InventoryListViewModel.TextileColor ?? null;
-            if (DeliveryListDialog == null && deliveryNumberCheckDialog.IsCheck == true)
+            DeliveryListDialog deliveryListDialog = null;
+            if (DeliveryListDialog.Count != 0)
+                DeliveryListDialog.TryGetValue(deliveryNumberCheckDialog.ProcessOrderDelivery.FactoryName, out deliveryListDialog);
+            if (deliveryListDialog == null && deliveryNumberCheckDialog.IsCheck == true)
             {
                 deliveryNumberCheckDialog.ProcessOrderDelivery.StorageNumber = textileColorInventory?.CountInventory ?? 0;
                 deliveryNumberCheckDialog.ProcessOrderDelivery.StorageSpace = textileColorInventory?.StorageSpaces ?? string.Empty;
                 Window parentWindow = Window.GetWindow(this);
-                DeliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.IsCheck == true ? deliveryNumberCheckDialog.ProcessOrderDelivery : null)
+                deliveryListDialog = new DeliveryListDialog(deliveryNumberCheckDialog.IsCheck == true ? deliveryNumberCheckDialog.ProcessOrderDelivery : null)
                 {
                     Owner = Window.GetWindow(this),
                     Top = parentWindow.Top,
                     Left = parentWindow.Left + parentWindow.Width > SystemParameters.PrimaryScreenWidth - 40 ? 0 : parentWindow.Left + parentWindow.Width,
                 };
-                DeliveryListDialog.Show();
-                DeliveryListDialog.Closed += DeliveryListDialogClosed;
+                DeliveryListDialog.Add(deliveryNumberCheckDialog.ProcessOrderDelivery.FactoryName, deliveryListDialog);
+
+                deliveryListDialog.Show();
+                deliveryListDialog.Closed += DeliveryListDialogClosed;
             }
             else
             {
                 if (deliveryNumberCheckDialog.IsCheck == true)
                 {
-                    DeliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.ProcessOrderDelivery,
+                    deliveryListDialog.ProcessOrderColorDetailChanged(deliveryNumberCheckDialog.ProcessOrderDelivery,
                         textileColorInventory?.CountInventory ?? 0,
                         textileColorInventory?.StorageSpaces ?? string.Empty);
                 }
@@ -547,19 +560,17 @@ namespace WpfApp1.Pages.ProcessOrderPages
                 MessageBox.Show("未選擇一筆資料！！");
                 return;
             }
-            ProcessOrderFlowDateDetail selected = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
-            EditProcessOrderFlowFactoryNameDialog editProcessOrderFlowFactoryNameDialog = new EditProcessOrderFlowFactoryNameDialog(selected);
+            EditProcessOrderFlowFactoryNameDialog editProcessOrderFlowFactoryNameDialog = new EditProcessOrderFlowFactoryNameDialog(ProcessOrderFlowDateDetail);
             editProcessOrderFlowFactoryNameDialog.EditProcessOrderFlowFactoryExecute += EditProcessOrderFlowFactoryExecute;
             DataGridProcessOrderFlowDateDetail.CancelEdit();
             editProcessOrderFlowFactoryNameDialog.Show();
         }
         private void EditProcessOrderFlowFactoryExecute(Factory selectedFactory)
         {
-            bool success = ProcessModule.EditProcessOrderFlowFactory(selectedFactory.FactoryID, (DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail).OrderFlowNo);
+            bool success = ProcessModule.EditProcessOrderFlowFactory(selectedFactory.FactoryID, ProcessOrderFlowDateDetail.OrderFlowNo);
             if (success)
             {
-                ProcessOrderFlowDateDetail processOrderFlowDateDetail = DataGridProcessOrderFlowDateDetail.SelectedItem as ProcessOrderFlowDateDetail;
-                processOrderFlowDateDetail.Name = selectedFactory.Name;
+                ProcessOrderFlowDateDetail.Name = selectedFactory.Name;
                 DataGridProcessOrderFlowDateDetail.CommitEdit();
                 DataGridProcessOrderFlowDateDetail.Items.Refresh();
                 //暫時以此方式解決，避免更新工廠名稱時會同時更新顏色狀態

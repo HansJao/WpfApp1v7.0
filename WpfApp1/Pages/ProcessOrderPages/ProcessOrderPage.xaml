@@ -78,7 +78,7 @@
                         <Button x:Name="ButtonNewColor" HorizontalAlignment="Right" Content="新增顏色" Height="24" Width="60" Click="ButtonNewColor_Click"/>
                     </StackPanel>
                     <StackPanel>
-                        <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
+                        <DataGrid x:Name="DataGridProcessOrderFlowDateDetail" SelectionChanged="DataGridProcessOrderFlowDateDetail_SelectionChanged" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" MouseDoubleClick="DataGridProcessOrderFlowDateDetail_MouseDoubleClick" >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="工廠" Binding="{Binding Name}"/>
                                 <DataGridTemplateColumn Header="轉入時間"  Width="100" >

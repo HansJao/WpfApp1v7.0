@@ -57,7 +57,10 @@ namespace WpfApp1
             if (processOrderPage != null && processOrderPage.InventoryListDialog != null)
             {
                 processOrderPage.InventoryListDialog.Close();
-                processOrderPage.DeliveryListDialog.Close();
+                foreach (var item in processOrderPage.DeliveryListDialog)
+                {
+                    item.Value.Close();
+                };
             }
             processOrderPage = new ProcessOrderPage();
 

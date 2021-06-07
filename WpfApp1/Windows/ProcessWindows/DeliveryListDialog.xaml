@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1.Windows.ProcessWindows"
         mc:Ignorable="d"
-        Title="載貨清單" Height="300" Width="350">
+        Title="載貨清單" Height="300" Width="450">
     <Grid>
         <StackPanel>
             <DataGrid HorizontalAlignment="Center" VerticalAlignment="Top" x:Name="DataGridProcessOrderDelivery" Height="200" AutoGenerateColumns="False" CanUserAddRows="False">

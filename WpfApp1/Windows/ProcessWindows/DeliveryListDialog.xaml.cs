@@ -26,6 +26,7 @@ namespace WpfApp1.Windows.ProcessWindows
         public DeliveryListDialog(ProcessOrderDelivery processOrderDelivery)
         {
             InitializeComponent();
+            this.Title = string.Concat(Title, "-", processOrderDelivery.FactoryName);
             processOrderColorDetails = new ObservableCollection<ProcessOrderDelivery>();
             if (processOrderDelivery != null)
             {
@@ -35,7 +36,7 @@ namespace WpfApp1.Windows.ProcessWindows
             }
         }
 
-        public void ProcessOrderColorDetailChanged(ProcessOrderDelivery processOrderDelivery,int storageNumber,string storageSpace)
+        public void ProcessOrderColorDetailChanged(ProcessOrderDelivery processOrderDelivery, int storageNumber, string storageSpace)
         {
             processOrderDelivery.StorageNumber = storageNumber;
             processOrderDelivery.StorageSpace = storageSpace;

@@ -8,6 +8,7 @@ namespace WpfApp1.DataClass.ProcessOrder
 {
     public class ProcessOrderDelivery
     {
+        public string FactoryName { get; set; }
         public string StorageSpace { get; set; }
         public int StorageNumber { get; set; }
         public string OrderString { get; set; }
