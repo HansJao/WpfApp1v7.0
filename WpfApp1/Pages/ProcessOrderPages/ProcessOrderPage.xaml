@@ -55,7 +55,7 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox SelectedItem="{Binding Status}" ItemsSource="{Binding Source={StaticResource dataFromEnum}, Mode=OneWay}"
-                                        SelectionChanged="SomeSelectionChanged " />
+                                        SelectionChanged="OrderColorStatusChanged " />
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

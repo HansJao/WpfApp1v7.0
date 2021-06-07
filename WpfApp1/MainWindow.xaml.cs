@@ -76,11 +76,11 @@ namespace WpfApp1
             this.MainFrame.NavigationService.Navigate(new ProcessOrderStatusPage());
         }
 
-        private void ButtonExportProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
-        {
-            //this.MainFrame.NavigationService.Navigate(new NewProcessOrderPage());
-            var x = new ExportProcessOrderRecordViewModel();
-        }
+        //private void ButtonExportProcessOrderRecordFunction_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //this.MainFrame.NavigationService.Navigate(new NewProcessOrderPage());
+        //    var x = new ExportProcessOrderRecordViewModel();
+        //}
 
         private void ButtonFactoryManageFunction_Click(object sender, RoutedEventArgs e)
         {
@@ -142,12 +142,12 @@ namespace WpfApp1
             this.Title = "庫存歷史紀錄";
             this.MainFrame.NavigationService.Navigate(new InventoryRecordComparePage());
         }
-        private void ButtonShippingHistoryChartFunction_Click(object sender, RoutedEventArgs e)
-        {
-            this.Title = "出貨紀錄圖表";
-            this.MainFrame.NavigationService.Navigate(new ShippingHistoryChartPage());
+        //private void ButtonShippingHistoryChartFunction_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.Title = "出貨紀錄圖表";
+        //    this.MainFrame.NavigationService.Navigate(new ShippingHistoryChartPage());
 
-        }
+        //}
         private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨排行圖表";

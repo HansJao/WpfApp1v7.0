@@ -319,15 +319,13 @@ namespace WpfApp1.Pages.ProcessOrderPages
             DataGridOrderColorFactoryShippingDetail.ItemsSource = processOrderColorFactoryShippingDetail;
         }
 
-        private void SomeSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OrderColorStatusChanged(object sender, SelectionChangedEventArgs e)
         {
-            ProcessOrderColorDetail selectedItem = this.DataGridOrderColorFactoryShippingDetail.CurrentItem as ProcessOrderColorDetail;
-            if (selectedItem == null)
+            if (!(this.DataGridOrderColorFactoryShippingDetail.CurrentItem is ProcessOrderColorDetail selectedItem))
                 return;
             ComboBox comboBox = sender as ComboBox;
-            string x = comboBox.SelectedItem.ToString();
-            ProcessOrderColorStatus status;
-            Enum.TryParse(x, out status);
+            string statusString = comboBox.SelectedItem.ToString();
+            Enum.TryParse(statusString, out ProcessOrderColorStatus status);
 
             int orderColorDetailNo = selectedItem.OrderColorDetailNo;
             int successCount = ProcessModule.UpdateProcessOrderColorStatus(orderColorDetailNo, status);
