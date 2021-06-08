@@ -18,7 +18,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
     public class ShipFeatureViewModel
     {
         protected ITrashModule TrashModule { get; } = new TrashModule();
-        private IEnumerable<TextileNameMapping> TextileNameMappings { get; set; }
 
         public ShipFeatureViewModel(string shipFeatureDate)
         {
@@ -37,7 +36,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             IEnumerable<TrashItem> trashItems = TrashModule.GetTrashItems().Where(w => w.I_03 != null).OrderBy(o => o.I_01);
 
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
-            TextileNameMappings = externalDataHelper.GetTextileNameMappings();
+            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
 
             for (int sheetCount = 0; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
@@ -73,13 +72,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     {
                         rowCount = rowCount + textileColorNumber / 7;
                     }
-                    TextileNameMapping textileNameMapping = TextileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) ?? new TextileNameMapping();
-                    string accountTextileNameMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault().Split('*')[0];
-
-                    TrashItem trashItem = new TrashItem();
-                    trashItem = trashItems.Where(w => w.I_03 == string.Concat(accountTextileNameMapping, textileColor)).FirstOrDefault();
-                    if (accountTextileNameMapping != string.Empty && (trashItem == null || trashItem.I_03 == null))
-                        trashItem = trashItems.Where(w => w.I_03.Contains(accountTextileNameMapping) && w.I_03.Contains(textileColor)).FirstOrDefault();
+                    TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, textileColor, textileNameMappings);
                     string accountFactoryID = string.Empty;
                     string accountTextileID = string.Empty;
                     string accountTextileName = string.Empty;
@@ -110,6 +103,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 workbook.Write(fs);
             }
-        }
+        }        
     }
 }

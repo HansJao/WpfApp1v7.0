@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.Reports;
 using WpfApp1.DataClass.StoreSearch;
 using WpfApp1.DataClass.TrashSystem;
@@ -196,12 +197,14 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         private void ExportShippingCheckExecute()
         {
             List<StoreSearchData<StoreSearchColorDetail>> excelDailyShippedList = ExcelModule.GetExcelDailyShippedList(ShippingCheckDate);
-            var trashShipped = TrashModule.GetTrashShippedList(ShippingCheckDate, ShippingCheckDate);
+            IEnumerable<TrashShipped> trashShipped = TrashModule.GetTrashShippedList(ShippingCheckDate, ShippingCheckDate);
+            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
 
-            var originalSources = new List<OriginalSource>();
+            List<OriginalSource> trashItems = new List<OriginalSource>();
             foreach (var shipped in trashShipped)
             {
-                originalSources.Add(new OriginalSource
+                trashItems.Add(new OriginalSource
                 {
                     DateTime = shipped.IN_DATE,
                     TextileNo = shipped.I_01,
@@ -210,7 +213,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 });
             }
             var newList = new List<Container>();
-            foreach (var originalSource in originalSources)
+            foreach (var trashItem in trashItems)
             {
                 var priviousDistance = 10;
                 var textileName = string.Empty;
@@ -218,21 +221,23 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 var shippedCount = 0;
                 foreach (var excelDailyShippedItem in excelDailyShippedList)
                 {
+                    TextileNameMapping textileNameMapping = textileNameMappings.ToList().Find(f => f.Inventory.Contains(excelDailyShippedItem.TextileName)) ?? new TextileNameMapping();
                     foreach (var colorDetail in excelDailyShippedItem.StoreSearchColorDetails)
                     {
-                        var currentDistance = LevenshteinDistance(originalSource.TextileColorName, excelDailyShippedItem.TextileName, colorDetail.ColorName);
-                        if (currentDistance < priviousDistance)
+                        string accountMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault();
+                        if (trashItem.TextileColorName == string.Concat(accountMapping.Split('*')[0], colorDetail.ColorName.Split('-')[0]))
                         {
                             textileColor = colorDetail.ColorName;
                             textileName = excelDailyShippedItem.TextileName;
-                            priviousDistance = currentDistance;
+                            priviousDistance = 0;
                             shippedCount = colorDetail.ShippedCount;
+                            break;
                         }
                     }
                 }
                 newList.Add(new Container()
                 {
-                    OriginalSource = originalSource,
+                    OriginalSource = trashItem,
                     TextileName = textileName,
                     ColorName = textileColor,
                     ShippedCount = shippedCount,
