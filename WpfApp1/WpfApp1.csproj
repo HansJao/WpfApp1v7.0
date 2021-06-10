@@ -174,7 +174,11 @@
     <Compile Include="DataClass\Enumeration\MalFunctionEnum.cs" />
     <Compile Include="DataClass\Enumeration\ProcessEnum.cs" />
     <Compile Include="DataClass\ExcelDataClass\ColumnFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelCellContent.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelColumnContent.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelSheetContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileColorInventoryShipping.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileInventory.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileInventoryHeader.cs" />
@@ -327,6 +331,7 @@
     <Compile Include="ViewModel\TrashSystemViewModel\DefaultPriceViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\FeatureSearchViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ReportsViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\RevenueExportViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ShipFeatureViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />

@@ -60,6 +60,18 @@
                             </Grid>
                         </MenuItem.Header>
                     </MenuItem>
+                    <MenuItem Click="ButtonRevenueExportFunction_Click">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="TextBlockRevenue" Text="營業額匯出" VerticalAlignment="Center"/>
+                                <TextBox x:Name="TextBoxRevenueDate" Width="130" Grid.Column="1" VerticalAlignment="Center"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
             <Menu>

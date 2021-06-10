@@ -168,6 +168,11 @@ namespace WpfApp1
             this.Title = "預設單價設定";
             this.MainFrame.NavigationService.Navigate(new DefaultPricePage());
         }
+        private void ButtonRevenueExportFunction_Click(object sender, RoutedEventArgs e)
+        {
+            string textBoxRevenueDate = TextBoxRevenueDate.Text;
+            RevenueExportViewModel revenueExportViewModel = new RevenueExportViewModel(textBoxRevenueDate);
+        }
         private void ButtonShipFeatureFunction_Click(object sender, RoutedEventArgs e)
         {
             string shipFeatureDate = ShipFeatureDate.Text;

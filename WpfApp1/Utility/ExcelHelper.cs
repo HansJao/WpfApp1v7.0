@@ -28,6 +28,12 @@ namespace WpfApp1.Utility
             cell.SetCellValue(cellValue);
             cell.CellStyle = style;
         }
+        public static void CreateCell(XSSFRow row, int cellIndex, double cellValue, ICellStyle style)
+        {
+            var cell = row.CreateCell(cellIndex);
+            cell.SetCellValue(cellValue);
+            cell.CellStyle = style;
+        }
 
         public static ICellStyle GetColorByStorageSpaces(IWorkbook wb, string storageSpaces)
         {
@@ -248,6 +254,8 @@ namespace WpfApp1.Utility
         public delegate List<T> ReadExcelAction<T>(List<T> list, IRow row, string sheetName, int timeRange);
         public delegate void CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, T storeData);
 
+        public delegate void CreateMultiSheetExcelAction<T>(XSSFRow ws, T storeData);
+
         public List<string> GetExcelSheetName()
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
@@ -338,6 +346,42 @@ namespace WpfApp1.Utility
             file.Close();
         }
 
+        public void CreateExcelFile<T>(CreateMultiSheetExcelAction<T> createMultiSheetExcelAction, ExcelContent<T> excelContent)
+        {
+            //建立Excel 2003檔案
+            IWorkbook wb = new XSSFWorkbook();
+            ICellStyle positionStyle = wb.CreateCellStyle();
+            positionStyle.WrapText = true;
+            positionStyle.Alignment = HorizontalAlignment.Center;
+            positionStyle.VerticalAlignment = VerticalAlignment.Center;
+
+            foreach (var excelSheet in excelContent.ExcelSheetContents)
+            {
+                ISheet ws = wb.CreateSheet(excelSheet.SheetName);
+                XSSFRow row = (XSSFRow)ws.CreateRow(0);
+                row.Height = 440;
+                foreach (var columnContent in excelSheet.ExcelColumnContents)
+                {
+                    ws.SetColumnWidth(excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.Width);
+                    CreateCell(row, excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.CellValue, columnContent.CellStyle);
+                }
+
+                int rowIndex = 1;
+                foreach (var rowContent in excelSheet.ExcelRowContents)
+                {
+                    XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+
+                    createMultiSheetExcelAction(rowTextile, rowContent);
+                    rowIndex++;
+                }
+            }
+
+
+            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", excelContent.FileName, ".xlsx"), FileMode.Create);//產生檔案
+            wb.Write(file);
+            file.Close();
+        }
+
         public static string GetCellString(IRow row, int cellNum)
         {
             row.GetCell(cellNum).SetCellType(CellType.String);
@@ -364,7 +408,7 @@ namespace WpfApp1.Utility
                 int cellValue = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory) == null || (row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CellType == CellType.Formula ? row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).CachedFormulaResultType == CellType.Error : false)
                     ? 0
                     : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory).NumericCellValue.ToInt();
-                
+
                 selectedTextiles.Add(new TextileColorInventory
                 {
                     Index = CheckExcelCellType<string>(CellType.String, row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.Index)),
