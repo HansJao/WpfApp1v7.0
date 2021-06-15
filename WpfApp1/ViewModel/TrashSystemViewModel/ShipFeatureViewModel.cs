@@ -55,7 +55,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     IRow row = sheet.GetRow(rowCount);
                     if (row == null) break;
                     ICell textileNameCell = row.GetCell(1);
-                    if (textileNameCell != null && (textileNameCell.StringCellValue != null | textileNameCell.StringCellValue != ""))
+                    if (textileNameCell != null && textileNameCell.StringCellValue != null && textileNameCell.StringCellValue != "")
                     {
                         textileName = textileNameCell.StringCellValue;
                     }
