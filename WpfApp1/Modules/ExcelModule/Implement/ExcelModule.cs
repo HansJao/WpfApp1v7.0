@@ -28,7 +28,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
             FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
             workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
             var list = new List<StoreSearchData<StoreSearchColorDetail>>();
-            var selectedDateTime = shippedDate == null ? DateTime.Now.ToString("M/d") : shippedDate?.ToString("M/d");
+            var selectedDateTime = shippedDate == null ? DateTime.Now.ToString("MM/dd") : shippedDate?.ToString("MM/dd");
             var currentDateValue = "出貨" + selectedDateTime;
             for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
