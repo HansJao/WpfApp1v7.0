@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.DataClass.ExcelDataClass
 {
-    public class ExcelContent<T>
+    public class ExcelContent
     {
         public string FileName { get; set; }
-        public List<ExcelSheetContent<T>> ExcelSheetContents { get; set; }
+        public List<ExcelSheetContent> ExcelSheetContents { get; set; }
     }
 }

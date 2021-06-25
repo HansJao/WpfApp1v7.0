@@ -285,6 +285,91 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             var excelHelper = new ExcelHelper();
             excelHelper.CreateExcelFile<Container>(CreateShippingCheckExcelAction, newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)).ToList(), columnFormats);
+
+
+
+            IWorkbook wb = new XSSFWorkbook();
+
+            ICellStyle positionStyle = wb.CreateCellStyle();
+            positionStyle.WrapText = true;
+            positionStyle.Alignment = HorizontalAlignment.Center;
+            positionStyle.VerticalAlignment = VerticalAlignment.Center;
+
+            ICellStyle estyle = wb.CreateCellStyle();
+            estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+            estyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle a2style = wb.CreateCellStyle();
+            a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+            a2style.FillPattern = FillPattern.SolidForeground;
+
+            List<List<ExcelCellContent>> excelRowContent = new List<List<ExcelCellContent>>();
+            foreach (var item in newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)))
+            {
+                var approximateNumber = item.OriginalSource.Weight / 20;
+                var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
+
+                var isEqual = round == item.ShippedCount;
+
+                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                {
+                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle =  GetStyle(wb, item.Distance) ?? positionStyle},
+                    new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
+                };
+                excelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+            };
+
+
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat("庫存對照清單", ShippingCheckDate.ToString("yyyy-MM-dd")),
+                ExcelSheetContents = new List<ExcelSheetContent>
+                {
+                    new ExcelSheetContent
+                    {
+                        SheetName = "Super為主",
+                        ExcelColumnContents = new List<ExcelCellContent>
+                        {
+                            new ExcelCellContent
+                            {
+                                CellValue = "Super布種名稱顏色",
+                                Width = 3000
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "出貨重量",
+                                Width = 2800
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "約略出貨數",
+                                Width = 1850
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "布種名稱",
+                                Width = 3000
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "顏色",
+                                Width = 1850
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "出貨數量",
+                                Width = 1850
+                            }
+                        },
+                        ExcelRowContents = excelRowContent
+        }
+    }
+            };
+            excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void CreateShippingCheckExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)

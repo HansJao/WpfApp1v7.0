@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.DataClass.ExcelDataClass
 {
-   public class ExcelSheetContent<T>
+   public class ExcelSheetContent
     {
         public string SheetName { get; set; }
         public List<ExcelCellContent>  ExcelColumnContents { get; set; }
-        public List<T> ExcelRowContents { get; set; }
+        public List<List<ExcelCellContent>> ExcelRowContents { get; set; }
 
     }
 }

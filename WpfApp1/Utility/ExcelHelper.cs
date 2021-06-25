@@ -254,8 +254,6 @@ namespace WpfApp1.Utility
         public delegate List<T> ReadExcelAction<T>(List<T> list, IRow row, string sheetName, int timeRange);
         public delegate void CreateExcelAction<T>(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, T storeData);
 
-        public delegate void CreateMultiSheetExcelAction<T>(XSSFRow ws, T storeData);
-
         public List<string> GetExcelSheetName()
         {
             IWorkbook workbook = null;  //新建IWorkbook對象  
@@ -346,10 +344,8 @@ namespace WpfApp1.Utility
             file.Close();
         }
 
-        public void CreateExcelFile<T>(CreateMultiSheetExcelAction<T> createMultiSheetExcelAction, ExcelContent<T> excelContent)
+        public void CreateExcelFile(IWorkbook wb, ExcelContent excelContent)
         {
-            //建立Excel 2003檔案
-            IWorkbook wb = new XSSFWorkbook();
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
             positionStyle.Alignment = HorizontalAlignment.Center;
@@ -371,7 +367,10 @@ namespace WpfApp1.Utility
                 {
                     XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
 
-                    createMultiSheetExcelAction(rowTextile, rowContent);
+                    for (int cellIndex = 0; cellIndex < rowContent.Count; cellIndex++)
+                    {
+                        CreateCell(rowTextile, cellIndex, rowContent.ElementAt(cellIndex).CellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                    }
                     rowIndex++;
                 }
             }

@@ -38,13 +38,25 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 Revenue = customerRevenue.Sum(s => s.Revenue)
             });
 
+
+            List<List<ExcelCellContent>> excelRowContent = new List<List<ExcelCellContent>>();
+            foreach (var item in customerRevenue)
+            {
+                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                {
+                    new ExcelCellContent{CellValue = item.CustomerName},
+                    new ExcelCellContent{CellValue = item.Revenue.ToString() }
+                };
+                excelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+            };
+
             var excelHelper = new ExcelHelper();
-            ExcelContent<CustomerRevenue> excelContent = new ExcelContent<CustomerRevenue>
+            ExcelContent excelContent = new ExcelContent
             {
                 FileName = string.Concat("營收表", date.ToString("yyyy-MM")),
-                ExcelSheetContents = new List<ExcelSheetContent<CustomerRevenue>>
+                ExcelSheetContents = new List<ExcelSheetContent>
                 {
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "營業額",
                         ExcelColumnContents = new List<ExcelCellContent>
@@ -105,54 +117,48 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                                 Width = 5000
                             }
                         },
-                        ExcelRowContents = customerRevenue.ToList()
+                        ExcelRowContents = excelRowContent
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "人事開銷",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "基本開銷",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "紗商",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "織廠",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "加工廠",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     },
-                    new ExcelSheetContent<CustomerRevenue>
+                    new ExcelSheetContent
                     {
                         SheetName = "其他開銷",
                         ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<CustomerRevenue>()
+                        ExcelRowContents = new List<List<ExcelCellContent>>()
                     }
                 }
             };
-
-            excelHelper.CreateExcelFile(CreateMultiSheetExcelAction, excelContent);
-        }
-
-        private void CreateMultiSheetExcelAction(XSSFRow row, CustomerRevenue storeData)
-        {
-            ExcelHelper.CreateCell(row, 0, storeData.CustomerName, null);
-            ExcelHelper.CreateCell(row, 1, storeData.Revenue, null);
+            IWorkbook wb = new XSSFWorkbook();
+            excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void CreateCustomerShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, CustomerRevenue storeData)
