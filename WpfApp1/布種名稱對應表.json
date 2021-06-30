@@ -57,6 +57,17 @@
   },
   {
     "ProcessOrder": [
+      "30CVC細絨布配件"
+    ],
+    "Inventory": [
+      "30CVC細絨布碼布"
+    ],
+    "Account": [
+      "CVC2X2+OP配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "20CVC單面布"
     ],
     "Inventory": [

@@ -212,7 +212,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     Weight = shipped.Quantity
                 });
             }
-            var newList = new List<Container>();
+            List<Container> trashPrimary = new List<Container>();
             foreach (var trashItem in trashItems)
             {
                 var priviousDistance = 10;
@@ -235,7 +235,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                         }
                     }
                 }
-                newList.Add(new Container()
+                trashPrimary.Add(new Container()
                 {
                     OriginalSource = trashItem,
                     TextileName = textileName,
@@ -245,48 +245,41 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 });
             }
 
-            ExcelFormat columnFormats = new ExcelFormat()
+            List<Container> excelPrimary = new List<Container>();
+            foreach (var excelDailyShippedItem in excelDailyShippedList)
             {
-                FileName = "庫存對照清單",
-                ColumnFormats = new List<ColumnFormat>
+                var priviousDistance = 10;
+                var textileName = string.Empty;
+                var textileColor = string.Empty;
+                foreach (var colorDetail in excelDailyShippedItem.StoreSearchColorDetails)
                 {
-                    new ColumnFormat
+                    TextileNameMapping textileNameMapping = textileNameMappings.ToList().Find(f => f.Inventory.Contains(excelDailyShippedItem.TextileName)) ?? new TextileNameMapping();
+                    OriginalSource originalSource = new OriginalSource();
+                    foreach (var trashItem in trashItems)
                     {
-                        CoiumnWidth = 3000,
-                        ColumnTitle = "布種顏色",
-                    },
-                    new ColumnFormat
-                    {
-                        CoiumnWidth = 2800,
-                        ColumnTitle = "出貨重量",
-                    },
-                    new ColumnFormat
-                    {
-                        CoiumnWidth = 1850,
-                        ColumnTitle = "約略出貨數",
-                    },
-                    new ColumnFormat
-                    {
-                        CoiumnWidth = 3000,
-                        ColumnTitle = "布種名稱",
-                    },
-                    new ColumnFormat
-                    {
-                        CoiumnWidth = 1850,
-                        ColumnTitle = "顏色",
-                    },
-                    new ColumnFormat
-                    {
-                        CoiumnWidth = 1850,
-                        ColumnTitle = "出貨數量",
+                        string accountMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault();
+                        if (trashItem.TextileColorName == string.Concat(accountMapping.Split('*')[0], colorDetail.ColorName.Split('-')[0]))
+                        {
+                            originalSource.DateTime = trashItem.DateTime;
+                            originalSource.TextileColorName = trashItem.TextileColorName;
+                            originalSource.Weight = trashItem.Weight;
+                            originalSource.TextileNo = trashItem.TextileNo;
+                            break;
+                        }
                     }
+                    excelPrimary.Add(new Container()
+                    {
+                        OriginalSource = originalSource,
+                        TextileName = excelDailyShippedItem.TextileName,
+                        ColorName = colorDetail.ColorName,
+                        ShippedCount = colorDetail.ShippedCount,
+                        Distance = priviousDistance
+                    });
                 }
-            };
-
-            var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<Container>(CreateShippingCheckExcelAction, newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)).ToList(), columnFormats);
+            }
 
 
+            ExcelHelper excelHelper = new ExcelHelper();
 
             IWorkbook wb = new XSSFWorkbook();
 
@@ -303,8 +296,8 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
             a2style.FillPattern = FillPattern.SolidForeground;
 
-            List<List<ExcelCellContent>> excelRowContent = new List<List<ExcelCellContent>>();
-            foreach (var item in newList.OrderBy(o => excelDailyShippedList.Select(s => s.TextileName).ToList().IndexOf(o.TextileName)))
+            List<List<ExcelCellContent>> trashPrimaryExcelRowContent = new List<List<ExcelCellContent>>();
+            foreach (var item in trashPrimary.OrderByDescending(t => t.OriginalSource.TextileColorName == null).ThenBy(t => t.TextileName).ThenBy(o => o.ColorName))
             {
                 var approximateNumber = item.OriginalSource.Weight / 20;
                 var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
@@ -313,14 +306,34 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
                 List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
                 {
-                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle =  GetStyle(wb, item.Distance) ?? positionStyle},
+                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
                     new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
                     new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
                     new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
                     new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
                     new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
                 };
-                excelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+                trashPrimaryExcelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+            };
+
+            List<List<ExcelCellContent>> excelPrimaryExcelRowContent = new List<List<ExcelCellContent>>();
+            foreach (var item in excelPrimary.OrderByDescending(t => t.OriginalSource.TextileColorName == null).ThenBy(t => t.TextileName).ThenBy(o => o.ColorName))
+            {
+                var approximateNumber = item.OriginalSource.Weight / 20;
+                var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
+
+                var isEqual = round == item.ShippedCount;
+
+                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                {
+                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
+                    new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
+                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
+                };
+                excelPrimaryExcelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
             };
 
 
@@ -337,7 +350,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                             new ExcelCellContent
                             {
                                 CellValue = "Super布種名稱顏色",
-                                Width = 3000
+                                Width = 6450
                             },
                             new ExcelCellContent
                             {
@@ -347,17 +360,17 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                             new ExcelCellContent
                             {
                                 CellValue = "約略出貨數",
-                                Width = 1850
+                                Width = 2000
                             },
                             new ExcelCellContent
                             {
                                 CellValue = "布種名稱",
-                                Width = 3000
+                                Width = 4550
                             },
                             new ExcelCellContent
                             {
                                 CellValue = "顏色",
-                                Width = 1850
+                                Width = 5550
                             },
                             new ExcelCellContent
                             {
@@ -365,63 +378,51 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                                 Width = 1850
                             }
                         },
-                        ExcelRowContents = excelRowContent
-        }
-    }
+                        ExcelRowContents = trashPrimaryExcelRowContent
+                    },
+                    new ExcelSheetContent
+                    {
+                        SheetName = "Excel為主",
+                        ExcelColumnContents = new List<ExcelCellContent>
+                        {
+                            new ExcelCellContent
+                            {
+                                CellValue = "Super布種名稱顏色",
+                                Width = 6450
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "出貨重量",
+                                Width = 2800
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "約略出貨數",
+                                Width = 2000
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "布種名稱",
+                                Width = 4550
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "顏色",
+                                Width = 5550
+                            },
+                            new ExcelCellContent
+                            {
+                                CellValue = "出貨數量",
+                                Width = 1850
+                            }
+                        },
+                        ExcelRowContents = excelPrimaryExcelRowContent
+                    }
+                }
             };
             excelHelper.CreateExcelFile(wb, excelContent);
         }
 
-        private void CreateShippingCheckExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, Container storeData)
-        {
-            ICellStyle estyle = wb.CreateCellStyle();
-            estyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
-            estyle.FillPattern = FillPattern.SolidForeground;
-
-            ICellStyle a2style = wb.CreateCellStyle();
-            a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
-            a2style.FillPattern = FillPattern.SolidForeground;
-
-            var approximateNumber = storeData.OriginalSource.Weight / 20;
-            var round = Math.Round(approximateNumber, 0, MidpointRounding.AwayFromZero);
-
-            var isEqual = round == storeData.ShippedCount;
-
-            XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-            ExcelHelper.CreateCell(rowTextile, 0, storeData.OriginalSource.TextileColorName, GetStyle(wb, storeData.Distance) ?? positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 1, storeData.OriginalSource.Weight.ToString(), positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 2, (approximateNumber).ToString(), positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 3, storeData.TextileName, positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 4, storeData.ColorName, positionStyle);
-            ExcelHelper.CreateCell(rowTextile, 5, storeData.ShippedCount.ToString(), isEqual ? positionStyle : estyle);
-
-            rowIndex++;
-        }
-
-
-        private ICellStyle GetStyle(IWorkbook wb, int distence)
-        {
-            switch (distence)
-            {
-                case 0:
-                    return null;
-                case 1:
-                    ICellStyle bstyle = wb.CreateCellStyle();
-                    bstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
-                    bstyle.FillPattern = FillPattern.SolidForeground;
-                    return bstyle;
-                case 2:
-                    ICellStyle hstyle = wb.CreateCellStyle();
-                    hstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SkyBlue.Index;
-                    hstyle.FillPattern = FillPattern.LessDots;
-                    return hstyle;
-                default:
-                    ICellStyle a2style = wb.CreateCellStyle();
-                    a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
-                    a2style.FillPattern = FillPattern.SolidForeground;
-                    return a2style;
-            }
-        }
         public class Container
         {
             public OriginalSource OriginalSource { get; set; }
