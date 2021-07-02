@@ -345,12 +345,7 @@ namespace WpfApp1.Utility
         }
 
         public void CreateExcelFile(IWorkbook wb, ExcelContent excelContent)
-        {
-            ICellStyle positionStyle = wb.CreateCellStyle();
-            positionStyle.WrapText = true;
-            positionStyle.Alignment = HorizontalAlignment.Center;
-            positionStyle.VerticalAlignment = VerticalAlignment.Center;
-
+        {           
             foreach (var excelSheet in excelContent.ExcelSheetContents)
             {
                 ISheet ws = wb.CreateSheet(excelSheet.SheetName);
@@ -369,7 +364,14 @@ namespace WpfApp1.Utility
 
                     for (int cellIndex = 0; cellIndex < rowContent.Count; cellIndex++)
                     {
-                        CreateCell(rowTextile, cellIndex, rowContent.ElementAt(cellIndex).CellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                        if (double.TryParse(rowContent.ElementAt(cellIndex).CellValue, out double cellValue))
+                        {
+                            CreateCell(rowTextile, cellIndex, cellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                        }
+                        else
+                        {
+                            CreateCell(rowTextile, cellIndex, rowContent.ElementAt(cellIndex).CellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                        }
                     }
                     rowIndex++;
                 }
