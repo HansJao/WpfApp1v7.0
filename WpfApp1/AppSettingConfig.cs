@@ -18,6 +18,10 @@ namespace WpfApp1
         {
             return getAppSettings("FilePath");
         }
+        public static string ShipFilePath()
+        {
+            return getAppSettings("ShipFilePath");
+        }
 
         public static string StoreManageFileName()
         {

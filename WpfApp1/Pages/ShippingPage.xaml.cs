@@ -58,7 +58,7 @@ namespace WpfApp1.Pages
 
         private void GetShippingCacheNameList()
         {
-            var existsFileName = Directory.GetFiles(AppSettingConfig.FilePath(), "*.txt").Select(System.IO.Path.GetFileName);
+            var existsFileName = Directory.GetFiles(AppSettingConfig.ShipFilePath(), "*.txt").Select(System.IO.Path.GetFileName);
             ComboBoxShippingCacheName.ItemsSource = existsFileName.ToList();
         }
 
@@ -199,7 +199,7 @@ namespace WpfApp1.Pages
                 {
                     var fileName = string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-", cacheIndex, ".txt");
 
-                    var shippingCacheFileName = string.Concat(AppSettingConfig.FilePath(), @"\", fileName);
+                    var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName);
                     if (File.Exists(shippingCacheFileName))
                     {
                         continue;
@@ -220,7 +220,7 @@ namespace WpfApp1.Pages
             else
             {
                 var selectedFileName = ComboBoxShippingCacheName.SelectedValue.ToString();
-                var shippingCacheFileName = string.Concat(AppSettingConfig.FilePath(), @"\", selectedFileName);
+                var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", selectedFileName);
 
                 var shippingSheetStructureJson = JsonConvert.SerializeObject(ShippingSheetStructure);
 
@@ -704,7 +704,7 @@ namespace WpfApp1.Pages
         private void ComboBoxShippingCacheName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var fileName = ((ComboBox)sender).SelectedValue.ToString();
-            var shippingCacheFileName = string.Concat(AppSettingConfig.FilePath(), @"\", fileName);
+            var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName);
             //this code segment read data from the file.
             FileStream fs2 = new FileStream(shippingCacheFileName, FileMode.OpenOrCreate, FileAccess.Read);
             StreamReader reader = new StreamReader(fs2);

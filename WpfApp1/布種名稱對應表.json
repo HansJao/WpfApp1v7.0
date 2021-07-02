@@ -55,11 +55,13 @@
       "30CVC細絨布*"
     ]
   },
-  {
+  { //特殊規則，方便取得配件特徵代號
     "ProcessOrder": [
       "30CVC細絨布配件"
     ],
     "Inventory": [
+      "CVC細絨布配件",
+      "CVC2X2+OP配件",
       "30CVC細絨布碼布"
     ],
     "Account": [
