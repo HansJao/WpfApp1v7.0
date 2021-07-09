@@ -1,4 +1,5 @@
 ﻿using NPOI.SS.UserModel;
+using NPOI.SS.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,7 @@ namespace WpfApp1.DataClass.ExcelDataClass
     public class ExcelCellContent
     {
         public string CellValue { get; set; }
-        public int Width { get; set; }
-        public int Height { get; set; }
         public ICellStyle CellStyle { get; set; }
+        public CellRangeAddress CellRangeAddress { get; set; }
     }
 }

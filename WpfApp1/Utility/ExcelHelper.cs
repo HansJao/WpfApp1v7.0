@@ -345,33 +345,41 @@ namespace WpfApp1.Utility
         }
 
         public void CreateExcelFile(IWorkbook wb, ExcelContent excelContent)
-        {           
+        {
             foreach (var excelSheet in excelContent.ExcelSheetContents)
             {
                 ISheet ws = wb.CreateSheet(excelSheet.SheetName);
+                ws.SetMargin(MarginType.LeftMargin, excelSheet.LeftMargin);
+                ws.SetMargin(MarginType.RightMargin, excelSheet.RightMargin);
+                ws.SetMargin(MarginType.TopMargin, excelSheet.TopMargin);
+                ws.SetMargin(MarginType.BottomMargin, excelSheet.BottomMargin);
                 XSSFRow row = (XSSFRow)ws.CreateRow(0);
                 row.Height = 440;
                 foreach (var columnContent in excelSheet.ExcelColumnContents)
                 {
-                    ws.SetColumnWidth(excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.Width);
+                    if (columnContent.Width != 0)
+                        ws.SetColumnWidth(excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.Width);
                     CreateCell(row, excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.CellValue, columnContent.CellStyle);
                 }
 
                 int rowIndex = 1;
-                foreach (var rowContent in excelSheet.ExcelRowContents)
+                foreach (ExcelRowContent rowContent in excelSheet.ExcelRowContents)
                 {
                     XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
 
-                    for (int cellIndex = 0; cellIndex < rowContent.Count; cellIndex++)
+                    for (int cellIndex = 0; cellIndex < rowContent.ExcelCellContents.Count; cellIndex++)
                     {
-                        if (double.TryParse(rowContent.ElementAt(cellIndex).CellValue, out double cellValue))
+                        rowTextile.Height = rowContent.Height;
+                        if (double.TryParse(rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue, out double cellValue))
                         {
-                            CreateCell(rowTextile, cellIndex, cellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                            CreateCell(rowTextile, cellIndex, cellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
                         }
                         else
                         {
-                            CreateCell(rowTextile, cellIndex, rowContent.ElementAt(cellIndex).CellValue, rowContent.ElementAt(cellIndex).CellStyle);
+                            CreateCell(rowTextile, cellIndex, rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
                         }
+                        if (rowContent.ExcelCellContents.ElementAt(cellIndex).CellRangeAddress != null)
+                            ws.AddMergedRegion(rowContent.ExcelCellContents.ElementAt(cellIndex).CellRangeAddress);
                     }
                     rowIndex++;
                 }

@@ -9,8 +9,12 @@ namespace WpfApp1.DataClass.ExcelDataClass
    public class ExcelSheetContent
     {
         public string SheetName { get; set; }
-        public List<ExcelCellContent>  ExcelColumnContents { get; set; }
-        public List<List<ExcelCellContent>> ExcelRowContents { get; set; }
+        public double LeftMargin { get; set; }
+        public double RightMargin { get; set; }
+        public double TopMargin { get; set; }
+        public double BottomMargin { get; set; }
+        public List<ExcelColumnContent>  ExcelColumnContents { get; set; }
+        public List<ExcelRowContent> ExcelRowContents { get; set; }
 
     }
 }

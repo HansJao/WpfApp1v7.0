@@ -430,23 +430,13 @@ namespace WpfApp1.Pages
         {
             //建立Excel 2003檔案
             IWorkbook wb = new XSSFWorkbook();
-            ISheet ws = wb.CreateSheet("Class");
             //ws.Autobreaks = false;
             //ws.PrintSetup.FitWidth = 1;
             //ws.SetColumnBreak(11);
-            ws.SetMargin(MarginType.LeftMargin, 0.04);
-            ws.SetMargin(MarginType.RightMargin, 0.04);
-            ws.SetMargin(MarginType.TopMargin, 0.1);
-            ws.SetMargin(MarginType.BottomMargin, 0.04);
-            XSSFRow row = (XSSFRow)ws.CreateRow(0);
-            row.Height = 440;
+
             ICellStyle cellCenter = wb.CreateCellStyle();
             cellCenter.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
 
-            ws.SetColumnWidth(0, 3000);
-            ws.SetColumnWidth(1, 5020);
-            ws.SetColumnWidth(4, 1700);
-            ws.SetColumnWidth(2, 1700);
 
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
@@ -493,41 +483,68 @@ namespace WpfApp1.Pages
             coralStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
             coralStyle.FillPattern = FillPattern.SolidForeground;
 
-            CreateColumnTitle(row, positionStyle);
             int rowIndex = 1;
             int colorIndex = 0;
             int total = 0;
+
+            List<ExcelRowContent> shipPosition = new List<ExcelRowContent>();
             foreach (var shippingSheetStructure in ShippingSheetStructure)
             {
-                XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-                rowTextile.Height = 318;
-                CreateCell(rowTextile, 0, shippingSheetStructure.Customer, null);
+                ExcelRowContent excelRowContent = new ExcelRowContent
+                {
+                    Height = 318,
+                    ExcelCellContents = new List<ExcelCellContent>()
+                    {
+                        new ExcelCellContent()
+                        {
+                            CellValue = shippingSheetStructure.Customer,
+                            CellStyle = null
+                        }
+                    }
+                };
                 int customerTotal = 0;
                 foreach (var textileShippingData in shippingSheetStructure.TextileShippingDatas)
                 {
                     //判斷若為第0筆資料,則與客戶資料同一行,否則跳下一行
                     if (shippingSheetStructure.TextileShippingDatas.IndexOf(textileShippingData) == 0)
                     {
-                        CreateCell(rowTextile, 1, textileShippingData.TextileName, textileNameStyle);
+                        excelRowContent.ExcelCellContents.Add(new ExcelCellContent()
+                        {
+                            CellValue = textileShippingData.TextileName,
+                            CellStyle = textileNameStyle,
+                            CellRangeAddress = new CellRangeAddress(rowIndex, rowIndex, 1, 3)
+                        });
+                        shipPosition.Add(excelRowContent);
                     }
                     else
                     {
                         rowIndex++;
-                        XSSFRow rowTextileName = (XSSFRow)ws.CreateRow(rowIndex);
-                        rowTextileName.Height = 318;
-                        CreateCell(rowTextileName, 1, textileShippingData.TextileName, textileNameStyle);
+                        ExcelRowContent excelRowTextileName = new ExcelRowContent
+                        {
+                            Height = 318,
+                            ExcelCellContents = new List<ExcelCellContent>()
+                            {
+                                new ExcelCellContent()
+                                {
+                                       CellValue = null,
+                                       CellStyle = null
+                                },
+                                new ExcelCellContent()
+                                {
+                                       CellValue = textileShippingData.TextileName,
+                                       CellStyle = textileNameStyle,
+                                       CellRangeAddress = new CellRangeAddress(rowIndex, rowIndex, 1, 3)
+                                }
+                            }
+                        };
+                        shipPosition.Add(excelRowTextileName);
                     }
                     //判斷是否為配件碼布
                     Regex reg = new Regex(@"碼布$");
                     var isAccessories = reg.IsMatch(textileShippingData.TextileName);
-                    ws.AddMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 1, 3));
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         rowIndex++;
-                        XSSFRow rowColorInfo = (XSSFRow)ws.CreateRow(rowIndex);
-                        rowColorInfo.Height = 440;
-                        CreateCell(rowColorInfo, 1, shippingSheetData.ColorName, positionStyle);
-                        CreateCell(rowColorInfo, 2, shippingSheetData.CountInventory.ToString(), (shippingSheetData.CountInventory - shippingSheetData.ShippingNumber) <= 3 ? needCheckStyle : positionStyle);
                         var colorByStorageSpaces = ExcelHelper.GetColorByStorageSpaces(wb, shippingSheetData.StorageSpaces);
                         if (!string.IsNullOrEmpty(shippingSheetData.StorageSpaces))
                         {
@@ -536,26 +553,81 @@ namespace WpfApp1.Pages
                             font.IsBold = true;
                             colorByStorageSpaces.SetFont(font);
                         }
-                        CreateCell(rowColorInfo, 3, shippingSheetData.StorageSpaces, colorByStorageSpaces);
-                        CreateCell(rowColorInfo, 4, shippingSheetData.ShippingNumber.ToString(), shippingNumberStyle);
-                        CreateCell(rowColorInfo, 5, shippingSheetData.Memo, null);
+                        ExcelRowContent excelRowColorInfo = new ExcelRowContent
+                        {
+                            Height = 440,
+                            ExcelCellContents = new List<ExcelCellContent>
+                            {
+                                new ExcelCellContent()
+                                {
+                                    CellValue = null,
+                                    CellStyle = null,
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue = shippingSheetData.ColorName,
+                                    CellStyle = positionStyle
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue = shippingSheetData.CountInventory.ToString(),
+                                    CellStyle = (shippingSheetData.CountInventory - shippingSheetData.ShippingNumber) <= 3 ? needCheckStyle : positionStyle
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue = shippingSheetData.StorageSpaces,
+                                    CellStyle = colorByStorageSpaces,
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue = shippingSheetData.ShippingNumber.ToString(),
+                                    CellStyle = shippingNumberStyle
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue = shippingSheetData.Memo,
+                                    CellStyle = null
+                                }
+                            }
+                        };
+                        shipPosition.Add(excelRowColorInfo);
                         int weightCellNumber = (int)ExcelEnum.ShippingSheetEnum.WeightCellNumber;
                         int startIndex = (int)ExcelEnum.ShippingSheetEnum.WeightCellStartIndex + shippingSheetData.Memo.Count() / (int)ExcelEnum.ShippingSheetEnum.CellOfStringLength;
+                        for (int i = 6; i < startIndex; i++)
+                        {
+                            excelRowColorInfo.ExcelCellContents.Add(new ExcelCellContent());
+
+                        }
                         for (int shippingCount = startIndex; shippingCount < startIndex + shippingSheetData.ShippingNumber; shippingCount++)
                         {
                             if ((shippingCount - 1) % weightCellNumber == 0 && shippingCount - 1 > weightCellNumber)
                             {
                                 rowIndex++;
-                                rowColorInfo = (XSSFRow)ws.CreateRow(rowIndex);
-                                rowColorInfo.Height = 440;
+                                shipPosition.Add(new ExcelRowContent()
+                                {
+                                    Height = 440
+                                });
+                                shipPosition.Last().ExcelCellContents = new List<ExcelCellContent>();
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    shipPosition.Last().ExcelCellContents.Add(new ExcelCellContent());
+                                }
                             }
                             if (colorIndex % 2 == 0)
                             {
-                                CreateCell(rowColorInfo, shippingCount - ((shippingCount - 1) / weightCellNumber - 1) * weightCellNumber, null, lightTurquoiseStyle);
+                                shipPosition.Last().ExcelCellContents.Add(new ExcelCellContent()
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = lightTurquoiseStyle,
+                                });
                             }
                             else
                             {
-                                CreateCell(rowColorInfo, shippingCount - ((shippingCount - 1) / weightCellNumber - 1) * weightCellNumber, null, coralStyle);
+                                shipPosition.Last().ExcelCellContents.Add(new ExcelCellContent()
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = coralStyle,
+                                });
                             }
                             if (isAccessories)
                             {
@@ -568,20 +640,194 @@ namespace WpfApp1.Pages
                     }
                 }
                 rowIndex++;
-                XSSFRow rowCustomerTotal = (XSSFRow)ws.CreateRow(rowIndex);
-                rowCustomerTotal.Height = 440;
-                CreateCell(rowCustomerTotal, 3, "總數", positionStyle);
-                CreateCell(rowCustomerTotal, 4, customerTotal.ToString(), positionStyle);
+
+                ExcelRowContent excelRowTotal = new ExcelRowContent
+                {
+                    Height = 440,
+                    ExcelCellContents = new List<ExcelCellContent>()
+                    {
+                        new ExcelCellContent()
+                        {
+                                CellValue = null,
+                                CellStyle = null
+                        },
+                        new ExcelCellContent()
+                        {
+                                CellValue = null,
+                                CellStyle = null
+                        },
+                        new ExcelCellContent()
+                        {
+                                CellValue = null,
+                                CellStyle = null
+                        },
+                        new ExcelCellContent()
+                        {
+                                CellValue = "總數",
+                                CellStyle = positionStyle
+                        },
+                        new ExcelCellContent()
+                        {
+                                CellValue = customerTotal.ToString(),
+                                CellStyle = positionStyle
+                        }
+                    }
+                };
+                shipPosition.Add(excelRowTotal);
                 total += customerTotal;
                 rowIndex++;
             }
-            XSSFRow rowTotal = (XSSFRow)ws.CreateRow(rowIndex);
-            rowTotal.Height = 440;
-            CreateCell(rowTotal, 3, "總出貨數", positionStyle);
-            CreateCell(rowTotal, 4, total.ToString(), positionStyle);
-            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), "/", "出貨", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
-            wb.Write(file);
-            file.Close();
+
+            ExcelRowContent excelRowContentTotal = new ExcelRowContent
+            {
+                Height = 440,
+                ExcelCellContents = new List<ExcelCellContent>()
+                {
+                    new ExcelCellContent()
+                    {
+                        CellValue = null,
+                        CellStyle = null
+                    },
+                        new ExcelCellContent()
+                    {
+                        CellValue = null,
+                        CellStyle = null
+                    },
+                        new ExcelCellContent()
+                    {
+                        CellValue = null,
+                        CellStyle = null
+                    },
+                        new ExcelCellContent()
+                    {
+                        CellValue = "總出貨數",
+                        CellStyle = positionStyle
+                    }, new ExcelCellContent()
+                    {
+                        CellValue = total.ToString(),
+                        CellStyle = positionStyle
+                    },
+                }
+            };
+            shipPosition.Add(excelRowContentTotal);
+            ExcelHelper excelHelper = new ExcelHelper();
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat("出貨", DateTime.Now.ToString("yyyy-MM-dd")),
+                ExcelSheetContents = new List<ExcelSheetContent>
+                {
+                    new ExcelSheetContent
+                    {
+                        SheetName = "出貨位置表",
+                        LeftMargin = 0.04,
+                        RightMargin = 0.04,
+                        BottomMargin = 0.1,
+                        TopMargin = 0.1,
+                        ExcelColumnContents = new List<ExcelColumnContent>
+                        {
+                            new ExcelColumnContent
+                            {
+                                CellValue = "客戶",
+                                Width = 3000,
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "顏色",
+                                Width = 5020,
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "庫存量",
+                                Width = 1700,
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "儲位",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "出貨數量",
+                                Width = 1700,
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "備註",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "1",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "2",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "3",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "4",
+                                CellStyle = positionStyle
+                            },
+                            new ExcelColumnContent
+                            {
+                                CellValue = "5",
+                                CellStyle = positionStyle
+                            }
+                        },
+                        ExcelRowContents = shipPosition
+                    },
+                    //new ExcelSheetContent
+                    //{
+                    //    SheetName = "Excel為主",
+                    //    ExcelColumnContents = new List<ExcelColumnContent>
+                    //    {
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "Super布種名稱顏色",
+                    //            Width = 6450
+                    //        },
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "出貨重量",
+                    //            Width = 2800
+                    //        },
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "約略出貨數",
+                    //            Width = 2000
+                    //        },
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "布種名稱",
+                    //            Width = 4550
+                    //        },
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "顏色",
+                    //            Width = 5550
+                    //        },
+                    //        new ExcelColumnContent
+                    //        {
+                    //            CellValue = "出貨數量",
+                    //            Width = 1850
+                    //        }
+                    //    },
+                    //    ExcelRowContents = null
+                    //}
+                }
+            };
+            excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void CreateColumnTitle(XSSFRow row, ICellStyle positionStyle)

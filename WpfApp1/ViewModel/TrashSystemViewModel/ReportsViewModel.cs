@@ -296,7 +296,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             a2style.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
             a2style.FillPattern = FillPattern.SolidForeground;
 
-            List<List<ExcelCellContent>> trashPrimaryExcelRowContent = new List<List<ExcelCellContent>>();
+            List<ExcelRowContent> trashPrimaryExcelRowContent = new List<ExcelRowContent>();
             foreach (var item in trashPrimary.OrderByDescending(t => t.OriginalSource.TextileColorName == null).ThenBy(t => t.TextileName).ThenBy(o => o.ColorName))
             {
                 var approximateNumber = item.OriginalSource.Weight / 20;
@@ -304,19 +304,22 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
                 var isEqual = round == item.ShippedCount;
 
-                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                ExcelRowContent excelCellContents = new ExcelRowContent
                 {
-                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
-                    new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
+                    ExcelCellContents = new List<ExcelCellContent>
+                    {
+                        new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
+                        new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
+                    }
                 };
-                trashPrimaryExcelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+                trashPrimaryExcelRowContent.Add(excelCellContents);
             };
 
-            List<List<ExcelCellContent>> excelPrimaryExcelRowContent = new List<List<ExcelCellContent>>();
+            List<ExcelRowContent> excelPrimaryExcelRowContent = new List<ExcelRowContent>();
             foreach (var item in excelPrimary.OrderByDescending(t => t.OriginalSource.TextileColorName == null).ThenBy(t => t.TextileName).ThenBy(o => o.ColorName))
             {
                 var approximateNumber = item.OriginalSource.Weight / 20;
@@ -324,16 +327,19 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
                 var isEqual = round == item.ShippedCount;
 
-                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                ExcelRowContent excelCellContents = new ExcelRowContent
                 {
+                    ExcelCellContents = new List<ExcelCellContent>
+                    {
                     new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
                     new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
                     new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
                     new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
                     new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle },
+                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle }
+                    }
                 };
-                excelPrimaryExcelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+                excelPrimaryExcelRowContent.Add(excelCellContents);
             };
 
 
@@ -345,34 +351,34 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     new ExcelSheetContent
                     {
                         SheetName = "Super為主",
-                        ExcelColumnContents = new List<ExcelCellContent>
+                        ExcelColumnContents = new List<ExcelColumnContent>
                         {
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "Super布種名稱顏色",
                                 Width = 6450
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "出貨重量",
                                 Width = 2800
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "約略出貨數",
                                 Width = 2000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "布種名稱",
                                 Width = 4550
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "顏色",
                                 Width = 5550
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "出貨數量",
                                 Width = 1850
@@ -383,34 +389,34 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     new ExcelSheetContent
                     {
                         SheetName = "Excel為主",
-                        ExcelColumnContents = new List<ExcelCellContent>
+                        ExcelColumnContents = new List<ExcelColumnContent>
                         {
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "Super布種名稱顏色",
                                 Width = 6450
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "出貨重量",
                                 Width = 2800
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "約略出貨數",
                                 Width = 2000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "布種名稱",
                                 Width = 4550
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "顏色",
                                 Width = 5550
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "出貨數量",
                                 Width = 1850

@@ -39,15 +39,18 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             });
 
 
-            List<List<ExcelCellContent>> excelRowContent = new List<List<ExcelCellContent>>();
+            List<ExcelRowContent> excelRowContents = new List<ExcelRowContent>();
             foreach (var item in customerRevenue)
             {
-                List<ExcelCellContent> excelCellContents = new List<ExcelCellContent>
+                ExcelRowContent excelRowContent = new ExcelRowContent
                 {
+                    ExcelCellContents = new List<ExcelCellContent>()
+                    {
                     new ExcelCellContent{CellValue = item.CustomerName},
                     new ExcelCellContent{CellValue = item.Revenue.ToString() }
+                    }
                 };
-                excelRowContent.Add(new List<ExcelCellContent>(excelCellContents));
+                excelRowContents.Add(excelRowContent);
             };
 
             var excelHelper = new ExcelHelper();
@@ -59,101 +62,101 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     new ExcelSheetContent
                     {
                         SheetName = "營業額",
-                        ExcelColumnContents = new List<ExcelCellContent>
+                        ExcelColumnContents = new List<ExcelColumnContent>
                         {
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "客戶名稱",
                                 Width = 3000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "營業額",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "實收金額",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "差額",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "0.99",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "單價折",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "故障折",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "尾數折",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "稅金發票1",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "稅金發票2",
                                 Width = 5000
                             },
-                            new ExcelCellContent
+                            new ExcelColumnContent
                             {
                                 CellValue = "稅金發票3",
                                 Width = 5000
                             }
                         },
-                        ExcelRowContents = excelRowContent
+                        ExcelRowContents = excelRowContents
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "人事開銷",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents = new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "基本開銷",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents = new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "紗商",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents = new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "織廠",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents = new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "加工廠",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents = new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     },
                     new ExcelSheetContent
                     {
                         SheetName = "其他開銷",
-                        ExcelColumnContents = new List<ExcelCellContent>(),
-                        ExcelRowContents = new List<List<ExcelCellContent>>()
+                        ExcelColumnContents =new List<ExcelColumnContent>(),
+                        ExcelRowContents = new List<ExcelRowContent>()
                     }
                 }
             };

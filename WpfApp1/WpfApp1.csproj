@@ -178,6 +178,7 @@
     <Compile Include="DataClass\ExcelDataClass\ExcelColumnContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelFormat.cs" />
+    <Compile Include="DataClass\ExcelDataClass\ExcelRowContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\ExcelSheetContent.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileColorInventoryShipping.cs" />
     <Compile Include="DataClass\ExcelDataClass\TextileInventory.cs" />
