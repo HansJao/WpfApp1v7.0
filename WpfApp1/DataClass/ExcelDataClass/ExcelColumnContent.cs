@@ -12,6 +12,5 @@ namespace WpfApp1.DataClass.ExcelDataClass
         public string CellValue { get; set; }
         public int Width { get; set; }
         public ICellStyle CellStyle { get; set; }
-        public List<ExcelCellContent> ExcelCellContents { get; set; }
     }
 }

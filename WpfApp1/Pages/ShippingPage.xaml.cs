@@ -271,6 +271,8 @@ namespace WpfApp1.Pages
 
             List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
 
+            List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
+            ExcelCellContent emptyExcelCellContent = new ExcelCellContent();
             for (int i = 0; i < shippingSheetStructures.Count; i++)
             {
                 int totalRow = 0;
@@ -343,101 +345,214 @@ namespace WpfApp1.Pages
                     int indexOfCurrentCustomer = shippingSheetStructures.IndexOf(shippingSheetStructures[i]) + 1;
                     shippingSheetStructures.Insert(indexOfCurrentCustomer, shippingSheetStructure);
                 }
-                /**/
-                ISheet ws = wb.CreateSheet(shippingSheetStucture.Customer);
-                ws.SetMargin(MarginType.TopMargin, 0.2);
-                ws.SetMargin(MarginType.RightMargin, 0.2);
-                ws.SetMargin(MarginType.BottomMargin, 0.2);
-                ws.SetMargin(MarginType.LeftMargin, 0.2);
-                ws.SetColumnWidth(0, 990);
-                ws.SetColumnWidth(1, 2650);
-                ws.SetColumnWidth(2, 2630);
-                ws.SetColumnWidth(3, 850);
-                ws.SetColumnWidth(4, 1730);
-                ws.SetColumnWidth(5, 1730);
-                ws.SetColumnWidth(6, 2418);
-                ws.SetColumnWidth(7, 2418);
-                ws.SetColumnWidth(8, 2418);
-                ws.SetColumnWidth(9, 2418);
-                ws.SetColumnWidth(10, 2418);
-                ws.SetColumnWidth(11, 2418);
-                ws.SetColumnWidth(12, 2418);
 
-                XSSFRow row0 = (XSSFRow)ws.CreateRow(0);
-                row0.Height = 510;
-                XSSFRow row1 = (XSSFRow)ws.CreateRow(1);
-                row1.Height = 255;
-                XSSFRow row2 = (XSSFRow)ws.CreateRow(2);
-                row2.Height = 225;
-                XSSFRow row3 = (XSSFRow)ws.CreateRow(3);
-                row3.Height = 225;
 
-                XSSFRow row4 = (XSSFRow)ws.CreateRow(4);
-                row4.Height = 420;
-                ws.AddMergedRegion(new CellRangeAddress(4, 4, 2, 5));
-                CreateCell(row4, 2, shippingSheetStucture.Customer, customerStyle);
+                ExcelSheetContent customerShipSheet = new ExcelSheetContent()
+                {
+                    SheetName = shippingSheetStucture.Customer,
+                    LeftMargin = 0.2,
+                    RightMargin = 0.2,
+                    BottomMargin = 0.2,
+                    TopMargin = 0.2,
+                    ColumnHeight = 510,
+                    ExcelColumnContents = new List<ExcelColumnContent>
+                    {
+                        new ExcelColumnContent
+                        {
+                            Width = 990,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2650,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2630
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 850,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 1730,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 1730,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        },
+                        new ExcelColumnContent
+                        {
+                            Width = 2418,
+                        }
+                    },
+                    ExcelRowContents = new List<ExcelRowContent>()
+                };
 
-                CreateCell(row4, 10, DateTime.Now.AddYears(-1911).Year.ToString(), LeftStyle);
-                CreateCell(row4, 11, DateTime.Now.Month.ToString(), weightStyle);
-                CreateCell(row4, 12, DateTime.Now.Day.ToString(), weightStyle);
-                XSSFRow row5 = (XSSFRow)ws.CreateRow(5);
-                row5.Height = 330;
+                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 255 });
+                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
+                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
+                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent
+                {
+                    Height = 420,
+                    ExcelCellContents = new List<ExcelCellContent>()
+                    {
+                       emptyExcelCellContent,
+                       emptyExcelCellContent,
+                       new ExcelCellContent()
+                       {
+                           CellValue = shippingSheetStucture.Customer.Split('-')[0],
+                           CellStyle = customerStyle
+                       },
+                       emptyExcelCellContent,
+                       emptyExcelCellContent,  new ExcelCellContent()
+                       {
+                           CellRangeAddress = new CellRangeAddress(4, 4, 2, 5)
+                       },
+                       emptyExcelCellContent,
+                       emptyExcelCellContent,
+                       emptyExcelCellContent,
+                       emptyExcelCellContent,
+                       new ExcelCellContent()
+                       {
+                           CellValue = DateTime.Now.AddYears(-1911).Year.ToString(),
+                           CellStyle = LeftStyle,
+                       },
+                       new ExcelCellContent()
+                       {
+                           CellValue = DateTime.Now.Month.ToString(),
+                           CellStyle = weightStyle,
+                       },
+                       new ExcelCellContent()
+                       {
+                           CellValue = DateTime.Now.Day.ToString(),
+                           CellStyle = weightStyle,
+                       }
+                    }
+                });
+                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent() { Height = 330 });
 
                 int rowNumber = 6;
                 foreach (var textileShippingData in shippingSheetStucture.TextileShippingDatas)
                 {
-                    XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
-                    rowTextile.Height = 405;
-                    ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 1, 3));
-                    if (rowNumber == 6)
-                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 4, 5));
-                    CreateCell(rowTextile, 1, textileShippingData.TextileName, positionStyle);
+                    bool textileNameDisplay = true;
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         string colorName = shippingSheetData.ColorName.Split('-')[0];
                         colorName = shippingSheetData.ShippingNumber == 1 ? colorName : colorName + "-" + shippingSheetData.ShippingNumber;
-                        CreateCell(rowTextile, 4, colorName, positionStyle);
-                        CreateCell(rowTextile, 6, "", weightStyle);
-                        CreateCell(rowTextile, 7, "", weightStyle);
-                        CreateCell(rowTextile, 8, "", weightStyle);
-                        CreateCell(rowTextile, 9, "", weightStyle);
-                        CreateCell(rowTextile, 10, "", weightStyle);
-                        CreateCell(rowTextile, 11, "", weightStyle);
-                        CreateCell(rowTextile, 12, "", weightStyle);
+                        ExcelRowContent excelRowColorContent = new ExcelRowContent()
+                        {
+                            Height = 405,
+                            ExcelCellContents = new List<ExcelCellContent>()
+                            {
+                                emptyExcelCellContent,
+                                new ExcelCellContent()
+                                {
+                                    CellValue = textileNameDisplay == true ? textileShippingData.TextileName : string.Empty,
+                                    CellStyle = positionStyle,
+                                    CellRangeAddress = new CellRangeAddress(rowNumber, rowNumber, 1, 3)
+                                },
+                                emptyExcelCellContent,
+                                emptyExcelCellContent,
+                                new ExcelCellContent()
+                                {
+                                    CellValue = colorName,
+                                    CellStyle = positionStyle,
+                                    CellRangeAddress = new CellRangeAddress(rowNumber, rowNumber, 4, 5)
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                },
+                                new ExcelCellContent
+                                {
+                                    CellValue = string.Empty,
+                                    CellStyle = weightStyle
+                                }
+                            }
+                        };
+                        textileNameDisplay = false;
+
+                        customerShipSheet.ExcelRowContents.Add(excelRowColorContent);
                         rowNumber++;
                         if (shippingSheetData.ShippingNumber >= 8)
                         {
                             int skipRowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
                             for (int skipRowCount = rowNumber; skipRowCount < skipRowNumber; skipRowCount++)
                             {
-                                rowTextile = (XSSFRow)ws.CreateRow(skipRowCount);
-                                rowTextile.Height = 405;
+                                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 405 });
                             }
                             rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
                         }
-                        rowTextile = (XSSFRow)ws.CreateRow(rowNumber);
-                        rowTextile.Height = 405;
-                        ws.AddMergedRegion(new CellRangeAddress(rowNumber, rowNumber, 4, 5));
                     }
                 }
+
+                excelSheetContents.Add(customerShipSheet);
             }
-            FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), "/", "出貨單", DateTime.Now.ToString("yyyyMMdd"), ".xlsx"), FileMode.Create);//產生檔案
-            wb.Write(file);
-            file.Close();
+            ExcelHelper excelHelper = new ExcelHelper();
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat("出貨單", DateTime.Now.ToString("yyyy-MM-dd")),
+                ExcelSheetContents = excelSheetContents
+            };
+
+            excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void ExportToExcel()
         {
             //建立Excel 2003檔案
             IWorkbook wb = new XSSFWorkbook();
-            //ws.Autobreaks = false;
-            //ws.PrintSetup.FitWidth = 1;
-            //ws.SetColumnBreak(11);
-
-            ICellStyle cellCenter = wb.CreateCellStyle();
-            cellCenter.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-
-
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -447,6 +562,7 @@ namespace WpfApp1.Pages
             textileNameStyle.WrapText = true;
             textileNameStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             textileNameStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
             IFont textileNameFont = wb.CreateFont();
             textileNameFont.IsBold = true;
             textileNameFont.FontName = "新細明體";
@@ -539,9 +655,7 @@ namespace WpfApp1.Pages
                         };
                         shipPosition.Add(excelRowTextileName);
                     }
-                    //判斷是否為配件碼布
-                    Regex reg = new Regex(@"碼布$");
-                    var isAccessories = reg.IsMatch(textileShippingData.TextileName);
+
                     foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         rowIndex++;
@@ -629,14 +743,9 @@ namespace WpfApp1.Pages
                                     CellStyle = coralStyle,
                                 });
                             }
-                            if (isAccessories)
-                            {
-                                break;
-                            }
                         }
                         colorIndex++;
-                        //如果是配件碼布的話只要加1
-                        customerTotal += isAccessories ? 1 : shippingSheetData.ShippingNumber;
+                        customerTotal += shippingSheetData.ShippingNumber;
                     }
                 }
                 rowIndex++;
@@ -710,6 +819,12 @@ namespace WpfApp1.Pages
                 }
             };
             shipPosition.Add(excelRowContentTotal);
+
+            ShipExcelData(wb, positionStyle, shipPosition);
+        }
+
+        private static void ShipExcelData(IWorkbook wb, ICellStyle positionStyle, List<ExcelRowContent> shipPosition)
+        {
             ExcelHelper excelHelper = new ExcelHelper();
             ExcelContent excelContent = new ExcelContent
             {
@@ -830,21 +945,6 @@ namespace WpfApp1.Pages
             excelHelper.CreateExcelFile(wb, excelContent);
         }
 
-        private void CreateColumnTitle(XSSFRow row, ICellStyle positionStyle)
-        {
-            CreateCell(row, 0, "客戶", positionStyle);
-            CreateCell(row, 1, "顏色", positionStyle);
-            CreateCell(row, 2, "庫存量", positionStyle);
-            CreateCell(row, 3, "儲位", positionStyle);
-            CreateCell(row, 4, "出貨數量", positionStyle);
-            CreateCell(row, 5, "備註", positionStyle);
-            CreateCell(row, 6, "1", positionStyle);
-            CreateCell(row, 7, "2", positionStyle);
-            CreateCell(row, 8, "3", positionStyle);
-            CreateCell(row, 9, "4", positionStyle);
-            CreateCell(row, 10, "5", positionStyle);
-        }
-
         private void CreateCell(XSSFRow row, int cellIndex, string cellValue, ICellStyle style)
         {
             var cell = row.CreateCell(cellIndex);
@@ -934,17 +1034,6 @@ namespace WpfApp1.Pages
             for (int i = 0; i < files.Length; i++)
                 files[i] = System.IO.Path.GetFileName(files[i]);
             return files;
-        }
-
-        private void HttpTest()
-        {
-            HttpClientService httpClientService = new HttpClientService(HttpClientService.SerializerFormat.Json);
-            var header = new Dictionary<string, string>();
-            header.Add("authorization", "token 33f38708-65d1-4c88-98da-89f46662b38f");
-            //header.Add("Content-Type", "application/json");
-            httpClientService.HttpHeader = header;
-            Uri uri = new Uri(@"https://jsonbin.org/me/test");
-            var myObject = httpClientService.Get<object>(uri);
         }
 
         private void ComboBoxShippingCacheName_SelectionChanged(object sender, SelectionChangedEventArgs e)

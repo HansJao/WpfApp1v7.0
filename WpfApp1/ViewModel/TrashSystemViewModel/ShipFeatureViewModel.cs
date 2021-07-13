@@ -61,13 +61,14 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     }
 
                     ICell colorCell = row.GetCell(4);
-                    if (colorCell == null || colorCell.StringCellValue == null || colorCell.StringCellValue == "")
+                    string colorCellValue = colorCell.CellType == CellType.String ? colorCell.StringCellValue : colorCell.NumericCellValue.ToString();
+                    if (colorCell == null || colorCellValue == null || colorCellValue == "")
                     {
                         break;
                     }
 
-                    string textileColor = colorCell.StringCellValue.Split('-')[0];
-                    int textileColorNumber = colorCell.StringCellValue.Split('-').Length >= 2 ? colorCell.StringCellValue.Split('-')[1].ToInt() : 0;
+                    string textileColor = colorCellValue.Split('-')[0];
+                    int textileColorNumber = colorCellValue.Split('-').Length >= 2 ? colorCellValue.Split('-')[1].ToInt() : 0;
                     if (textileColorNumber / 7 >= 1)
                     {
                         rowCount = rowCount + textileColorNumber / 7;
@@ -85,7 +86,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                         accountTextileID = trashItem.I_01;
                         accountTextileName = trashItem.I_03;
                     }
-                    string shipFeatureString = colorCell.StringCellValue + "*" + accountFactoryID + "_" + accountTextileID + "-" + accountTextileName;
+                    string shipFeatureString = colorCellValue + "*" + accountFactoryID + "_" + accountTextileID + "-" + accountTextileName;
                     colorCell.SetCellValue(shipFeatureString);
                     IFont font = workbook.CreateFont();
                     font.Color = HSSFColor.Blue.Index2;
@@ -103,6 +104,6 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             {
                 workbook.Write(fs);
             }
-        }        
+        }
     }
 }

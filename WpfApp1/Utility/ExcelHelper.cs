@@ -354,8 +354,8 @@ namespace WpfApp1.Utility
                 ws.SetMargin(MarginType.TopMargin, excelSheet.TopMargin);
                 ws.SetMargin(MarginType.BottomMargin, excelSheet.BottomMargin);
                 XSSFRow row = (XSSFRow)ws.CreateRow(0);
-                row.Height = 440;
-                foreach (var columnContent in excelSheet.ExcelColumnContents)
+                row.Height = excelSheet.ColumnHeight;
+                foreach (ExcelColumnContent columnContent in excelSheet.ExcelColumnContents)
                 {
                     if (columnContent.Width != 0)
                         ws.SetColumnWidth(excelSheet.ExcelColumnContents.ToList().IndexOf(columnContent), columnContent.Width);
@@ -366,10 +366,9 @@ namespace WpfApp1.Utility
                 foreach (ExcelRowContent rowContent in excelSheet.ExcelRowContents)
                 {
                     XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-
-                    for (int cellIndex = 0; cellIndex < rowContent.ExcelCellContents.Count; cellIndex++)
+                    rowTextile.Height = rowContent.Height;
+                    for (int cellIndex = 0; cellIndex < rowContent.ExcelCellContents?.Count; cellIndex++)
                     {
-                        rowTextile.Height = rowContent.Height;
                         if (double.TryParse(rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue, out double cellValue))
                         {
                             CreateCell(rowTextile, cellIndex, cellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
@@ -384,7 +383,6 @@ namespace WpfApp1.Utility
                     rowIndex++;
                 }
             }
-
 
             FileStream file = new FileStream(string.Concat(AppSettingConfig.FilePath(), @"\", excelContent.FileName, ".xlsx"), FileMode.Create);//產生檔案
             wb.Write(file);
