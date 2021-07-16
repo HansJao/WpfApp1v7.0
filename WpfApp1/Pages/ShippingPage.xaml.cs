@@ -273,89 +273,72 @@ namespace WpfApp1.Pages
 
             List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
             ExcelCellContent emptyExcelCellContent = new ExcelCellContent();
-            for (int i = 0; i < shippingSheetStructures.Count; i++)
+            foreach (var shippingSheetStucture in ShippingSheetStructure)
             {
-                int totalRow = 0;
-
-                ShippingSheetStructure shippingSheetStucture = new ShippingSheetStructure()
+                //拆解每一個客戶的出貨資料
+                List<ShippingSheetData> shippingSheetDatasExpand = new List<ShippingSheetData>();
+                foreach (var textileShippingData in shippingSheetStucture.TextileShippingDatas)
                 {
-                    Customer = shippingSheetStructures[i].Customer,
-                    TextileShippingDatas = new List<TextileShippingData>(shippingSheetStructures[i].TextileShippingDatas.Select(s => new TextileShippingData { TextileName = s.TextileName, ShippingSheetDatas = new List<ShippingSheetData>(s.ShippingSheetDatas) }))
-                };
-                /**/
-                totalRow = shippingSheetStucture.TextileShippingDatas.Sum(s => s.ShippingSheetDatas.Count());
-                foreach (var shippingSheetData in shippingSheetStucture.TextileShippingDatas)
-                {
-                    foreach (ShippingSheetData color in shippingSheetData.ShippingSheetDatas)
+                    foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
-                        if (color.ShippingNumber >= 8)
-                            totalRow = totalRow + color.ShippingNumber / 7;
-                    }
-                }
-
-                if (totalRow > 13)
-                {
-                    List<TextileShippingData> cacheLastTextileShippingData = new List<TextileShippingData>();
-
-                    int skipRow = 0;
-
-                    for (int textileShippingDataIndex = 0; textileShippingDataIndex < shippingSheetStucture.TextileShippingDatas.Count(); textileShippingDataIndex++)
-                    {
-                        TextileShippingData textileShippingData = shippingSheetStucture.TextileShippingDatas[textileShippingDataIndex];
-
-                        for (int shippingSheetDataIndex = 0; shippingSheetDataIndex < textileShippingData.ShippingSheetDatas.Count(); shippingSheetDataIndex++)
+                        shippingSheetDatasExpand.Add(new ShippingSheetData()
                         {
-                            ShippingSheetData shippingSheetData = textileShippingData.ShippingSheetDatas[shippingSheetDataIndex];
-                            skipRow++;
-                            if (shippingSheetData.ShippingNumber > 7)
+                            Customer = shippingSheetStucture.Customer,
+                            TextileName = textileShippingData.TextileName,
+                            ColorName = shippingSheetData.ColorName,
+                            StorageSpaces = shippingSheetData.StorageSpaces,
+                            Memo = shippingSheetData.Memo,
+                            CountInventory = shippingSheetData.CountInventory,
+                            ShippingNumber = shippingSheetData.ShippingNumber > 7 ? 7 : shippingSheetData.ShippingNumber,
+                        });
+                        //出貨數量超過7個則換行
+                        for (int shippingNumberCount = 0; shippingNumberCount < shippingSheetData.ShippingNumber / 7; shippingNumberCount++)
+                        {
+                            if (shippingSheetDatasExpand.Count() <= 13)
+                                shippingSheetDatasExpand.Last().ShippingNumber += shippingSheetData.ShippingNumber - (shippingNumberCount + 1) * 7;
+                            shippingSheetDatasExpand.Add(new ShippingSheetData()
                             {
-                                skipRow = skipRow + shippingSheetData.ShippingNumber / 7;
-                            }
-                            if (skipRow > 13)
-                            {
-                                int indexOftextileShippingData = shippingSheetStucture.TextileShippingDatas.IndexOf(textileShippingData);
-                                shippingSheetStucture.TextileShippingDatas[indexOftextileShippingData].ShippingSheetDatas.Remove(shippingSheetData);
-                                if (shippingSheetStucture.TextileShippingDatas[indexOftextileShippingData].ShippingSheetDatas.Count == 0)
-                                {
-                                    shippingSheetStucture.TextileShippingDatas.Remove(textileShippingData);
-                                }
-                                if (cacheLastTextileShippingData.Count(c => c.TextileName == textileShippingData.TextileName) > 0)
-                                {
-                                    int indexCache = cacheLastTextileShippingData.FindIndex(f => f.TextileName == textileShippingData.TextileName);
-                                    cacheLastTextileShippingData[indexCache].ShippingSheetDatas.Add(shippingSheetData);
-                                }
-                                else
-                                {
-                                    cacheLastTextileShippingData.Add(
-                                        new TextileShippingData
-                                        {
-                                            TextileName = textileShippingData.TextileName,
-                                            ShippingSheetDatas = new List<ShippingSheetData> { shippingSheetData }
-                                        }
-                                    );
-                                }
-                            }
+                                Customer = shippingSheetStucture.Customer,
+                                TextileName = textileShippingData.TextileName,
+                                ColorName = shippingSheetDatasExpand.Count() <= 13 ? string.Empty : shippingSheetData.ColorName,//行數未超過13(換頁)的話，則不顯示顏色名稱
+                                StorageSpaces = shippingSheetData.StorageSpaces,
+                                Memo = shippingSheetData.Memo,
+                                CountInventory = shippingSheetData.CountInventory,
+                                ShippingNumber = shippingSheetDatasExpand.Count() <= 13 ? 0 : shippingSheetData.ShippingNumber - (shippingNumberCount + 1) * 7,//行數未超過13(換頁)的話，則不顯示數量
+                            });
                         }
                     }
-                    ShippingSheetStructure shippingSheetStructure = new ShippingSheetStructure()
-                    {
-                        Customer = shippingSheetStucture.Customer + "-1",
-                        TextileShippingDatas = cacheLastTextileShippingData
-                    };
-                    int indexOfCurrentCustomer = shippingSheetStructures.IndexOf(shippingSheetStructures[i]) + 1;
-                    shippingSheetStructures.Insert(indexOfCurrentCustomer, shippingSheetStructure);
                 }
 
-
-                ExcelSheetContent customerShipSheet = new ExcelSheetContent()
+                //分頁客戶出貨資料
+                List<ShippingSheetStructure> pageShippingSheetStructures = new List<ShippingSheetStructure>();
+                int pageNum = 0;
+                while (pageNum * 13 < shippingSheetDatasExpand.Count())
                 {
-                    SheetName = shippingSheetStucture.Customer,
-                    LeftMargin = 0.2,
-                    RightMargin = 0.2,
-                    BottomMargin = 0.2,
-                    TopMargin = 0.2,
-                    ColumnHeight = 510,
-                    ExcelColumnContents = new List<ExcelColumnContent>
+                    var pageData = shippingSheetDatasExpand.Skip(pageNum * 13).Take(13).GroupBy(o => o.TextileName).Select(s => new TextileShippingData
+                    {
+                        TextileName = s.Key,
+                        ShippingSheetDatas = s.Select(ss => new ShippingSheetData { ColorName = ss.ColorName, ShippingNumber = ss.ShippingNumber }).ToList()
+                    }).ToList();
+                    pageShippingSheetStructures.Add(new ShippingSheetStructure
+                    {
+                        Customer = shippingSheetStucture.Customer + (pageNum > 0 ? "-" + pageNum : string.Empty),
+                        TextileShippingDatas = new List<TextileShippingData>(pageData)
+                    });
+                    pageNum++;
+                }
+
+                foreach (var pageShippingSheetStructure in pageShippingSheetStructures)
+                {
+                    ExcelSheetContent customerShipSheet = new ExcelSheetContent()
+                    {
+                        SheetName = pageShippingSheetStructure.Customer,
+                        LeftMargin = 0.2,
+                        RightMargin = 0.2,
+                        BottomMargin = 0.2,
+                        TopMargin = 0.2,
+                        ColumnHeight = 510,
+                        ExcelColumnContents = new List<ExcelColumnContent>
                     {
                         new ExcelColumnContent
                         {
@@ -410,22 +393,22 @@ namespace WpfApp1.Pages
                             Width = 2418,
                         }
                     },
-                    ExcelRowContents = new List<ExcelRowContent>()
-                };
+                        ExcelRowContents = new List<ExcelRowContent>()
+                    };
 
-                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 255 });
-                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
-                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
-                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent
-                {
-                    Height = 420,
-                    ExcelCellContents = new List<ExcelCellContent>()
+                    customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 255 });
+                    customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
+                    customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 225 });
+                    customerShipSheet.ExcelRowContents.Add(new ExcelRowContent
+                    {
+                        Height = 420,
+                        ExcelCellContents = new List<ExcelCellContent>()
                     {
                        emptyExcelCellContent,
                        emptyExcelCellContent,
                        new ExcelCellContent()
                        {
-                           CellValue = shippingSheetStucture.Customer.Split('-')[0],
+                           CellValue = pageShippingSheetStructure.Customer.Split('-')[0],
                            CellStyle = customerStyle
                        },
                        emptyExcelCellContent,
@@ -453,21 +436,21 @@ namespace WpfApp1.Pages
                            CellStyle = weightStyle,
                        }
                     }
-                });
-                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent() { Height = 330 });
+                    });
+                    customerShipSheet.ExcelRowContents.Add(new ExcelRowContent() { Height = 330 });
 
-                int rowNumber = 6;
-                foreach (var textileShippingData in shippingSheetStucture.TextileShippingDatas)
-                {
-                    bool textileNameDisplay = true;
-                    foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
+                    int rowNumber = 6;
+                    foreach (var textileShippingData in pageShippingSheetStructure.TextileShippingDatas)
                     {
-                        string colorName = shippingSheetData.ColorName.Split('-')[0];
-                        colorName = shippingSheetData.ShippingNumber == 1 ? colorName : colorName + "-" + shippingSheetData.ShippingNumber;
-                        ExcelRowContent excelRowColorContent = new ExcelRowContent()
+                        bool textileNameDisplay = true;
+                        foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
-                            Height = 405,
-                            ExcelCellContents = new List<ExcelCellContent>()
+                            string colorName = shippingSheetData.ColorName.Split('-')[0];
+                            colorName = shippingSheetData.ShippingNumber <= 1 ? colorName : colorName + "-" + shippingSheetData.ShippingNumber;
+                            ExcelRowContent excelRowColorContent = new ExcelRowContent()
+                            {
+                                Height = 405,
+                                ExcelCellContents = new List<ExcelCellContent>()
                             {
                                 emptyExcelCellContent,
                                 new ExcelCellContent()
@@ -520,25 +503,19 @@ namespace WpfApp1.Pages
                                     CellStyle = weightStyle
                                 }
                             }
-                        };
-                        textileNameDisplay = false;
+                            };
+                            textileNameDisplay = false;
 
-                        customerShipSheet.ExcelRowContents.Add(excelRowColorContent);
-                        rowNumber++;
-                        if (shippingSheetData.ShippingNumber >= 8)
-                        {
-                            int skipRowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
-                            for (int skipRowCount = rowNumber; skipRowCount < skipRowNumber; skipRowCount++)
-                            {
-                                customerShipSheet.ExcelRowContents.Add(new ExcelRowContent { Height = 405 });
-                            }
-                            rowNumber = rowNumber + (shippingSheetData.ShippingNumber / 7);
+                            customerShipSheet.ExcelRowContents.Add(excelRowColorContent);
+                            rowNumber++;
                         }
                     }
-                }
 
-                excelSheetContents.Add(customerShipSheet);
+                    excelSheetContents.Add(customerShipSheet);
+                }
             }
+
+
             ExcelHelper excelHelper = new ExcelHelper();
             ExcelContent excelContent = new ExcelContent
             {
