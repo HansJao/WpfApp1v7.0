@@ -25,7 +25,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             string[] dateNumber = shipFeatureDate.Split('-');
 
-            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨單", dateNumber[0].Length > 5 ? dateNumber[0] : defaultDate, "-", dateNumber[0].Length > 5 ? dateNumber[1] : dateNumber[0], ".xlsx");
+            string fileNameDate = string.Concat(AppSettingConfig.FilePath(), "\\出貨", dateNumber[0].Length > 5 ? dateNumber[0] : defaultDate, "-", dateNumber[0].Length > 5 ? dateNumber[1] : dateNumber[0], ".xlsx");
             //IEnumerable<string> shipFileName = Directory.GetFiles(AppSettingConfig.FilePath(), fileNameDate).Select(System.IO.Path.GetFileName).OrderByDescending(o => o);
             IWorkbook workbook = null;  //新建IWorkbook對象  
             using (FileStream fs = new FileStream(fileNameDate, FileMode.Open, FileAccess.Read))
@@ -38,7 +38,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
             IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
 
-            for (int sheetCount = 0; sheetCount < workbook.NumberOfSheets; sheetCount++)
+            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
                 ISheet sheet = workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
                 string textileName = null;
@@ -61,8 +61,10 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     }
 
                     ICell colorCell = row.GetCell(4);
+                    if (colorCell == null)
+                        break;
                     string colorCellValue = colorCell.CellType == CellType.String ? colorCell.StringCellValue : colorCell.NumericCellValue.ToString();
-                    if (colorCell == null || colorCellValue == null || colorCellValue == "")
+                    if (colorCellValue == null || colorCellValue == "")
                     {
                         break;
                     }

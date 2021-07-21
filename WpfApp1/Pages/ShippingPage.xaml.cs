@@ -191,8 +191,19 @@ namespace WpfApp1.Pages
 
         private void Export_Click(object sender, RoutedEventArgs e)
         {
-            ExportToShip();
-            ExportToExcel();
+            IWorkbook wb = new XSSFWorkbook();
+            List<ExcelSheetContent> shippingSheet = ExportToShip(wb);
+            List<ExcelSheetContent> shippingLocation = ExportToExcel(wb);
+
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat("出貨", DateTime.Now.ToString("yyyyMMdd")),
+                ExcelSheetContents = new List<ExcelSheetContent>(),
+            };
+            excelContent.ExcelSheetContents.AddRange(shippingLocation);
+            excelContent.ExcelSheetContents.AddRange(shippingSheet);
+            ExcelHelper excelHelper = new ExcelHelper();
+            excelHelper.CreateExcelFile(wb, excelContent);
             if (ComboBoxShippingCacheName.SelectedIndex == -1)
             {
                 for (int cacheIndex = 1; cacheIndex < 5; cacheIndex++)
@@ -236,9 +247,8 @@ namespace WpfApp1.Pages
             ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
         }
 
-        private void ExportToShip()
+        private List<ExcelSheetContent> ExportToShip(IWorkbook wb)
         {
-            IWorkbook wb = new XSSFWorkbook();
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -515,21 +525,19 @@ namespace WpfApp1.Pages
                 }
             }
 
+            return excelSheetContents;
+            //ExcelHelper excelHelper = new ExcelHelper();
+            //ExcelContent excelContent = new ExcelContent
+            //{
+            //    FileName = string.Concat("出貨單", DateTime.Now.ToString("yyyy-MM-dd")),
+            //    ExcelSheetContents = excelSheetContents
+            //};
 
-            ExcelHelper excelHelper = new ExcelHelper();
-            ExcelContent excelContent = new ExcelContent
-            {
-                FileName = string.Concat("出貨單", DateTime.Now.ToString("yyyy-MM-dd")),
-                ExcelSheetContents = excelSheetContents
-            };
-
-            excelHelper.CreateExcelFile(wb, excelContent);
+            //excelHelper.CreateExcelFile(wb, excelContent);
         }
 
-        private void ExportToExcel()
+        private List<ExcelSheetContent> ExportToExcel(IWorkbook wb)
         {
-            //建立Excel 2003檔案
-            IWorkbook wb = new XSSFWorkbook();
             ICellStyle positionStyle = wb.CreateCellStyle();
             positionStyle.WrapText = true;
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
@@ -797,12 +805,12 @@ namespace WpfApp1.Pages
             };
             shipPosition.Add(excelRowContentTotal);
 
-            ShipExcelData(wb, positionStyle, shipPosition);
+            return ShipExcelData(positionStyle, shipPosition);
         }
 
-        private static void ShipExcelData(IWorkbook wb, ICellStyle positionStyle, List<ExcelRowContent> shipPosition)
+        private List<ExcelSheetContent> ShipExcelData(ICellStyle positionStyle, List<ExcelRowContent> shipPosition)
         {
-            ExcelHelper excelHelper = new ExcelHelper();
+            //ExcelHelper excelHelper = new ExcelHelper();
             ExcelContent excelContent = new ExcelContent
             {
                 FileName = string.Concat("出貨", DateTime.Now.ToString("yyyy-MM-dd")),
@@ -919,14 +927,8 @@ namespace WpfApp1.Pages
                     //}
                 }
             };
-            excelHelper.CreateExcelFile(wb, excelContent);
-        }
-
-        private void CreateCell(XSSFRow row, int cellIndex, string cellValue, ICellStyle style)
-        {
-            var cell = row.CreateCell(cellIndex);
-            cell.SetCellValue(cellValue);
-            cell.CellStyle = style;
+            return excelContent.ExcelSheetContents;
+            //excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void ButtonShippingDelete_Click(object sender, RoutedEventArgs e)
