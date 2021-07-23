@@ -206,26 +206,19 @@ namespace WpfApp1.Pages
             excelHelper.CreateExcelFile(wb, excelContent);
             if (ComboBoxShippingCacheName.SelectedIndex == -1)
             {
-                for (int cacheIndex = 1; cacheIndex < 5; cacheIndex++)
+                DirectoryInfo d = new DirectoryInfo(AppSettingConfig.ShipFilePath()); //Assuming Test is your Folder
+
+                IEnumerable<FileInfo> fileInfos = d.GetFiles("*.txt").Where(w => w.Name.Contains(string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"))));
+                FileInfo fileInfo = fileInfos.LastOrDefault();
+                string fileName = fileInfo == null ? string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-1")
+                                                : string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-", fileInfo.Name.ElementAt(13).ToString().ToInt() + 1);
+                string shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName, ".txt");
+                var shippingSheetStructureJson = JsonConvert.SerializeObject(ShippingSheetStructure);
+                // Create a new file 
+                using (FileStream fs = File.Create(shippingCacheFileName))
                 {
-                    var fileName = string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-", cacheIndex, ".txt");
-
-                    var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName);
-                    if (File.Exists(shippingCacheFileName))
-                    {
-                        continue;
-                    }
-
-                    var shippingSheetStructureJson = JsonConvert.SerializeObject(ShippingSheetStructure);
-
-                    // Create a new file 
-                    using (FileStream fs = File.Create(shippingCacheFileName))
-                    {
-                        // Add some text to file
-                        Byte[] title = new UTF8Encoding(true).GetBytes(shippingSheetStructureJson);
-                        fs.Write(title, 0, title.Length);
-                    }
-                    break;
+                    Byte[] title = new UTF8Encoding(true).GetBytes(shippingSheetStructureJson);
+                    fs.Write(title, 0, title.Length);
                 }
             }
             else
