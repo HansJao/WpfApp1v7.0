@@ -110,7 +110,7 @@
       "20CVC單面大小條"
     ],
     "Account": [
-      "20CVC單面大小條*"
+      "20CVC單面大小*"
     ]
   },
   {
@@ -140,10 +140,10 @@
       "單面+OP寬對半條"
     ],
     "Inventory": [
-      "單面+OP寬對半條"
+      "單面+OP寬對半"
     ],
     "Account": [
-      "單面+OP寬對半條*"
+      "單面+OP寬對半*"
     ]
   },
   {
@@ -559,6 +559,19 @@
   },
   {
     "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "TC細絨布配件",
+      "TC1X1+OP配件",
+      "TC細絨布碼布"
+    ],
+    "Account": [
+      "TC細絨配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "單OP10CM條"
     ],
     "Inventory": [
@@ -830,6 +843,50 @@
     ],
     "Account": [
       "20CVC1212條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20CVC單面62條"
+    ],
+    "Inventory": [
+      "20CVC單面62條"
+    ],
+    "Account": [
+      "20CVC單面62條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "條碼條+OP16+4"
+    ],
+    "Inventory": [
+      "條碼條+OP"
+    ],
+    "Account": [
+      "條碼條+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC細絨2010條"
+    ],
+    "Inventory": [
+      "30CVC細絨2010條"
+    ],
+    "Account": [
+      "30CVC細絨2010條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "R100平織布"
+    ],
+    "Account": [
+      "R100平織布*"
     ]
   }
 ]

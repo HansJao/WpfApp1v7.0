@@ -148,6 +148,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                     Quantity = s.ChartDetail.Where(w => w.ShippedDate == ss).Select(sss => sss.Quantity).Sum()
                 }).ToList()
             });
+            LabelTotalCount.Content = Math.Round(filterShippingRecord.Sum(s => s.ChartDetail.Sum(ss => ss.Quantity)), 1);
             foreach (var item in filterShippingRecord)
             {
                 ChartData chartData = new ChartData
