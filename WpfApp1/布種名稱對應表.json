@@ -368,6 +368,17 @@
   },
   {
     "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "CVC2X2+OP大絨配件"
+    ],
+    "Account": [
+      "CVC2X2+OP配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "SP 1*1"
     ],
     "Inventory": [
@@ -382,10 +393,10 @@
       "SP健康布"
     ],
     "Inventory": [
-      "健康布"
+      "SP健康布"
     ],
     "Account": [
-      "健康布*"
+      "SP健康布*"
     ]
   },
   {
@@ -899,5 +910,52 @@
     "Account": [
       "25C單面*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "TR樓梯布"
+    ],
+    "Inventory": [
+      "TR樓梯布"
+    ],
+    "Account": [
+      "TR樓梯布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "單刷布碼布",
+      "SP+T2X2"
+    ],
+    "Account": [
+      "SP+T2X2配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC大絨對半條"
+    ],
+    "Inventory": [
+      "CVC大絨對半條"
+    ],
+    "Account": [
+      "CVC大絨對半條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC大絨條"
+    ],
+    "Inventory": [
+      "30CVC大絨條"
+    ],
+    "Account": [
+      "30CVC大絨條*"
+    ]
   }
 ]
+
+
