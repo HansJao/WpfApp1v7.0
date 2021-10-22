@@ -110,7 +110,7 @@
       "20CVC單面大小條"
     ],
     "Account": [
-      "20CVC單面大小*"
+      "20CVC單大小*"
     ]
   },
   {
@@ -357,7 +357,18 @@
   },
   {
     "ProcessOrder": [
-      "CVC大絨布"
+      "X"
+    ],
+    "Inventory": [
+      "CVC2X2+OP刷磨配件"
+    ],
+    "Account": [
+      "CVC2X2+OP配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC大絨布"
     ],
     "Inventory": [
       "CVC大絨布"
@@ -408,8 +419,8 @@
       "單刷布"
     ],
     "Account": [
-      "SP單刷布*",
-      "T單刷布*"
+      "T單刷布*",
+      "SP單刷布*"
     ]
   },
   {
@@ -574,8 +585,8 @@
     ],
     "Inventory": [
       "TC細絨布配件",
-      "TC1X1+OP配件",
-      "TC細絨布碼布"
+      "TC細絨布碼布",
+      "TC細絨配件"
     ],
     "Account": [
       "TC細絨配件*"
@@ -954,6 +965,39 @@
     ],
     "Account": [
       "30CVC大絨條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "SP單刷條"
+    ],
+    "Inventory": [
+      "單刷條子"
+    ],
+    "Account": [
+      "單刷條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP131條"
+    ],
+    "Inventory": [
+      "單面+OP131條"
+    ],
+    "Account": [
+      "單OP131條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "沙感布"
+    ],
+    "Inventory": [
+      "沙感布"
+    ],
+    "Account": [
+      "沙感布*"
     ]
   }
 ]
