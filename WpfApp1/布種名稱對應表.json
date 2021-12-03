@@ -110,7 +110,7 @@
       "20CVC單面大小條"
     ],
     "Account": [
-      "20CVC單面大小*"
+      "20CVC單大小*"
     ]
   },
   {
@@ -357,13 +357,37 @@
   },
   {
     "ProcessOrder": [
-      "CVC大絨布"
+      "X"
+    ],
+    "Inventory": [
+      "CVC2X2+OP刷磨配件",
+      "CVC大絨刷磨配件"
+    ],
+    "Account": [
+      "CVC2X2+OP配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC大絨布"
     ],
     "Inventory": [
       "CVC大絨布"
     ],
     "Account": [
       "CVC大絨布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "CVC2X2+OP大絨配件",
+      "CVC大絨布配件"
+    ],
+    "Account": [
+      "CVC2X2+OP配件*"
     ]
   },
   {
@@ -382,10 +406,10 @@
       "SP健康布"
     ],
     "Inventory": [
-      "健康布"
+      "SP健康布"
     ],
     "Account": [
-      "健康布*"
+      "SP健康布*"
     ]
   },
   {
@@ -397,8 +421,7 @@
       "單刷布"
     ],
     "Account": [
-      "SP單刷布*",
-      "T單刷布*"
+      "單刷布*"
     ]
   },
   {
@@ -410,8 +433,7 @@
       "搖粒布"
     ],
     "Account": [
-      "T搖粒布*",
-      "SP搖粒布*"
+      "搖粒布*"
     ]
   },
   {
@@ -563,8 +585,8 @@
     ],
     "Inventory": [
       "TC細絨布配件",
-      "TC1X1+OP配件",
-      "TC細絨布碼布"
+      "TC細絨布碼布",
+      "TC細絨配件"
     ],
     "Account": [
       "TC細絨配件*"
@@ -899,5 +921,96 @@
     "Account": [
       "25C單面*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "TR樓梯布"
+    ],
+    "Inventory": [
+      "TR樓梯布"
+    ],
+    "Account": [
+      "TR樓梯布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "單刷布配件",
+      "SP+T2X2"
+    ],
+    "Account": [
+      "SP+T2X2配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC大絨對半條"
+    ],
+    "Inventory": [
+      "CVC大絨對半條"
+    ],
+    "Account": [
+      "CVC大絨對半條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC大絨條"
+    ],
+    "Inventory": [
+      "30CVC大絨條"
+    ],
+    "Account": [
+      "CVC大絨大小條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "SP單刷條"
+    ],
+    "Inventory": [
+      "單刷條子"
+    ],
+    "Account": [
+      "單刷條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP131條"
+    ],
+    "Inventory": [
+      "單面+OP131條"
+    ],
+    "Account": [
+      "單OP131條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "沙感布"
+    ],
+    "Inventory": [
+      "沙感布"
+    ],
+    "Account": [
+      "沙感布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "法式羅紋磨毛"
+    ],
+    "Inventory": [
+      "法式羅紋磨毛"
+    ],
+    "Account": [
+      "法式羅紋磨毛*"
+    ]
   }
 ]
+
+
