@@ -13,9 +13,13 @@ using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
+using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.StoreSearch;
+using WpfApp1.DataClass.TrashSystem;
 using WpfApp1.Modules.ExcelModule;
 using WpfApp1.Modules.ExcelModule.Implement;
+using WpfApp1.Modules.TrashModule;
+using WpfApp1.Modules.TrashModule.Implement;
 using WpfApp1.Utility;
 
 namespace WpfApp1.ViewModel.InventoryViewModel
@@ -34,6 +38,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         }
 
         protected IExcelModule ExcelModule { get; } = new ExcelModule();
+        protected ITrashModule TrashModule { get; } = new TrashModule();
 
         public StoreSearchViewModel()
         {
@@ -127,7 +132,16 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
             ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
             ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
+            ExcelHelper.CreateCell(row, 7, "10天內", positionStyle);
+            ExcelHelper.CreateCell(row, 8, "30天內", positionStyle);
+            ExcelHelper.CreateCell(row, 9, "60天內", positionStyle);
+
+
             int rowIndex = 1;
+            string textileName = string.Empty;
+            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
+            IEnumerable<TrashItem> trashItems = TrashModule.GetTrashItems().Where(w => w.I_03 != null).OrderBy(o => o.I_01);
             foreach (StoreData storeData in ShippingHistoryStoreDataList)
             {
                 XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
@@ -135,8 +149,15 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
                 if (!string.IsNullOrEmpty(storeData.TextileName))
                 {
+                    textileName = storeData.TextileName;
                     rowIndex++;
                     continue;
+                }
+                TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, storeData.ColorName.Split('-')[0], textileNameMappings);
+                List<TrashCustomerShipped> trashCustomerShippeds = new List<TrashCustomerShipped>();
+                if (trashItem != null)
+                {
+                    trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(trashItem.I_03, DateTime.Now.AddDays(-60), DateTime.Now).ToList();
                 }
                 ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
@@ -144,6 +165,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 7, trashCustomerShippeds.Where(w => w.IN_DATE > DateTime.Now.AddDays(-10)).Sum(s => s.Quantity), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 8, trashCustomerShippeds.Where(w => w.IN_DATE > DateTime.Now.AddDays(-30)).Sum(s => s.Quantity), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 9, trashCustomerShippeds.Sum(s => s.Quantity), positionStyle);
 
                 rowIndex++;
             }
@@ -195,7 +219,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         }
                         double cellValue = countInventory.NumericCellValue; //獲取i行j列數據
                         string storeArea = row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces) == null ? "" : row.GetCell((int)ExcelEnum.ExcelInventoryColumnIndexEnum.StorageSpaces).ToString();
-                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea)  && !checkExceptAreaPattern.IsMatch(storeArea))
+                        if (cellValue <= MaxNumber && cellValue >= MinNumber && checkStoreAreaPattern.IsMatch(storeArea) && !checkExceptAreaPattern.IsMatch(storeArea))
                         {
                             colorList.Add(new StoreData
                             {
