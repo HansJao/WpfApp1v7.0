@@ -77,10 +77,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
         public List<StoreSearchData<StoreSearchColorDetail>> CreateStoreSearchListByShipped()
         {
-            var list = new List<StoreSearchData<StoreSearchColorDetail>>();
-            list = ExcelModule.GetExcelDailyShippedList(ShippingHistoryDate);
+            List<StoreSearchData<StoreSearchColorDetail>> storeSearchDatas = ExcelModule.GetExcelDailyShippedList(ShippingHistoryDate);
 
-            foreach (var item in list)
+            foreach (StoreSearchData<StoreSearchColorDetail> item in storeSearchDatas)
             {
                 if (item.StoreSearchColorDetails.Count() == 0)
                 {
@@ -91,7 +90,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     TextileName = item.TextileName,
 
                 });
-                foreach (var color in item.StoreSearchColorDetails)
+                foreach (StoreSearchColorDetail color in item.StoreSearchColorDetails)
                 {
                     ShippingHistoryStoreDataList.Add(new StoreData
                     {
@@ -104,7 +103,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     });
                 }
             }
-            return list;
+            return storeSearchDatas;
         }
 
         private void ExportToExcel()
@@ -179,7 +178,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public string StoreArea { get; set; } = "1B,1C,2A,2B,2C";
         public string ExceptArea { get; set; } = "小,大";
         public string TextileName { get; set; } = "";
-        void InventoryNumberRangeSearchExecute()
+
+        private void InventoryNumberRangeSearchExecute()
         {
             StoreDataList.Clear();
             IWorkbook workbook = null;  //新建IWorkbook對象

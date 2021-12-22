@@ -171,12 +171,12 @@ namespace WpfApp1
         private void ButtonRevenueExportFunction_Click(object sender, RoutedEventArgs e)
         {
             string textBoxRevenueDate = TextBoxRevenueDate.Text;
-            RevenueExportViewModel revenueExportViewModel = new RevenueExportViewModel(textBoxRevenueDate);
+            new RevenueExportViewModel(textBoxRevenueDate);
         }
         private void ButtonShipFeatureFunction_Click(object sender, RoutedEventArgs e)
         {
             string shipFeatureDate = ShipFeatureDate.Text;
-            ShipFeatureViewModel shipFeatureViewModel = new ShipFeatureViewModel(shipFeatureDate);
+            new ShipFeatureViewModel(shipFeatureDate);
         }
 
     }

@@ -73,7 +73,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                     int textileColorNumber = colorCellValue.Split('-').Length >= 2 ? colorCellValue.Split('-')[1].ToInt() : 0;
                     if (textileColorNumber / 7 >= 1)
                     {
-                        rowCount = rowCount + textileColorNumber / 7;
+                        rowCount += textileColorNumber / 7;
                     }
                     TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, textileColor, textileNameMappings);
                     string accountFactoryID = string.Empty;

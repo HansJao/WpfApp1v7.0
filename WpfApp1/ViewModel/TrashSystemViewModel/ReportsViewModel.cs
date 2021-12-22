@@ -202,7 +202,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
 
             List<OriginalSource> trashItems = new List<OriginalSource>();
-            foreach (var shipped in trashShipped)
+            foreach (TrashShipped shipped in trashShipped)
             {
                 trashItems.Add(new OriginalSource
                 {
@@ -213,16 +213,16 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 });
             }
             List<Container> trashPrimary = new List<Container>();
-            foreach (var trashItem in trashItems)
+            foreach (OriginalSource trashItem in trashItems)
             {
-                var priviousDistance = 10;
-                var textileName = string.Empty;
-                var textileColor = string.Empty;
-                var shippedCount = 0;
-                foreach (var excelDailyShippedItem in excelDailyShippedList)
+                int priviousDistance = 10;
+                string textileName = string.Empty;
+                string textileColor = string.Empty;
+                int shippedCount = 0;
+                foreach (StoreSearchData<StoreSearchColorDetail> excelDailyShippedItem in excelDailyShippedList)
                 {
                     TextileNameMapping textileNameMapping = textileNameMappings.ToList().Find(f => f.Inventory.Contains(excelDailyShippedItem.TextileName)) ?? new TextileNameMapping();
-                    foreach (var colorDetail in excelDailyShippedItem.StoreSearchColorDetails)
+                    foreach (StoreSearchColorDetail colorDetail in excelDailyShippedItem.StoreSearchColorDetails)
                     {
                         string accountMapping = textileNameMapping.Account == null ? string.Empty : textileNameMapping.Account.FirstOrDefault();
                         if (trashItem.TextileColorName == string.Concat(accountMapping.Split('*')[0], colorDetail.ColorName.Split('-')[0]))
@@ -246,7 +246,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             }
 
             List<Container> excelPrimary = new List<Container>();
-            foreach (var excelDailyShippedItem in excelDailyShippedList)
+            foreach (StoreSearchData<StoreSearchColorDetail> excelDailyShippedItem in excelDailyShippedList)
             {
                 var priviousDistance = 10;
                 var textileName = string.Empty;
