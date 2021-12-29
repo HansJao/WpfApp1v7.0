@@ -124,6 +124,34 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
+            ICellStyle greyStyle = wb.CreateCellStyle();
+            greyStyle.WrapText = true;
+            greyStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            greyStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            greyStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+            greyStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle lightGreenStyle = wb.CreateCellStyle();
+            lightGreenStyle.WrapText = true;
+            lightGreenStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            lightGreenStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            lightGreenStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+            lightGreenStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
+            lightTurquoiseStyle.WrapText = true;
+            lightTurquoiseStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            lightTurquoiseStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            lightTurquoiseStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
+            lightTurquoiseStyle.FillPattern = FillPattern.SolidForeground;
+
+            ICellStyle coralStyle = wb.CreateCellStyle();
+            coralStyle.WrapText = true;
+            coralStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            coralStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            coralStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
+            coralStyle.FillPattern = FillPattern.SolidForeground;
+
             ExcelHelper.CreateCell(row, 0, "布種", positionStyle);
             ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
             ExcelHelper.CreateCell(row, 2, "織廠", positionStyle);
@@ -132,8 +160,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
             ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
             ExcelHelper.CreateCell(row, 7, "10天內", positionStyle);
-            ExcelHelper.CreateCell(row, 8, "30天內", positionStyle);
-            ExcelHelper.CreateCell(row, 9, "60天內", positionStyle);
+            ExcelHelper.CreateCell(row, 8, "20天內", positionStyle);
+            ExcelHelper.CreateCell(row, 9, "30天內", positionStyle);
+            ExcelHelper.CreateCell(row, 10, "60天內", positionStyle);
 
 
             int rowIndex = 1;
@@ -141,6 +170,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
             IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
             IEnumerable<TrashItem> trashItems = TrashModule.GetTrashItems().Where(w => w.I_03 != null).OrderBy(o => o.I_01);
+            DateTime tenDays = DateTime.Now.Date.AddDays(-10);
+            DateTime twentyDays = DateTime.Now.Date.AddDays(-20);
+            DateTime thirtyDays = DateTime.Now.Date.AddDays(-30);
+
             foreach (StoreData storeData in ShippingHistoryStoreDataList)
             {
                 XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
@@ -164,9 +197,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 7, trashCustomerShippeds.Where(w => w.IN_DATE > DateTime.Now.AddDays(-10)).Sum(s => s.Quantity), positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 8, trashCustomerShippeds.Where(w => w.IN_DATE > DateTime.Now.AddDays(-30)).Sum(s => s.Quantity), positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 9, trashCustomerShippeds.Sum(s => s.Quantity), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
+                ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
+                ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
+                ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashCustomerShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
 
                 rowIndex++;
             }
