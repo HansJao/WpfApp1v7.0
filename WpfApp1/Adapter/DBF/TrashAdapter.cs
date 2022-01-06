@@ -33,10 +33,9 @@ namespace WpfApp1.Adapter.DBF
 
         public IEnumerable<TrashShipped> GetTrashShippedList(DateTime datePickerBegin, DateTime datePickerEnd)
         {
-            string sqlCmd = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,SUM(invosub.QUANTITY) as Quantity FROM INVOSUB.dbf invosub " +
+            string sqlCmd = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM INVOSUB.dbf invosub " +
                            "INNER JOIN ITEM.dbf item ON invosub.I_01 = item.I_01 AND invosub.F_01 = item.F_01 " +
                            "WHERE invosub.IN_DATE Between cDate('" + datePickerBegin.ToString() + "') and cDate('" + datePickerEnd.ToString() + "') " +
-                           "GROUP BY invosub.IN_DATE,invosub.I_01,item.I_03 " +
                            "ORDER BY invosub.IN_DATE,invosub.I_01";
             var result = DapperHelper.QueryDbfCollection<TrashShipped>(AppSettingConfig.DbfConnectionString(), CommandType.Text, sqlCmd);
             return result;

@@ -112,7 +112,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         private void ButtonExportExecute()
         {
 
-            _trashShippeds.AddRange(TrashModule.GetTrashShippedList(DatePickerBegin, DatePickerEnd));
+            _trashShippeds.AddRange(TrashModule.GetTrashShippedQuantitySum(DatePickerBegin, DatePickerEnd));
             #region OleDB
             //string databaseDirectory = AppSettingConfig.DbfFilePath();
             //string sql4 = "SELECT invosub.IN_DATE,invosub.I_01,item.I_03,SUM(invosub.QUANTITY) FROM INVOSUB.dbf invosub " +
@@ -197,7 +197,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         private void ExportShippingCheckExecute()
         {
             List<StoreSearchData<StoreSearchColorDetail>> excelDailyShippedList = ExcelModule.GetExcelDailyShippedList(ShippingCheckDate);
-            IEnumerable<TrashShipped> trashShipped = TrashModule.GetTrashShippedList(ShippingCheckDate, ShippingCheckDate);
+            IEnumerable<TrashShipped> trashShipped = TrashModule.GetTrashShippedQuantitySum(ShippingCheckDate, ShippingCheckDate);
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
             IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
 

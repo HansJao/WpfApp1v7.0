@@ -43,6 +43,35 @@ namespace WpfApp1.Modules.TrashModule.Implement
             return trashItems;
         }
 
+        /// <summary>
+        /// 依據日期取得布種出貨總數
+        /// </summary>
+        /// <param name="datePickerBegin"></param>
+        /// <param name="datePickerEnd"></param>
+        /// <returns></returns>        
+        public IEnumerable<TrashShipped> GetTrashShippedQuantitySum(DateTime datePickerBegin, DateTime datePickerEnd)
+        {
+            IEnumerable<TrashShipped> trashList = TrashAdapter.GetTrashShippedList(datePickerBegin, datePickerEnd).GroupBy(g =>
+             new
+             {
+                 g.IN_DATE,
+                 g.I_01,
+                 g.I_03
+             }).Select(s => new TrashShipped
+             {
+                 IN_DATE = s.Key.IN_DATE,
+                 I_01 = s.Key.I_01,
+                 I_03 = s.Key.I_03,
+                 Quantity = s.Sum(ss => ss.Quantity)
+             });
+            return trashList;
+        }
+        /// <summary>
+        /// 依據日期取得布種出貨清單
+        /// </summary>
+        /// <param name="datePickerBegin"></param>
+        /// <param name="datePickerEnd"></param>
+        /// <returns></returns>        
         public IEnumerable<TrashShipped> GetTrashShippedList(DateTime datePickerBegin, DateTime datePickerEnd)
         {
             IEnumerable<TrashShipped> trashList = TrashAdapter.GetTrashShippedList(datePickerBegin, datePickerEnd);

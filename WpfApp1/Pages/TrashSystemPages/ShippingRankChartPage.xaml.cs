@@ -40,7 +40,7 @@ namespace WpfApp1.Pages.TrashSystemPages
             {
                 mainChart.Series.Clear();
                 this.mainChart.Name = "Textile";
-                IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedQuantitySum(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
                 IEnumerable<ChartTable> chartTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
                 CreateChartData(chartTables, true);
             }
@@ -287,7 +287,7 @@ namespace WpfApp1.Pages.TrashSystemPages
                     mainChart.Invalidate();
                     break;
                 case "TextileCustomerDetail":
-                    IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedList(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
+                    IEnumerable<TrashShipped> trashShippeds = TrashModule.GetTrashShippedQuantitySum(DatePickerStartDate.SelectedDate ?? DateTime.Now, DatePickerEndDate.SelectedDate ?? DateTime.Now);
                     IEnumerable<ChartTable> trashShippedsTables = trashShippeds.Select(s => new ChartTable { AxisXValue = s.IN_DATE.ToOADate(), AxisYName = s.I_03, AxisYValue = s.Quantity, });
                     CreateChartData(trashShippedsTables, true);
                     mainChart.ChartAreas[0].RecalculateAxesScale();

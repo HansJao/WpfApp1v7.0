@@ -173,6 +173,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             DateTime tenDays = DateTime.Now.Date.AddDays(-10);
             DateTime twentyDays = DateTime.Now.Date.AddDays(-20);
             DateTime thirtyDays = DateTime.Now.Date.AddDays(-30);
+            List<TrashShipped> xtrashCustomerShippeds = TrashModule.GetTrashShippedList(DateTime.Now.AddDays(-60), DateTime.Now).ToList();
 
             foreach (StoreData storeData in ShippingHistoryStoreDataList)
             {
@@ -186,10 +187,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     continue;
                 }
                 TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, storeData.ColorName.Split('-')[0], textileNameMappings);
-                List<TrashCustomerShipped> trashCustomerShippeds = new List<TrashCustomerShipped>();
+                List<TrashShipped> trashShippeds = new List<TrashShipped>();
                 if (trashItem != null)
                 {
-                    trashCustomerShippeds = TrashModule.GetCustomerShippedListByTextileName(trashItem.I_03, DateTime.Now.AddDays(-60), DateTime.Now).ToList();
+                    trashShippeds = xtrashCustomerShippeds.Where(w => w.I_03 == trashItem.I_03).ToList();
                 }
                 ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
@@ -197,10 +198,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
                 ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
-                ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
-                ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashCustomerShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
-                ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashCustomerShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
+                ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
+                ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
+                ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
+                ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
 
                 rowIndex++;
             }

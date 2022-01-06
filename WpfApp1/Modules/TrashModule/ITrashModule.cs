@@ -17,6 +17,19 @@ namespace WpfApp1.Modules.TrashModule
         /// <returns></returns>
         IEnumerable<TrashItem> GetTrashItems();
         IEnumerable<TrashItem> GetTrashItemsByFeature(string feature);
+        /// <summary>
+        /// 依據日期取得布種出貨總數
+        /// </summary>
+        /// <param name="datePickerBegin"></param>
+        /// <param name="datePickerEnd"></param>
+        /// <returns></returns>        
+        IEnumerable<TrashShipped> GetTrashShippedQuantitySum(DateTime datePickerBegin, DateTime datePickerEnd);
+        /// <summary>
+        /// 依據日期取得布種出貨清單
+        /// </summary>
+        /// <param name="datePickerBegin"></param>
+        /// <param name="datePickerEnd"></param>
+        /// <returns></returns>        
         IEnumerable<TrashShipped> GetTrashShippedList(DateTime datePickerBegin, DateTime datePickerEnd);
         /// <summary>
         /// 取得客戶出貨紀錄
