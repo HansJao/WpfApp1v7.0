@@ -323,6 +323,7 @@
     <Compile Include="ViewModel\FabricViewModel\YarnPriceViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\InventoryRecordCompareViewModel.cs" />
+    <Compile Include="ViewModel\InventoryViewModel\InventoryReturnModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\InventoryWindowViewModel\InventoryListViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\StoreSearchViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

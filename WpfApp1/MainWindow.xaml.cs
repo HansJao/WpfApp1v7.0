@@ -151,6 +151,11 @@ namespace WpfApp1
         //    this.MainFrame.NavigationService.Navigate(new ShippingHistoryChartPage());
 
         //}
+        private void ButtonInventoryReturnFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "庫存數量整理";
+            this.MainFrame.NavigationService.Navigate(new InventoryReturnModel());
+        }
         private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨排行圖表";
