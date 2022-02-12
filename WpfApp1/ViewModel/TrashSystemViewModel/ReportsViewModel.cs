@@ -43,31 +43,114 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 .Select(s => new TrashCustomerShipped { C_Name = s.Key.C_Name, I_03 = s.Key.I_03, Quantity = s.Sum(item => item.Quantity) });
             IEnumerable<TrashCustomerShipped> trashCustomerShippeds = string.IsNullOrEmpty(TextileName) ? trashCustomerShippedList.OrderBy(o => o.I_03) : trashCustomerShippedList.Where(w => w.I_03.Contains(TextileName)).OrderBy(o => o.I_03);
 
-            ExcelFormat excelFormat = new ExcelFormat()
+            IOrderedEnumerable<IGrouping<string, TrashCustomerShipped>> groupCustomerShippeds = trashCustomerShippeds
+                                                                                                .OrderByDescending(o => o.Quantity)
+                                                                                                .GroupBy(g => g.C_Name)
+                                                                                                .OrderByDescending(o => o.Select(s => s.Quantity).Sum());
+            ExcelContent excelContent = new ExcelContent
             {
-                FileName = string.Concat(CustomerName, TextileName + "出貨紀錄"),
-                ColumnFormats = new List<ColumnFormat>
+                FileName = string.Concat(TextileName + "客戶出貨紀錄", DateTime.Now.ToString("yyyyMMdd")),
+                ExcelSheetContents = new List<ExcelSheetContent>(),
+            };
+            List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
+
+            foreach (IGrouping<string, TrashCustomerShipped> customerShippeds in groupCustomerShippeds)
+            {
+                ExcelSheetContent excelSheetContent = new ExcelSheetContent();
+                excelSheetContent.SheetName = customerShippeds.Key;
+                excelSheetContent.ExcelColumnContents = new List<ExcelColumnContent>()
                 {
-                     new ColumnFormat
+                    new ExcelColumnContent()
                     {
-                        CoiumnWidth = 3000,
-                        ColumnTitle = "客戶名稱"
+                        CellValue = "客戶名稱",
+                        Width = 3000
                     },
-                    new ColumnFormat
+                    new ExcelColumnContent()
                     {
-                        CoiumnWidth = 5000,
-                        ColumnTitle = "布種名稱"
+                        CellValue = "布種名稱",
+                        Width = 5200
                     },
-                     new ColumnFormat
+                    new ExcelColumnContent()
                     {
-                        CoiumnWidth = 3000,
-                        ColumnTitle = "重量"
+                        CellValue = "重量",
+                        Width = 3000
                     }
-                 }
+                };
+                excelSheetContent.ExcelRowContents = new List<ExcelRowContent>();
+                foreach (TrashCustomerShipped customerShipped in customerShippeds)
+                {
+                    excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
+                    {
+                        ExcelCellContents = new List<ExcelCellContent>()
+                        {
+                             new ExcelCellContent()
+                            {
+                                CellValue = customerShipped.C_Name
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellValue = customerShipped.I_03
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellValue = customerShipped.Quantity.ToString()
+                            }
+                        }
+                    });
+                }
+                excelSheetContents.Add(excelSheetContent);
+            }
+            var customerTotals = groupCustomerShippeds.Select(s => new { customerName = s.Key, totalQuantity = s.Sum(sum => sum.Quantity) });
+            ExcelSheetContent excelSheetContentTotal = new ExcelSheetContent()
+            {
+                SheetName = "客戶排名",
+                ExcelColumnContents = new List<ExcelColumnContent>()
+                    {
+                        new ExcelColumnContent()
+                        {
+                            CellValue = "客戶名稱",
+                            Width = 3000
+                        },
+                        new ExcelColumnContent()
+                        {
+                            CellValue = "總出貨數",
+                            Width = 3000
+                        }
+                    },
+                ExcelRowContents = new List<ExcelRowContent>()
             };
 
-            var excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile<TrashCustomerShipped>(CreateCustomerShippedExcelAction, trashCustomerShippeds.ToList(), excelFormat);
+            foreach (var customerTotal in customerTotals)
+            {
+                List<ExcelRowContent> excelRowContent = new List<ExcelRowContent>()
+                {
+                    new ExcelRowContent()
+                    {
+                        ExcelCellContents = new List<ExcelCellContent>()
+                        {
+                            new ExcelCellContent()
+                            {
+                                CellValue = customerTotal.customerName
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellValue = customerTotal.totalQuantity.ToString()
+                            }
+                        }
+                    }
+                };
+                excelSheetContentTotal.ExcelRowContents.AddRange(excelRowContent);
+            }
+
+            List<ExcelSheetContent> excelSheetContentTotals = new List<ExcelSheetContent>();
+            excelSheetContentTotals.Add(excelSheetContentTotal);
+
+            excelContent.ExcelSheetContents.AddRange(excelSheetContentTotals);
+            excelContent.ExcelSheetContents.AddRange(excelSheetContents);
+
+            ExcelHelper excelHelper = new ExcelHelper();
+            IWorkbook wb = new XSSFWorkbook();
+            excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void CreateCustomerShippedExcelAction(IWorkbook wb, ISheet ws, ICellStyle positionStyle, ref int rowIndex, TrashCustomerShipped storeData)

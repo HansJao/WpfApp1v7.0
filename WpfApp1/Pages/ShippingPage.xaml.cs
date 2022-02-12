@@ -272,17 +272,15 @@ namespace WpfApp1.Pages
             LeftStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
             LeftStyle.SetFont(weightFont);
 
-            List<ShippingSheetStructure> shippingSheetStructures = new List<ShippingSheetStructure>(ShippingSheetStructure);
-
             List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
             ExcelCellContent emptyExcelCellContent = new ExcelCellContent();
-            foreach (var shippingSheetStucture in ShippingSheetStructure)
+            foreach (ShippingSheetStructure shippingSheetStucture in ShippingSheetStructure)
             {
                 //拆解每一個客戶的出貨資料
                 List<ShippingSheetData> shippingSheetDatasExpand = new List<ShippingSheetData>();
-                foreach (var textileShippingData in shippingSheetStucture.TextileShippingDatas)
+                foreach (TextileShippingData textileShippingData in shippingSheetStucture.TextileShippingDatas)
                 {
-                    foreach (var shippingSheetData in textileShippingData.ShippingSheetDatas)
+                    foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                     {
                         shippingSheetDatasExpand.Add(new ShippingSheetData()
                         {
@@ -331,7 +329,7 @@ namespace WpfApp1.Pages
                     pageNum++;
                 }
 
-                foreach (var pageShippingSheetStructure in pageShippingSheetStructures)
+                foreach (ShippingSheetStructure pageShippingSheetStructure in pageShippingSheetStructures)
                 {
                     ExcelSheetContent customerShipSheet = new ExcelSheetContent()
                     {
