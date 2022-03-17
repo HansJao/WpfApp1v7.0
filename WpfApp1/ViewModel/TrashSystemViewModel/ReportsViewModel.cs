@@ -31,7 +31,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public ICommand ExportShippingCheckExecuteClick { get { return new RelayCommand(ExportShippingCheckExecute, CanExecute); } }
         public ICommand ButtonExportExecuteClick { get { return new RelayCommand(ButtonExportExecute, CanExecute); } }
         public ICommand ButtonExportCustomerClick { get { return new RelayCommand(ButtonExportCustomerExecute, CanExecute); } }
-
+        public ICommand ButtonExportShippedListClick { get { return new RelayCommand(ButtonExportShippedListExecute, CanExecute); } }
         public string CustomerName { get; set; }
         public string TextileName { get; set; }
         public DateTime CustomerDatePickerBegin { get; set; } = DateTime.Now.AddYears(-1);
@@ -146,6 +146,62 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             excelSheetContentTotals.Add(excelSheetContentTotal);
 
             excelContent.ExcelSheetContents.AddRange(excelSheetContentTotals);
+            excelContent.ExcelSheetContents.AddRange(excelSheetContents);
+
+            ExcelHelper excelHelper = new ExcelHelper();
+            IWorkbook wb = new XSSFWorkbook();
+            excelHelper.CreateExcelFile(wb, excelContent);
+        }
+
+        private void ButtonExportShippedListExecute()
+        {
+
+            List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(DatePickerBegin, DatePickerEnd).Where(w => w.I_03.Contains(FilterText)).ToList();
+            IOrderedEnumerable<IGrouping<string, TrashShipped>> groupTrashShippedList = trashShippedList
+                                                                                        .OrderByDescending(o => o.Quantity)
+                                                                                        .GroupBy(g => g.I_03)
+                                                                                        .OrderByDescending(o => o.Select(s => s.Quantity).Sum());
+
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat(FilterText + "出貨區間", DatePickerBegin.ToString("yyyyMMdd"),"-", DatePickerEnd.ToString("yyyyMMdd")),
+                ExcelSheetContents = new List<ExcelSheetContent>(),
+            };
+            List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
+            ExcelSheetContent excelSheetContent = new ExcelSheetContent();
+            excelSheetContent.SheetName = FilterText;
+            excelSheetContent.ExcelColumnContents = new List<ExcelColumnContent>()
+            {
+                new ExcelColumnContent()
+                {
+                    CellValue = "布種名稱",
+                    Width = 5200
+                },
+                new ExcelColumnContent()
+                {
+                    CellValue = "重量",
+                    Width = 3000
+                }
+            };
+            excelSheetContent.ExcelRowContents = new List<ExcelRowContent>();
+            foreach (IGrouping<string, TrashShipped> trashShippeds in groupTrashShippedList)
+            {
+                excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
+                {
+                    ExcelCellContents = new List<ExcelCellContent>()
+                        {
+                            new ExcelCellContent()
+                            {
+                                CellValue = trashShippeds.Key
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellValue = trashShippeds.Sum(s=>s.Quantity).ToString()
+                            }
+                        }
+                });
+            }
+            excelSheetContents.Add(excelSheetContent);
             excelContent.ExcelSheetContents.AddRange(excelSheetContents);
 
             ExcelHelper excelHelper = new ExcelHelper();

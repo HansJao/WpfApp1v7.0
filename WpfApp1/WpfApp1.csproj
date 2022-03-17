@@ -259,6 +259,9 @@
     <Compile Include="Pages\FactoryPages\FactoryListPage.xaml.cs">
       <DependentUpon>FactoryListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\InventoryPages\DeductInventoryPage.xaml.cs">
+      <DependentUpon>DeductInventoryPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\InventoryPages\InventoryRecordComparePage.xaml.cs">
       <DependentUpon>InventoryRecordComparePage.xaml</DependentUpon>
     </Compile>
@@ -322,6 +325,7 @@
     <Compile Include="ViewModel\FabricViewModel\FabricViewModel.cs" />
     <Compile Include="ViewModel\FabricViewModel\YarnPriceViewModel.cs" />
     <Compile Include="ViewModel\FactoryViewModel\AddFactoryViewModel.cs" />
+    <Compile Include="ViewModel\InventoryViewModel\DeductInventoryViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\InventoryRecordCompareViewModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\InventoryReturnModel.cs" />
     <Compile Include="ViewModel\InventoryViewModel\InventoryWindowViewModel\InventoryListViewModel.cs" />
@@ -431,6 +435,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\FactoryPages\FactoryListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\InventoryPages\DeductInventoryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

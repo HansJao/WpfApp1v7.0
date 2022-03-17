@@ -14,11 +14,11 @@ namespace WpfApp1.Utility
     {
         public IEnumerable<TextileNameMapping> GetTextileNameMappings()
         {
-            var textileNameMappingFilePath = string.Concat(AppSettingConfig.TextileNameMappingFilePath());
+            string textileNameMappingFilePath = string.Concat(AppSettingConfig.TextileNameMappingFilePath());
             //this code segment read data from the file.
             FileStream fs2 = new FileStream(textileNameMappingFilePath, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(fs2);
-            var cacheJson = reader.ReadToEnd();
+            string cacheJson = reader.ReadToEnd();
             IEnumerable<TextileNameMapping> textileNameMappings = JsonConvert.DeserializeObject<IEnumerable<TextileNameMapping>>(cacheJson);
             reader.Close();
             return textileNameMappings;

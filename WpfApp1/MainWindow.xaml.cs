@@ -154,8 +154,17 @@ namespace WpfApp1
         private void ButtonInventoryReturnFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "庫存數量整理";
-            this.MainFrame.NavigationService.Navigate(new InventoryReturnModel());
+            MessageBoxResult messageBoxResult = MessageBox.Show("請確認是否要執行庫存數量整理？", "確認", MessageBoxButton.YesNo);
+            if (messageBoxResult == MessageBoxResult.Yes)
+            {
+                this.MainFrame.NavigationService.Navigate(new InventoryReturnModel());
+            }
         }
+        //private void ButtonDeductInventoryFunction_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.Title = "扣庫存量";
+        //    this.MainFrame.NavigationService.Navigate(new DeductInventoryPage());
+        //}
         private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨排行圖表";
