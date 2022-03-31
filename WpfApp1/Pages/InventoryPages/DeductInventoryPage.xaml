@@ -12,8 +12,9 @@
         <viewModel:DeductInventoryViewModel/>
     </Page.DataContext>
     <Grid>
-
-        <DatePicker SelectedDate="{Binding ShippingDate}" HorizontalAlignment="Left" Margin="110,69,0,0" VerticalAlignment="Top"/>
-
+        <StackPanel>
+            <Button Content="執行" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding DeductInventoryClick}" />
+            <DatePicker SelectedDate="{Binding ShippingDate}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        </StackPanel>
     </Grid>
 </Page>

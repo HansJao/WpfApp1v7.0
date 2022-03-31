@@ -14,7 +14,7 @@
                     <MenuItem Header="庫存盤點表匯出" Click="ButtonStorageInventroyExportFunction_Click"/>
                     <MenuItem Header="庫存歷史紀錄" Click="ButtonInventoryRecordCompareFunction_Click"/>
                     <MenuItem Header="庫存量整理" Click="ButtonInventoryReturnFunction_Click"/>
-                    <!--<MenuItem Header="扣庫存量" Click="ButtonDeductInventoryFunction_Click"/>-->
+                    <MenuItem Header="扣庫存量" Click="ButtonDeductInventoryFunction_Click"/>
                 </MenuItem>
             </Menu>
             <!--<Button x:Name="ButtonStoreSearchFunction" Content="庫存查詢" Click="ButtonStoreSearchFunction_Click" />-->

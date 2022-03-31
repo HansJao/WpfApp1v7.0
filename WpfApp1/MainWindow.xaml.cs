@@ -160,11 +160,11 @@ namespace WpfApp1
                 this.MainFrame.NavigationService.Navigate(new InventoryReturnModel());
             }
         }
-        //private void ButtonDeductInventoryFunction_Click(object sender, RoutedEventArgs e)
-        //{
-        //    this.Title = "扣庫存量";
-        //    this.MainFrame.NavigationService.Navigate(new DeductInventoryPage());
-        //}
+        private void ButtonDeductInventoryFunction_Click(object sender, RoutedEventArgs e)
+        {
+            this.Title = "扣庫存量";
+            this.MainFrame.NavigationService.Navigate(new DeductInventoryPage());
+        }
         private void ButtonShippingRankChartFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨排行圖表";
