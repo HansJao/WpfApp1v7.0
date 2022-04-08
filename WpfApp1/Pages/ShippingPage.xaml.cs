@@ -517,14 +517,6 @@ namespace WpfApp1.Pages
             }
 
             return excelSheetContents;
-            //ExcelHelper excelHelper = new ExcelHelper();
-            //ExcelContent excelContent = new ExcelContent
-            //{
-            //    FileName = string.Concat("出貨單", DateTime.Now.ToString("yyyy-MM-dd")),
-            //    ExcelSheetContents = excelSheetContents
-            //};
-
-            //excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private List<ExcelSheetContent> ExportToExcel(IWorkbook wb)

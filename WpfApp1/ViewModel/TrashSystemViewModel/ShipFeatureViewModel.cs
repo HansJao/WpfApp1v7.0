@@ -49,7 +49,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 if (trashCustomers != null && trashCustomers.FirstOrDefault() != null)
                     customerCell.SetCellValue(string.Concat(customerCell.StringCellValue, "-", trashCustomers.FirstOrDefault().CARD_NO, trashCustomers.FirstOrDefault().C_NAME));
 
-                for (int rowCount = 6; rowCount <= 18; rowCount++)
+                for (int rowCount = 6; rowCount <= 19; rowCount++)
                 {
 
                     IRow row = sheet.GetRow(rowCount);

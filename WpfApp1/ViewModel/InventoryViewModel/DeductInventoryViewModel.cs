@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Input;
 using WpfApp1.Command;
 using WpfApp1.DataClass.Enumeration;
+using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Fabric;
 using WpfApp1.DataClass.Shipping;
 using WpfApp1.Utility;
@@ -28,7 +29,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         {
             DirectoryInfo d = new DirectoryInfo(AppSettingConfig.FilePath()); //Assuming Test is your Folder
 
-            IEnumerable<FileInfo> fileInfos = d.GetFiles("*.xlsx").Where(w => w.Name.Contains(string.Concat("出貨測試", ShippingDate.ToString("yyyyMMdd"), "-")));
+            IEnumerable<FileInfo> fileInfos = d.GetFiles("*.xlsx").Where(w => w.Name.Contains(string.Concat("出貨", ShippingDate.ToString("yyyyMMdd"), "-")));
             List<List<ShippingSheetStructure>> multiShippingSheetStructures = new List<List<ShippingSheetStructure>>();
 
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
@@ -46,7 +47,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 multiShippingSheetStructures.Add(ShippingSheetStructures);
             }
 
-            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), "\\庫存管理測試", ".xlsx");
+            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), "\\庫存管理", ".xlsx");
             IWorkbook inventoryWorkbook = null;
 
             using (FileStream fs = new FileStream(InventoryfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -71,7 +72,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     {
                         //取得庫存布種的活頁薄
                         ISheet inventorySheet = inventoryWorkbook.GetSheet(textileShippingData.TextileName);
-
+                        if (inventorySheet == null)
+                            break;
                         //取得客戶的出貨布種顏色與數量
                         foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
@@ -81,6 +83,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                 try
                                 {
                                     IRow inventoryRow = inventorySheet.GetRow(rowCount);
+                                    inventorySheet.ForceFormulaRecalculation = true;
                                     if (inventoryRow == null) break;
                                     ICell inventoryCell = inventoryRow.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt());
                                     if (inventoryCell.StringCellValue.Split('-')[0] == shippingSheetData.ColorName)
@@ -88,7 +91,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                         item.Where(w => w.Customer == structure.Customer).FirstOrDefault()
                                               .TextileShippingDatas.Where(w => w.TextileName == textileShippingData.TextileName).FirstOrDefault()
                                               .ShippingSheetDatas.Where(w => w.ColorName == shippingSheetData.ColorName).FirstOrDefault()
-                                              .ColorName = shippingSheetData.ColorName + "/" + inventoryCell.StringCellValue;
+                                              .ColorName = shippingSheetData.ColorName + "/**/" + inventoryCell.StringCellValue;
                                         ICell deductCell = inventoryRow.GetCell(dateColumnNum) == null ? inventoryRow.CreateCell(dateColumnNum) : inventoryRow.GetCell(dateColumnNum);
                                         deductCell.SetCellValue(shippingSheetData.ShippingNumber + deductCell.NumericCellValue);
                                         deductCell.CellStyle = positionStyle;
@@ -106,14 +109,111 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     }
                 }
             }
-
+            ExportCheckDeductShipping(multiShippingSheetStructures);
             using (FileStream fs = new FileStream(InventoryfileName, FileMode.Create, FileAccess.Write))
             {
                 inventoryWorkbook.Write(fs);
             }
         }
 
+        /// <summary>
+        /// 匯出扣庫存檢查表
+        /// </summary>
+        private void ExportCheckDeductShipping(List<List<ShippingSheetStructure>> multiShippingSheetStructures)
+        {
+            IWorkbook wb = new XSSFWorkbook();
 
+            ICellStyle positionStyle = wb.CreateCellStyle();
+            positionStyle.WrapText = true;
+            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat("扣庫存檢查表", DateTime.Now.ToString("yyyyMMdd")),
+                ExcelSheetContents = new List<ExcelSheetContent>(),
+            };
+            List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
+            ExcelSheetContent excelSheetContent = new ExcelSheetContent()
+            {
+                SheetName = "庫存檢查",
+                ExcelColumnContents = new List<ExcelColumnContent>()
+                {
+                    new ExcelColumnContent()
+                    {
+                        CellValue = "客戶名稱",
+                    },
+                    new ExcelColumnContent()
+                    {
+                        CellValue = "布種名稱",
+                    },
+                    new ExcelColumnContent()
+                    {
+                        CellValue = "布種顏色",
+                    }
+                },
+                ExcelRowContents = new List<ExcelRowContent>()
+
+            };
+            foreach (List<ShippingSheetStructure> shippingSheetStructures in multiShippingSheetStructures)
+            {
+                foreach (ShippingSheetStructure shippingSheetStructure in shippingSheetStructures)
+                {
+                    excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
+                    {
+                        ExcelCellContents = new List<ExcelCellContent>()
+                        {
+                            new ExcelCellContent()
+                            {
+                                CellValue =  shippingSheetStructure.Customer
+                            }
+                        }
+                    });
+                    foreach (TextileShippingData textileShippingData in shippingSheetStructure.TextileShippingDatas)
+                    {
+                        excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
+                        {
+                            ExcelCellContents = new List<ExcelCellContent>()
+                            {
+                                new ExcelCellContent()
+                                {
+                                    CellValue =  ""
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellValue =  textileShippingData.TextileName
+                                }
+                            }
+                        });
+                        foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
+                        {
+                            excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
+                            {
+                                ExcelCellContents = new List<ExcelCellContent>()
+                                {
+                                    new ExcelCellContent()
+                                    {
+                                        CellValue =  ""
+                                    },
+                                          new ExcelCellContent()
+                                    {
+                                        CellValue =  ""
+                                    },
+                                    new ExcelCellContent()
+                                    {
+                                        CellValue =  shippingSheetData.ColorName
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+            excelSheetContents.Add(excelSheetContent);
+            excelContent.ExcelSheetContents.AddRange(excelSheetContents);
+            ExcelHelper excelHelper = new ExcelHelper();
+            excelHelper.CreateExcelFile(wb, excelContent);
+        }
         /// <summary>
         /// 取得整理過後的ShippingSheetSturcture
         /// Step1 如有配件，則使用布種名稱對應到與庫存管理相同的名字
@@ -143,7 +243,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     //如有配件，則使用布種名稱對應到與庫存管理相同的名字
                     if (textileName.Contains("配件"))
                     {
-                        textileName = textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)).Inventory.ToList().Find(f => f.Contains("碼布")) ?? textileName;
+                        if (textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) == null)
+                        {
+
+                        }
+                        else
+                            textileName = textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)).Inventory.ToList().Find(f => f.Contains("碼布")) ?? textileName;
+
                     }
                     string colorFullName = row.GetCell(4).StringCellValue;
                     //判斷顏色是否含有數量數字
