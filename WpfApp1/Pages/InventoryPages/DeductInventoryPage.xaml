@@ -13,8 +13,9 @@
     </Page.DataContext>
     <Grid>
         <StackPanel>
-            <Button Content="執行" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Command="{Binding DeductInventoryClick}" />
-            <DatePicker SelectedDate="{Binding ShippingDate}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+            <TextBox Text="{Binding StorageName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="22" Margin="3"/>
+            <DatePicker SelectedDate="{Binding ShippingDate}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="3"/>
+            <Button Content="執行" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Command="{Binding DeductInventoryClick}" Margin="3"/>
         </StackPanel>
     </Grid>
 </Page>

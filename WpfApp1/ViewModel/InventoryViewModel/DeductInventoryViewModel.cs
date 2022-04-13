@@ -21,6 +21,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
     {
         public ICommand DeductInventoryClick { get { return new RelayCommand(DeductInventoryExecute, CanExecute); } }
         public DateTime ShippingDate { get; set; } = DateTime.Now;
+        public string StorageName { get; set; } = AppSettingConfig.StoreManageFileName();
         public DeductInventoryViewModel()
         {
 
@@ -28,9 +29,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public void DeductInventoryExecute()
         {
             DirectoryInfo d = new DirectoryInfo(AppSettingConfig.FilePath()); //Assuming Test is your Folder
-
             IEnumerable<FileInfo> fileInfos = d.GetFiles("*.xlsx").Where(w => w.Name.Contains(string.Concat("出貨", ShippingDate.ToString("yyyyMMdd"), "-")));
             List<List<ShippingSheetStructure>> multiShippingSheetStructures = new List<List<ShippingSheetStructure>>();
+
+            if (MessageBox.Show("是否要執行以下出貨單？\n" + string.Join("\n", fileInfos.Select(s => s.Name).ToArray()), "扣庫存執行確認", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            {
+                return;
+            }
 
             ExternalDataHelper externalDataHelper = new ExternalDataHelper();
             IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
@@ -47,7 +52,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 multiShippingSheetStructures.Add(ShippingSheetStructures);
             }
 
-            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), "\\庫存管理", ".xlsx");
+            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), StorageName);
             IWorkbook inventoryWorkbook = null;
 
             using (FileStream fs = new FileStream(InventoryfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -72,12 +77,10 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     {
                         //取得庫存布種的活頁薄
                         ISheet inventorySheet = inventoryWorkbook.GetSheet(textileShippingData.TextileName);
-                        if (inventorySheet == null)
-                            break;
+                        if (inventorySheet == null) break;
                         //取得客戶的出貨布種顏色與數量
                         foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
-
                             for (int rowCount = 1; rowCount <= inventorySheet.LastRowNum; rowCount++)
                             {
                                 try
@@ -88,12 +91,21 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                     ICell inventoryCell = inventoryRow.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt());
                                     if (inventoryCell.StringCellValue.Split('-')[0] == shippingSheetData.ColorName)
                                     {
-                                        item.Where(w => w.Customer == structure.Customer).FirstOrDefault()
-                                              .TextileShippingDatas.Where(w => w.TextileName == textileShippingData.TextileName).FirstOrDefault()
-                                              .ShippingSheetDatas.Where(w => w.ColorName == shippingSheetData.ColorName).FirstOrDefault()
-                                              .ColorName = shippingSheetData.ColorName + "/**/" + inventoryCell.StringCellValue;
-                                        ICell deductCell = inventoryRow.GetCell(dateColumnNum) == null ? inventoryRow.CreateCell(dateColumnNum) : inventoryRow.GetCell(dateColumnNum);
-                                        deductCell.SetCellValue(shippingSheetData.ShippingNumber + deductCell.NumericCellValue);
+                                        if (shippingSheetData.ShippingNumber == 0)
+                                        {
+                                            shippingSheetData.ColorName = shippingSheetData.ColorName + "/-/" + inventoryCell.StringCellValue;
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            shippingSheetData.ColorName = shippingSheetData.ColorName + "/*/" + inventoryCell.StringCellValue;
+                                        }
+
+                                        ICell deductCell = inventoryRow.GetCell(dateColumnNum) ?? inventoryRow.CreateCell(dateColumnNum);
+                                        // ICell countInventoryCell = inventoryRow.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt());
+                                        double totalDeduct = shippingSheetData.ShippingNumber + deductCell.NumericCellValue;
+                                        //若是出貨為0，則直接跳過，不寫入庫存
+                                        deductCell.SetCellValue(totalDeduct);
                                         deductCell.CellStyle = positionStyle;
                                         break;
                                     }
@@ -128,6 +140,20 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
 
+            ICellStyle redStyle = wb.CreateCellStyle();
+            redStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+            redStyle.FillPattern = FillPattern.SolidForeground;
+            redStyle.WrapText = true;
+            redStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            redStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
+            ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
+            lightTurquoiseStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
+            lightTurquoiseStyle.FillPattern = FillPattern.SolidForeground;
+            lightTurquoiseStyle.WrapText = true;
+            lightTurquoiseStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            lightTurquoiseStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+
             ExcelContent excelContent = new ExcelContent
             {
                 FileName = string.Concat("扣庫存檢查表", DateTime.Now.ToString("yyyyMMdd")),
@@ -141,14 +167,17 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 {
                     new ExcelColumnContent()
                     {
+                        Width = 3000,
                         CellValue = "客戶名稱",
                     },
                     new ExcelColumnContent()
                     {
+                        Width = 5000,
                         CellValue = "布種名稱",
                     },
                     new ExcelColumnContent()
                     {
+                        Width = 6500,
                         CellValue = "布種顏色",
                     }
                 },
@@ -187,6 +216,18 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         });
                         foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
+                            ICellStyle cellStyle = positionStyle;
+                            if (shippingSheetData.ColorName.Contains("/-/"))
+                            {
+                                cellStyle = redStyle;
+                            }
+                            else if (shippingSheetData.ColorName.Contains("/*/"))
+                            {
+                            }
+                            else
+                            {
+                                cellStyle = lightTurquoiseStyle;
+                            }
                             excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
                             {
                                 ExcelCellContents = new List<ExcelCellContent>()
@@ -201,7 +242,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                     },
                                     new ExcelCellContent()
                                     {
-                                        CellValue =  shippingSheetData.ColorName
+                                        CellValue =  shippingSheetData.ColorName,
+                                        CellStyle = cellStyle
                                     }
                                 }
                             });

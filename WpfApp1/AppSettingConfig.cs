@@ -4,11 +4,20 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfApp1.Utility;
 
 namespace WpfApp1
 {
     public class AppSettingConfig
     {
+        public static int MainWindowHeigh()
+        {
+            return getAppSettings("MainWindowHeigh").ToInt();
+        }
+        public static int MainWindowWidth()
+        {
+            return getAppSettings("MainWindowWidth").ToInt();
+        }
         public static IEnumerable<string> CustomerList()
         {
            return getAppSettings("CustomerList").Split(',').ToList();

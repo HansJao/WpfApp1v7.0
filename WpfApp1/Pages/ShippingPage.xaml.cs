@@ -238,6 +238,7 @@ namespace WpfApp1.Pages
             }
             GetShippingCacheNameList();
             ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
+            MessageBox.Show("出貨單已匯出！！","出貨單匯出通知");
         }
 
         private List<ExcelSheetContent> ExportToShip(IWorkbook wb)

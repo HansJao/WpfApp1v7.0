@@ -25,6 +25,8 @@ namespace WpfApp1
             InitializeComponent();
             this.Left = 0;
             this.Top = 0;
+            this.Height = AppSettingConfig.MainWindowHeigh();
+            this.Width = AppSettingConfig.MainWindowWidth();
         }
 
         private void ButtonStoreSearchFunction_Click(object sender, RoutedEventArgs e)
