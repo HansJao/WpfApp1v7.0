@@ -52,7 +52,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 multiShippingSheetStructures.Add(ShippingSheetStructures);
             }
 
-            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), StorageName);
+            string InventoryfileName = string.Concat(AppSettingConfig.FilePath(), "\\", StorageName);
             IWorkbook inventoryWorkbook = null;
 
             using (FileStream fs = new FileStream(InventoryfileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -135,24 +135,82 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         {
             IWorkbook wb = new XSSFWorkbook();
 
-            ICellStyle positionStyle = wb.CreateCellStyle();
-            positionStyle.WrapText = true;
-            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-
             ICellStyle redStyle = wb.CreateCellStyle();
             redStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
             redStyle.FillPattern = FillPattern.SolidForeground;
             redStyle.WrapText = true;
             redStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
             redStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            redStyle.BorderRight = BorderStyle.Thin;
+            redStyle.BorderBottom = BorderStyle.Thin;
+            redStyle.BorderTop = BorderStyle.Thin;
+            redStyle.BorderLeft = BorderStyle.Thin;
 
-            ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
-            lightTurquoiseStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
-            lightTurquoiseStyle.FillPattern = FillPattern.SolidForeground;
-            lightTurquoiseStyle.WrapText = true;
-            lightTurquoiseStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            lightTurquoiseStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            ICellStyle orangeStyle = wb.CreateCellStyle();
+            orangeStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Orange.Index;
+            orangeStyle.FillPattern = FillPattern.SolidForeground;
+            orangeStyle.WrapText = true;
+            orangeStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            orangeStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            orangeStyle.BorderRight = BorderStyle.Thin;
+            orangeStyle.BorderBottom = BorderStyle.Thin;
+            orangeStyle.BorderTop = BorderStyle.Thin;
+            orangeStyle.BorderLeft = BorderStyle.Thin;
+
+            ICellStyle lightGreenStyle = wb.CreateCellStyle();
+            lightGreenStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+            lightGreenStyle.FillPattern = FillPattern.SolidForeground;
+            lightGreenStyle.WrapText = true;
+            lightGreenStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            lightGreenStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            lightGreenStyle.BorderRight = BorderStyle.Thin;
+            lightGreenStyle.BorderBottom = BorderStyle.Thin;
+            lightGreenStyle.BorderTop = BorderStyle.Thin;
+            lightGreenStyle.BorderLeft = BorderStyle.Thin;
+
+            ICellStyle tanStyle = wb.CreateCellStyle();
+            tanStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Tan.Index;
+            tanStyle.FillPattern = FillPattern.SolidForeground;
+            tanStyle.WrapText = true;
+            tanStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            tanStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            tanStyle.BorderRight = BorderStyle.Thin;
+            tanStyle.BorderBottom = BorderStyle.Thin;
+            tanStyle.BorderTop = BorderStyle.Thin;
+            tanStyle.BorderLeft = BorderStyle.Thin;
+
+            ICellStyle grey25PercentStyle = wb.CreateCellStyle();
+            grey25PercentStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
+            grey25PercentStyle.FillPattern = FillPattern.SolidForeground;
+            grey25PercentStyle.WrapText = true;
+            grey25PercentStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            grey25PercentStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            grey25PercentStyle.BorderRight = BorderStyle.Thin;
+            grey25PercentStyle.BorderBottom = BorderStyle.Thin;
+            grey25PercentStyle.BorderTop = BorderStyle.Thin;
+            grey25PercentStyle.BorderLeft = BorderStyle.Thin;
+
+            ICellStyle skyBlueStyle = wb.CreateCellStyle();
+            skyBlueStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.SkyBlue.Index;
+            skyBlueStyle.FillPattern = FillPattern.SolidForeground;
+            skyBlueStyle.WrapText = true;
+            skyBlueStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            skyBlueStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            skyBlueStyle.BorderRight = BorderStyle.Thin;
+            skyBlueStyle.BorderBottom = BorderStyle.Thin;
+            skyBlueStyle.BorderTop = BorderStyle.Thin;
+            skyBlueStyle.BorderLeft = BorderStyle.Thin;
+
+            ICellStyle limeStyle = wb.CreateCellStyle();
+            limeStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Lime.Index;
+            limeStyle.FillPattern = FillPattern.SolidForeground;
+            limeStyle.WrapText = true;
+            limeStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
+            limeStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
+            limeStyle.BorderRight = BorderStyle.Thin;
+            limeStyle.BorderBottom = BorderStyle.Thin;
+            limeStyle.BorderTop = BorderStyle.Thin;
+            limeStyle.BorderLeft = BorderStyle.Thin;
 
             ExcelContent excelContent = new ExcelContent
             {
@@ -177,7 +235,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     },
                     new ExcelColumnContent()
                     {
-                        Width = 6500,
+                        Width = 7500,
                         CellValue = "布種顏色",
                     }
                 },
@@ -186,6 +244,27 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             };
             foreach (List<ShippingSheetStructure> shippingSheetStructures in multiShippingSheetStructures)
             {
+                ICellStyle pageStyle = null;
+                switch (multiShippingSheetStructures.IndexOf(shippingSheetStructures) + 1)
+                {
+                    case 1:
+                        pageStyle = lightGreenStyle;
+                        break;
+                    case 2:
+                        pageStyle = tanStyle;
+                        break;
+                    case 3:
+                        pageStyle = grey25PercentStyle;
+                        break;
+                    case 4:
+                        pageStyle = skyBlueStyle;
+                        break;
+                    case 5:
+                        pageStyle = limeStyle;
+                        break;
+                    default:
+                        break;
+                }
                 foreach (ShippingSheetStructure shippingSheetStructure in shippingSheetStructures)
                 {
                     excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
@@ -194,8 +273,18 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         {
                             new ExcelCellContent()
                             {
-                                CellValue =  shippingSheetStructure.Customer
+                                CellValue =  shippingSheetStructure.Customer,
+                                CellStyle = pageStyle
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellStyle = pageStyle
+                            },
+                            new ExcelCellContent()
+                            {
+                                CellStyle = pageStyle
                             }
+
                         }
                     });
                     foreach (TextileShippingData textileShippingData in shippingSheetStructure.TextileShippingDatas)
@@ -206,17 +295,23 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                             {
                                 new ExcelCellContent()
                                 {
-                                    CellValue =  ""
+                                    CellValue =  "",
+                                    CellStyle = pageStyle
                                 },
                                 new ExcelCellContent()
                                 {
-                                    CellValue =  textileShippingData.TextileName
+                                    CellValue =  textileShippingData.TextileName,
+                                    CellStyle = pageStyle
+                                },
+                                new ExcelCellContent()
+                                {
+                                    CellStyle = pageStyle
                                 }
                             }
                         });
                         foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
-                            ICellStyle cellStyle = positionStyle;
+                            ICellStyle cellStyle = pageStyle;
                             if (shippingSheetData.ColorName.Contains("/-/"))
                             {
                                 cellStyle = redStyle;
@@ -226,7 +321,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                             }
                             else
                             {
-                                cellStyle = lightTurquoiseStyle;
+                                cellStyle = orangeStyle;
                             }
                             excelSheetContent.ExcelRowContents.Add(new ExcelRowContent()
                             {
@@ -234,11 +329,13 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                 {
                                     new ExcelCellContent()
                                     {
-                                        CellValue =  ""
+                                        CellValue =  "",
+                                        CellStyle = pageStyle
                                     },
                                           new ExcelCellContent()
                                     {
-                                        CellValue =  ""
+                                        CellValue =  "",
+                                        CellStyle = pageStyle
                                     },
                                     new ExcelCellContent()
                                     {
