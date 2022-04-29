@@ -218,6 +218,7 @@
     <Compile Include="DataClass\TrashSystem\TrashCustomerShipped.cs" />
     <Compile Include="DataClass\TrashSystem\TrashItem.cs" />
     <Compile Include="DataClass\TrashSystem\TrashShipped.cs" />
+    <Compile Include="DataClass\TrashSystem\TrashShippedInterval.cs" />
     <Compile Include="Modules\AccountSystemModule\IAccountSystemModule.cs" />
     <Compile Include="Modules\AccountSystemModule\Implement\AccountSystemModule.cs" />
     <Compile Include="Modules\CustomerModule\ICustomerModule.cs" />

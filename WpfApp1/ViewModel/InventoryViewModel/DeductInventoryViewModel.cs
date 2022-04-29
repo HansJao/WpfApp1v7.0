@@ -390,33 +390,41 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                             textileName = textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)).Inventory.ToList().Find(f => f.Contains("碼布")) ?? textileName;
 
                     }
-                    string colorFullName = row.GetCell(4).StringCellValue;
-                    //判斷顏色是否含有數量數字
-                    string colorName = colorFullName.Split('-').Count() == 2 ? colorFullName.Split('*')[0] : colorFullName.Split('-')[0];
-                    int quantity = colorFullName.Split('-').Count() == 2 ? 1 : colorFullName.Split('-')[1].Split('*')[0].ToInt();
-                    //計算實際出貨數量有多少
-                    int totalQuantity = CountTotalQuantity(sheet, rowCount);
-                    //判斷有幾行，然後直接跳行, 如遇到配件則不用跳行
-                    rowCount = colorFullName.Contains("配件") ? rowCount : (decimal)totalQuantity / 7 > 1 ? rowCount + (totalQuantity / 7) : rowCount;
-
-                    //判斷此客戶是否已有加入布種，或是前後布種名稱不一樣時，則加入新的布種, 如布種名稱為空格，則為上一個布種
-                    if (shippingSheetStructure.TextileShippingDatas.Count == 0 || (shippingSheetStructure.TextileShippingDatas.Last().TextileName != textileName && textileName != string.Empty))
+                    try
                     {
-                        shippingSheetStructure.TextileShippingDatas.Add(new TextileShippingData()
+                        string colorFullName = row.GetCell(4).StringCellValue;
+                        //判斷顏色是否含有數量數字
+                        string colorName = colorFullName.Split('-').Count() == 2 ? colorFullName.Split('*')[0] : colorFullName.Split('-')[0];
+                        int quantity = colorFullName.Split('-').Count() == 2 ? 1 : colorFullName.Split('-')[1].Split('*')[0].ToInt();
+                        //計算實際出貨數量有多少
+                        int totalQuantity = CountTotalQuantity(sheet, rowCount);
+                        //判斷有幾行，然後直接跳行, 如遇到配件則不用跳行
+                        rowCount = colorFullName.Contains("配件") ? rowCount : (decimal)totalQuantity / 7 > 1 ? rowCount + (totalQuantity / 7) : rowCount;
+
+                        //判斷此客戶是否已有加入布種，或是前後布種名稱不一樣時，則加入新的布種, 如布種名稱為空格，則為上一個布種
+                        if (shippingSheetStructure.TextileShippingDatas.Count == 0 || (shippingSheetStructure.TextileShippingDatas.Last().TextileName != textileName && textileName != string.Empty))
                         {
-                            TextileName = textileName,
-                            ShippingSheetDatas = new List<ShippingSheetData>()
+                            shippingSheetStructure.TextileShippingDatas.Add(new TextileShippingData()
+                            {
+                                TextileName = textileName,
+                                ShippingSheetDatas = new List<ShippingSheetData>()
+                            });
+                        }
+
+                        shippingSheetStructure.TextileShippingDatas.Last().ShippingSheetDatas.Add(new ShippingSheetData()
+                        {
+                            ColorName = colorName,
+                            //計算出貨總數
+                            ShippingNumber = totalQuantity,
+                            //原出貨數
+                            CountInventory = quantity,
                         });
                     }
-
-                    shippingSheetStructure.TextileShippingDatas.Last().ShippingSheetDatas.Add(new ShippingSheetData()
+                    catch (Exception ex)
                     {
-                        ColorName = colorName,
-                        //計算出貨總數
-                        ShippingNumber = totalQuantity,
-                        //原出貨數
-                        CountInventory = quantity,
-                    });
+                        MessageBox.Show(string.Concat("----出貨單---", "\n", sheet.SheetName, "Row：", rowCount, "\n", textileName, "\n", ex.StackTrace));
+                        throw ex;
+                    }
                 }
                 ShippingSheetStructures.Add(shippingSheetStructure);
             }

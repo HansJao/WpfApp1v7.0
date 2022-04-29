@@ -1023,6 +1023,50 @@
     "Account": [
       "20CVC單面對半*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC細絨137條"
+    ],
+    "Inventory": [
+      "30CVC細絨137條"
+    ],
+    "Account": [
+      "30CVC細絨137條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC單面282條"
+    ],
+    "Inventory": [
+      "30CVC單面282條"
+    ],
+    "Account": [
+      "30CVC282條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20CVC單面2424條"
+    ],
+    "Inventory": [
+      "20CVC單面2424條"
+    ],
+    "Account": [
+      "20CVC單2424條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "TR1*1"
+    ],
+    "Inventory": [
+      "TR1X1配件"
+    ],
+    "Account": [
+      "TR1X1白*"
+    ]
   }
 ]
 

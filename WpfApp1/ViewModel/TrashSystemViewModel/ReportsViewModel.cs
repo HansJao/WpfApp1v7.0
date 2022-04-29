@@ -36,6 +36,23 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         public string TextileName { get; set; }
         public DateTime CustomerDatePickerBegin { get; set; } = DateTime.Now.AddYears(-1);
         public DateTime CustomerDatePickerEnd { get; set; } = DateTime.Now;
+
+        #region 出貨區間
+        public string TextileShippedIntervalName { get; set; }
+        public string IntervalDate { get; set; } = string.Empty;
+        public ICommand ButtonIntervalDateClick { get { return new RelayCommand(ButtonIntervalDateExecute, CanExecute); } }
+        public ICommand ButtonExportShippedIntervalClick { get { return new RelayCommand(ButtonExportShippedIntervalExecute, CanExecute); } }
+        public DateTime TextileShippedIntervalDatePickerBegin { get; set; } = DateTime.Now.AddYears(-1);
+        public DateTime TextileShippedIntervalDatePickerEnd { get; set; } = DateTime.Now;
+        #endregion
+
+        private void ButtonIntervalDateExecute()
+        {
+            if (IntervalDate != string.Empty) IntervalDate += ",";
+            IntervalDate = IntervalDate + TextileShippedIntervalDatePickerBegin.ToString("yyyy/MM/dd") + "~" + TextileShippedIntervalDatePickerEnd.ToString("yyyy/MM/dd");
+            RaisePropertyChanged("IntervalDate");
+        }
+
         private void ButtonExportCustomerExecute()
         {
             IEnumerable<TrashCustomerShipped> trashCustomerShippedList = TrashModule.GetCustomerShippedList(CustomerName, CustomerDatePickerBegin, CustomerDatePickerEnd)
@@ -153,8 +170,81 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             excelHelper.CreateExcelFile(wb, excelContent);
         }
 
+        private void ButtonExportShippedIntervalExecute()
+        {
+            Dictionary<string, IEnumerable<IGrouping<string, TrashShipped>>> TrashShippedsDictionary = new Dictionary<string, IEnumerable<IGrouping<string, TrashShipped>>>();
+            List<string> textileNames = new List<string>();
+            string[] intervalDates = IntervalDate.Split(',');
+            foreach (string intervalDate in intervalDates)
+            {
+                DateTime dateTimeBegin = DateTime.Parse(intervalDate.Split('~')[0]);
+                DateTime dateTimeEnd = DateTime.Parse(intervalDate.Split('~')[1]);
+                List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(dateTimeBegin, dateTimeEnd).Where(w => w.I_03.Contains(TextileShippedIntervalName)).ToList();
+                TrashShippedsDictionary.Add(intervalDate, trashShippedList.GroupBy(g => g.I_03));
+                textileNames.AddRange(trashShippedList.Select(s => s.I_03).Distinct());
+            }
+            textileNames = textileNames.Distinct().ToList();
+
+            ExcelContent excelContent = new ExcelContent
+            {
+                FileName = string.Concat(FilterText + "出貨區間-", TextileShippedIntervalName),
+                ExcelSheetContents = new List<ExcelSheetContent>(),
+            };
+            List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
+            ExcelSheetContent excelSheetContent = new ExcelSheetContent();
+            excelSheetContent.SheetName = TextileShippedIntervalName;
+            excelSheetContent.ExcelColumnContents = new List<ExcelColumnContent>()
+            {
+                new ExcelColumnContent()
+                {
+                    CellValue = "布種名稱",
+                    Width = 5200
+                }
+            };
+            foreach (string intervalDate in intervalDates)
+            {
+                excelSheetContent.ExcelColumnContents.Add(new ExcelColumnContent() { CellValue = intervalDate, Width = 5200 });
+            }
+            excelSheetContent.ExcelRowContents = new List<ExcelRowContent>();
+
+            foreach (string textileName in textileNames)
+            {
+                ExcelRowContent excelRowContent = new ExcelRowContent()
+                {
+                    ExcelCellContents = new List<ExcelCellContent>
+                    {
+                        new ExcelCellContent
+                        {
+                            CellValue = textileName
+                        }
+                    }
+                };
+                foreach (var item in TrashShippedsDictionary.Values)
+                {
+                    excelRowContent.ExcelCellContents.Add(new ExcelCellContent()
+                    {
+                        CellValue = item.Where(w => w.Key == textileName).FirstOrDefault() == null ? string.Empty : item.Where(w => w.Key == textileName).FirstOrDefault().Sum(s => s.Quantity).ToString()
+                    }); ;
+                }
+                excelSheetContent.ExcelRowContents.Add(excelRowContent);
+            }
+
+            excelSheetContents.Add(excelSheetContent);
+            excelContent.ExcelSheetContents.AddRange(excelSheetContents);
+
+            ExcelHelper excelHelper = new ExcelHelper();
+            IWorkbook wb = new XSSFWorkbook();
+            excelHelper.CreateExcelFile(wb, excelContent);
+        }
         private void ButtonExportShippedListExecute()
         {
+            foreach (string intervalDate in IntervalDate.Split(','))
+            {
+                DateTime dateTimeBegin = DateTime.Parse(intervalDate.Split('~')[0]);
+                DateTime dateTimeEnd = DateTime.Parse(intervalDate.Split('~')[1]);
+                List<TrashShipped> trashShippedLists = TrashModule.GetTrashShippedList(dateTimeBegin, dateTimeEnd).Where(w => w.I_03.Contains(TextileShippedIntervalName)).ToList();
+            }
+
 
             List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(DatePickerBegin, DatePickerEnd).Where(w => w.I_03.Contains(FilterText)).ToList();
             IOrderedEnumerable<IGrouping<string, TrashShipped>> groupTrashShippedList = trashShippedList
@@ -164,7 +254,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             ExcelContent excelContent = new ExcelContent
             {
-                FileName = string.Concat(FilterText + "出貨區間", DatePickerBegin.ToString("yyyyMMdd"),"-", DatePickerEnd.ToString("yyyyMMdd")),
+                FileName = string.Concat(FilterText + "出貨區間", DatePickerBegin.ToString("yyyyMMdd"), "-", DatePickerEnd.ToString("yyyyMMdd")),
                 ExcelSheetContents = new List<ExcelSheetContent>(),
             };
             List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
