@@ -551,7 +551,8 @@ namespace WpfApp1.Pages.ProcessOrderPages
         }
         private void DeliveryListDialogClosed(object sender, EventArgs e)
         {
-            DeliveryListDialog = null;
+            Window window = (Window)sender;
+            DeliveryListDialog.Remove(window.Title.Split('-')[1]);
         }
         private void DataGridProcessOrderFlowDateDetail_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
