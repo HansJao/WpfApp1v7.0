@@ -60,28 +60,31 @@
                 <Button Content="出貨區間匯出" Command="{Binding ButtonExportShippedIntervalClick}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Margin="2"/>
             </StackPanel>
             <StackPanel>
-                <Label Content="客戶出貨紀錄查詢"/>
-                <StackPanel Orientation="Horizontal">
+                <Label Content="客戶出貨紀錄查詢" Margin="2"/>
+                <StackPanel Orientation="Horizontal" Margin="2">
                     <Label Content="開始時間:"/>
                     <DatePicker SelectedDate="{Binding CustomerDatePickerBegin}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="2">
                     <Label Content="終止時間:"/>
                     <DatePicker SelectedDate="{Binding CustomerDatePickerEnd}"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="2">
                     <Label Content="客戶名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox Text="{Binding CustomerName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="2">
                     <Label Content="布種名稱:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                     <TextBox Text="{Binding TextileName}" HorizontalAlignment="Left" VerticalAlignment="Top" Width="120"/>
                 </StackPanel>
-                <Button Content="客戶出貨紀錄匯出" Command="{Binding ButtonExportCustomerClick}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100"/>
+                <Button Content="客戶出貨紀錄匯出" Command="{Binding ButtonExportCustomerClick}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Margin="2"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Super庫存出貨比對" Margin="2"/>
+                <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding ShippingCheckDate}" VerticalAlignment="Top" Margin="2"/>
+                <Button HorizontalAlignment="Right" Content="匯出"   Width="105" Command="{Binding ExportShippingCheckExecuteClick}" Margin="2"/>
             </StackPanel>
         </StackPanel>
-        <Button HorizontalAlignment="Left" Content="Super、庫存對照" Margin="688,42,0,0" VerticalAlignment="Top" Width="105" Command="{Binding ExportShippingCheckExecuteClick}" />
-        <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding ShippingCheckDate}" Margin="688,10,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Page>

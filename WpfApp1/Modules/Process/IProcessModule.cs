@@ -148,7 +148,7 @@ namespace WpfApp1.Modules.Process
         /// <param name="containFinish"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish,string color);
+        IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish, string color, bool afterThreeMouth);
 
 
 

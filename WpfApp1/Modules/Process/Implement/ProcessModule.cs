@@ -239,7 +239,7 @@ namespace WpfApp1.Modules.Process.Implement
         /// <param name="statusList"></param>
         /// <param name="containFinish"></param>
         /// <returns></returns>
-        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish, string color)
+        public IEnumerable<ProcessOrder> GetProcessOrderFilter(List<Factory> factoryList, List<ProcessOrderColorStatus> statusList, bool containFinish, string color, bool afterThreeMouth)
         {
             IEnumerable<ProcessOrder> result;
             if (color == string.Empty)
@@ -254,6 +254,11 @@ namespace WpfApp1.Modules.Process.Implement
             else
             {
                 result = GetProcessOrderByColor(color, containFinish);
+            }
+
+            if (afterThreeMouth)
+            {
+                result = result.Where(w => w.CreateDate > DateTime.Now.AddMonths(-3));
             }
             return result.OrderByDescending(o => o.OrderNo);
         }

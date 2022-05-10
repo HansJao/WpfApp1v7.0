@@ -25,6 +25,7 @@
                 <DockPanel DockPanel.Dock="Top">
                     <StackPanel>
                         <CheckBox x:Name="CheckBoxContainFinish" VerticalAlignment="Center" Content="包含已出完訂單" Click="CheckBoxContainFinish_Click" />
+                        <CheckBox x:Name="CheckBoxAfterThreeMouth" VerticalAlignment="Center" Content="三個月內訂單" Click="CheckBoxAfterThreeMouth_Click" />
                         <Button x:Name="ButtonDisplayAllOrder" Content="顯示所有訂單" Width="100" Margin="2,0,3,0" Click="ButtonDisplayAllOrder_Click"/>
                     </StackPanel>
                     <ComboBox x:Name="ComboBoxStatus" Width="120" Height="25" SelectionChanged="ComboBoxStatus_SelectionChanged" />
