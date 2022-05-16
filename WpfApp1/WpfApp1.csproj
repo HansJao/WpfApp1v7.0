@@ -341,6 +341,7 @@
     <Compile Include="ViewModel\TrashSystemViewModel\RevenueExportViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\ShipFeatureViewModel.cs" />
     <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryByFeatureViewModel.cs" />
+    <Compile Include="ViewModel\TrashSystemViewModel\WindowViewModel\CustomerOrderHistoryViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="Windows\CommonWindows\TextBoxMessageDialog.xaml.cs">
       <DependentUpon>TextBoxMessageDialog.xaml</DependentUpon>
@@ -389,6 +390,9 @@
     </Compile>
     <Compile Include="Windows\TrashSystemWindows\CustomerOrderHistoryByFeatureDialog.xaml.cs">
       <DependentUpon>CustomerOrderHistoryByFeatureDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\TrashSystemWindows\CustomerOrderHistoryDialog.xaml.cs">
+      <DependentUpon>CustomerOrderHistoryDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -560,6 +564,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\TrashSystemWindows\CustomerOrderHistoryByFeatureDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\TrashSystemWindows\CustomerOrderHistoryDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

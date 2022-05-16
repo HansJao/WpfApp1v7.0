@@ -84,14 +84,14 @@ namespace WpfApp1.Adapter.DBF
             string sqlCmd = "";
             if (string.IsNullOrEmpty(customerName))
             {
-                sqlCmd = string.Concat(@"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+                sqlCmd = string.Concat(@"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY,invosub.Price FROM (CUST.dbf AS cust 
                             INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
                             INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 AND invosub.F_01 = ITEM.F_01 
                             WHERE invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')");
             }
             else
             {
-                sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY FROM (CUST.dbf AS cust 
+                sqlCmd = @"SELECT DISTINCT cust.C_Name,invosub.IN_DATE,invosub.I_01,item.I_03,invosub.QUANTITY,invosub.Price FROM (CUST.dbf AS cust 
                             INNER JOIN INVOSUB.dbf AS invosub ON cust.CARD_NO = invosub.C_01)
                             INNER JOIN ITEM.dbf AS item ON invosub.I_01 = ITEM.I_01 AND  invosub.F_01 = ITEM.F_01
                             WHERE cust.C_NAME = '" + customerName + "' AND invosub.IN_DATE Between cDate('" + customerDatePickerBegin.ToString() + "') and cDate('" + customerDatePickerEnd.ToString() + "')";

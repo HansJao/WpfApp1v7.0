@@ -238,15 +238,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         }
         private void ButtonExportShippedListExecute()
         {
-            foreach (string intervalDate in IntervalDate.Split(','))
-            {
-                DateTime dateTimeBegin = DateTime.Parse(intervalDate.Split('~')[0]);
-                DateTime dateTimeEnd = DateTime.Parse(intervalDate.Split('~')[1]);
-                List<TrashShipped> trashShippedLists = TrashModule.GetTrashShippedList(dateTimeBegin, dateTimeEnd).Where(w => w.I_03.Contains(TextileShippedIntervalName)).ToList();
-            }
-
-
-            List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(DatePickerBegin, DatePickerEnd).Where(w => w.I_03.Contains(FilterText)).ToList();
+            List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(TextileShippedIntervalDatePickerBegin, TextileShippedIntervalDatePickerEnd).Where(w => w.I_03.Contains(TextileShippedIntervalName)).ToList();
             IOrderedEnumerable<IGrouping<string, TrashShipped>> groupTrashShippedList = trashShippedList
                                                                                         .OrderByDescending(o => o.Quantity)
                                                                                         .GroupBy(g => g.I_03)
@@ -254,12 +246,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             ExcelContent excelContent = new ExcelContent
             {
-                FileName = string.Concat(FilterText + "出貨區間", DatePickerBegin.ToString("yyyyMMdd"), "-", DatePickerEnd.ToString("yyyyMMdd")),
+                FileName = string.Concat(TextileShippedIntervalName + "出貨區間", TextileShippedIntervalDatePickerBegin.ToString("yyyyMMdd"), "-", TextileShippedIntervalDatePickerEnd.ToString("yyyyMMdd")),
                 ExcelSheetContents = new List<ExcelSheetContent>(),
             };
             List<ExcelSheetContent> excelSheetContents = new List<ExcelSheetContent>();
             ExcelSheetContent excelSheetContent = new ExcelSheetContent();
-            excelSheetContent.SheetName = FilterText;
+            excelSheetContent.SheetName = TextileShippedIntervalName;
             excelSheetContent.ExcelColumnContents = new List<ExcelColumnContent>()
             {
                 new ExcelColumnContent()

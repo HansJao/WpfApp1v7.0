@@ -1,0 +1,29 @@
+﻿<Window x:Class="WpfApp1.Windows.TrashSystemWindows.CustomerOrderHistoryDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1.Windows.TrashSystemWindows"
+        mc:Ignorable="d"
+        Title="CustomerOrderHistoryDialog" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="客戶代號:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <Label Content="{Binding Path=TrashCustomer.CARD_NO}" Width="100" Height="24" HorizontalAlignment="Left" />
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                <Label Content="客戶名稱:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <Label Content="{Binding Path=TrashCustomer.C_NAME}" Width="100" Height="24" HorizontalAlignment="Left" />
+            </StackPanel>          
+            <DataGrid ItemsSource="{Binding TrashCustomerShippeds}" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" AlternatingRowBackground="LightGray" CanUserAddRows="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE,StringFormat=yyyyMMdd}"/>
+                    <DataGridTextColumn Header="布種名稱" Binding="{Binding I_03}"/>
+                    <DataGridTextColumn Header="數量" Binding="{Binding Quantity}"/>
+                    <DataGridTextColumn Header="單價" Binding="{Binding Price}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+    </Grid>
+</Window>

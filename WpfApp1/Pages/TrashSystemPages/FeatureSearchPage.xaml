@@ -13,26 +13,60 @@
         <viewModel:FeatureSearchViewModel/>
     </Page.DataContext>
     <Grid>
-        <Label Content="特 徵: " Margin="10,7,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" />
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="58,10,0,0" TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding TrashItem}" AutoGenerateColumns="False" Margin="10,38,0,0" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <i:InvokeCommandAction Command="{Binding DataGridDoubleClick}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <DataGrid.Style>
-                <Style TargetType="DataGrid">
-                    <Setter Property="AlternatingRowBackground" Value="LightCoral"/>
-                </Style>
-            </DataGrid.Style>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}" FontSize="14"/>
-                <DataGridTextColumn Header="貨號" Binding="{Binding I_01}" FontSize="14"/>
-                <DataGridTextColumn Header="特徵" Binding="{Binding I_03}" FontSize="14"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="223,10,0,0" TextWrapping="Wrap" Text="{Binding ProductNumber,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <Label Content="貨 號:" HorizontalAlignment="Left" Margin="183,7,0,0" VerticalAlignment="Top"/>
+        <StackPanel Orientation="Horizontal">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Label Content="特     徵: "  HorizontalAlignment="Left" VerticalAlignment="Top" />
+                    <TextBox HorizontalAlignment="Left" Height="23"  TextWrapping="Wrap" Text="{Binding Feature,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Label Content="貨     號: " HorizontalAlignment="Left"  VerticalAlignment="Top"/>
+                    <TextBox HorizontalAlignment="Left" Height="23"  TextWrapping="Wrap" Text="{Binding ProductNumber,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+                </StackPanel>
+                <DataGrid x:Name="DataGridTrashItem" HorizontalAlignment="Left" Height="400" ItemsSource="{Binding TrashItemList}" SelectedItem="{Binding TrashItem}" AutoGenerateColumns="False" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False" Margin="2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataGridDoubleClick}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Setter Property="AlternatingRowBackground" Value="LightCoral"/>
+                        </Style>
+                    </DataGrid.Style>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="工廠代號" Binding="{Binding F_01}" FontSize="14"/>
+                        <DataGridTextColumn Header="貨號" Binding="{Binding I_01}" FontSize="14"/>
+                        <DataGridTextColumn Header="特徵" Binding="{Binding I_03}" FontSize="14"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="2">
+                    <Label Content="客戶代號: "/>
+                    <TextBox  Height="23" TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding CustomerNumber,UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="2" >
+                    <Label Content="客戶名稱: "/>
+                    <TextBox  Height="23"  TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding CustomerName,UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
+                </StackPanel>
+                <DataGrid x:Name="DataGridTrashIte" HorizontalAlignment="Left" Height="400" ItemsSource="{Binding TrashCustomerList}" SelectedItem="{Binding SelectedTrashCustomer}" AutoGenerateColumns="False" VerticalAlignment="Top" RowHeight="25" CanUserAddRows="False" Margin="2">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding DataGridCustomerDoubleClick}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Style>
+                        <Style TargetType="DataGrid">
+                            <Setter Property="AlternatingRowBackground" Value="LightCoral"/>
+                        </Style>
+                    </DataGrid.Style>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="客戶代號" Binding="{Binding CARD_NO}" FontSize="14"/>
+                        <DataGridTextColumn Header="客戶名稱" Binding="{Binding C_NAME}" FontSize="14"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Page>
