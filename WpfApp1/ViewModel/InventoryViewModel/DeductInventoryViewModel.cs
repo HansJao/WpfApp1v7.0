@@ -94,7 +94,12 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                                         if (shippingSheetData.ShippingNumber == 0)
                                         {
                                             shippingSheetData.ColorName = shippingSheetData.ColorName + "/-/" + inventoryCell.StringCellValue;
+                                            //若是出貨為0，則直接跳過，不寫入庫存
                                             break;
+                                        }
+                                        else if (shippingSheetData.ShippingNumber != shippingSheetData.CountInventory)
+                                        {
+                                            shippingSheetData.ColorName = shippingSheetData.ColorName + "/**/" + inventoryCell.StringCellValue;
                                         }
                                         else
                                         {
@@ -103,8 +108,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
                                         ICell deductCell = inventoryRow.GetCell(dateColumnNum) ?? inventoryRow.CreateCell(dateColumnNum);
                                         // ICell countInventoryCell = inventoryRow.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt());
-                                        double totalDeduct = shippingSheetData.ShippingNumber + deductCell.NumericCellValue;
-                                        //若是出貨為0，則直接跳過，不寫入庫存
+                                        double totalDeduct = shippingSheetData.ShippingNumber + deductCell.NumericCellValue;                                        
                                         deductCell.SetCellValue(totalDeduct);
                                         deductCell.CellStyle = positionStyle;
                                         break;
@@ -312,12 +316,14 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         foreach (ShippingSheetData shippingSheetData in textileShippingData.ShippingSheetDatas)
                         {
                             ICellStyle cellStyle = pageStyle;
+                            //實際出貨數為零，顯示紅色
                             if (shippingSheetData.ColorName.Contains("/-/"))
                             {
                                 cellStyle = redStyle;
                             }
                             else if (shippingSheetData.ColorName.Contains("/*/"))
                             {
+                                //出貨與實際相符，不修改顏色
                             }
                             else
                             {
