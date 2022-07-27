@@ -108,7 +108,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
                                         ICell deductCell = inventoryRow.GetCell(dateColumnNum) ?? inventoryRow.CreateCell(dateColumnNum);
                                         // ICell countInventoryCell = inventoryRow.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt());
-                                        double totalDeduct = shippingSheetData.ShippingNumber + deductCell.NumericCellValue;                                        
+                                        double totalDeduct = shippingSheetData.ShippingNumber + deductCell.NumericCellValue;
                                         deductCell.SetCellValue(totalDeduct);
                                         deductCell.CellStyle = positionStyle;
                                         break;
@@ -384,7 +384,17 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 for (int rowCount = 6; rowCount <= sheet.LastRowNum; rowCount++)
                 {
                     IRow row = sheet.GetRow(rowCount);
-                    string textileName = row.GetCell(1).StringCellValue;
+                    string textileName = string.Empty;
+                    try
+                    {
+                        textileName = row.GetCell(1).StringCellValue;
+                    }
+                    catch (Exception ex)
+                    {
+
+                        MessageBox.Show(string.Concat("----出貨單---", "\n", sheet.SheetName, "Row：", rowCount + 1, "\n", textileName, "\n", ex.StackTrace));
+                        throw ex;
+                    }
                     //如有配件，則使用布種名稱對應到與庫存管理相同的名字
                     if (textileName.Contains("配件"))
                     {
@@ -428,7 +438,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show(string.Concat("----出貨單---", "\n", sheet.SheetName, "Row：", rowCount, "\n", textileName, "\n", ex.StackTrace));
+                        MessageBox.Show(string.Concat("----出貨單---", "\n", sheet.SheetName, "Row：", rowCount + 1, "\n", textileName, "\n", ex.StackTrace));
                         throw ex;
                     }
                 }

@@ -115,17 +115,6 @@
   },
   {
     "ProcessOrder": [
-      "單面+OP10CM條"
-    ],
-    "Inventory": [
-      "單面OP10CM條"
-    ],
-    "Account": [
-      "單面OP10CM條*"
-    ]
-  },
-  {
-    "ProcessOrder": [
       "T/R細絨條+OP"
     ],
     "Inventory": [
@@ -629,6 +618,18 @@
   },
   {
     "ProcessOrder": [
+      "SP細絨布配件"
+    ],
+    "Inventory": [
+      "SP細絨布配件",
+      "SP細絨布碼布"
+    ],
+    "Account": [
+      "SP細絨配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "30CVC1*1+OP"
     ],
     "Inventory": [
@@ -1066,6 +1067,72 @@
     ],
     "Account": [
       "TR1X1白*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC華夫格"
+    ],
+    "Inventory": [
+      "CVC華夫格"
+    ],
+    "Account": [
+      "CVC華夫格*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "OP牙籤立體條"
+    ],
+    "Inventory": [
+      "OP牙籤立體條"
+    ],
+    "Account": [
+      "OP牙籤立體*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20TR單面2CM對半條"
+    ],
+    "Inventory": [
+      "20TR單2CM"
+    ],
+    "Account": [
+      "20TR單2CM對半條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "20TR單面7CM對半條"
+    ],
+    "Inventory": [
+      "20TR單7CM"
+    ],
+    "Account": [
+      "20TR單7CM對半條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP62條"
+    ],
+    "Inventory": [
+      "單面+OP62條"
+    ],
+    "Account": [
+      "單面OP62條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "OP抽針布"
+    ],
+    "Inventory": [
+      "OP抽針布"
+    ],
+    "Account": [
+      "OP抽針布*"
     ]
   }
 ]
