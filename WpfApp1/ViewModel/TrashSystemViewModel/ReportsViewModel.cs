@@ -184,6 +184,25 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 textileNames.AddRange(trashShippedList.Select(s => s.I_03).Distinct());
             }
             textileNames = textileNames.Distinct().ToList();
+            #region 依照庫存管理排序
+            string fileName = string.Concat(AppSettingConfig.FilePath(), "\\", AppSettingConfig.StoreManageFileName());
+            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+            IWorkbook Workbook;
+            Workbook = new XSSFWorkbook(fileStream);
+            ISheet sheet = Workbook.GetSheet(TextileShippedIntervalName);
+            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
+            TextileNameMapping textileNameMapping = textileNameMappings.Where(w => w.Inventory.Contains(TextileShippedIntervalName)).FirstOrDefault();
+            List<string> colorName = new List<string>();
+
+            for (int i = 1; i < sheet.LastRowNum; i++)
+            {
+                colorName.Add(textileNameMapping.Account.FirstOrDefault().Substring(0, textileNameMapping.Account.FirstOrDefault().Length - 1) + sheet.GetRow(i).GetCell(1).StringCellValue.Split('-')[0]);
+            }
+
+            textileNames = textileNames.OrderBy(o => colorName.IndexOf(o)).ToList();
+            #endregion
+
 
             ExcelContent excelContent = new ExcelContent
             {
