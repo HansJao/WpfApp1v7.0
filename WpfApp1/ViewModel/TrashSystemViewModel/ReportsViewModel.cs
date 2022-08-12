@@ -173,13 +173,16 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
         private void ButtonExportShippedIntervalExecute()
         {
             Dictionary<string, IEnumerable<IGrouping<string, TrashShipped>>> TrashShippedsDictionary = new Dictionary<string, IEnumerable<IGrouping<string, TrashShipped>>>();
+            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
+            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
+            TextileNameMapping textileNameMapping = textileNameMappings.Where(w => w.Inventory.Contains(TextileShippedIntervalName)).FirstOrDefault();
             List<string> textileNames = new List<string>();
             string[] intervalDates = IntervalDate.Split(',');
             foreach (string intervalDate in intervalDates)
             {
                 DateTime dateTimeBegin = DateTime.Parse(intervalDate.Split('~')[0]);
                 DateTime dateTimeEnd = DateTime.Parse(intervalDate.Split('~')[1]);
-                List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(dateTimeBegin, dateTimeEnd).Where(w => w.I_03.Contains(TextileShippedIntervalName)).ToList();
+                List<TrashShipped> trashShippedList = TrashModule.GetTrashShippedList(dateTimeBegin, dateTimeEnd).Where(w => w.I_03.Contains(textileNameMapping.Account.FirstOrDefault().Split('*')[0])).ToList();
                 TrashShippedsDictionary.Add(intervalDate, trashShippedList.GroupBy(g => g.I_03));
                 textileNames.AddRange(trashShippedList.Select(s => s.I_03).Distinct());
             }
@@ -190,13 +193,13 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             IWorkbook Workbook;
             Workbook = new XSSFWorkbook(fileStream);
             ISheet sheet = Workbook.GetSheet(TextileShippedIntervalName);
-            ExternalDataHelper externalDataHelper = new ExternalDataHelper();
-            IEnumerable<TextileNameMapping> textileNameMappings = externalDataHelper.GetTextileNameMappings();
-            TextileNameMapping textileNameMapping = textileNameMappings.Where(w => w.Inventory.Contains(TextileShippedIntervalName)).FirstOrDefault();
+
             List<string> colorName = new List<string>();
 
             for (int i = 1; i < sheet.LastRowNum; i++)
             {
+                if (sheet.GetRow(i) == null || sheet.GetRow(i).GetCell(1) == null)
+                    break;
                 colorName.Add(textileNameMapping.Account.FirstOrDefault().Substring(0, textileNameMapping.Account.FirstOrDefault().Length - 1) + sheet.GetRow(i).GetCell(1).StringCellValue.Split('-')[0]);
             }
 

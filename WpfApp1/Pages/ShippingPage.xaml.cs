@@ -238,7 +238,7 @@ namespace WpfApp1.Pages
             }
             GetShippingCacheNameList();
             ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
-            MessageBox.Show("出貨單已匯出！！","出貨單匯出通知");
+            MessageBox.Show("出貨單已匯出！！", "出貨單匯出通知");
         }
 
         private List<ExcelSheetContent> ExportToShip(IWorkbook wb)
@@ -294,7 +294,7 @@ namespace WpfApp1.Pages
                             ShippingNumber = shippingSheetData.ShippingNumber > 7 ? 7 : shippingSheetData.ShippingNumber,
                         });
                         //出貨數量超過7個則換行
-                        for (int shippingNumberCount = 0; shippingNumberCount < shippingSheetData.ShippingNumber / 7; shippingNumberCount++)
+                        for (int shippingNumberCount = 0; shippingNumberCount < (shippingSheetData.ShippingNumber - 7) / 7.0; shippingNumberCount++)
                         {
                             if (shippingSheetDatasExpand.Count() <= 13)
                                 shippingSheetDatasExpand.Last().ShippingNumber += shippingSheetData.ShippingNumber - (shippingNumberCount + 1) * 7;
