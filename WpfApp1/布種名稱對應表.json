@@ -1134,6 +1134,50 @@
     "Account": [
       "OP抽針布*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "單面+OP66對半條"
+    ],
+    "Inventory": [
+      "單面+OP66對半條"
+    ],
+    "Account": [
+      "單面OP66條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "法式羅紋磨毛"
+    ],
+    "Inventory": [
+      "法式羅紋磨毛"
+    ],
+    "Account": [
+      "法式羅紋磨毛*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "變色樓梯63條"
+    ],
+    "Inventory": [
+      "變色樓梯63條"
+    ],
+    "Account": [
+      "變色樓梯63條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "變色樓梯21條"
+    ],
+    "Inventory": [
+      "變色樓梯21條"
+    ],
+    "Account": [
+      "變色樓梯21條*"
+    ]
   }
 ]
 

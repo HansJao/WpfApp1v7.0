@@ -396,16 +396,16 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         throw ex;
                     }
                     //如有配件，則使用布種名稱對應到與庫存管理相同的名字
-                    if (textileName.Contains("配件"))
-                    {
-                        if (textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) == null)
-                        {
+                    //if (textileName.Contains("配件"))
+                    //{
+                    //    if (textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)) == null)
+                    //    {
 
-                        }
-                        else
-                            textileName = textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)).Inventory.ToList().Find(f => f.Contains("碼布")) ?? textileName;
+                    //    }
+                    //    else
+                    //        textileName = textileNameMappings.ToList().Find(f => f.Inventory.Contains(textileName)).Inventory.ToList().Find(f => f.Contains("碼布")) ?? textileName;
 
-                    }
+                    //}
                     try
                     {
                         string colorFullName = row.GetCell(4).StringCellValue;
@@ -476,21 +476,21 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         {
             IRow row = sheet.GetRow(rowCount);
             //配件數量要除0.34 OR  0.3
-            if (row.GetCell(4).StringCellValue.Contains("配件"))
-            {
-                int accessoriesCount = 0;
-                for (int quantityCount = 6; quantityCount <= 12; quantityCount++)
-                {
-                    if (row.GetCell(quantityCount) != null && row.GetCell(quantityCount).CellType == CellType.Numeric)
-                        if (row.GetCell(4).StringCellValue.Contains("TC"))
-                            accessoriesCount += Math.Round(row.GetCell(quantityCount).NumericCellValue / 0.3, 0).ToInt();
-                        else
-                            accessoriesCount += Math.Round(row.GetCell(quantityCount).NumericCellValue / 0.34, 0).ToInt();
-                    else
-                        break;
-                }
-                return accessoriesCount;
-            }
+            //if (row.GetCell(4).StringCellValue.Contains("配件"))
+            //{
+            //    int accessoriesCount = 0;
+            //    for (int quantityCount = 6; quantityCount <= 12; quantityCount++)
+            //    {
+            //        if (row.GetCell(quantityCount) != null && row.GetCell(quantityCount).CellType == CellType.Numeric)
+            //            if (row.GetCell(4).StringCellValue.Contains("TC"))
+            //                accessoriesCount += Math.Round(row.GetCell(quantityCount).NumericCellValue / 0.3, 0).ToInt();
+            //            else
+            //                accessoriesCount += Math.Round(row.GetCell(quantityCount).NumericCellValue / 0.34, 0).ToInt();
+            //        else
+            //            break;
+            //    }
+            //    return accessoriesCount;
+            //}
             int quantityCheck = 0;
             //數量確認
             for (int quantityCount = 6; quantityCount <= 12; quantityCount++)

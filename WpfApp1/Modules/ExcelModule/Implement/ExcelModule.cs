@@ -50,7 +50,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
                 var colorList = new List<StoreData>();
                 for (int rowIndex = 1; rowIndex <= sheet.LastRowNum; rowIndex++)  //對工作表每一行  
                 {
-                    if (rowIndex > 120)
+                    if (rowIndex > 200)
                         break;
                     row = sheet.GetRow(rowIndex);   //row讀入第i行數據  
 

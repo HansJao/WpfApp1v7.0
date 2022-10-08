@@ -138,7 +138,8 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 newDefaultPriceSuccess = AccountSystemModule.InsertDefaultPrice(accountTextile);
             }
             IEnumerable<AccountTextile> accountTextiles = AccountSystemModule.GetAccountTextile();
-            CustomerTextilePrice customerTextilePrice = new CustomerTextilePrice
+       
+           CustomerTextilePrice customerTextilePrice = new CustomerTextilePrice
             {
                 AccountTextileID = accountTextiles.Where(w => w.FactoryID == SelectedCustomerCheckBillSheet.F_01 && w.ItemID == SelectedCustomerCheckBillSheet.I_01).FirstOrDefault().AccountTextileID,
                 AccountCustomerID = SelectedTrashCustomer.CARD_NO,

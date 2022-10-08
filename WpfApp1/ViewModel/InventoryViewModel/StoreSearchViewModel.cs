@@ -237,7 +237,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 var colorList = new List<StoreData>();
                 for (int rowNumber = 1; rowNumber <= sheet.LastRowNum; rowNumber++)  //對工作表每一行
                 {
-                    if (rowNumber > 70)
+                    if (rowNumber > 200)
                         break;
                     row = sheet.GetRow(rowNumber);   //row讀入第i行數據  
 
