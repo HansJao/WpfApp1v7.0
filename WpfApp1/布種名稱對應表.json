@@ -61,8 +61,7 @@
     ],
     "Inventory": [
       "30CVC細絨布配件",
-      "CVC2X2+OP配件",
-      "30CVC細絨布碼布"
+      "CVC2X2+OP配件"
     ],
     "Account": [
       "CVC2X2+OP配件*"
@@ -335,6 +334,18 @@
   },
   {
     "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "30CVC健康布配件",
+      "CVC健康配件"
+    ],
+    "Account": [
+      "CVC健康配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "CVC大絨刷磨毛"
     ],
     "Inventory": [
@@ -350,8 +361,7 @@
     ],
     "Inventory": [
       "CVC2X2+OP刷磨配件",
-      "CVC大絨刷磨配件",
-      "CVC大絨刷磨碼布"
+      "CVC大絨刷磨配件"
     ],
     "Account": [
       "CVC2X2+OP配件*"
@@ -374,11 +384,10 @@
     ],
     "Inventory": [
       "CVC2X2+OP大絨配件",
-      "CVC大絨布配件",
-      "CVC大絨布碼布"
+      "CVC大絨布配件"
     ],
     "Account": [
-      "CVC2X2+OP配件*"
+      "CVC大配件*"
     ]
   },
   {
@@ -576,7 +585,6 @@
     ],
     "Inventory": [
       "TC細絨布配件",
-      "TC細絨布碼布",
       "TC細絨配件"
     ],
     "Account": [
@@ -618,11 +626,11 @@
   },
   {
     "ProcessOrder": [
-      "SP細絨布配件"
+      "X"
     ],
     "Inventory": [
       "SP細絨布配件",
-      "SP細絨布碼布"
+      "SP細絨配件"
     ],
     "Account": [
       "SP細絨配件*"
@@ -1016,6 +1024,18 @@
   },
   {
     "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "法式羅紋磨毛配件",
+      "法式羅紋配件"
+    ],
+    "Account": [
+      "法羅磨毛配件*"
+    ]
+  },
+  {
+    "ProcessOrder": [
       "20CVC單面對半條"
     ],
     "Inventory": [
@@ -1078,6 +1098,18 @@
     ],
     "Account": [
       "CVC華夫格*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "CVC華夫格配件",
+      "華夫格配件"
+    ],
+    "Account": [
+      "華夫格配件*"
     ]
   },
   {
