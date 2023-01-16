@@ -18,6 +18,14 @@ namespace WpfApp1.Utility
             }
             return Convert.ToInt32(s);
         }
+        public static decimal ToDecimal(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return 0;
+            }
+            return Convert.ToDecimal(s);
+        }
         public static int ToInt(this Enum s)
         {
             return Convert.ToInt32(s);

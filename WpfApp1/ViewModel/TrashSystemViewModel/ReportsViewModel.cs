@@ -21,6 +21,7 @@ using WpfApp1.Modules.ExcelModule.Implement;
 using WpfApp1.Modules.TrashModule;
 using WpfApp1.Modules.TrashModule.Implement;
 using WpfApp1.Utility;
+using WpfApp1.DataClass.Enumeration;
 
 namespace WpfApp1.ViewModel.TrashSystemViewModel
 {
@@ -194,16 +195,20 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             Workbook = new XSSFWorkbook(fileStream);
             ISheet sheet = Workbook.GetSheet(TextileShippedIntervalName);
 
-            List<string> colorName = new List<string>();
+            List<TextileColorInventory> colorName = new List<TextileColorInventory>();
 
             for (int i = 1; i < sheet.LastRowNum; i++)
             {
                 if (sheet.GetRow(i) == null || sheet.GetRow(i).GetCell(1) == null)
                     break;
-                colorName.Add(textileNameMapping.Account.FirstOrDefault().Substring(0, textileNameMapping.Account.FirstOrDefault().Length - 1) + sheet.GetRow(i).GetCell(1).StringCellValue.Split('-')[0]);
+                colorName.Add(new TextileColorInventory()
+                {
+                    ColorName = textileNameMapping.Account.FirstOrDefault().Substring(0, textileNameMapping.Account.FirstOrDefault().Length - 1) + sheet.GetRow(i).GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt()).StringCellValue.Split('-')[0],
+                    CountInventory = sheet.GetRow(i).GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt()) == null ? 0 : sheet.GetRow(i).GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt()).NumericCellValue.ToInt(),
+                });
             }
-
-            textileNames = textileNames.OrderBy(o => colorName.IndexOf(o)).ToList();
+            IEnumerable<TextileColorInventory> TextileColorInventoryList = colorName.GroupBy(g => g.ColorName).Select(s => new TextileColorInventory() { ColorName = s.Key, CountInventory =s.Sum(ss=>ss.CountInventory)});
+            textileNames = textileNames.OrderBy(o => colorName.Select(s => s.ColorName).ToList().IndexOf(o)).ToList();
             #endregion
 
 
@@ -226,7 +231,9 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
             foreach (string intervalDate in intervalDates)
             {
                 excelSheetContent.ExcelColumnContents.Add(new ExcelColumnContent() { CellValue = intervalDate, Width = 5200 });
+                excelSheetContent.ExcelColumnContents.Add(new ExcelColumnContent() { CellValue = "疋數", Width = 1400 });
             }
+            excelSheetContent.ExcelColumnContents.Add(new ExcelColumnContent() { CellValue = "庫存數量", Width = 2000 });
             excelSheetContent.ExcelRowContents = new List<ExcelRowContent>();
 
             foreach (string textileName in textileNames)
@@ -243,11 +250,20 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 };
                 foreach (var item in TrashShippedsDictionary.Values)
                 {
+                    string intervalDateQuantity = item.Where(w => w.Key == textileName).FirstOrDefault() == null ? string.Empty : item.Where(w => w.Key == textileName).FirstOrDefault().Sum(s => s.Quantity).ToString();
                     excelRowContent.ExcelCellContents.Add(new ExcelCellContent()
                     {
-                        CellValue = item.Where(w => w.Key == textileName).FirstOrDefault() == null ? string.Empty : item.Where(w => w.Key == textileName).FirstOrDefault().Sum(s => s.Quantity).ToString()
-                    }); ;
+                        CellValue = intervalDateQuantity == string.Empty ? "0" : intervalDateQuantity,
+                    });
+                    excelRowContent.ExcelCellContents.Add(new ExcelCellContent()
+                    {
+                        CellValue = (intervalDateQuantity == string.Empty ? 0 : Math.Round(intervalDateQuantity.ToDecimal() / 22)).ToString()
+                    });
                 }
+                excelRowContent.ExcelCellContents.Add(new ExcelCellContent()
+                {
+                    CellValue = TextileColorInventoryList.Where(w => w.ColorName == textileName).Count() == 0 ? "0" : TextileColorInventoryList.Where(w => w.ColorName == textileName).FirstOrDefault().CountInventory.ToString()
+                });
                 excelSheetContent.ExcelRowContents.Add(excelRowContent);
             }
 
@@ -574,12 +590,12 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
                 {
                     ExcelCellContents = new List<ExcelCellContent>
                     {
-                    new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
-                    new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
-                    new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle }
+                        new ExcelCellContent{CellValue = item.OriginalSource.TextileColorName, CellStyle = positionStyle},
+                        new ExcelCellContent{CellValue = item.OriginalSource.Weight.ToString(),CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue =  (approximateNumber).ToString(),CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.TextileName,CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.ColorName,CellStyle = positionStyle },
+                        new ExcelCellContent{CellValue = item.ShippedCount.ToString(), CellStyle = isEqual ? positionStyle : estyle }
                     }
                 };
                 excelPrimaryExcelRowContent.Add(excelCellContents);
