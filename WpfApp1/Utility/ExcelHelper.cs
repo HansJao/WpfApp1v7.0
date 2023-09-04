@@ -27,6 +27,7 @@ namespace WpfApp1.Utility
             var cell = row.CreateCell(cellIndex);
             cell.SetCellValue(cellValue);
             cell.CellStyle = style;
+            cell.SetCellType(CellType.String);
         }
         public static void CreateCell(XSSFRow row, int cellIndex, double cellValue, ICellStyle style)
         {
@@ -77,7 +78,7 @@ namespace WpfApp1.Utility
                     gstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
                     gstyle.FillPattern = FillPattern.SolidForeground;
                     return gstyle;
-                case var someVal when new Regex("(^1H)+|(H小)").IsMatch(someVal):
+                case var someVal when new Regex("(^2E)+|(H小)").IsMatch(someVal):
                     ICellStyle hstyle = wb.CreateCellStyle();
                     hstyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightOrange.Index;
                     hstyle.FillPattern = FillPattern.SolidForeground;
@@ -369,13 +370,18 @@ namespace WpfApp1.Utility
                     rowTextile.Height = rowContent.Height;
                     for (int cellIndex = 0; cellIndex < rowContent.ExcelCellContents?.Count; cellIndex++)
                     {
-                        if (double.TryParse(rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue, out double cellValue))
+                        var cellValue = rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue;
+                        if (int.TryParse(cellValue, out int cellIntValue))
                         {
-                            CreateCell(rowTextile, cellIndex, cellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
+                            CreateCell(rowTextile, cellIndex, cellIntValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
+                        }
+                        else if (double.TryParse(cellValue, out double cellDoubleValue) && !cellValue.Contains("E"))
+                        {
+                            CreateCell(rowTextile, cellIndex, cellDoubleValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
                         }
                         else
                         {
-                            CreateCell(rowTextile, cellIndex, rowContent.ExcelCellContents.ElementAt(cellIndex).CellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
+                            CreateCell(rowTextile, cellIndex, cellValue, rowContent.ExcelCellContents.ElementAt(cellIndex).CellStyle);
                         }
                         if (rowContent.ExcelCellContents.ElementAt(cellIndex).CellRangeAddress != null)
                             ws.AddMergedRegion(rowContent.ExcelCellContents.ElementAt(cellIndex).CellRangeAddress);

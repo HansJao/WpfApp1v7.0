@@ -197,7 +197,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
             List<TextileColorInventory> colorName = new List<TextileColorInventory>();
 
-            for (int i = 1; i < sheet.LastRowNum; i++)
+            for (int i = 1; i <= sheet.LastRowNum; i++)
             {
                 if (sheet.GetRow(i) == null || sheet.GetRow(i).GetCell(1) == null)
                     break;

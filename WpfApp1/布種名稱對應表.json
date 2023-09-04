@@ -1219,6 +1219,116 @@
     "Account": [
       "變色樓梯21條*"
     ]
+  },
+  {
+    "ProcessOrder": [
+      "涼感棉"
+    ],
+    "Inventory": [
+      "涼感棉"
+    ],
+    "Account": [
+      "涼感棉*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "C1X1"
+    ],
+    "Inventory": [
+      "C1X1"
+    ],
+    "Account": [
+      "C1X1*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "透氣棉"
+    ],
+    "Inventory": [
+      "透氣棉"
+    ],
+    "Account": [
+      "透氣棉*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "OP壓褶布"
+    ],
+    "Inventory": [
+      "OP壓褶布"
+    ],
+    "Account": [
+      "OP壓褶布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "變色樓梯布"
+    ],
+    "Inventory": [
+      "變色樓梯布"
+    ],
+    "Account": [
+      "變色樓梯布*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30CVC4*2+OP條"
+    ],
+    "Inventory": [
+      "30CVC4X2+OP條"
+    ],
+    "Account": [
+      "30CVC4X2+OP條*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "CVC大絨布刷毛"
+    ],
+    "Inventory": [
+      "CVC大絨刷毛"
+    ],
+    "Account": [
+      "CVC大絨刷*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "CVC大絨刷毛配件"
+    ],
+    "Account": [
+      "CVC大刷毛配*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "馬卡絨"
+    ],
+    "Inventory": [
+      "馬卡絨"
+    ],
+    "Account": [
+      "馬卡絨*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "X"
+    ],
+    "Inventory": [
+      "馬卡絨"
+    ],
+    "Account": [
+      "馬卡絨配件*"
+    ]
   }
 ]
 
