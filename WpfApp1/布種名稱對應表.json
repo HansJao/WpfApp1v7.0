@@ -1302,9 +1302,7 @@
       "X"
     ],
     "Inventory": [
-      "CVC大絨刷毛配件",
-      "CVC大絨刷配件",
-      "CVC大絨刷毛碼布"
+      "CVC大絨刷毛配件"
     ],
     "Account": [
       "CVC大刷毛配*"
@@ -1326,23 +1324,10 @@
       "X"
     ],
     "Inventory": [
-      "馬卡絨配件",
-      "馬卡配件",
-      "馬卡絨碼布"
+      "馬卡絨"
     ],
     "Account": [
       "馬卡絨配件*"
-    ]
-  },
-  {
-    "ProcessOrder": [
-      "X"
-    ],
-    "Inventory": [
-      "30TR8X2+OP"
-    ],
-    "Account": [
-      "30TR8X2+OP*"
     ]
   }
 ]
