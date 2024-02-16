@@ -41,25 +41,39 @@ namespace WpfApp1.Pages
         {
             InitializeComponent();
             //IWorkbook _workbook = null;  //新建IWorkbook對象  
-            string fileName = string.Concat(AppSettingConfig.FilePath(), "\\", AppSettingConfig.StoreManageFileName());
-            FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-            _workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-            List<string> textileList = new List<string>();
-            for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
-            {
-                ISheet sheet = _workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
-                textileList.Add(sheet.SheetName);
-            }
-            DataGridTextileList.ItemsSource = textileList;
-            DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
-
+            GetStoreMangeWorkbook();
             GetShippingCacheNameList();
         }
+        public void GetStoreMangeWorkbook()
+        {
+            string fileName = string.Concat(AppSettingConfig.FilePath(), "\\", AppSettingConfig.StoreManageFileName());
+            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            {
+                _workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
+                //List<string> textileList = new List<string>();
+                //for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
+                //{
+                //    ISheet sheet = _workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
+                //    textileList.Add(sheet.SheetName);
+                //}
+                DataGridTextileList.ItemsSource = GetTextileNames();
+                DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
+                _workbook.Close();
+            }
+        }
+        IEnumerable<string> GetTextileNames()
+        {
+            for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
+            {
+                ISheet sheet = _workbook.GetSheetAt(sheetCount);
+                yield return sheet.SheetName;
+            }
+        }
 
-        private void GetShippingCacheNameList()
+        public void GetShippingCacheNameList()
         {
             var existsFileName = Directory.GetFiles(AppSettingConfig.ShipFilePath(), "*.txt").Select(System.IO.Path.GetFileName);
-            ComboBoxShippingCacheName.ItemsSource = existsFileName.ToList();
+            ComboBoxShippingCacheName.ItemsSource = existsFileName;
         }
 
         private void SelectedTextile_Click(object sender, RoutedEventArgs e)
@@ -1047,25 +1061,48 @@ namespace WpfApp1.Pages
 
         private void TextBoxTextile_TextChanged(object sender, TextChangedEventArgs e)
         {
+            //TextBox textBoxName = (TextBox)sender;
+            //string filterText = textBoxName.Text;
+            //ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
+            //if (!string.IsNullOrEmpty(filterText))
+            //{
+            //    cv.Filter = o =>
+            //    {
+            //        /* change to get data row value */
+            //        string p = o as string;
+            //        return (p.ToUpper().Contains(filterText.ToUpper()));
+            //        /* end change to get data row value */
+            //    };
+            //}
+            //else
+            //{
+            //    cv.Filter = o =>
+            //    {
+            //        return (true);
+            //    };
+            //}
+
+
             TextBox textBoxName = (TextBox)sender;
             string filterText = textBoxName.Text;
             ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
+
             if (!string.IsNullOrEmpty(filterText))
             {
                 cv.Filter = o =>
                 {
-                    /* change to get data row value */
-                    string p = o as string;
-                    return (p.ToUpper().Contains(filterText.ToUpper()));
-                    /* end change to get data row value */
+                    // Change to get the data row value directly
+                    if (o is string row)
+                    {
+                        // Use StringComparison.OrdinalIgnoreCase for case-insensitive comparison
+                        return row.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1;
+                    }
+                    return false;
                 };
             }
             else
             {
-                cv.Filter = o =>
-                {
-                    return (true);
-                };
+                cv.Filter = null; // Clear the filter
             }
         }
 

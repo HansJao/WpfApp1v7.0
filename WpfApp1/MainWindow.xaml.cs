@@ -28,7 +28,7 @@ namespace WpfApp1
             this.Height = AppSettingConfig.MainWindowHeigh();
             this.Width = AppSettingConfig.MainWindowWidth();
         }
-
+        ShippingPage ShippingPage { get; set; }
         private void ButtonStoreSearchFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "庫存查詢";
@@ -38,7 +38,18 @@ namespace WpfApp1
         private void ButtonShippingFunction_Click(object sender, RoutedEventArgs e)
         {
             this.Title = "出貨";
-            this.MainFrame.NavigationService.Navigate(new ShippingPage());
+            if (ShippingPage == null)
+            {
+                ShippingPage = new ShippingPage();
+            }
+            else
+            {
+                ShippingPage.GetStoreMangeWorkbook();
+                ShippingPage.GetShippingCacheNameList();
+            }
+
+            this.MainFrame.NavigationService.Navigate(ShippingPage);
+
         }
 
         private void ButtonReportsFunction_Click(object sender, RoutedEventArgs e)
