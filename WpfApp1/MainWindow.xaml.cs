@@ -46,6 +46,10 @@ namespace WpfApp1
             {
                 ShippingPage.GetStoreMangeWorkbook();
                 ShippingPage.GetShippingCacheNameList();
+                ShippingPage.DataGridShippingSheet.ItemsSource = null;
+                ShippingPage.ShippingSheetStructure = new System.Collections.Generic.List<DataClass.Shipping.ShippingSheetStructure>();
+                ShippingPage.ComboBoxShippingCacheName.SelectedIndex = -1;
+
             }
 
             this.MainFrame.NavigationService.Navigate(ShippingPage);

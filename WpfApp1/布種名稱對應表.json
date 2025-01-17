@@ -1044,10 +1044,10 @@
   },
   {
     "ProcessOrder": [
-      "20CVC單面對半條"
+      "20CVC單6060條"
     ],
     "Inventory": [
-      "20CVC單面對半"
+      "20CVC單6060條"
     ],
     "Account": [
       "20CVC單6060條*"
@@ -1336,13 +1336,35 @@
   },
   {
     "ProcessOrder": [
-      "X"
+      "30TR8*2+OP"
     ],
     "Inventory": [
       "30TR8X2+OP"
     ],
     "Account": [
       "30TR8X2+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR2*2+OP"
+    ],
+    "Inventory": [
+      "30TR2X2+OP"
+    ],
+    "Account": [
+      "TR2X2+OP*"
+    ]
+  },
+  {
+    "ProcessOrder": [
+      "30TR2*2+OP條"
+    ],
+    "Inventory": [
+      "30TR2X2+OP條"
+    ],
+    "Account": [
+      "TR2X2+OP條*"
     ]
   }
 ]

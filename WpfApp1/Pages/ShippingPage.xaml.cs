@@ -34,7 +34,7 @@ namespace WpfApp1.Pages
 
         protected ICustomerModule CustomerModule { get; } = new CustomerModule();
         //ObservableCollection<string> TextileList = new ObservableCollection<string>();
-        List<ShippingSheetStructure> ShippingSheetStructure = new List<ShippingSheetStructure>();
+        public List<ShippingSheetStructure> ShippingSheetStructure = new List<ShippingSheetStructure>();
 
         private IWorkbook _workbook { get; set; }
         public ShippingPage()
@@ -1015,6 +1015,8 @@ namespace WpfApp1.Pages
 
         private void ComboBoxShippingCacheName_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (((ComboBox)sender).SelectedIndex == -1)
+                return;
             var fileName = ((ComboBox)sender).SelectedValue.ToString();
             var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName);
             //this code segment read data from the file.
