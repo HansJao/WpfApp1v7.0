@@ -70,6 +70,7 @@
                 <!--<Button x:Name="ButtonStoreSearchListByShipped" Content="查詢" HorizontalAlignment="Left" Margin="28,33,0,0" VerticalAlignment="Top" Width="75"/>-->
                 <Button x:Name="ButtonExportToExcel" Content="匯出" HorizontalAlignment="Left" Margin="121,33,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportToExcelClick}" />
                 <DatePicker x:Name="DatePickerSelecter" HorizontalAlignment="Left" Margin="10,31,0,0" VerticalAlignment="Top" SelectedDate="{Binding ShippingHistoryDate}" Width="100" />
+                <Button x:Name="ButtonExportAIToExcel" Content="匯出AI用" HorizontalAlignment="Left" Margin="201,33,0,0" VerticalAlignment="Top" Width="75" Command="{Binding ExportAIToExcelClick}"/>
                 <!--<Button x:Name="ButtonInventoryCheckSheet" Content="庫存盤點表" HorizontalAlignment="Left" Margin="28,6,0,0" VerticalAlignment="Top" Width="75" Click="ButtonInventoryCheckSheet_Click"/>-->
             </Grid>
         </DockPanel>
