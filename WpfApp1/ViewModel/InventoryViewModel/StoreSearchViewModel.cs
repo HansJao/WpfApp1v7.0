@@ -170,15 +170,20 @@ namespace WpfApp1.ViewModel.InventoryViewModel
 
             ExcelHelper.CreateCell(row, 0, "布種", positionStyle);
             ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
-            ExcelHelper.CreateCell(row, 2, "織廠", positionStyle);
-            ExcelHelper.CreateCell(row, 3, "整理", positionStyle);
-            ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
-            ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
-            ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
-            ExcelHelper.CreateCell(row, 7, "10天內", positionStyle);
-            ExcelHelper.CreateCell(row, 8, "20天內", positionStyle);
-            ExcelHelper.CreateCell(row, 9, "30天內", positionStyle);
-            ExcelHelper.CreateCell(row, 10, "60天內", positionStyle);
+            ExcelHelper.CreateCell(row, 2, "訂單號", positionStyle);
+            ExcelHelper.CreateCell(row, 3, "織廠", positionStyle);
+            ExcelHelper.CreateCell(row, 4, "整理", positionStyle);
+            ExcelHelper.CreateCell(row, 5, "開單日", positionStyle);
+            ExcelHelper.CreateCell(row, 6, "入布日", positionStyle);
+            ExcelHelper.CreateCell(row, 7, "染定廠", positionStyle);
+            ExcelHelper.CreateCell(row, 8, "製作數量", positionStyle);
+            ExcelHelper.CreateCell(row, 9, "出貨量", positionStyle);
+            ExcelHelper.CreateCell(row, 10, "計算庫存量", positionStyle);
+            ExcelHelper.CreateCell(row, 11, "時間", positionStyle);
+            ExcelHelper.CreateCell(row, 12, "10天內", positionStyle);
+            ExcelHelper.CreateCell(row, 13, "20天內", positionStyle);
+            ExcelHelper.CreateCell(row, 14, "30天內", positionStyle);
+            ExcelHelper.CreateCell(row, 15, "60天內", positionStyle);
 
 
             int rowIndex = 1;
@@ -204,16 +209,31 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 {
                     trashShippeds = xtrashCustomerShippeds.Where(w => w.I_03 == trashItem.I_03).ToList();
                 }
-                ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 3, storeData.ClearFactory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
-                ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
-                ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
-                ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
+                string[] ColorNameParts = (storeData.ColorName ?? "").Split('-');
+                string colorName = ColorNameParts.ElementAtOrDefault(0) ?? "";
+                string order = ColorNameParts.ElementAtOrDefault(1) ?? "";
+                ExcelHelper.CreateCell(rowTextile, 1, colorName, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 2, order, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 3, storeData.FabricFactory, positionStyle);
+
+                string[] ClearFactoryParts = (storeData.ClearFactory ?? "").Split('-');
+                string startDate = ClearFactoryParts.ElementAtOrDefault(0) ?? "";
+                string inputDate = ClearFactoryParts.ElementAtOrDefault(1) ?? "";
+                string factory = ClearFactoryParts.ElementAtOrDefault(2) ?? "";
+                string amount = ClearFactoryParts.ElementAtOrDefault(3) ?? "";
+
+                ExcelHelper.CreateCell(rowTextile, 4, storeData.ClearFactory, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 5, startDate, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 6, inputDate, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 7, factory, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 8, amount, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 9, storeData.ShippedCount.ToString(), positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 10, storeData.CountInventory, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 11, storeData.CheckDate, positionStyle);
+                ExcelHelper.CreateCell(rowTextile, 12, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
+                ExcelHelper.CreateCell(rowTextile, 13, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
+                ExcelHelper.CreateCell(rowTextile, 14, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
+                ExcelHelper.CreateCell(rowTextile, 15, Math.Round(trashShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
 
                 rowIndex++;
             }
