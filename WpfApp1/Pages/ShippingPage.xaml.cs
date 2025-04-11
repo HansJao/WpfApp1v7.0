@@ -951,7 +951,8 @@ namespace WpfApp1.Pages
         {
             ShippingSheetDatas = new ObservableCollection<ShippingSheetData>();
             DataGridShippingSheet.ItemsSource = ShippingSheetDatas;
-
+            CustomerAmount.Content = ShippingSheetStructure.Count;
+            ShippingAmount.Content = ShippingSheetStructure.SelectMany(s => s.TextileShippingDatas).SelectMany(s => s.ShippingSheetDatas).Select(s => s.ShippingNumber).Sum();
             int array0Index = 0;
             foreach (var item in ShippingSheetStructure)
             {

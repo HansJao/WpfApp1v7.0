@@ -68,6 +68,10 @@
                 <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10,0">
                     <ComboBox x:Name="ComboBoxShippingCacheName" Width="150" HorizontalAlignment="Right" VerticalAlignment="Top" SelectionChanged="ComboBoxShippingCacheName_SelectionChanged"/>
                     <Button Content="匯出" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="Export_Click"/>
+                    <Label Content="客戶數量：" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label x:Name="CustomerAmount" Content="" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label Content="出貨數量：" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <Label x:Name="ShippingAmount" Content="" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                 </StackPanel>
                 <DataGrid x:Name="DataGridShippingSheet" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False">
                     <DataGrid.Columns>
