@@ -46,29 +46,23 @@ namespace WpfApp1.Pages
         }
         public void GetStoreMangeWorkbook()
         {
-            string fileName = string.Concat(AppSettingConfig.FilePath(), "\\", AppSettingConfig.StoreManageFileName());
-            using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            string fileName = Path.Combine(AppSettingConfig.FilePath(), AppSettingConfig.StoreManageFileName());
+            using (var fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read))
+            using (_workbook = new XSSFWorkbook(fileStream))
             {
-                _workbook = new XSSFWorkbook(fileStream);  //xlsx數據讀入workbook
-                //List<string> textileList = new List<string>();
-                //for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
-                //{
-                //    ISheet sheet = _workbook.GetSheetAt(sheetCount);  //獲取第i個工作表  
-                //    textileList.Add(sheet.SheetName);
-                //}
-                DataGridTextileList.ItemsSource = GetTextileNames();
+                DataGridTextileList.ItemsSource = GetTextileNames(_workbook);
                 DataGridCustomerName.ItemsSource = CustomerModule.GetCustomerNameList();
-                _workbook.Close();
             }
+
         }
-        IEnumerable<string> GetTextileNames()
+
+        private IEnumerable<string> GetTextileNames(IWorkbook workbook)
         {
-            for (int sheetCount = 1; sheetCount < _workbook.NumberOfSheets; sheetCount++)
+            for (int sheetCount = 1; sheetCount < workbook.NumberOfSheets; sheetCount++)
             {
-                ISheet sheet = _workbook.GetSheetAt(sheetCount);
-                yield return sheet.SheetName;
+                yield return workbook.GetSheetAt(sheetCount).SheetName;
             }
-        }
+        }       
 
         public void GetShippingCacheNameList()
         {
