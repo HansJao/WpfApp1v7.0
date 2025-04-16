@@ -121,13 +121,7 @@ namespace WpfApp1.Pages
                     }
                     //每新增一次則重建顯示資料表
                     DataGridShippingDisplay();
-                    if (ShippingSheetStructure.Last().Customer == customerName)
-                    {
-                        if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
-                        {
-                            if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
-                        }
-                    }
+                    ScrollToCustomer(customerName);
                 }
                 else
                 {
@@ -152,13 +146,7 @@ namespace WpfApp1.Pages
                     });
                     //每新增一次則重建顯示資料表
                     DataGridShippingDisplay();
-                    if (ShippingSheetStructure.Last().Customer == customerName)
-                    {
-                        if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
-                        {
-                            if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
-                        }
-                    }
+                    ScrollToCustomer(customerName);
                 }
             }
             else
@@ -190,10 +178,33 @@ namespace WpfApp1.Pages
                 });
                 //每新增一次則重建顯示資料表
                 DataGridShippingDisplay();
-                if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border)
-                {
-                    if (border.Child is ScrollViewer scroll) scroll.ScrollToEnd();
-                }
+                ScrollToCustomer(customerName);
+            }
+        }
+
+        private void ScrollToCustomer(string customerName)
+        {
+            if (string.IsNullOrEmpty(customerName) || DataGridShippingSheet == null || ShippingSheetDatas == null)
+            {
+                return;
+            }
+
+            // 查找第一個匹配該客戶的項目
+            var targetItem = ShippingSheetDatas.FirstOrDefault(item => item.Customer == customerName);
+            if (targetItem != null)
+            {
+                // 滾動到該項目
+                DataGridShippingSheet.ScrollIntoView(targetItem);
+            }
+        }
+
+        // 輔助方法：滾動到最後
+        private void ScrollToEnd()
+        {
+            if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border &&
+                border.Child is ScrollViewer scroll)
+            {
+                scroll.ScrollToEnd();
             }
         }
 
