@@ -16,6 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.Shipping;
@@ -191,10 +192,91 @@ namespace WpfApp1.Pages
 
             // 查找第一個匹配該客戶的項目
             var targetItem = ShippingSheetDatas.FirstOrDefault(item => item.Customer == customerName);
-            if (targetItem != null)
+            if (targetItem == null)
             {
-                // 滾動到該項目
-                DataGridShippingSheet.ScrollIntoView(targetItem);
+                return;
+            }
+
+            // 確保目標項目在可見範圍內（初始化位置）
+            DataGridShippingSheet.ScrollIntoView(targetItem);
+
+            // 獲取 DataGrid 內的 ScrollViewer
+            ScrollViewer scrollViewer = FindScrollViewer(DataGridShippingSheet);
+            if (scrollViewer == null)
+            {
+                return;
+            }
+
+            // 獲取目標項目的索引
+            int targetIndex = ShippingSheetDatas.IndexOf(targetItem);
+
+            // 估算目標行的偏移量（假設每行高度一致）
+            double estimatedRowHeight = 1.0; // 根據實際行高調整
+            double targetOffset = targetIndex * estimatedRowHeight;
+
+            // 限制偏移量在有效範圍內
+            targetOffset = Math.Max(0, Math.Min(targetOffset, scrollViewer.ScrollableHeight));
+
+            // 創建平滑滾動動畫
+            DoubleAnimation animation = new DoubleAnimation
+            {
+                From = scrollViewer.VerticalOffset,
+                To = targetOffset,
+                Duration = new Duration(TimeSpan.FromMilliseconds(500)), // 動畫持續時間
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut } // 緩動效果
+            };
+
+            // 應用動畫到 ScrollViewer 的 VerticalOffset
+            scrollViewer.BeginAnimation(ScrollViewerBehavior.VerticalOffsetProperty, animation);
+        }
+
+        // 輔助方法：查找 DataGrid 內的 ScrollViewer
+        private ScrollViewer FindScrollViewer(DependencyObject depObj)
+        {
+            if (depObj is ScrollViewer scrollViewer)
+            {
+                return scrollViewer;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+                var result = FindScrollViewer(child);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+
+            return null;
+        }
+
+        // 輔助類：用於動畫控制 ScrollViewer 的 VerticalOffset
+        public static class ScrollViewerBehavior
+        {
+            public static readonly DependencyProperty VerticalOffsetProperty =
+                DependencyProperty.RegisterAttached(
+                    "VerticalOffset",
+                    typeof(double),
+                    typeof(ScrollViewerBehavior),
+                    new UIPropertyMetadata(0.0, OnVerticalOffsetChanged));
+
+            public static double GetVerticalOffset(DependencyObject obj)
+            {
+                return (double)obj.GetValue(VerticalOffsetProperty);
+            }
+
+            public static void SetVerticalOffset(DependencyObject obj, double value)
+            {
+                obj.SetValue(VerticalOffsetProperty, value);
+            }
+
+            private static void OnVerticalOffsetChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+            {
+                if (d is ScrollViewer scrollViewer)
+                {
+                    scrollViewer.ScrollToVerticalOffset((double)e.NewValue);
+                }
             }
         }
 
