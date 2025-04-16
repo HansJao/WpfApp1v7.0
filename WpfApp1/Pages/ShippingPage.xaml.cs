@@ -11,6 +11,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -38,6 +40,9 @@ namespace WpfApp1.Pages
         public List<ShippingSheetStructure> ShippingSheetStructure = new List<ShippingSheetStructure>();
 
         private IWorkbook _workbook { get; set; }
+
+        // 用於防抖的計時器
+        private CancellationTokenSource _filterCancellationTokenSource;
         public ShippingPage()
         {
             InitializeComponent();
@@ -608,16 +613,13 @@ namespace WpfApp1.Pages
                             }
                             };
                             textileNameDisplay = false;
-
                             customerShipSheet.ExcelRowContents.Add(excelRowColorContent);
                             rowNumber++;
                         }
                     }
-
                     excelSheetContents.Add(customerShipSheet);
                 }
             }
-
             return excelSheetContents;
         }
 
@@ -971,49 +973,10 @@ namespace WpfApp1.Pages
                             }
                         },
                         ExcelRowContents = shipPosition
-                    },
-                    //new ExcelSheetContent
-                    //{
-                    //    SheetName = "Excel為主",
-                    //    ExcelColumnContents = new List<ExcelColumnContent>
-                    //    {
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "Super布種名稱顏色",
-                    //            Width = 6450
-                    //        },
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "出貨重量",
-                    //            Width = 2800
-                    //        },
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "約略出貨數",
-                    //            Width = 2000
-                    //        },
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "布種名稱",
-                    //            Width = 4550
-                    //        },
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "顏色",
-                    //            Width = 5550
-                    //        },
-                    //        new ExcelColumnContent
-                    //        {
-                    //            CellValue = "出貨數量",
-                    //            Width = 1850
-                    //        }
-                    //    },
-                    //    ExcelRowContents = null
-                    //}
+                    },                    
                 }
             };
             return excelContent.ExcelSheetContents;
-            //excelHelper.CreateExcelFile(wb, excelContent);
         }
 
         private void ButtonShippingDelete_Click(object sender, RoutedEventArgs e)
@@ -1151,49 +1114,42 @@ namespace WpfApp1.Pages
 
         private void TextBoxTextile_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //TextBox textBoxName = (TextBox)sender;
-            //string filterText = textBoxName.Text;
-            //ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
-            //if (!string.IsNullOrEmpty(filterText))
-            //{
-            //    cv.Filter = o =>
-            //    {
-            //        /* change to get data row value */
-            //        string p = o as string;
-            //        return (p.ToUpper().Contains(filterText.ToUpper()));
-            //        /* end change to get data row value */
-            //    };
-            //}
-            //else
-            //{
-            //    cv.Filter = o =>
-            //    {
-            //        return (true);
-            //    };
-            //}
-
-
             TextBox textBoxName = (TextBox)sender;
             string filterText = textBoxName.Text;
-            ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
 
-            if (!string.IsNullOrEmpty(filterText))
+            // 取消之前的過濾操作
+            _filterCancellationTokenSource?.Cancel();
+            _filterCancellationTokenSource = new CancellationTokenSource();
+
+            // 防抖：延遲 300ms 執行過濾
+            Task.Delay(300, _filterCancellationTokenSource.Token).ContinueWith(t =>
             {
-                cv.Filter = o =>
+                if (t.IsCanceled) return;
+
+                // 在 UI 線程執行過濾
+                Dispatcher.InvokeAsync(() =>
                 {
-                    // Change to get the data row value directly
-                    if (o is string row)
+                    ICollectionView cv = CollectionViewSource.GetDefaultView(DataGridTextileList.ItemsSource);
+                    if (cv == null) return;
+
+                    if (!string.IsNullOrEmpty(filterText))
                     {
-                        // Use StringComparison.OrdinalIgnoreCase for case-insensitive comparison
-                        return row.IndexOf(filterText, StringComparison.OrdinalIgnoreCase) != -1;
+                        cv.Filter = o =>
+                        {
+                            if (o is string row)
+                            {
+                                // 優化字符串比較
+                                return row.Contains(filterText);
+                            }
+                            return false;
+                        };
                     }
-                    return false;
-                };
-            }
-            else
-            {
-                cv.Filter = null; // Clear the filter
-            }
+                    else
+                    {
+                        cv.Filter = null; // 清除過濾
+                    }
+                });
+            }, TaskScheduler.Default);
         }
 
         private void TextBoxTextile_KeyUp(object sender, KeyEventArgs e)
