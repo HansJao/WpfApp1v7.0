@@ -99,93 +99,101 @@ namespace WpfApp1.Pages
 
         private void AddCustomerShippingFabric(IEnumerable<TextileColorInventoryShipping> selectedTextiles)
         {
-            var customerName = TextBoxCustomerName.Text.ToString();
-            var textileName = DataGridTextileList.SelectedItem.ToString();
-            //若表中有此客戶
-            if (ShippingSheetStructure.Count > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).Count() > 0)
+            // 防錯檢查
+            if (selectedTextiles == null || !selectedTextiles.Any())
             {
-                //若客戶中有此布種
-                if (ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Count() > 0 && ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Where(w => w.TextileName == textileName).Count() > 0)
+                return;
+            }
+
+            string customerName = TextBoxCustomerName.Text?.Trim();
+            if (string.IsNullOrEmpty(customerName))
+            {
+                MessageBox.Show("請輸入客戶名稱！");
+                return;
+            }
+
+            if (DataGridTextileList.SelectedItem == null)
+            {
+                MessageBox.Show("請選擇布種！");
+                return;
+            }
+            string textileName = DataGridTextileList.SelectedItem.ToString();
+            // 查找現有客戶
+            var customer = ShippingSheetStructure.FirstOrDefault(w => w.Customer == customerName);
+            //若表中有此客戶
+            if (customer != null)
+            {
+                // 查找現有布種
+                var textileData = customer.TextileShippingDatas.FirstOrDefault(w => w.TextileName == textileName);
+                if (textileData != null)
                 {
-                    //將新的布種顏色資料加入原有的布種資料
-                    var currentTextileShippingData = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas.Where(w => w.TextileName == textileName).First();
-                    foreach (TextileColorInventoryShipping item in selectedTextiles)
-                    {
-                        if (currentTextileShippingData.ShippingSheetDatas.Where(w => w.ColorName == item.ColorName).Count() > 0)
-                        {
-                            currentTextileShippingData.ShippingSheetDatas.Where(w => w.ColorName == item.ColorName).First().ShippingNumber = item.ShippingNumber;
-                        }
-                        else
-                            currentTextileShippingData.ShippingSheetDatas.Add(new ShippingSheetData
-                            {
-                                ColorName = item.ColorName,
-                                CountInventory = item.CountInventory,
-                                StorageSpaces = item.StorageSpaces,
-                                ShippingNumber = item.ShippingNumber,
-                                Memo = item.Memo
-                            });
-                    }
-                    //每新增一次則重建顯示資料表
-                    DataGridShippingDisplay();
-                    ScrollToCustomer(customerName);
+                    // 更新現有布種的顏色資料
+                    UpdateTextileColors(textileData, selectedTextiles);
                 }
                 else
                 {
-                    //新增新的布種與顏色
-                    var currentTextileShippingDatas = ShippingSheetStructure.Where(w => w.Customer == customerName).First().TextileShippingDatas;
-                    var shippingSheetDatas = new List<ShippingSheetData>();
-                    foreach (TextileColorInventoryShipping item in selectedTextiles)
-                    {
-                        shippingSheetDatas.Add(new ShippingSheetData
-                        {
-                            ColorName = item.ColorName,
-                            CountInventory = item.CountInventory,
-                            StorageSpaces = item.StorageSpaces,
-                            ShippingNumber = item.ShippingNumber,
-                            Memo = item.Memo
-                        });
-                    }
-                    currentTextileShippingDatas.Add(new TextileShippingData
-                    {
-                        TextileName = textileName,
-                        ShippingSheetDatas = shippingSheetDatas
-                    });
-                    //每新增一次則重建顯示資料表
-                    DataGridShippingDisplay();
-                    ScrollToCustomer(customerName);
+                    // 新增布種和顏色
+                    customer.TextileShippingDatas.Add(CreateTextileData(textileName, selectedTextiles));
                 }
             }
             else
             {
-                //新增新的客戶和布種與顏色
-                var shippingSheetDatas = new List<ShippingSheetData>();
-                foreach (TextileColorInventoryShipping item in selectedTextiles)
-                {
-                    shippingSheetDatas.Add(new ShippingSheetData
-                    {
-                        ColorName = item.ColorName,
-                        CountInventory = item.CountInventory,
-                        StorageSpaces = item.StorageSpaces,
-                        ShippingNumber = item.ShippingNumber,
-                        Memo = item.Memo
-                    });
-                }
-                var textileShippingDatas = new List<TextileShippingData>() {
-                    new TextileShippingData
-                    {
-                        TextileName = textileName,
-                        ShippingSheetDatas = shippingSheetDatas
-                    }
-                };
+                // 新增客戶、布種和顏色
                 ShippingSheetStructure.Add(new ShippingSheetStructure
                 {
                     Customer = customerName,
-                    TextileShippingDatas = textileShippingDatas
-                });
-                //每新增一次則重建顯示資料表
-                DataGridShippingDisplay();
-                ScrollToCustomer(customerName);
+                    TextileShippingDatas = new List<TextileShippingData>
+            {
+                CreateTextileData(textileName, selectedTextiles)
             }
+                });
+            }
+            //每新增一次則重建顯示資料表
+            DataGridShippingDisplay();
+            ScrollToCustomer(customerName);
+        }
+
+        // 輔助方法：更新布種的顏色資料
+        private void UpdateTextileColors(TextileShippingData textileData, IEnumerable<TextileColorInventoryShipping> selectedTextiles)
+        {
+            foreach (var item in selectedTextiles)
+            {
+                var existingColor = textileData.ShippingSheetDatas.FirstOrDefault(w => w.ColorName == item.ColorName);
+                if (existingColor != null)
+                {
+                    existingColor.ShippingNumber = item.ShippingNumber;
+                    existingColor.CountInventory = item.CountInventory;
+                    existingColor.StorageSpaces = item.StorageSpaces;
+                    existingColor.Memo = item.Memo;
+                }
+                else
+                {
+                    textileData.ShippingSheetDatas.Add(CreateShippingSheetData(item));
+                }
+            }
+        }
+
+        // 輔助方法：創建布種資料
+        private TextileShippingData CreateTextileData(string textileName, IEnumerable<TextileColorInventoryShipping> selectedTextiles)
+        {
+            return new TextileShippingData
+            {
+                TextileName = textileName,
+                ShippingSheetDatas = selectedTextiles.Select(CreateShippingSheetData).ToList()
+            };
+        }
+
+        // 輔助方法：創建單個顏色資料
+        private ShippingSheetData CreateShippingSheetData(TextileColorInventoryShipping item)
+        {
+            return new ShippingSheetData
+            {
+                ColorName = item.ColorName,
+                CountInventory = item.CountInventory,
+                StorageSpaces = item.StorageSpaces,
+                ShippingNumber = item.ShippingNumber,
+                Memo = item.Memo
+            };
         }
 
         private void ScrollToCustomer(string customerName)
@@ -285,67 +293,186 @@ namespace WpfApp1.Pages
             }
         }
 
-        // 輔助方法：滾動到最後
-        private void ScrollToEnd()
+        private async void Export_Click(object sender, RoutedEventArgs e)
         {
-            if (VisualTreeHelper.GetChild(DataGridShippingSheet, 0) is Decorator border &&
-                border.Child is ScrollViewer scroll)
+            try
             {
-                scroll.ScrollToEnd();
+                // 檢查是否有資料
+                if (!ShippingSheetStructure.Any())
+                {
+                    MessageBox.Show("沒有出貨資料可匯出！", "匯出失敗", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // 匯出 Excel
+                IWorkbook workbook = new XSSFWorkbook();
+                List<ExcelSheetContent> shippingSheet = ExportToShip(workbook);
+                List<ExcelSheetContent> shippingLocation = ExportToExcel(workbook);
+
+                ExcelContent excelContent = new ExcelContent
+                {
+                    FileName = $"出貨{DateTime.Now:yyyyMMdd}",
+                    ExcelSheetContents = new List<ExcelSheetContent>()
+                };
+                excelContent.ExcelSheetContents.AddRange(shippingLocation);
+                excelContent.ExcelSheetContents.AddRange(shippingSheet);
+
+                ExcelHelper excelHelper = new ExcelHelper();
+                await Task.Run(() => excelHelper.CreateExcelFile(workbook, excelContent));
+
+                // 儲存暫存檔案
+                string cacheFilePath = await SaveShippingCacheAsync();
+                if (cacheFilePath == null)
+                {
+                    MessageBox.Show("儲存暫存檔案失敗！", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // 更新下拉選單
+                GetShippingCacheNameList();
+                ComboBoxShippingCacheName.SelectedValue = Path.GetFileName(cacheFilePath);
+
+                MessageBox.Show("出貨單已匯出！", "匯出成功", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"匯出失敗：{ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        // 輔助方法：儲存出貨暫存檔案
+        private async Task<string> SaveShippingCacheAsync()
+        {
+            string shipFilePath = AppSettingConfig.ShipFilePath();
+            try
+            {
+                // 確保目錄存在
+                if (!Directory.Exists(shipFilePath))
+                {
+                    Directory.CreateDirectory(shipFilePath);
+                }
+
+                string cacheFilePath;
+                if (ComboBoxShippingCacheName.SelectedIndex == -1)
+                {
+                    // 生成新檔案名稱
+                    string datePrefix = $"出貨暫存{DateTime.Now:yyyyMMdd}";
+                    var existingFiles = Directory.GetFiles(shipFilePath, $"{datePrefix}*.txt")
+                                               .Select(Path.GetFileNameWithoutExtension)
+                                               .Where(name => name.StartsWith(datePrefix))
+                                               .ToList();
+
+                    int nextNumber = 1;
+                    if (existingFiles.Any())
+                    {
+                        nextNumber = existingFiles
+                            .Select(name => int.TryParse(name.Substring(datePrefix.Length + 1), out int num) ? num : 0)
+                            .Max() + 1;
+                    }
+                    cacheFilePath = Path.Combine(shipFilePath, $"{datePrefix}-{nextNumber}.txt");
+                }
+                else
+                {
+                    // 使用選中的檔案名稱
+                    string selectedFileName = ComboBoxShippingCacheName.SelectedValue?.ToString();
+                    if (string.IsNullOrEmpty(selectedFileName))
+                    {
+                        return null;
+                    }
+                    cacheFilePath = Path.Combine(shipFilePath, selectedFileName);
+                }
+
+                // 序列化並異步寫入檔案
+                string json = JsonConvert.SerializeObject(ShippingSheetStructure);
+                using (FileStream fs = new FileStream(cacheFilePath, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, useAsync: true))
+                {
+                    byte[] data = Encoding.UTF8.GetBytes(json);
+                    await fs.WriteAsync(data, 0, data.Length);
+                }
+
+                return cacheFilePath;
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Failed to save cache file: {ex.Message}");
+                return null;
             }
         }
 
-        private void Export_Click(object sender, RoutedEventArgs e)
+        private void Weight_Click(object sender, RoutedEventArgs e)
         {
-            IWorkbook wb = new XSSFWorkbook();
-            List<ExcelSheetContent> shippingSheet = ExportToShip(wb);
-            List<ExcelSheetContent> shippingLocation = ExportToExcel(wb);
-
-            ExcelContent excelContent = new ExcelContent
+            try
             {
-                FileName = string.Concat("出貨", DateTime.Now.ToString("yyyyMMdd")),
-                ExcelSheetContents = new List<ExcelSheetContent>(),
-            };
-            excelContent.ExcelSheetContents.AddRange(shippingLocation);
-            excelContent.ExcelSheetContents.AddRange(shippingSheet);
-            ExcelHelper excelHelper = new ExcelHelper();
-            excelHelper.CreateExcelFile(wb, excelContent);
-            if (ComboBoxShippingCacheName.SelectedIndex == -1)
-            {
-                DirectoryInfo d = new DirectoryInfo(AppSettingConfig.ShipFilePath()); //Assuming Test is your Folder
+                // 預設使用當天日期生成檔名 (格式: 出貨yyyymmdd.xlsx)
+                string dateStr = DateTime.Today.ToString("yyyyMMdd");
+                string fileName = $"出貨{dateStr}.xlsx";
+                string filePath = Path.Combine(AppSettingConfig.FilePath(), fileName);
 
-                IEnumerable<FileInfo> fileInfos = d.GetFiles("*.txt").Where(w => w.Name.Contains(string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"))));
-                FileInfo fileInfo = fileInfos.LastOrDefault();
-                string fileName = fileInfo == null ? string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-1")
-                                                : string.Concat("出貨暫存", DateTime.Now.ToString("yyyyMMdd"), "-", fileInfo.Name.ElementAt(13).ToString().ToInt() + 1);
-                string shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", fileName, ".txt");
-                var shippingSheetStructureJson = JsonConvert.SerializeObject(ShippingSheetStructure);
-                // Create a new file 
-                using (FileStream fs = File.Create(shippingCacheFileName))
+                // 檢查檔案是否存在
+                if (!File.Exists(filePath))
                 {
-                    Byte[] title = new UTF8Encoding(true).GetBytes(shippingSheetStructureJson);
-                    fs.Write(title, 0, title.Length);
+                    MessageBox.Show($"錯誤：檔案 {fileName} 不存在於當前目錄。", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
-            }
-            else
-            {
-                var selectedFileName = ComboBoxShippingCacheName.SelectedValue.ToString();
-                var shippingCacheFileName = string.Concat(AppSettingConfig.ShipFilePath(), @"\", selectedFileName);
 
-                var shippingSheetStructureJson = JsonConvert.SerializeObject(ShippingSheetStructure);
+                // 儲存所有工作表 G7:M20 的總和
+                double totalSum = 0.0;
+                int totalCustomer = 0;
+                StringBuilder sheetResults = new StringBuilder();
 
-                // Create a new file 
-                using (FileStream fs = File.Create(shippingCacheFileName))
+                // 讀取 Excel 檔案
+                using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    // Add some text to file
-                    Byte[] title = new UTF8Encoding(true).GetBytes(shippingSheetStructureJson);
-                    fs.Write(title, 0, title.Length);
+                    // 建立 XSSFWorkbook (適用於 .xlsx)
+                    IWorkbook workbook = new XSSFWorkbook(fs);
+
+                    // 檢查是否有至少兩個工作表
+                    if (workbook.NumberOfSheets < 2)
+                    {
+                        MessageBox.Show("錯誤：檔案只有一個或零個工作表，無法計算第二個到最後一個工作表的數據。", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                    }
+
+                    // 從第二個工作表 (索引 1) 到最後一個工作表
+                    for (int sheetIndex = 1; sheetIndex < workbook.NumberOfSheets; sheetIndex++)
+                    {
+                        ISheet sheet = workbook.GetSheetAt(sheetIndex);
+
+                        // 定義範圍 G7:M20 (列 6 到 19，欄 6 到 12，0-based 索引)
+                        double sheetSum = 0.0;
+
+                        for (int rowIndex = 6; rowIndex <= 19; rowIndex++) // G7 到 M20 的列 (7-20, 0-based 為 6-19)
+                        {
+                            IRow row = sheet.GetRow(rowIndex);
+                            if (row == null) continue; // 略過空列
+
+                            for (int colIndex = 6; colIndex <= 12; colIndex++) // G 到 M 的欄 (G=6, M=12)
+                            {
+                                ICell cell = row.GetCell(colIndex, MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                                if (cell != null && cell.CellType == CellType.Numeric)
+                                {
+                                    sheetSum += cell.NumericCellValue;
+                                }
+                                // 非數字或空單元格則忽略
+                            }
+                        }
+
+                        // 記錄單個工作表的總和
+                        sheetResults.AppendLine($"{sheet.SheetName}: {sheetSum:F1} 公斤");
+                        totalCustomer++;
+                        totalSum += sheetSum;
+                    }
                 }
+
+                // 顯示結果
+                string message = $"{sheetResults.ToString()}\n總客戶:{totalCustomer} \n總重量: {totalSum:F1} 公斤";
+                MessageBox.Show(message, "出貨重量計算結果", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            GetShippingCacheNameList();
-            ComboBoxShippingCacheName.SelectedIndex = ComboBoxShippingCacheName.Items.Count - 1;
-            MessageBox.Show("出貨單已匯出！！", "出貨單匯出通知");
+            catch (Exception ex)
+            {
+                MessageBox.Show($"發生錯誤: {ex.Message}", "錯誤", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
         private List<ExcelSheetContent> ExportToShip(IWorkbook wb)
         {
