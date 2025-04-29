@@ -99,6 +99,83 @@ namespace WpfApp1.Modules.ExcelModule.Implement
             return list;
         }
 
+        /// <summary>
+        /// 取得Excel每日出貨清單
+        /// </summary>
+        /// <param name="shippedDate"></param>
+        /// <returns></returns>
+        public string GetExcelMatchColorList(IWorkbook workbook, string textileName, StoreData storeData)
+        {
+            string amount = string.Empty;
+            try
+            {
+                ISheet sheet = null;
+
+                sheet = workbook.GetSheet(textileName);
+                if (sheet == null)
+                {
+                    throw new ArgumentException($"工作表索引 {storeData.TextileName} 不存在");
+                }
+                // 遍歷所有行
+                for (int rowIndex = sheet.FirstRowNum; rowIndex <= sheet.LastRowNum; rowIndex++)
+                {
+                    var row = sheet.GetRow(rowIndex);
+                    if (row == null) // 跳過空行
+                    {
+                        continue;
+                    }
+
+                    // 獲取第一列（Column 0）的儲存格
+                    var color = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.ColorName.ToInt(), MissingCellPolicy.RETURN_NULL_AND_BLANK);
+                    var countInventory = row.GetCell(ExcelEnum.ExcelInventoryColumnIndexEnum.CountInventory.ToInt());
+                    if (color == null) // 儲存格為空
+                    {
+                        continue;
+                    }
+
+                    // 根據儲存格類型獲取值並比較
+                    string stringColor = GetCellValueAsString(color);
+                    string stringCountInventory = GetCellValueAsString(countInventory);
+                    string colorName = stringColor.Split('-')[0];
+                    bool isMatch = colorName.Equals(storeData.ColorName.Split('-')[0], StringComparison.OrdinalIgnoreCase); // 忽略大小寫比較
+                    if (isMatch)
+                        amount += amount != string.Empty ? "-" + stringCountInventory : "" + stringCountInventory;
+                }
+
+                return amount;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"處理 Excel 檔案時發生錯誤: {ex.Message}");
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 將儲存格值轉為字串
+        /// </summary>
+        private static string GetCellValueAsString(ICell cell)
+        {
+            if (cell == null)
+                return string.Empty;
+
+            switch (cell.CellType)
+            {
+                case CellType.String:
+                    return cell.StringCellValue;
+                case CellType.Numeric:
+                    if (DateUtil.IsCellDateFormatted(cell))
+                        return cell.DateCellValue.ToString();
+                    return cell.NumericCellValue.ToString();
+                case CellType.Boolean:
+                    return cell.BooleanCellValue.ToString();
+                case CellType.Formula:
+                    return cell.NumericCellValue.ToString();
+                default:
+                    return string.Empty;
+            }
+        }
+
         public TextileInventoryHeader GetShippingDate(ISheet sheet)
         {
             TextileInventoryHeader TextileInventoryHeader = new TextileInventoryHeader

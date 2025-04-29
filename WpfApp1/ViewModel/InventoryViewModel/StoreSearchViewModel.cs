@@ -83,7 +83,6 @@ namespace WpfApp1.ViewModel.InventoryViewModel
         public List<StoreSearchData<StoreSearchColorDetail>> CreateStoreSearchListByShipped()
         {
             List<StoreSearchData<StoreSearchColorDetail>> storeSearchDatas = ExcelModule.GetExcelDailyShippedList(ShippingHistoryDate);
-
             foreach (StoreSearchData<StoreSearchColorDetail> item in storeSearchDatas)
             {
                 if (item.StoreSearchColorDetails.Count() == 0)
@@ -201,8 +200,8 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                 XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
 
                 ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
-                
-                 textileName = storeData.TextileName;
+
+                textileName = storeData.TextileName;
                 TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, storeData.ColorName.Split('-')[0], textileNameMappings);
                 List<TrashShipped> trashShippeds = new List<TrashShipped>();
                 if (trashItem != null)
@@ -243,6 +242,23 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             file.Close();
         }
 
+        // 輔助方法：創建單元格樣式
+        private static ICellStyle CreateCellStyle(IWorkbook wb, HorizontalAlignment hAlign, VerticalAlignment vAlign, bool wrapText = false, short? fillColor = null)
+        {
+            var style = wb.CreateCellStyle();
+            style.WrapText = wrapText;
+            style.Alignment = hAlign;
+            style.VerticalAlignment = vAlign;
+
+            if (fillColor.HasValue)
+            {
+                style.FillForegroundColor = fillColor.Value;
+                style.FillPattern = FillPattern.SolidForeground;
+            }
+
+            return style;
+        }
+
         private void ExportToExcel()
         {
             //建立Excel 2003檔案
@@ -256,38 +272,12 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ws.SetColumnWidth(2, 1700);
             ws.SetColumnWidth(4, 1700);
 
-            ICellStyle positionStyle = wb.CreateCellStyle();
-            positionStyle.WrapText = true;
-            positionStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            positionStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-
-            ICellStyle greyStyle = wb.CreateCellStyle();
-            greyStyle.WrapText = true;
-            greyStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            greyStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-            greyStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index;
-            greyStyle.FillPattern = FillPattern.SolidForeground;
-
-            ICellStyle lightGreenStyle = wb.CreateCellStyle();
-            lightGreenStyle.WrapText = true;
-            lightGreenStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            lightGreenStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-            lightGreenStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
-            lightGreenStyle.FillPattern = FillPattern.SolidForeground;
-
-            ICellStyle lightTurquoiseStyle = wb.CreateCellStyle();
-            lightTurquoiseStyle.WrapText = true;
-            lightTurquoiseStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            lightTurquoiseStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-            lightTurquoiseStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
-            lightTurquoiseStyle.FillPattern = FillPattern.SolidForeground;
-
-            ICellStyle coralStyle = wb.CreateCellStyle();
-            coralStyle.WrapText = true;
-            coralStyle.Alignment = NPOI.SS.UserModel.HorizontalAlignment.Center;
-            coralStyle.VerticalAlignment = NPOI.SS.UserModel.VerticalAlignment.Center;
-            coralStyle.FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Coral.Index;
-            coralStyle.FillPattern = FillPattern.SolidForeground;
+            // 創建樣式
+            var positionStyle = CreateCellStyle(wb, HorizontalAlignment.Center, VerticalAlignment.Center, wrapText: true);
+            var greyStyle = CreateCellStyle(wb, HorizontalAlignment.Center, VerticalAlignment.Center, wrapText: true, fillColor: NPOI.HSSF.Util.HSSFColor.Grey25Percent.Index);
+            var lightGreenStyle = CreateCellStyle(wb, HorizontalAlignment.Center, VerticalAlignment.Center, wrapText: true, fillColor: NPOI.HSSF.Util.HSSFColor.LightGreen.Index);
+            var lightTurquoiseStyle = CreateCellStyle(wb, HorizontalAlignment.Center, VerticalAlignment.Center, wrapText: true, fillColor: NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index);
+            var coralStyle = CreateCellStyle(wb, HorizontalAlignment.Center, VerticalAlignment.Center, wrapText: true, fillColor: NPOI.HSSF.Util.HSSFColor.Coral.Index);
 
             ExcelHelper.CreateCell(row, 0, "布種", positionStyle);
             ExcelHelper.CreateCell(row, 1, "顏色", positionStyle);
@@ -295,7 +285,7 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             ExcelHelper.CreateCell(row, 3, "整理", positionStyle);
             ExcelHelper.CreateCell(row, 4, "出貨量", positionStyle);
             ExcelHelper.CreateCell(row, 5, "計算庫存量", positionStyle);
-            ExcelHelper.CreateCell(row, 6, "時間", positionStyle);
+            ExcelHelper.CreateCell(row, 6, "剩餘數量", positionStyle);
             ExcelHelper.CreateCell(row, 7, "10天內", positionStyle);
             ExcelHelper.CreateCell(row, 8, "20天內", positionStyle);
             ExcelHelper.CreateCell(row, 9, "30天內", positionStyle);
@@ -311,36 +301,44 @@ namespace WpfApp1.ViewModel.InventoryViewModel
             DateTime twentyDays = DateTime.Now.Date.AddDays(-20);
             DateTime thirtyDays = DateTime.Now.Date.AddDays(-30);
             List<TrashShipped> xtrashCustomerShippeds = TrashModule.GetTrashShippedList(DateTime.Now.AddDays(-60), DateTime.Now).ToList();
-
-            foreach (StoreData storeData in ShippingHistoryStoreDataList)
+            var excelModul = new ExcelModule();
+            string filePath = string.Concat(AppSettingConfig.FilePath(), "/", AppSettingConfig.StoreManageFileName());
+            IWorkbook inventoryWorkbook = null;
+            using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
-                XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
-
-                ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
-                if (!string.IsNullOrEmpty(storeData.TextileName))
+                inventoryWorkbook = new XSSFWorkbook(fileStream);
+                foreach (StoreData storeData in ShippingHistoryStoreDataList)
                 {
-                    textileName = storeData.TextileName;
+                    XSSFRow rowTextile = (XSSFRow)ws.CreateRow(rowIndex);
+
+                    ExcelHelper.CreateCell(rowTextile, 0, storeData.TextileName, positionStyle);
+                    if (!string.IsNullOrEmpty(storeData.TextileName))
+                    {
+                        textileName = storeData.TextileName;
+                        rowIndex++;
+                        continue;
+                    }
+
+                    string restAmount = excelModul.GetExcelMatchColorList(inventoryWorkbook, textileName, storeData);
+                    TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, storeData.ColorName.Split('-')[0], textileNameMappings);
+                    List<TrashShipped> trashShippeds = new List<TrashShipped>();
+                    if (trashItem != null)
+                    {
+                        trashShippeds = xtrashCustomerShippeds.Where(w => w.I_03 == trashItem.I_03).ToList();
+                    }
+                    ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 3, storeData.ClearFactory, positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 6, restAmount, positionStyle);
+                    ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
+                    ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
+                    ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
+                    ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
+
                     rowIndex++;
-                    continue;
                 }
-                TrashItem trashItem = externalDataHelper.GetTrashItemFromInventoryMapping(trashItems, textileName, storeData.ColorName.Split('-')[0], textileNameMappings);
-                List<TrashShipped> trashShippeds = new List<TrashShipped>();
-                if (trashItem != null)
-                {
-                    trashShippeds = xtrashCustomerShippeds.Where(w => w.I_03 == trashItem.I_03).ToList();
-                }
-                ExcelHelper.CreateCell(rowTextile, 1, storeData.ColorName, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 2, storeData.FabricFactory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 3, storeData.ClearFactory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 4, storeData.ShippedCount.ToString(), positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 5, storeData.CountInventory, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 6, storeData.CheckDate, positionStyle);
-                ExcelHelper.CreateCell(rowTextile, 7, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= tenDays).Sum(s => s.Quantity) / 22, 0), greyStyle);
-                ExcelHelper.CreateCell(rowTextile, 8, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= twentyDays).Sum(s => s.Quantity) / 22, 0), lightGreenStyle);
-                ExcelHelper.CreateCell(rowTextile, 9, Math.Round(trashShippeds.Where(w => w.IN_DATE.Date >= thirtyDays).Sum(s => s.Quantity) / 22, 0), lightTurquoiseStyle);
-                ExcelHelper.CreateCell(rowTextile, 10, Math.Round(trashShippeds.Sum(s => s.Quantity) / 22, 0), coralStyle);
-
-                rowIndex++;
             }
             var selectedDateTime = ShippingHistoryDate == null ? DateTime.Now.ToString("yyyyMMdd") : ShippingHistoryDate.ToString("yyyyMMdd");
             FileStream file = new FileStream(string.Concat(AppSettingConfig.StoreSearchFilePath(), "出貨查詢", selectedDateTime, ".xlsx"), FileMode.Create);//產生檔案

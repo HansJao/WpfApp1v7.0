@@ -18,6 +18,11 @@ namespace WpfApp1.Modules.ExcelModule
         /// <returns></returns>
         List<StoreSearchData<StoreSearchColorDetail>> GetExcelDailyShippedList(DateTime? shippedDate);
         /// <summary>
+        /// 取得Excel每日出貨清單
+        /// </summary>
+        /// <returns></returns>
+        string GetExcelMatchColorList(IWorkbook workbook, string textileName, StoreData StoreDatas);
+        /// <summary>
         /// 取得Excel 出貨日期
         /// </summary>
         /// <returns></returns>
