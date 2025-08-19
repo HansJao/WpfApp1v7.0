@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using WpfApp1.DataClass.Enumeration;
 using WpfApp1.DataClass.ExcelDataClass;
 using WpfApp1.DataClass.StoreSearch;
@@ -146,7 +147,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"處理 Excel 檔案時發生錯誤: {ex.Message}");
+                MessageBox.Show($"處理 Excel 檔案時發生錯誤: {ex.Message}");
                 throw;
             }
         }

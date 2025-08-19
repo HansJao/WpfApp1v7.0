@@ -415,7 +415,9 @@ namespace WpfApp1.ViewModel.InventoryViewModel
                         //計算實際出貨數量有多少
                         int totalQuantity = CountTotalQuantity(sheet, rowCount);
                         //判斷有幾行，然後直接跳行, 如遇到配件則不用跳行
-                        rowCount = colorFullName.Contains("配件") ? rowCount : (decimal)totalQuantity / 7 > 1 ? rowCount + (totalQuantity / 7) : rowCount;
+                        rowCount = colorFullName.Contains("配件") 
+                            ? rowCount : (decimal)totalQuantity / 7 > 1 
+                            ? rowCount + (int)Math.Ceiling((decimal)(totalQuantity - 7) / 7) : rowCount;
 
                         //判斷此客戶是否已有加入布種，或是前後布種名稱不一樣時，則加入新的布種, 如布種名稱為空格，則為上一個布種
                         if (shippingSheetStructure.TextileShippingDatas.Count == 0 || (shippingSheetStructure.TextileShippingDatas.Last().TextileName != textileName && textileName != string.Empty))
