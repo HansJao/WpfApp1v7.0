@@ -33,7 +33,7 @@ namespace WpfApp1.ViewModel.TrashSystemViewModel
 
         private void DataGridCustomerDoubleClickExecute()
         {
-            CustomerOrderHistoryDialog customerOrderHistoryDialog = new CustomerOrderHistoryDialog(SelectedTrashCustomer, DateTime.Now.AddYears(-3), DateTime.Now);
+            CustomerOrderHistoryDialog customerOrderHistoryDialog = new CustomerOrderHistoryDialog(SelectedTrashCustomer, DateTime.Now.AddYears(-10), DateTime.Now);
             customerOrderHistoryDialog.Show();
         }
 

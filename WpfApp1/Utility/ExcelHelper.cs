@@ -199,7 +199,7 @@ namespace WpfApp1.Utility
         {
             switch (cellType)
             {
-                case CellType.Unknown:
+                case CellType._None:
                     return default(T);
                 case CellType.Numeric:
                     if (cell == null)

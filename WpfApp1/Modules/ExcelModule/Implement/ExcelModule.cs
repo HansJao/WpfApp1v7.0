@@ -147,7 +147,7 @@ namespace WpfApp1.Modules.ExcelModule.Implement
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"處理 Excel 檔案時發生錯誤: {ex.Message}");
+                MessageBox.Show($"處理 Excel 檔案時發生錯誤: {ex.Message}" + textileName);
                 throw;
             }
         }

@@ -15,8 +15,15 @@
             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                 <Label Content="客戶名稱:" Width="60" Height="24" HorizontalAlignment="Left" />
                 <Label Content="{Binding Path=TrashCustomer.C_NAME}" Width="100" Height="24" HorizontalAlignment="Left" />
-            </StackPanel>          
-            <DataGrid ItemsSource="{Binding TrashCustomerShippeds}" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" AlternatingRowBackground="LightGray" CanUserAddRows="False">
+            </StackPanel>
+            <!-- 新增：搜尋列 -->
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,5,0,5">
+                <Label Content="布種名稱:" Width="60" Height="24" HorizontalAlignment="Left" />
+                <TextBox x:Name="SearchTextBox" Width="150" Height="24" VerticalContentAlignment="Center" KeyDown="SearchTextBox_KeyDown" />
+                <Button Content="搜尋" Width="60" Height="24" Margin="5,0,0,0" Click="SearchButton_Click" />
+                <Button Content="清除" Width="60" Height="24" Margin="5,0,0,0" Click="ClearButton_Click" />
+            </StackPanel>
+            <DataGrid x:Name="ShippedDataGrid" ItemsSource="{Binding TrashCustomerShippeds}" HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False" AlternatingRowBackground="LightGray" CanUserAddRows="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="出貨時間" Binding="{Binding IN_DATE,StringFormat=yyyyMMdd}"/>
                     <DataGridTextColumn Header="布種名稱" Binding="{Binding I_03}"/>
